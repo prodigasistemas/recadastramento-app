@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="myColor">#45A1C0</color>
+    <color name="textColorYellowBackground">#001A5C</color>
+    <color name="textColor">#FFFFFF</color>
+	<color name="adicionalColor">#FFF4A1</color>
+    <color name="transparent">#000000</color>
+	<color name="colorBege1">#FFBB59</color>
+    <color name="colorbege2">#E09639</color>
+    <color name="white">#FFFFFF</color>
+    
+    <string name="app_name">Cadastro</string>
+    <string name="user">Usuário</string>
+    <string name="password">Senha</string>
+    <string name="auth_problem">Dados Incorretos</string>
+    <string name="menu_cadastros">Lista de Cadastros</string>
+    <string name="menu_info">Informações do Roteiro</string>
+    <string name="menu_consulta">Consultar Cadastro</string>
+    <string name="menu_relatorio">Relatórios</string>
+    <string name="menu_cadastros_concluidos">Enviar Concluídos </string>
+    <string name="menu_finalizar">Finalizar Roteiro</string>
+    <string name="menu_novo_roteiro">Limpar Tudo</string>
+    <string name="menu_arquivo_completo">Arquivo Completo</string>
+
+    <string-array name="statusImovel">
+        <item>Salvo</item>
+        <item>SalvoComAnormalidade</item>
+        <item>ASalvar</item>
+        </string-array>
+
+	<string-array name="sexo">
+        <item>Masculino</item>
+        <item>Feminino</item>
+    </string-array>
+
+	<string-array name="consulta">
+        <item>Todos</item>
+	    <item>Matrícula</item>
+        <item>CPF</item>
+        <item>CNPJ</item>
+	</string-array>
+
+	<string-array name="filtro">
+        <item>Todos</item>
+        <item>Visitados com Sucesso</item>
+        <item>Visitados com Anormalidade</item>
+        <item>Não Visitados</item>
+        <item>Novos Cadastros</item>
+        <item>Transmitidos</item>
+        <item>Não Transmitidos</item>
+	</string-array>
+
+	<string-array name="tipoPessoa">
+        <item>Física</item>
+        <item>Jurídica</item>
+    </string-array>
+
+    <string-array name="listaUF">
+        <item>AC</item>
+        <item>AM</item>
+        <item>AL</item>
+        <item>AP</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MG</item>
+        <item>MT</item>
+        <item>MS</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>PR</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>RS</item>
+        <item>SC</item>
+        <item>SE</item>
+        <item>SP</item>
+        <item>TO</item>
+	</string-array>
+
+    <string-array name="listaResponsavel">
+		<item>Usuário</item>
+        <item>Proprietário</item>
+       	<item>Outro</item>
+     </string-array>
+
+    <string name="options_adicionar_imovel">Novo Cadastro</string>
+    <string name="options_menu_principal">Menu Principal</string>
+    <string name="options_lista_cadastro">Lista de Cadastros</string>
+	<string name="options_proximo">Próximo</string>
+	<string name="options_anterior">Anterior</string>
+	<string name="options_sair">Sair</string>
+	                
+</resources>

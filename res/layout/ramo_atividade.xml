@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+	android:id="@+id/linearLayoutRamoAtividade">
+
+	<Button android:id="@+id/buttonRemoveRamoAtividade" android:background="@drawable/btn_remove_custom" android:paddingLeft="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	<TextView android:text="     " android:id="@+id/txtSeparador2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<TextView android:id="@+id/txtCodigoRamoAtividade" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<TextView android:text=" - " android:id="@+id/txtSeparador" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<TextView android:id="@+id/txtDescricaoRamoAtividade" android:minWidth="50dp" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	    	
+</LinearLayout>
+    

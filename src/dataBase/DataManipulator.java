@@ -45,7 +45,7 @@ public class DataManipulator
     	openHelper.close();
     }
 
-    public int getNumeroCadastros() {
+    public int getNumeroImoveis() {
         return (int)DatabaseUtils.queryNumEntries(db,Constantes.TABLE_IMOVEL);
     }
 

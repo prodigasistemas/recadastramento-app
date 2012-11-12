@@ -244,6 +244,7 @@ public class Controlador {
      */
     public void carregarDadosParaRecordStore(BufferedReader input, Handler mHandler, Context context) {
 		String line = "";
+	    linhasLidas = 0;
 		
 		if (input != null){
 			

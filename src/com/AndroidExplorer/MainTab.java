@@ -93,21 +93,6 @@ public class MainTab extends TabActivity {
         }
     }
     
-//  private LinearLayout makeTabIndicator(String text, int tabIconId){
-    //
-//        	int tabHeight = 60;
-//    		LayoutInflater inflater = this.getLayoutInflater();
-//    		LinearLayout tabView = (LinearLayout)inflater.inflate(R.layout.rowtab, null, true);
-//        	
-//            ((TextView)tabView.findViewById(R.id.tabText)).setText(text);
-//    		((ImageView)tabView.findViewById(R.id.tabIcon)).setImageResource(tabIconId);
-//        	LayoutParams lp3 = new LayoutParams(LayoutParams.WRAP_CONTENT, tabHeight, 1);
-//        	lp3.setMargins(1, 0, 1, 0);
-//        	tabView.setLayoutParams(lp3);
-//        	tabView.setBackgroundDrawable( getResources().getDrawable(R.drawable.tab_custom_green));
-//        	return tabView;
-//        }
-
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.layout.menuoptions, menu);
@@ -121,7 +106,7 @@ public class MainTab extends TabActivity {
 
 	    	Controlador.getInstancia().isCadastroAlterado();
 	    	
-	    	if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroCadastros())-1){
+	    	if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
 				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
 
 			}else{
@@ -137,7 +122,7 @@ public class MainTab extends TabActivity {
 	    	Controlador.getInstancia().isCadastroAlterado();
 	    	
 	    	if(Controlador.getInstancia().getCadastroListPosition() <= 0){
-				Controlador.getInstancia().setCadastroSelecionadoByListPosition((int)Controlador.getInstancia().getCadastroDataManipulator().getNumeroCadastros()-1);
+				Controlador.getInstancia().setCadastroSelecionadoByListPosition((int)Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()-1);
 			}else{
 		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()-1);
 			}

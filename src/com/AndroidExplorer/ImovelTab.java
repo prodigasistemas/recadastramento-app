@@ -175,8 +175,10 @@ public class ImovelTab extends Activity implements LocationListener {
 			public void onItemSelected(AdapterView parent, View v, int position, long id){
  				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_RAMO_ATIVIDADE, ((Spinner)findViewById(R.id.spinnerDescricaoRamoAtividade)).getSelectedItem().toString());
  				
- 				if (codigo.compareTo(((EditText)findViewById(R.id.codigoRamoAtividade)).getText().toString()) != 0){
- 	 				isUpdatingRamoAtividade = true;  
+ 				if (codigo.compareTo(((EditText)findViewById(R.id.codigoRamoAtividade)).getText().toString()) != 0 &&
+ 					((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() != 0){
+ 	 				
+ 					isUpdatingRamoAtividade = true;  
  					((EditText)findViewById(R.id.codigoRamoAtividade)).setText(codigo);
 	        	}
 			}
@@ -205,6 +207,8 @@ public class ImovelTab extends Activity implements LocationListener {
  			        	if (listRamosAtividade.get(i).equalsIgnoreCase(descricaoRamoAtividade)){
  			                ((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).setSelection(i);
  			        		break;
+ 			        	}else{
+ 			                ((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).setSelection(0);
  			        	}
  			        }
  				}

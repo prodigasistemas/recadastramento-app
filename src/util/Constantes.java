@@ -52,10 +52,6 @@ public class Constantes {
     public static final int TIPO_RESPONSAVEL_USUARIO = 1;
     public static final int TIPO_RESPONSAVEL_OUTRO = 2;
 
-    public static final int TIPO_RELATORIO_EMBARQUE_DESEMBARQUE = 0;
-    public static final int TIPO_RELATORIO_PONTO = 1;
-    public static final int TIPO_RELATORIO_PONTO_PRODUCAO = 2;
-
     public static final int IMOVEL_PROPRIETARIO_RESIDENCIAL = 1;
     public static final int IMOVEL_PROPRIETARIO_COMERCIAL = 2;
     

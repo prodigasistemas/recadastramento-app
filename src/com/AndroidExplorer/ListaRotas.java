@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -50,7 +52,12 @@ public class ListaRotas extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
        	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+    	this.getListView().setCacheColorHint(Color.TRANSPARENT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        
+    	int[] colors = {0x12121212, 0xFFFFFFFF, 0x12121212}; // red for the example
+    	this.getListView().setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
+    	this.getListView().setDividerHeight(1);
         
         instanciate();
     }
@@ -67,10 +74,6 @@ public class ListaRotas extends ListActivity {
     	
     	if (Environment.MEDIA_MOUNTED.equals(state)) {
     	    
-//    		Controlador.getInstancia().deleteDatabase();
-//    		Controlador.getInstancia().setPermissionGranted(false);
-//    		Controlador.getInstancia().initiateDataManipulator(getBaseContext());
-   		
     		// We can read and write the media
             File path = Environment.getExternalStorageDirectory();
             path.getAbsolutePath();
@@ -151,6 +154,18 @@ public class ListaRotas extends ListActivity {
             progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progDialog.setMessage("Por favor, espere enquanto a rota está sendo carregada...");
 			progDialog.setCancelable(false);
+			progDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+
+			    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+			        if (keyCode == KeyEvent.KEYCODE_SEARCH && event.getRepeatCount() == 0) {
+			            return true; // Pretend we processed it
+			        
+			        }else if (keyCode == KeyEvent.KEYCODE_HOME && event.getRepeatCount() == 0) {
+			            return true; // Pretend we processed it
+			        }
+			        return false; // Any other keys are still processed as normal
+			    }
+			});
             
             try {
             	int fileLineNumber = FileManager.getFileLineNumber(fileName);
@@ -234,7 +249,7 @@ public class ListaRotas extends ListActivity {
 			
 			// change the row color based on selected state
 	        if(selectedPos == position){
-	        	rowView.setBackgroundColor(Color.GRAY);
+	        	rowView.setBackgroundColor(Color.argb(70, 255, 255, 255));
 	        }else{
 	        	rowView.setBackgroundColor(Color.TRANSPARENT);
 	        }
@@ -249,18 +264,24 @@ public class ListaRotas extends ListActivity {
 	
     public boolean onKeyDown(int keyCode, KeyEvent event){
         
-    	if ((keyCode == KeyEvent.KEYCODE_BACK)){
+    	if (keyCode == KeyEvent.KEYCODE_BACK){
 
-            if (progDialog != null && progDialog.isShowing()){
-            	progThread.stop();
-            }
+//          if (progDialog != null && progDialog.isShowing()){
+//          	progThread.stop();
+//          }
 
     		finish();
-            return true;
-
-        }else{
-            return super.onKeyDown(keyCode, event);
-        }
+    		return true;
+    		
+    	}else if (keyCode == KeyEvent.KEYCODE_SEARCH){
+    		return true;
+    		
+    	}else if (keyCode == KeyEvent.KEYCODE_HOME){
+    		return true;
+    		
+    	}else {
+    		return super.onKeyDown(keyCode, event);
+    	}
     }
 
 }

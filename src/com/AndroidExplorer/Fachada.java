@@ -17,6 +17,7 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -33,6 +34,7 @@ public class Fachada extends Activity {
 
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.welcome);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     	
 	    // get IMEI
     	ControladorAcessoOnline.getInstancia().setIMEI(((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
@@ -66,46 +68,46 @@ public class Fachada extends Activity {
         });
     }
 
-	protected void onNewIntent(Intent intent) {
-		
-		super.onNewIntent(intent);
-		setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-
-        final Animation animation = new AlphaAnimation(1, (float)0.3);
-        animation.setDuration(1000);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.setRepeatCount(Animation.INFINITE);
-        animation.setRepeatMode(Animation.REVERSE);
-
-        final Button startButton = (Button)findViewById(R.id.buttonStart);
-        startButton.startAnimation(animation);
-
-        startButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	v.clearAnimation();
-
-            	// Define URL GSAN
-            	//Produção
-            	ControladorAcessoOnline.getInstancia().setURL("http:/200.178.173.131:8080/gsan");
-            	
-            	//Treinamento
-            	ControladorAcessoOnline.getInstancia().setURL("http:/200.178.173.136:8080/gsan");
-            	
-                if (Controlador.getInstancia().databaseExists(getBaseContext()) &&
-                	Controlador.getInstancia().isDatabaseRotaCarregadaOk() == Constantes.SIM){
-                	
-                	if (!Controlador.getInstancia().isPermissionGranted()){
-                    	Controlador.getInstancia().initiateDataManipulator(getBaseContext());
-                	}
-                	onPasswordDialogButtonClick(findViewById(R.id.buttonStart));			
-
-                }else{
-        		    Intent myIntent = new Intent(getBaseContext(), ListaRotas.class);
-        	        startActivityForResult(myIntent, 1);
-                }
-            }
-        });
-	}
+//	protected void onNewIntent(Intent intent) {
+//		
+//		super.onNewIntent(intent);
+//		setIntent(intent);//must store the new intent unless getIntent() will return the old one.
+//
+//        final Animation animation = new AlphaAnimation(1, (float)0.3);
+//        animation.setDuration(1000);
+//        animation.setInterpolator(new LinearInterpolator());
+//        animation.setRepeatCount(Animation.INFINITE);
+//        animation.setRepeatMode(Animation.REVERSE);
+//
+//        final Button startButton = (Button)findViewById(R.id.buttonStart);
+//        startButton.startAnimation(animation);
+//
+//        startButton.setOnClickListener(new OnClickListener() {
+//            public void onClick(View v) {
+//            	v.clearAnimation();
+//
+//            	// Define URL GSAN
+//            	//Produção
+//            	ControladorAcessoOnline.getInstancia().setURL("http:/200.178.173.131:8080/gsan");
+//            	
+//            	//Treinamento
+//            	ControladorAcessoOnline.getInstancia().setURL("http:/200.178.173.136:8080/gsan");
+//            	
+//                if (Controlador.getInstancia().databaseExists(getBaseContext()) &&
+//                	Controlador.getInstancia().isDatabaseRotaCarregadaOk() == Constantes.SIM){
+//                	
+//                	if (!Controlador.getInstancia().isPermissionGranted()){
+//                    	Controlador.getInstancia().initiateDataManipulator(getBaseContext());
+//                	}
+//                	onPasswordDialogButtonClick(findViewById(R.id.buttonStart));			
+//
+//                }else{
+//        		    Intent myIntent = new Intent(getBaseContext(), ListaRotas.class);
+//        	        startActivityForResult(myIntent, 1);
+//                }
+//            }
+//        });
+//	}
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Controlador.getInstancia().databaseExists(getBaseContext()) &&
@@ -190,7 +192,7 @@ public class Fachada extends Activity {
     @Override
     public void onDestroy(){
     	
-        Controlador.getInstancia().finalizeDataManipulator();
+//        Controlador.getInstancia().finalizeDataManipulator();
     	super.onDestroy();
     	
     }

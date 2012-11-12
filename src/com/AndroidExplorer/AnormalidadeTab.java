@@ -168,8 +168,13 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         	
 			public void onItemSelected(AdapterView parent, View v, int position, long id){
  				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_ANORMALIDADE, ((Spinner)findViewById(R.id.spinnerTipoAnormalidade)).getSelectedItem().toString());
- 				consideraEventoItemSelectedListenerCodigoAnormalidade = true;  
- 				codigoAnormalidade.setText(codigo);
+ 
+ 				if (codigo.compareTo(((EditText)findViewById(R.id.codigoAnormalidade)).getText().toString()) != 0 &&
+ 					((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() != 0){
+ 					
+ 					consideraEventoItemSelectedListenerCodigoAnormalidade = true;  
+ 					codigoAnormalidade.setText(codigo);
+	        	}
 			}
 			
 			public void onNothingSelected(AdapterView<?> arg0) {}
@@ -196,6 +201,8 @@ public class AnormalidadeTab extends Activity implements LocationListener {
  			        	if (listAnormalidades.get(i).equalsIgnoreCase(descricaoAnormalidade)){
  			                ((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).setSelection(i);
  			        		break;
+ 			        	}else{
+ 			                ((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).setSelection(0); 			        		
  			        	}
  			        }
  				}
@@ -568,7 +575,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	        			progThread = new EnviarCadastroOnlineThread(handler, getApplicationContext(), increment);
 	    	            progThread.start();
 	        			
-	        	    	if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroCadastros())-1){
+	        	    	if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
 	        				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
 
 	        			}else{

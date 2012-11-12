@@ -80,12 +80,12 @@ public class MenuPrincipal extends Activity {
         instanciate();
 	}
     
-	protected void onNewIntent(Intent intent) {
-		  super.onNewIntent(intent);
-		  setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-		  instanciate();
-		}
-
+//	protected void onNewIntent(Intent intent) {
+//		  super.onNewIntent(intent);
+//		  setIntent(intent);//must store the new intent unless getIntent() will return the old one.
+//		  instanciate();
+//		}
+//
 	public void instanciate(){
 
 		GridView gridView = (GridView) findViewById(R.id.gridview);
@@ -169,7 +169,7 @@ public class MenuPrincipal extends Activity {
         	int totalArquivoCompleto = msg.getData().getInt("arquivoCompleto" + String.valueOf(increment));
             progDialog.setProgress(totalArquivoCompleto);
             
-            if (totalArquivoCompleto >= Controlador.getInstancia().getCadastroDataManipulator().getNumeroCadastros() || 
+            if (totalArquivoCompleto >= Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis() || 
             	progThread.getCustomizedState() == CarregarRotaThread.DONE){
                 
             	dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
@@ -203,19 +203,18 @@ public class MenuPrincipal extends Activity {
 	        });
 	        	 
 	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
 	        	public void onClick(DialogInterface dialog, int which) {
 	        		removeDialog(id);
-	        		Controlador.getInstancia().getCadastroDataManipulator().close();
+	        		Controlador.getInstancia().finalizeDataManipulator();
 	        		Controlador.getInstancia().deleteDatabase();
 	        		Controlador.getInstancia().setPermissionGranted(false);
 	        		Controlador.getInstancia().initiateDataManipulator(layoutConfirmationDialog.getContext());
 	        		
 	        	    Toast.makeText(getBaseContext(),"Todas as informações foram apagadas com sucesso!",Toast.LENGTH_LONG).show();
 
-	        	    Controlador.getInstancia().finalizeDataManipulator();
         		    Intent myIntent = new Intent(layoutConfirmationDialog.getContext(), Fachada.class);
         	        startActivity(myIntent);
-
 	        	}
 	        });
 	        
@@ -227,7 +226,7 @@ public class MenuPrincipal extends Activity {
 	            progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	            progDialog.setCancelable(false);
 	            progDialog.setMessage("Por favor, espere enquanto o Arquivo de Retorno Completo está sendo gerado...");
-	            progDialog.setMax(Controlador.getInstancia().getCadastroDataManipulator().getNumeroCadastros());
+	            progDialog.setMax(Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis());
 	            progThread = new GerarArquivoCompletoThread(handler, this, increment);
 	            progThread.start();
 	            return progDialog;

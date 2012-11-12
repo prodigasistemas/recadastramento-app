@@ -252,7 +252,7 @@ public class Consulta extends ListActivity {
 
 	        // change the row color based on selected state
 	        if(selectedPos == position){
-	        	rowView.setBackgroundColor(Color.GRAY);
+	        	rowView.setBackgroundColor(Color.argb(70, 255, 255, 255));
 	        }else{
 	        	rowView.setBackgroundColor(Color.TRANSPARENT);
 	        }

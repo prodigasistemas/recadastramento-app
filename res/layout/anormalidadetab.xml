@@ -8,7 +8,7 @@ android:orientation="vertical">
 	<LinearLayout android:paddingTop="15dp" android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
 	
 	   	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayoutPeriodo">
-			<TextView android:id="@+id/txtGeoPosicao" android:text="Posicionamento Geográfico" android:textSize="18dp" android:textColor="@color/textColorYellowBackground" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
+			<TextView android:id="@+id/txtGeoPosicao" android:text="Posicionamento Geográfico" android:layout_marginLeft="50dp" android:textSize="18dp" android:textColor="@color/textColorYellowBackground" android:gravity="center" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
 		   	<LinearLayout android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayoutPeriodo">
 				<Button android:id="@+id/buttonAtualizar" android:background="@drawable/btn_update_custom" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	 			<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayoutGeoPosicao">
@@ -35,8 +35,10 @@ android:orientation="vertical">
 		</LinearLayout>
 		        		
 		<TextView android:text="Comentários:" android:id="@+id/txtComentario" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-		<EditText android:id="@+id/editComentario" android:singleLine="false" android:lines="5" android:layout_width="fill_parent"  android:layout_height="wrap_content" android:inputType="textMultiLine" > <requestFocus /> </EditText>
-
+		<ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
+			<EditText android:id="@+id/editComentario" android:singleLine="false" android:lines="6" android:layout_width="fill_parent"  android:layout_height="wrap_content" android:inputType="textMultiLine" > <requestFocus /> </EditText>
+		</ScrollView>
+		
 		<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="horizontal" android:padding="10dp" >
 			<Button android:id="@+id/buttonPicture1" android:background="@drawable/btn_camera" android:layout_marginRight="10dp" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 			<ImageView android:id="@+id/imageView1" android:background="@drawable/photo_logo" android:layout_width="200dip" android:layout_height="200dip"/>

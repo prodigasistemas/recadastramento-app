@@ -7,22 +7,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import ui.ArquivoRetorno;
-import ui.MessageDispatcher;
+import model.AnormalidadeImovel;
 import util.Constantes;
 import util.Util;
-
-import model.AnormalidadeImovel;
-import background.CarregarRotaThread;
-import background.EnviarCadastroOnlineThread;
-import background.GerarArquivoCompletoThread;
-import business.Controlador;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
@@ -34,8 +29,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.provider.MediaStore.Images.Media;
+import android.provider.Settings;
 import android.telephony.CellLocation;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -43,9 +38,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,7 +49,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
+import background.EnviarCadastroOnlineThread;
+import business.Controlador;
  
 public class AnormalidadeTab extends Activity implements LocationListener {
 
@@ -459,7 +456,30 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	    		break;
 	    	}
     	}
+    	
+    	removeImage(getLastImageId());
     }
+    
+    private int getLastImageId(){
+        final String[] imageColumns = { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
+        final String imageOrderBy = MediaStore.Images.Media._ID+" DESC";
+        Cursor imageCursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns, null, null, imageOrderBy);
+        if(imageCursor.moveToFirst()){
+            int id = imageCursor.getInt(imageCursor.getColumnIndex(MediaStore.Images.Media._ID));
+            String fullPath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+//            Log.d(TAG, "getLastImageId::id " + id);
+//            Log.d(TAG, "getLastImageId::path " + fullPath);
+            imageCursor.close();
+            return id;
+        }else{
+            return 0;
+        }
+    }
+    
+    private void removeImage(int id) {
+    	   ContentResolver cr = getContentResolver();
+    	   cr.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media._ID + "=?", new String[]{ Long.toString(id) } );
+    	}
 
     public long getImovelSelecionadoId(){
     	return Controlador.getInstancia().getImovelSelecionado().getImovelId();
@@ -575,7 +595,10 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	        			progThread = new EnviarCadastroOnlineThread(handler, getApplicationContext(), increment);
 	    	            progThread.start();
 	        			
-	        	    	if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
+	    	            if (MainTab.indiceNovoImovel != null) {
+	    	            	Controlador.getInstancia().setCadastroSelecionadoByListPosition(MainTab.indiceNovoImovel);
+	    	            	MainTab.indiceNovoImovel = null;
+	    	            } else if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
 	        				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
 
 	        			}else{
@@ -611,6 +634,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 	        	public void onClick(DialogInterface dialog, int which) {
 	        		removeDialog(id);
+	        		MainTab.indiceNovoImovel = null;
 	    			finish();
 	        	}
 	        });

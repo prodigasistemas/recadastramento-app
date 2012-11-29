@@ -93,7 +93,23 @@ public class DataManipulator
         db.delete(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, "id_imovel=?", new String []{String.valueOf(idImovel)});
    }
     
-    public List<String> selectEnderecoImoveis(String condition){
+    public int getPosicaoImovelLista(Imovel imovel) {
+    	Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "matricula" }, null, null, null, null,  "inscricao asc");
+    	int i = 0;
+    	 if (cursor.moveToFirst()) {
+    		 do {
+    			 i++;
+    			 if (imovel.getMatricula() == Integer.parseInt(cursor.getString(0))) {
+    				 return i;
+    			 }
+    		 } while (cursor.moveToNext());
+    	 }
+    	 
+    	 return i;
+    }
+    
+    
+public List<String> selectEnderecoImoveis(String condition){
     	
     	ArrayList<String> list = new ArrayList<String>();
     	Cursor cursor;
@@ -111,6 +127,7 @@ public class DataManipulator
         if (cursor.moveToFirst()) {
            do {
                 String b1= "(" + (x+1) + ") " + String.valueOf(Integer.parseInt(cursor.getString(1))) + " - " + cursor.getString(2).trim() + ", n°" + cursor.getString(3).trim() + " " + cursor.getString(4).trim() + " " +  cursor.getString(5).trim() + " " + cursor.getString(6).trim() + " " + cursor.getString(7).trim();
+//                b1 = Util.capitalizarString(b1);
                 list.add(b1);
                 x=x+1;
            } while (cursor.moveToNext());
@@ -121,6 +138,50 @@ public class DataManipulator
         cursor.close();
         return list;
    }
+
+	public List<Imovel> selectEnderecoImovel(String condition){
+	
+		Cursor cursor;
+		List<Imovel> imoveis = null;
+	    
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "inscricao",
+														        		"rota",
+														        		"face",
+														        		"codigo_municipio",
+														        		"logradouro_imovel",
+														        		"bairro_imovel",
+														        		"cep_imovel",
+														        		"municipio_imovel",
+														        		"codigo_logradouro_imovel", "numero_imovel", "complemento_imovel" }, 
+														        		condition, null, null, null,  "inscricao asc");
+		Imovel imovel = null;
+	    if (cursor.moveToFirst()) {
+	    	imoveis = new ArrayList<Imovel>();
+	    	do {
+				imovel = new Imovel();
+				imovel.setInscricao(cursor.getString(0));
+				imovel.setRota(cursor.getString(1));
+				imovel.setFace(cursor.getString(2));
+				imovel.setCodigoMunicipio(cursor.getString(3));
+				imovel.getEnderecoImovel().setLogradouro(cursor.getString(4));
+				imovel.getEnderecoImovel().setBairro(cursor.getString(5));
+				imovel.getEnderecoImovel().setCep(cursor.getString(6));
+				imovel.getEnderecoImovel().setMunicipio(cursor.getString(7));
+				imovel.setCodigoLogradouro(cursor.getString(8));
+				imovel.getEnderecoImovel().setNumero(cursor.getString(9));
+				imovel.getEnderecoImovel().setComplemento(cursor.getString(10));
+				
+				imoveis.add(imovel);
+	    	} while (cursor.moveToNext());
+	    }
+
+	    if (cursor != null && !cursor.isClosed()) {
+	       cursor.close();
+	    }
+	    cursor.close();
+	    
+	    return imoveis;
+}
     
     public List<String> selectIdImoveis(String condition){
     	

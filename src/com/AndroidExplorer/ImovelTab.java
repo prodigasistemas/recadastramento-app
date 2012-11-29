@@ -302,8 +302,9 @@ public class ImovelTab extends Activity implements LocationListener {
             		if (ramosAtividadeImovel.size() > 0 && isRamoAtividadeOk() || ramosAtividadeImovel.size() == 0){
 
             			getImovel().setTabSaved(true);
-            			dialogMessage = " Dados do Imóvel atualizados com sucesso. ";
-            	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
+            			Toast.makeText(ImovelTab.this, "Dados do Imóvel atualizados com sucesso.", 5).show();
+//            			dialogMessage = " Dados do Imóvel atualizados com sucesso. ";
+//            	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
 
             		}
             	}
@@ -1033,6 +1034,7 @@ public class ImovelTab extends Activity implements LocationListener {
 	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 	        	public void onClick(DialogInterface dialog, int which) {
 	        		removeDialog(id);
+	        		MainTab.indiceNovoImovel = null;
 	    			finish();
 	        	}
 	        });
@@ -1058,8 +1060,7 @@ public class ImovelTab extends Activity implements LocationListener {
 
 	
 	public void onLocationChanged(Location location) {
-		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
-		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+		lastKnownLocation = location;
 	}
 
 	

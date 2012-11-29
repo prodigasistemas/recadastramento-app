@@ -92,6 +92,7 @@
      </string-array>
 
     <string name="options_adicionar_imovel">Novo Cadastro</string>
+    <string name="options_adicionar_sublote">Adicionar Sublote</string>
     <string name="options_menu_principal">Menu Principal</string>
     <string name="options_lista_cadastro">Lista de Cadastros</string>
 	<string name="options_proximo">Próximo</string>

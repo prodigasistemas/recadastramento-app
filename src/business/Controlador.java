@@ -160,6 +160,11 @@ public class Controlador {
     	dmCadastro.selectAnormalidadeImovel(idCadastroSelecionado);
     }
     
+    public void setCadastroSelecionadoNovoImovel() {
+    	initCadastroTabs();
+    	idCadastroSelecionado = -1;
+    }
+    
     public void initCadastroTabs(){
         clienteSelecionado = new Cliente();
         imovelSelecionado = new Imovel();
@@ -167,6 +172,7 @@ public class Controlador {
         servicosSelecionado = new Servicos();
         anormalidadeImovelSelecionado = new AnormalidadeImovel();
     }
+    
     
     public int getIdCadastroSelecionado(int listPosition, String condition){
     	// se for cadastro novo

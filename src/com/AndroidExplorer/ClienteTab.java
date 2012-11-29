@@ -183,8 +183,9 @@ public class ClienteTab extends Activity implements LocationListener {
 	                	// Verificar se pode salvar!!!!!!
 	                	
 	            		getCliente().setTabSaved(true);
-	        			dialogMessage = "Dados do Cliente atualizados com sucesso.";
-	        	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
+	            		Toast.makeText(ClienteTab.this, "Dados do Cliente atualizados com sucesso.", 5).show();
+//	        			dialogMessage = "Dados do Cliente atualizados com sucesso.";
+//	        	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
 	            	}
             	}
         	}
@@ -1018,6 +1019,7 @@ public class ClienteTab extends Activity implements LocationListener {
 	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 	        	public void onClick(DialogInterface dialog, int which) {
 	        		removeDialog(id);
+	        		MainTab.indiceNovoImovel = null;
 	    			finish();
 	        	}
 	        });
@@ -1043,8 +1045,7 @@ public class ClienteTab extends Activity implements LocationListener {
 
 	
 	public void onLocationChanged(Location location) {
-		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
-		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+		lastKnownLocation = location;
 	}
 
 	

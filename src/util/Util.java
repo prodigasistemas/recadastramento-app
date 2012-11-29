@@ -16,6 +16,7 @@ import business.ControladorAcessoOnline;
 
 import com.AndroidExplorer.ClienteTab;
 
+import android.annotation.TargetApi;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -1040,6 +1041,22 @@ public class Util {
 	
 		// retorna o array de bytes
 	return resposta;
+    }
+    
+	public static String capitalizarString(String string) {
+    	string = string.toLowerCase();
+    	String[] palavras = string.split(" ");
+    	String novaString = "";
+    	
+    	for (String palavra : palavras) {
+    		if (palavra.equals("")){
+    			continue;
+    		}
+			palavra = Character.toUpperCase(palavra.charAt(0)) + palavra.substring(1);
+			novaString += palavra + " ";
+		}
+    	
+    	return novaString;
     }
 
 }

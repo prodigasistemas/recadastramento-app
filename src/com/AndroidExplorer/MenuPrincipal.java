@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -137,14 +138,14 @@ public class MenuPrincipal extends Activity {
         				}
         	    	}
         	    	
-        	    	if (statusOk){
+//        	    	if (statusOk){
                 		showDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
         	    	
-        	    	}else{
+//        	    	}else{
             		
-        	    		dialogMessage = "Não é permitido gerar arquivo de retorno Completo enquanto houver imóveis não visitados.";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
-        	    	}
+//        	    		dialogMessage = "Não é permitido gerar arquivo de retorno Completo enquanto houver imóveis não visitados.";
+//            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+//        	    	}
             		
             	}else if (position == MENU_CADASTROS_CONCLUIDOS){
 					
@@ -189,7 +190,7 @@ public class MenuPrincipal extends Activity {
 		
 	    if (id == Constantes.DIALOG_ID_CLEAN_DB){
 	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
+	        final View layoutConfirmationDialog = inflater.inflate(R.layout.remove_data, (ViewGroup) findViewById(R.id.root));
 	  
 	        builder = new AlertDialog.Builder(this);
 	        builder.setTitle("Atenção!");
@@ -205,16 +206,31 @@ public class MenuPrincipal extends Activity {
 	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
 	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	        		Controlador.getInstancia().finalizeDataManipulator();
-	        		Controlador.getInstancia().deleteDatabase();
-	        		Controlador.getInstancia().setPermissionGranted(false);
-	        		Controlador.getInstancia().initiateDataManipulator(layoutConfirmationDialog.getContext());
-	        		
-	        	    Toast.makeText(getBaseContext(),"Todas as informações foram apagadas com sucesso!",Toast.LENGTH_LONG).show();
+	        		EditText senha = (EditText) layoutConfirmationDialog.findViewById(R.id.txtSenha);
+	        		if (senha.getText().toString().equals("apagar")) {
+	
+		        		removeDialog(id);
+		        		Controlador.getInstancia().finalizeDataManipulator();
+		        		Controlador.getInstancia().deleteDatabase();
+		        		Controlador.getInstancia().setPermissionGranted(false);
+		        		Controlador.getInstancia().initiateDataManipulator(layoutConfirmationDialog.getContext());
+		        		
+		        	    Toast.makeText(getBaseContext(),"Todas as informações foram apagadas com sucesso!",Toast.LENGTH_LONG).show();
+	
+	        		    Intent myIntent = new Intent(layoutConfirmationDialog.getContext(), Fachada.class);
+	        	        startActivity(myIntent);
+	        		} else {
+	        			AlertDialog.Builder builder = new AlertDialog.Builder(MenuPrincipal.this);
+	        	        builder.setTitle("Erro");
+	        	        builder.setMessage("Senha inválida");
 
-        		    Intent myIntent = new Intent(layoutConfirmationDialog.getContext(), Fachada.class);
-        	        startActivity(myIntent);
+	        	        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {}
+						});
+	        	        
+	        	        builder.show();
+
+	        		}
 	        	}
 	        });
 	        
@@ -299,16 +315,18 @@ public class MenuPrincipal extends Activity {
 				
 				LayoutInflater inflator = getLayoutInflater();
 				view = inflator.inflate(R.layout.icon, null);
-				TextView textView = (TextView)view.findViewById(R.id.icon_text);
-				textView.setText(TextIDs[position]);
-				ImageView imageView = (ImageView)view.findViewById(R.id.icon_image);
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				imageView.setPadding(5, 5, 5, 5);
-				imageView.setImageResource(imageIDs[position]);
-			
+							
 			}else{
 				view = convertView;
 			}
+			
+			TextView textView = (TextView)view.findViewById(R.id.icon_text);
+			textView.setText(TextIDs[position]);
+			ImageView imageView = (ImageView)view.findViewById(R.id.icon_image);
+			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			imageView.setPadding(5, 5, 5, 5);
+			imageView.setImageResource(imageIDs[position]);
+
 			return view;
 		}
     }    

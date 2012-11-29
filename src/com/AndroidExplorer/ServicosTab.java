@@ -144,8 +144,9 @@ public class ServicosTab extends Activity implements LocationListener{
             	
 //            	if (!((TextView)findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
             		getServicos().setTabSaved(true);
-        			dialogMessage = " Dados do Serviço atualizados com sucesso. ";
-        	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
+            		Toast.makeText(ServicosTab.this, "Dados do Serviço atualizados com sucesso.", 5).show();
+//        			dialogMessage = " Dados do Serviço atualizados com sucesso. ";
+//        	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
             		
 //            	}else{
 //        			dialogMessage = "Atualize a Localização Geográfica antes de salvar.";
@@ -177,8 +178,7 @@ public class ServicosTab extends Activity implements LocationListener{
 
 	
 	public void onLocationChanged(Location location) {
-		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
-		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+		lastKnownLocation = location;
 	}
 
 	
@@ -268,6 +268,7 @@ public class ServicosTab extends Activity implements LocationListener{
 	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 	        	public void onClick(DialogInterface dialog, int which) {
 	        		removeDialog(id);
+	        		MainTab.indiceNovoImovel = null;
 	    			finish();
 	        	}
 	        });

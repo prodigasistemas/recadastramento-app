@@ -1,31 +1,42 @@
 package com.AndroidExplorer;
 
+import java.util.List;
+
+import model.Imovel;
 import util.Constantes;
-import business.Controlador;
+import util.Util;
+import android.app.AlertDialog;
 import android.app.TabActivity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TabHost.TabContentFactory;
+import business.Controlador;
  
 public class MainTab extends TabActivity {
 
 	private static TabHost tabHost;
+	public static Integer indiceNovoImovel;
+	public boolean numeroLoteInsuficiente = false;
+	private static final int IMOVEL_ANTERIOR = 0; 
+	private static final int IMOVEL_POSTERIOR = 1; 
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -94,8 +105,10 @@ public class MainTab extends TabActivity {
     }
     
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.layout.menuoptions, menu);
+	    if (indiceNovoImovel == null) {
+	    	MenuInflater inflater = getMenuInflater();
+		    inflater.inflate(R.layout.menuoptions, menu);
+	    }
 	    return true;
 	}
 
@@ -133,32 +146,148 @@ public class MainTab extends TabActivity {
 	        return true;
 	    
 	    case R.id.adicionarNovo:
+	    	
+	    	final int posicao = Controlador.getInstancia().getCadastroListPosition();
+	    	
+	    	List<Imovel> imoveis = Controlador.getInstancia().getCadastroDataManipulator().selectEnderecoImovel(null);
 			
-			myIntent = new Intent(getApplicationContext(), ListaAddImovel.class);
-			startActivity(myIntent);
+	    	Imovel proximo = null;
+	    	
+	    	Imovel anterior = null;
+	    	
+	    	String imovelAnterior = "";
+	    	String imovelPosterior = "";
+	    	
+	    	if (!isInicioLista(posicao)) {
+	    		anterior = imoveis.get(posicao-1);
+	    		imovelAnterior = Util.capitalizarString(anterior.getEnderecoImovel().getLogradouro() + ", nº " + anterior.getEnderecoImovel().getNumero() + 
+	    				" " + anterior.getEnderecoImovel().getComplemento());
+	    	}
+	    	
+	    	if (!isFimLista(posicao)) {
+	    		proximo = imoveis.get(posicao+1);
+	    		imovelPosterior = Util.capitalizarString(proximo.getEnderecoImovel().getLogradouro() + ", nº " + proximo.getEnderecoImovel().getNumero() + 
+	    				" " + proximo.getEnderecoImovel().getComplemento());
+	    	}
+	    	
+	    	String imovelAtual = Util.capitalizarString(getImovelSelecionado().getEnderecoImovel().getLogradouro() + ", nº " + 
+	    						 getImovelSelecionado().getEnderecoImovel().getNumero() + 
+	    						 " " + getImovelSelecionado().getEnderecoImovel().getComplemento());
+	    	
+	    	
+	    	LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    	final View view = (View) inflater.inflate(R.layout.add_lote_dialog, (ViewGroup) findViewById(R.layout.maintab));
+	    	
+	    	final AlertDialog dialog = new AlertDialog.Builder(this).create();
+	    	dialog.setTitle("Por favor, escolha a posição do novo imóvel");
+	    	dialog.setView(view);
+	    	dialog.show();
+	    	
+	    	if (posicao >= 1) {
+	    		((TextView) view.findViewById(R.id.txtImovelAnterior)).setText(imovelAnterior);
+	    	}
+	    	
+	    	if (posicao <= Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) {
+	    		((TextView) view.findViewById(R.id.txtImovelPosterior)).setText(imovelPosterior);
+	    	}
+	    	
+	    	((TextView) view.findViewById(R.id.txtImovelAtual)).setText(imovelAtual); 
+	    	 
+	    	// Primeiro botao para adicionar imovel
+	    	Button inserirImoveAntes = (Button) view.findViewById(R.id.txtInserirImovelAntes);
+	    	final Imovel ant = anterior;
+	    	final Imovel prox = proximo;
+	    	inserirImoveAntes.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					dialog.dismiss();
+					Controlador.getInstancia().setCadastroListPosition(posicao);
+					if (isInicioLista(posicao)) {
+					
+						indiceNovoImovel = posicao + 1;
+						int lote = (int)(Integer.parseInt(getImovelSelecionado().getLote())/2);
+						if (lote < 1) {
+							numeroLoteInsuficiente = true;;
+						}
+						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+						
+					} else if (isFimLista(posicao)) {
+						
+						indiceNovoImovel = 0;
+						
+						int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(ant.getLote()))/2;
+						if (getImovelSelecionado().getLote().equals(""+lote) || ant.getLote().equals(""+lote)) {
+							numeroLoteInsuficiente = true;;
+						}
+						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+					
+					} else if (isMesmoEndereco(ant.getEnderecoImovel().getLogradouro(), getImovelSelecionado().getEnderecoImovel().getLogradouro())) {
+						
+						indiceNovoImovel = posicao + 1;
+						
+						int lote = (Integer.parseInt(ant.getLote()) + Integer.parseInt(getImovelSelecionado().getLote()))/2;
+						if (getImovelSelecionado().getLote().equals(""+lote) || ant.getLote().equals(""+lote)) {
+							numeroLoteInsuficiente = true;;
+						}
+	                    preencheNovoImovel(ant, montarLote(""+lote));
+	                    
+					} else if (!isMesmoEndereco(ant.getEnderecoImovel().getLogradouro(), Controlador.getInstancia()
+							.getImovelSelecionado().getEnderecoImovel().getLogradouro())) {
+						
+						indiceNovoImovel = posicao + 1;
+						showDialogSelecionarFace(ant, IMOVEL_ANTERIOR);
+	                    
+					} 
+				}
+			});
+	    	
+	    	// Segundo botao para adicionar imovel
+	    	Button inserirImoveDepois = (Button) view.findViewById(R.id.txtInserirImovelDepois);
+	    	inserirImoveDepois.setOnClickListener(new OnClickListener() {
+	    		
+	    		public void onClick(View v) {
+	    			dialog.dismiss();
+	    			Controlador.getInstancia().setCadastroListPosition(posicao);
+	    			if (isInicioLista(posicao)) {
+						
+	    				indiceNovoImovel = posicao+2;
+	    				int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(prox.getLote()))/2;
+	    				if (getImovelSelecionado().getLote().equals(""+lote) || prox.getLote().equals(""+lote)) {
+							numeroLoteInsuficiente = true;;
+						}
+						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+						
+					} else if (isFimLista(posicao)) {
+						
+						indiceNovoImovel = 0;
+						int lote = (Integer.parseInt(getImovelSelecionado().getLote())+4);
+						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+					
+					} else if (isMesmoEndereco(getImovelSelecionado().getEnderecoImovel().getLogradouro(), prox.getEnderecoImovel().getLogradouro())) {
+	                
+						indiceNovoImovel = posicao+2;
+						int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(prox.getLote()))/2;
+						if (getImovelSelecionado().getLote().equals(""+lote) || prox.getLote().equals(""+lote)) {
+							numeroLoteInsuficiente = true;;
+						}
+	                    preencheNovoImovel(prox, montarLote(""+lote));
+					
+	    			} else if (!isMesmoEndereco(prox.getEnderecoImovel().getLogradouro(), getImovelSelecionado().getEnderecoImovel().getLogradouro())) {
+						
+						indiceNovoImovel = posicao+2;
+						showDialogSelecionarFace(prox, IMOVEL_POSTERIOR);
+	                    
+					}
+	    		}
+	    	});
+	    	
 
-//	    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(-1);
-//	    	Controlador.getInstancia().initCadastroTabs();
-//	    	finish();
-//	    	myIntent = new Intent(getApplicationContext(), MainTab.class);
-//			startActivity(myIntent);
 	        return true;
 	        
-	    case R.id.menuPrincipal:
+	    case R.id.novoSublote:
+	    	
 			
-	    	myIntent = new Intent(getApplicationContext(), MenuPrincipal.class);
-			startActivity(myIntent);
-	        return true;
-	        
-	    case R.id.listCadastros:
-			
-	    	myIntent = new Intent(getApplicationContext(), ListaImoveis.class);
-			startActivity(myIntent);
-	        return true;
-	        
-	    case R.id.sair:
-			
-	        return true;
+	    	return true;
 	        
 	    default:
 	        return super.onOptionsItemSelected(item);
@@ -169,6 +298,154 @@ public class MainTab extends TabActivity {
 	protected void onResume() {
 //		initializeTabs();
 		super.onResume();
+	}
+
+	
+	public void preencheNovoImovel(Imovel imovelReferencia, String lote) {
+        Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
+		
+		Imovel imovel = new Imovel();
+		imovel.getEnderecoImovel().setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
+		imovel.getEnderecoImovel().setBairro(imovelReferencia.getEnderecoImovel().getBairro());
+		imovel.getEnderecoImovel().setCep(imovelReferencia.getEnderecoImovel().getCep());
+		imovel.getEnderecoImovel().setMunicipio(imovelReferencia.getEnderecoImovel().getMunicipio());
+		imovel.setRota(imovelReferencia.getRota());
+		imovel.setFace(imovelReferencia.getFace());
+		imovel.setCodigoMunicipio(""+imovelReferencia.getCodigoMunicipio());
+		imovel.setSubLote("000");
+		imovel.setLote(lote);
+		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
+		imovel.setLocalidade(imovelReferencia.getLocalidade());
+		imovel.setSetor(imovelReferencia.getSetor());
+		imovel.setQuadra(imovelReferencia.getQuadra());
+		imovel.setImovelStatus(""+Constantes.IMOVEL_A_SALVAR);
+		
+		Controlador.getInstancia().setImovelSelecionado(imovel);
+		
+		if (numeroLoteInsuficiente) {
+			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			dialog.setTitle("Erro");
+			dialog.setMessage("Não há mais lotes disponíveis");
+			dialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+					Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
+			        startActivity(myIntent);
+				}
+			});
+			
+			dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+
+			    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+			        if ( (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) && 
+				         (event.getRepeatCount() == 0)) {
+				            
+				        return true; // Pretend we processed it
+			        }
+			        return false; // Any other keys are still processed as normal
+			    }
+			});
+
+			
+			dialog.show();
+		} else {
+			finish();
+			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
+	        startActivity(myIntent);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param imovelReferencia
+	 * @param posicaoImovel - 0: anterior, 1: posterior
+	 */
+	public void showDialogSelecionarFace(final Imovel imovelReferencia, final int posicaoImovel) {
+		ListView lista = new ListView(MainTab.this);
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainTab.this, android.R.layout.simple_list_item_1);
+		
+		final AlertDialog dialog = new AlertDialog.Builder(MainTab.this).create();
+		dialog.setTitle("Por favor, selecione a rua ao qual o imóvel faz frente");
+		dialog.setView(lista);
+		dialog.show();
+		
+		if (posicaoImovel == IMOVEL_ANTERIOR) {
+			arrayAdapter.add(Util.capitalizarString(imovelReferencia.getEnderecoImovel().getLogradouro() + ", nº " + imovelReferencia.getEnderecoImovel().getNumero() + 
+					" " + imovelReferencia.getEnderecoImovel().getComplemento()));
+			arrayAdapter.add(Util.capitalizarString(getImovelSelecionado().getEnderecoImovel().getLogradouro() + ", nº " + 
+					 getImovelSelecionado().getEnderecoImovel().getNumero() + 
+					 " " + getImovelSelecionado().getEnderecoImovel().getComplemento()));
+		
+		} else if (posicaoImovel == IMOVEL_POSTERIOR) {
+			arrayAdapter.add(Util.capitalizarString(getImovelSelecionado().getEnderecoImovel().getLogradouro() + ", nº " + 
+					getImovelSelecionado().getEnderecoImovel().getNumero() + 
+					" " + getImovelSelecionado().getEnderecoImovel().getComplemento()));
+			arrayAdapter.add(Util.capitalizarString(imovelReferencia.getEnderecoImovel().getLogradouro() + ", nº " + imovelReferencia.getEnderecoImovel().getNumero() + 
+					" " + imovelReferencia.getEnderecoImovel().getComplemento()));
+		}
+		
+		lista.setAdapter(arrayAdapter);
+		lista.setBackgroundColor(Color.parseColor("#6e6e6e"));
+		lista.setCacheColorHint(0);
+		lista.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				
+				dialog.dismiss();
+				
+				// Monta o novo imovel com os dados do imovel selecionado
+				if ((position == 0 && posicaoImovel == IMOVEL_POSTERIOR)) {
+					preencheNovoImovel(getImovelSelecionado(), montarLote(""+(Integer.parseInt(getImovelSelecionado().getLote()) + 4)));
+					return;
+				
+				} else if (position == 1 && posicaoImovel == IMOVEL_ANTERIOR) {
+					int lote = Integer.parseInt(getImovelSelecionado().getLote())/2;
+					if (lote < 1) {
+						numeroLoteInsuficiente = true;
+					}
+					preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+					return;
+				}
+				
+				if (posicaoImovel == IMOVEL_ANTERIOR) {
+					int lote = (Integer.parseInt(imovelReferencia.getLote()) + 4);
+					preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+				
+				} else if (posicaoImovel == IMOVEL_POSTERIOR) {
+					int lote = Integer.parseInt(imovelReferencia.getLote())/2;
+					if (lote < 1) {
+						numeroLoteInsuficiente = true;
+					}
+					preencheNovoImovel(imovelReferencia, montarLote(""+lote));
+				}
+				
+			}
+		});
+
+	}
+	
+	public String montarLote(String lote) {
+		return Util.adicionarZerosEsquerdaNumero(4, lote);
+	}
+	
+	public boolean isInicioLista(long id) {
+		return id == 0;
+	}
+	
+	public boolean isFimLista(long id) {
+		return id == Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()-1;
+	}
+	
+	public boolean isMesmoEndereco(String e1, String e2) {
+		return e1.trim().equals(e2.trim());
+	}
+	
+	public Imovel getImovelSelecionado() {
+		return Controlador.getInstancia().getImovelSelecionado();
+	}
+	
+	public int getPosicaoImovelLista(Imovel imovel) {
+		return Controlador.getInstancia().getCadastroDataManipulator().getPosicaoImovelLista(imovel);
 	}
 
 }

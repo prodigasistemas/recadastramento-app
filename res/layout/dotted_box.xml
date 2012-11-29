@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_enabled="false"><shape xmlns:android="http://schemas.android.com/apk/res/android" android:background="#EDEDED" android:padding="8dp" android:shape="rectangle">
+            <gradient android:angle="90" android:centerColor="#4F594B" android:endColor="#7E8A78" android:startColor="#3E5237" />
+
+            <corners android:radius="6dp" />
+
+            <padding android:bottom="8dp" android:left="8dp" android:right="8dp" android:top="8dp" />
+
+            <stroke android:dashGap="10dp" android:dashWidth="10dp" android:width="2dp" android:color="#2a6739" />
+        </shape></item>
+    <item android:state_enabled="true" android:state_pressed="true"><shape xmlns:android="http://schemas.android.com/apk/res/android" android:background="#EDEDED" android:padding="8dp" android:shape="rectangle">
+            <gradient android:angle="90" android:centerColor="#8f9a8a" android:endColor="#a9b1a5" android:startColor="#656f60" />
+
+            <corners android:radius="6dp" />
+
+            <padding android:bottom="8dp" android:left="8dp" android:right="8dp" android:top="8dp" />
+
+            <stroke android:dashGap="10dp" android:dashWidth="10dp" android:width="2dp" android:color="#2a6739" />
+        </shape></item>
+    <item android:state_enabled="true" android:state_focused="true"><shape xmlns:android="http://schemas.android.com/apk/res/android" android:background="#EDEDED" android:padding="8dp" android:shape="rectangle">
+            <gradient android:startColor="#000000" />
+
+            <corners android:radius="6dp" />
+
+            <padding android:bottom="8dp" android:left="8dp" android:right="8dp" android:top="8dp" />
+
+            <stroke android:dashGap="10dp" android:dashWidth="10dp" android:width="2dp" android:color="#2a6739" />
+        </shape></item>
+    <item android:state_enabled="true"><shape xmlns:android="http://schemas.android.com/apk/res/android" android:background="#EDEDED" android:padding="8dp" android:shape="rectangle">
+            <gradient android:startColor="#000000" />
+
+            <corners android:radius="6dp" />
+
+            <padding android:bottom="8dp" android:left="8dp" android:right="8dp" android:top="8dp" />
+
+            <stroke android:dashGap="10dp" android:dashWidth="10dp" android:width="2dp" android:color="#2a6739" />
+        </shape></item>
+
+</selector>

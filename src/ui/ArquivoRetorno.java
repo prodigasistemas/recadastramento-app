@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 import business.Controlador;
 import util.Constantes;
@@ -28,6 +29,7 @@ public class ArquivoRetorno {
     private static ArquivoRetorno instancia;
     private static StringBuffer arquivo;
 
+    private static StringBuffer registrosTipoZero = null;
     private static StringBuffer registrosTipoCLiente = null;
     private static StringBuffer registrosTipoImovel = null;
     private static StringBuffer registrosTipoRamoAtividadeImovel = null;
@@ -84,6 +86,8 @@ public class ArquivoRetorno {
 		    arquivo = new StringBuffer();
 		    
 		    ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
+		    
+		    gerarLinhaZero();
 		    
 		    for (int i = 0; i < listIdImoveis.size(); i++){
 
@@ -155,7 +159,26 @@ public class ArquivoRetorno {
 	    return arquivo;		    
     }
     
+    private static void gerarLinhaZero() {
+    	registrosTipoZero = new StringBuffer();
+    	
+    	registrosTipoZero.append("00");
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getGrupoFaturamento()));
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getLocalidade()));
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getSetor()));
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(2, Controlador.getInstancia().getDadosGerais().getRota()));
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(6, Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento()));
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(4, ""+Controlador.getInstancia().getDadosGerais().getIdRota()));
+    	registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, Controlador.getInstancia().getDadosGerais().getVersaoCelular()));
+    	
+    	registrosTipoZero.append("\n");
+    	
+    	arquivo.append(registrosTipoZero);
+    }
+    
     private static void gerarRegistroTipoCliente() {
+    	
+    	Log.i("EMAIL>>>>", getClienteSelecionado().getUsuario().getEmail());
 
     	registrosTipoCLiente = new StringBuffer();
    	
@@ -168,26 +191,27 @@ public class ArquivoRetorno {
     	registrosTipoCLiente.append(getClienteSelecionado().isUsuarioProprietario());
     	registrosTipoCLiente.append(getClienteSelecionado().getTipoResponsavel());
     	
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getUsuario().getNome(), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(50, getClienteSelecionado().getUsuario().getNome(), ' '));
  
        	registrosTipoCLiente.append((getClienteSelecionado().getUsuario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getUsuario().getTipoPessoa() : " "));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getUsuario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-    	registrosTipoCLiente.append(getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""));
-    	registrosTipoCLiente.append(getClienteSelecionado().getUsuario().getUf());
-    	registrosTipoCLiente.append(getClienteSelecionado().getUsuario().getTipoSexo());
+    	registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getUsuario().getUf(), ' '));
+    	registrosTipoCLiente.append(!getClienteSelecionado().getUsuario().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getUsuario().getTipoSexo() : " ");
     	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getUsuario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getUsuario().getEmail(), ' '));
     	
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getProprietario().getNome(), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(50, getClienteSelecionado().getProprietario().getNome(), ' '));
        	registrosTipoCLiente.append((getClienteSelecionado().getProprietario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getProprietario().getTipoPessoa() : " "));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getProprietario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-    	registrosTipoCLiente.append(getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""));
-    	registrosTipoCLiente.append(getClienteSelecionado().getProprietario().getUf());
-    	registrosTipoCLiente.append(getClienteSelecionado().getProprietario().getTipoSexo());
+    	registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getProprietario().getUf(), ' '));
+    	registrosTipoCLiente.append(!getClienteSelecionado().getProprietario().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getProprietario().getTipoSexo() : " ");
     	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getProprietario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getProprietario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getProprietario().getEmail(), ' '));
+    	registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, ""+getClienteSelecionado().getEnderecoProprietario().getTipoLogradouro()));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getEnderecoProprietario().getLogradouro(), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(5, getClienteSelecionado().getEnderecoProprietario().getNumero(), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(25, getClienteSelecionado().getEnderecoProprietario().getComplemento(), ' '));
@@ -195,15 +219,16 @@ public class ArquivoRetorno {
     	registrosTipoCLiente.append(Util.adicionarCharDireita(8, getClienteSelecionado().getEnderecoProprietario().getCep().replaceAll("[-]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(15, getClienteSelecionado().getEnderecoProprietario().getMunicipio(), ' '));
 
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getResponsavel().getNome(), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(50, getClienteSelecionado().getResponsavel().getNome(), ' '));
        	registrosTipoCLiente.append((getClienteSelecionado().getResponsavel().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getResponsavel().getTipoPessoa() : " "));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getResponsavel().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-    	registrosTipoCLiente.append(getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""));
-    	registrosTipoCLiente.append(getClienteSelecionado().getResponsavel().getUf());
-    	registrosTipoCLiente.append(getClienteSelecionado().getResponsavel().getTipoSexo());
+    	registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getResponsavel().getUf(), ' '));
+    	registrosTipoCLiente.append(!getClienteSelecionado().getResponsavel().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getResponsavel().getTipoSexo() : " ");
     	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getResponsavel().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getResponsavel().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getResponsavel().getEmail(), ' '));
+    	registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, ""+getClienteSelecionado().getEnderecoResponsavel().getTipoLogradouro()));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getEnderecoResponsavel().getLogradouro(), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(5, getClienteSelecionado().getEnderecoResponsavel().getNumero(), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(25, getClienteSelecionado().getEnderecoResponsavel().getComplemento(), ' '));
@@ -213,7 +238,12 @@ public class ArquivoRetorno {
 
     	registrosTipoCLiente.append(Util.adicionarCharDireita(20, String.valueOf(getClienteSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getClienteSelecionado().getLatitude() : " "), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(20, String.valueOf(getClienteSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getClienteSelecionado().getLongitude() : " "), ' '));
+//    	registrosTipoCLiente.append("");
     	registrosTipoCLiente.append(Util.adicionarCharEsquerda(26, getClienteSelecionado().getData(), ' '));
+    	
+    	registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, ""+getClienteSelecionado().getUsuario().getMatricula()));
+    	registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, ""+getClienteSelecionado().getResponsavel().getMatricula()));
+    	registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, ""+getClienteSelecionado().getProprietario().getMatricula()));
 
     	registrosTipoCLiente.append("\n");
     	
@@ -235,6 +265,7 @@ public class ArquivoRetorno {
     	registrosTipoImovel.append(Util.adicionarCharDireita(20, getImovelSelecionado().getNumeroCelpa(), ' '));
     	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getNumeroPontosUteis())));
 
+    	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, ""+getImovelSelecionado().getEnderecoImovel().getTipoLogradouro()));
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(40, getImovelSelecionado().getEnderecoImovel().getLogradouro(), ' '));
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(5, getImovelSelecionado().getEnderecoImovel().getNumero(), ' '));
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(25, getImovelSelecionado().getEnderecoImovel().getComplemento(), ' '));
@@ -263,7 +294,7 @@ public class ArquivoRetorno {
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria3())));
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4())));
 
-	   	registrosTipoImovel.append(getImovelSelecionado().getTipoFonteAbastecimento());
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, ""+getImovelSelecionado().getTipoFonteAbastecimento()));
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLatitude() : " "), ' '));
     	registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLongitude() : " "), ' '));
     	registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));
@@ -311,10 +342,10 @@ public class ArquivoRetorno {
        	registroTipoMedidor.append("05");
     	
        	registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
-       	registroTipoMedidor.append(getMedidorSelecionado().getPossuiMedidor());
+       	registroTipoMedidor.append(Util.adicionarCharEsquerda(1, ""+getMedidorSelecionado().getPossuiMedidor(), ' '));
        	registroTipoMedidor.append(Util.adicionarCharDireita(10, getMedidorSelecionado().getNumeroHidrometro(), ' '));
-       	registroTipoMedidor.append(Util.adicionarCharDireita(2, String.valueOf(getMedidorSelecionado().getMarca()), ' '));
-       	registroTipoMedidor.append(Util.adicionarCharDireita(5, String.valueOf(getMedidorSelecionado().getCapacidade() != Constantes.NULO_DOUBLE ? getMedidorSelecionado().getCapacidade() : " "), ' '));
+       	registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(getMedidorSelecionado().getMarca())));
+       	registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(getMedidorSelecionado().getCapacidade() != Constantes.NULO_DOUBLE ? getMedidorSelecionado().getCapacidade() : " ")));
        	registroTipoMedidor.append(Util.adicionarCharDireita(2, String.valueOf(getMedidorSelecionado().getTipoCaixaProtecao()), ' '));
        	registroTipoMedidor.append(Util.adicionarCharDireita(20, String.valueOf(getMedidorSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getMedidorSelecionado().getLatitude() : " "), ' '));
        	registroTipoMedidor.append(Util.adicionarCharDireita(20, String.valueOf(getMedidorSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getMedidorSelecionado().getLongitude() : " "), ' '));
@@ -330,12 +361,12 @@ public class ArquivoRetorno {
 
     	registroTipoAnormalidadeImovel.append("06");
     	registroTipoAnormalidadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, String.valueOf(getAnormalidadeImovelSelecionado().getComentario()), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, String.valueOf(getAnormalidadeImovelSelecionado().getPathFoto1()), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, String.valueOf(getAnormalidadeImovelSelecionado().getPathFoto2()), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getComentario()), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getPathFoto1()), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getPathFoto2()), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getAnormalidadeImovelSelecionado().getData(), ' '));
     	registroTipoAnormalidadeImovel.append("\n");
 

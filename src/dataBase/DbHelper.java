@@ -11,16 +11,16 @@ public class DbHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CLIENTE_QUERY =
-    	"CREATE TABLE cliente (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, gerencia TEXT, tipo_endereco_proprietario TEXT, tipo_endereco_responsavel TEXT, usuario_proprietario TEXT, tipo_responsavel TEXT, " +
+    	"CREATE TABLE cliente (id INTEGER PRIMARY KEY autoincrement, matricula_usuario INTEGER, matricula_responsavel INTEGER, matricula_proprietario INTEGER, matricula TEXT not null, gerencia TEXT, tipo_endereco_proprietario TEXT, tipo_endereco_responsavel TEXT, usuario_proprietario TEXT, tipo_responsavel TEXT, " +
     	"nome_usuario TEXT, tipo_pessoa_usuario TEXT, cpf_cnpj_usuario TEXT, rg_usuario TEXT, uf_usuario TEXT, tipo_sexo_usuario TEXT, telefone_usuario TEXT, celular_usuario TEXT, email_usuario TEXT, " +
     	"nome_proprietario TEXT, tipo_pessoa_proprietario TEXT, cpf_cnpj_proprietario TEXT, rg_proprietario TEXT, uf_proprietario TEXT, tipo_sexo_proprietario TEXT, telefone_proprietario TEXT, celular_proprietario TEXT, email_proprietario TEXT, " +
-     	"logradouro_proprietario TXT, numero_proprietario TEXT, complemento_proprietario TEXT, bairro_proprietario TEXT, cep_proprietario TEXT, municipio_proprietario TEXT, " +
+     	"tipo_logradouro_proprietario INTEGER, logradouro_proprietario TXT, numero_proprietario TEXT, complemento_proprietario TEXT, bairro_proprietario TEXT, cep_proprietario TEXT, municipio_proprietario TEXT, " +
     	"nome_responsavel TEXT, tipo_pessoa_responsavel TEXT, cpf_cnpj_responsavel TEXT, rg_responsavel TEXT, uf_responsavel TEXT, tipo_sexo_responsavel TEXT, telefone_responsavel TEXT, celular_responsavel TEXT, email_responsavel TEXT, " +
- 		"logradouro_responsavel TXT, numero_responsavel TEXT, complemento_responsavel TEXT, bairro_responsavel TEXT, cep_responsavel TEXT, municipio_responsavel TEXT, latitude TEXT, longitude TEXT, data TEXT )";
+ 		"tipo_logradouro_responsavel INTEGER, logradouro_responsavel TXT, numero_responsavel TEXT, complemento_responsavel TEXT, bairro_responsavel TEXT, cep_responsavel TEXT, municipio_responsavel TEXT, latitude TEXT, longitude TEXT, data TEXT )";
 
     private static final String DATABASE_IMOVEL_QUERY =
     	"CREATE TABLE imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, codigo_cliente TEXT, inscricao TEXT, rota TEXT, face TEXT, codigo_municipio TEXT, numero_iptu TEXT, numero_celpa TEXT, numero_pontos_uteis TEXT, " +
-    	"logradouro_imovel TEXT, numero_imovel TEXT, complemento_imovel TEXT, bairro_imovel TEXT, cep_imovel TEXT, municipio_imovel TEXT, codigo_logradouro_imovel TEXT, " +
+    	"tipo_logradouro_imovel INTEGER, logradouro_imovel TEXT, numero_imovel TEXT, complemento_imovel TEXT, bairro_imovel TEXT, cep_imovel TEXT, municipio_imovel TEXT, codigo_logradouro_imovel TEXT, " +
     	"sub_categoria_residencial_1 TEXT, sub_categoria_residencial_2 TEXT, sub_categoria_residencial_3 TEXT, sub_categoria_residencial_4 TEXT, " +
     	"sub_categoria_comercial_1 TEXT, sub_categoria_comercial_2 TEXT, sub_categoria_comercial_3 TEXT, sub_categoria_comercial_4 TEXT, " +
     	"sub_categoria_publica_1 TEXT, sub_categoria_publica_2 TEXT, sub_categoria_publica_3 TEXT, sub_categoria_publica_4 TEXT, " +
@@ -39,7 +39,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_GERAL_QUERY =
     	"CREATE TABLE geral (id INTEGER PRIMARY KEY autoincrement, ano_mes_faturamento TEXT, codigo_febraban TEXT, telefone0800 TEXT, cnpj_empresa TEXT, " +
     	"inscricao_estadual_empresa TEXT, login TEXT, senha TXT, indicador_transmissao_offline TEXT, versao_celular TEXT, id_rota TEXT, data_inicio TEXT, data_fim TEXT, " +
-    	"localidade TEXT, setor TEXT, rota TEXT, grupo_faturamento TEXT)";
+    	"localidade TEXT, setor TEXT, rota TEXT, grupo_faturamento TEXT, qtd_imoveis_novos INTEGER)";
 
     private static final String DATABASE_ANORMALIDADE_QUERY =
     	"CREATE TABLE anormalidade (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT, data DATE)";
@@ -64,7 +64,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_MARCA_HIDROMETRO_QUERY =
     	"CREATE TABLE marca_hidrometro (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
+    
+    private static final String DATABASE_CAPACIDADE_HIDROMETRO_QUERY =
+        	"CREATE TABLE capacidade_hidrometro (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
 
+    private static final String DATABASE_TIPO_LOGRADOURO_QUERY =
+        	"CREATE TABLE tipo_logradouro (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
+    
     private static final String DATABASE_LOCAL_INSTALACAO_RAMAL_QUERY =
         "CREATE TABLE local_instalacao_ramal (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
 
@@ -92,6 +98,8 @@ public class DbHelper extends SQLiteOpenHelper {
      	db.execSQL(DATABASE_PROTECAO_HIDROMETRO_QUERY);
      	db.execSQL(DATABASE_FONTE_ABASTECIMENTO_QUERY);
      	db.execSQL(DATABASE_MARCA_HIDROMETRO_QUERY);
+     	db.execSQL(DATABASE_CAPACIDADE_HIDROMETRO_QUERY);
+     	db.execSQL(DATABASE_TIPO_LOGRADOURO_QUERY);
      	db.execSQL(DATABASE_LOCAL_INSTALACAO_RAMAL_QUERY);
      	db.execSQL(DATABASE_CONFIGURACAO_QUERY);
     }

@@ -41,6 +41,8 @@ public class Constantes {
     public static final int REGISTRO_TIPO_FONTE_ABASTECIMENTO = 13;
     public static final int REGISTRO_TIPO_MARCA_HIDROMETRO = 14;
     public static final int REGISTRO_TIPO_LOCAl_INSTALACAO_RAMAL= 15;
+    public static final int REGISTRO_TIPO_CAPACIDADE_HIDROMETRO = 16;
+    public static final int REGISTRO_TIPO_LOGRADOURO = 17;
     
     public static final int SIM = 1;
     public static final int NAO = 2;
@@ -98,7 +100,9 @@ public class Constantes {
     public static final String TABLE_PROTECAO_HIDROMETRO = "protecao_hidrometro";
     public static final String TABLE_FONTE_ABASTECIMENTO = "fonte_abastecimento";
     public static final String TABLE_MARCA_HIDROMETRO = "marca_hidrometro";
+    public static final String TABLE_CAPACIDADE_HIDROMETRO = "capacidade_hidrometro";
     public static final String TABLE_CONFIGURACAO = "configuracao";
+    public static final String TABLE_TIPO_LOGRADOURO = "tipo_logradouro";
     
     public static final String DATABASE_NAME = "cadastro.db";
 	public static final String DATABASE_PATH = "/data/data/com.AndroidExplorer/databases/";
@@ -109,5 +113,6 @@ public class Constantes {
     public static final int IMOVEL_NOVO = 3;
     public static final int IMOVEL_TRANSMITIDO = 4;
     public static final int IMOVEL_NAO_TRANSMITIDO = 5;
+    public static final int IMOVEL_NOVO_COM_ANORMALIDADE = 6;
 
 }

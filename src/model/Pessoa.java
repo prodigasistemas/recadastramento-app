@@ -4,6 +4,7 @@ import util.Util;
 
 public class Pessoa {
 
+	private int matricula;
     private String nome;
     private int tipoPessoa;
 
@@ -26,6 +27,20 @@ public class Pessoa {
     	celular = "";
     	eMail = "";
     }
+    
+    
+
+	public int getMatricula() {
+		return matricula;
+	}
+
+
+
+	public void setMatricula(int matricula) {
+		this.matricula = matricula;
+	}
+
+
 
 	public void setNome(String nome) {
 		this.nome = Util.verificarNuloString(nome);

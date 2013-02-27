@@ -319,6 +319,12 @@ public class Controlador {
 
 				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOCAl_INSTALACAO_RAMAL) {
 				    	dmCadastro.insertLocalInstalacaoRamal(line);
+				    	
+				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_CAPACIDADE_HIDROMETRO) {
+				    	dmCadastro.insertCapacidadeHidrometro(line);
+				    	
+				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOGRADOURO) {
+				    	dmCadastro.insertLogradouro(line);
 				    }
 				    
 				    if (linhasLidas < qtdRegistros){

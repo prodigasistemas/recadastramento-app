@@ -1,10 +1,10 @@
 package com.AndroidExplorer;
 
 import java.util.Calendar;
+import java.util.List;
 
 import model.Cliente;
 import model.Endereco;
-import business.Controlador;
 import util.Constantes;
 import util.Util;
 import android.app.Activity;
@@ -23,10 +23,11 @@ import android.telephony.CellLocation;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,11 +35,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.RadioGroup.OnCheckedChangeListener;
+import business.Controlador;
  
 public class ClienteTab extends Activity implements LocationListener {
 
@@ -54,6 +55,8 @@ public class ClienteTab extends Activity implements LocationListener {
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
+	List<String> listTiposLogradouroProprietario;
+	List<String> listTiposLogradouroResponsavel;
 
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -369,6 +372,8 @@ public class ClienteTab extends Activity implements LocationListener {
 			getCliente().getProprietario().setTelefone(((EditText)findViewById(R.id.foneProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getProprietario().setCelular(((EditText)findViewById(R.id.celularProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getProprietario().setEmail(((EditText)findViewById(R.id.emailProprietario)).getText().toString());
+			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)findViewById(R.id.spinnerTipoLogradouroProprietario)).getSelectedItem().toString());
+			getCliente().getEnderecoProprietario().setTipoLogradouro(codigo);
 			getCliente().getEnderecoProprietario().setLogradouro(((EditText)findViewById(R.id.logradouroProprietario)).getText().toString());
 			getCliente().getEnderecoProprietario().setNumero(((EditText)findViewById(R.id.numeroProprietario)).getText().toString());
 			getCliente().getEnderecoProprietario().setComplemento(((EditText)findViewById(R.id.complementoProprietario)).getText().toString());
@@ -396,6 +401,8 @@ public class ClienteTab extends Activity implements LocationListener {
 			getCliente().getResponsavel().setTelefone(((EditText)findViewById(R.id.foneResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getResponsavel().setCelular(((EditText)findViewById(R.id.celularResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getResponsavel().setEmail(((EditText)findViewById(R.id.emailResponsavel)).getText().toString());
+			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)findViewById(R.id.spinnerTipoLogradouroResponsavel)).getSelectedItem().toString());
+			getCliente().getEnderecoResponsavel().setTipoLogradouro(codigo);
 			getCliente().getEnderecoResponsavel().setLogradouro(((EditText)findViewById(R.id.logradouroResponsavel)).getText().toString());
 			getCliente().getEnderecoResponsavel().setNumero(((EditText)findViewById(R.id.numeroResponsavel)).getText().toString());
 			getCliente().getEnderecoResponsavel().setComplemento(((EditText)findViewById(R.id.complementoResponsavel)).getText().toString());
@@ -795,6 +802,24 @@ public class ClienteTab extends Activity implements LocationListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSexoProprietario.setAdapter(adapter);
         
+        // Spinner Tipo Logradouro
+        Spinner spinnerTipoLogradouro = (Spinner) findViewById(R.id.spinnerTipoLogradouroProprietario);
+        listTiposLogradouroProprietario = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_TIPO_LOGRADOURO);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTiposLogradouroProprietario);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTipoLogradouro.setAdapter(adapter);
+		
+        // populate Tipo Logradouro
+		String descricaoTipoLogradouro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricaoByCodigoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, String.valueOf(getCliente().getEnderecoProprietario().getTipoLogradouro()));
+		if (descricaoTipoLogradouro != null){
+			for (int i = 0; i < listTiposLogradouroProprietario.size(); i++){
+	        	if (listTiposLogradouroProprietario.get(i).equalsIgnoreCase(descricaoTipoLogradouro)){
+	        		spinnerTipoLogradouro.setSelection(i);
+	        		break;
+	        	}
+	        }
+		}
+        
 		populateProprietario();
 
 	}
@@ -857,6 +882,24 @@ public class ClienteTab extends Activity implements LocationListener {
 	    adapter = ArrayAdapter.createFromResource(getBaseContext(), R.array.sexo, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    spinnerSexoResponsavel.setAdapter(adapter);
+	    
+	    // Spinner Tipo Logradouro
+        Spinner spinnerTipoLogradouro = (Spinner) findViewById(R.id.spinnerTipoLogradouroResponsavel);
+        listTiposLogradouroResponsavel = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_TIPO_LOGRADOURO);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTiposLogradouroResponsavel);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTipoLogradouro.setAdapter(adapter);
+		
+        // populate Tipo Logradouro
+		String descricaoTipoLogradouro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricaoByCodigoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, String.valueOf(getCliente().getEnderecoResponsavel().getTipoLogradouro()));
+		if (descricaoTipoLogradouro != null){
+			for (int i = 0; i < listTiposLogradouroResponsavel.size(); i++){
+	        	if (listTiposLogradouroResponsavel.get(i).equalsIgnoreCase(descricaoTipoLogradouro)){
+	        		spinnerTipoLogradouro.setSelection(i);
+	        		break;
+	        	}
+	        }
+		}
 
 		populateResponsavel();
 	}

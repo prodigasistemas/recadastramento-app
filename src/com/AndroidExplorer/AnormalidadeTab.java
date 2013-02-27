@@ -243,9 +243,13 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 
         	    	
                 	if (((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() > 0) {
-                		Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
+                		if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_NOVO) {
+                    		Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO_COM_ANORMALIDADE));
+                    	} else { 
+                    		Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
+                    	}
                 		
-                	}else{
+                	} else if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO) {
                     	Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
                 	}
 
@@ -311,10 +315,10 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	        	((ImageView)findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
 	        	((ImageView)findViewById(R.id.imageView1)).invalidate(); 
 	        
-	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto1.jpg").exists()){
+	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
 	    		
 	        	try {
-	    			bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto1.jpg")) );
+	    			bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg")) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
@@ -341,10 +345,10 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	        	((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
 	        	((ImageView)findViewById(R.id.imageView2)).invalidate(); 
 	        
-	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto2.jpg").exists()){
+	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
 	        	
 	    		try {
-	    			bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto2.jpg")) );
+	    			bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
@@ -377,17 +381,17 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 
         if (fotoNumber == TAKE_PICTURE_1){
         	
-        	if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto1.jpg").exists()){
-        		getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto1.jpg").delete();
+        	if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
+        		getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").delete();
         	}
         	
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto1.jpg")));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg")));
  
         }else{
-        	if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto2.jpg").exists()){
-        		getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto2.jpg").delete();
+        	if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
+        		getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").delete();
         	}
-        	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto2.jpg")));
+        	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")));
         }
 
         startActivityForResult(intent, fotoNumber);
@@ -425,7 +429,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 
 	             try {  
 	             
-	            	 bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto1.jpg")) );  
+	            	 bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() +"_1.jpg")) );  
 	                 foto1Taken = true;
 	            	 
 	             } catch (FileNotFoundException e) {  
@@ -442,7 +446,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 
 	             try {  
 	             
-	            	 bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() +"_foto2.jpg")) );  
+	            	 bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );  
 	                 foto2Taken = true;
 
 	             } catch (FileNotFoundException e) {  
@@ -495,12 +499,12 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 		
 		getAnormalidadeImovel().setComentario(((EditText)findViewById(R.id.editComentario)).getText().toString());
 		
-		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() + "_foto1.jpg").exists()){
-			getAnormalidadeImovel().setPathFoto1(Util.getRetornoRotaDirectory() + "/" + getImovelSelecionadoId() + "_foto1.jpg");
+		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
+			getAnormalidadeImovel().setPathFoto1(Util.getRetornoRotaDirectory() + "/" + Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg");
 		}
 		
-		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionadoId() + "_foto2.jpg").exists()){
-			getAnormalidadeImovel().setPathFoto2(Util.getRetornoRotaDirectory() + "/" + getImovelSelecionadoId() + "_foto2.jpg");	
+		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
+			getAnormalidadeImovel().setPathFoto2(Util.getRetornoRotaDirectory() + "/" + Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg");	
 		}
 
 		if (!((TextView)findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){

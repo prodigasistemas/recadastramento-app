@@ -53,6 +53,7 @@ public class ImovelTab extends Activity implements LocationListener {
 	private ArrayList<String> ramosAtividadeImovel;
 	private List<String> listRamosAtividade;
 	private List<String> listFonteAbastecimento;
+	private List<String> listTiposLogradouroImovel;
 	private String dialogMessage = null;
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
@@ -102,6 +103,24 @@ public class ImovelTab extends Activity implements LocationListener {
     	ramosAtividadeImovel = new ArrayList<String>();
         
     	Util.addTextChangedListenerCepMask((EditText)findViewById(R.id.cepImovel));
+    	
+    	// Spinner Tipo Logradouro
+        Spinner spinnerTipoLogradouro = (Spinner) findViewById(R.id.spinnerTipoLogradouroImovel);
+        listTiposLogradouroImovel = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_TIPO_LOGRADOURO);
+        ArrayAdapter<CharSequence> arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTiposLogradouroImovel);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTipoLogradouro.setAdapter(arrayAdapter);
+		
+        // populate Tipo Logradouro
+		String descricaoTipoLogradouro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricaoByCodigoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, String.valueOf(getImovel().getEnderecoImovel().getTipoLogradouro()));
+		if (descricaoTipoLogradouro != null){
+			for (int i = 0; i < listTiposLogradouroImovel.size(); i++){
+	        	if (listTiposLogradouroImovel.get(i).equalsIgnoreCase(descricaoTipoLogradouro)){
+	        		spinnerTipoLogradouro.setSelection(i);
+	        		break;
+	        	}
+	        }
+		}
 
     	//CheckBox Categoria Residencial
     	enableEconominasResidencial(false);
@@ -234,7 +253,7 @@ public class ImovelTab extends Activity implements LocationListener {
 	        	}
 	        }
 		}
-        
+		
     	populateImovel();
         populateCategorias();
         
@@ -573,8 +592,16 @@ public class ImovelTab extends Activity implements LocationListener {
 	
 	public void updateImovelSelecionado(){
 		
+		if (getImovel().getImovelStatus() == Constantes.IMOVEL_NOVO) {
+			ArrayList<Integer> listStatus = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
+	        int qtdImoveisNovos = listStatus.get(Constantes.IMOVEL_NOVO);
+			getImovel().setMatricula(""+(qtdImoveisNovos == 0 ? 1 : qtdImoveisNovos+1));
+			
+		} else {
+			getImovel().setMatricula(((EditText)findViewById(R.id.matricula)).getText().toString());
+		}
+		
 		getImovel().setCodigoCliente(((EditText)findViewById(R.id.codCliente)).getText().toString());
-		getImovel().setMatricula(((EditText)findViewById(R.id.matricula)).getText().toString());
 		getImovel().setLocalidade(Util.adicionarZerosEsquerdaNumero(3, ((EditText)findViewById(R.id.localidade)).getText().toString()));
 		getImovel().setSetor(Util.adicionarZerosEsquerdaNumero(3, ((EditText)findViewById(R.id.setor)).getText().toString()));
 		getImovel().setQuadra(Util.adicionarZerosEsquerdaNumero(4, ((EditText)findViewById(R.id.quadra)).getText().toString()));
@@ -590,6 +617,8 @@ public class ImovelTab extends Activity implements LocationListener {
 		getImovel().setNumeroCelpa(((EditText)findViewById(R.id.numeroCelpa)).getText().toString());
 		getImovel().setNumeroPontosUteis(((EditText)findViewById(R.id.numeroPontosUteis)).getText().toString());
 		
+		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)findViewById(R.id.spinnerTipoLogradouroImovel)).getSelectedItem().toString());
+    	getImovel().getEnderecoImovel().setTipoLogradouro(codigo);
 		getImovel().getEnderecoImovel().setLogradouro(((EditText)findViewById(R.id.logradouro)).getText().toString());
 		getImovel().getEnderecoImovel().setNumero(((EditText)findViewById(R.id.numero)).getText().toString());
 		getImovel().getEnderecoImovel().setComplemento(((EditText)findViewById(R.id.complemento)).getText().toString());
@@ -647,7 +676,7 @@ public class ImovelTab extends Activity implements LocationListener {
     		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria4(String.valueOf(Constantes.NULO_INT));
     	}
 
-		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_FONTE_ABASTECIMENTO, ((Spinner)findViewById(R.id.spinnerFonteAbastecimento)).getSelectedItem().toString());
+		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_FONTE_ABASTECIMENTO, ((Spinner)findViewById(R.id.spinnerFonteAbastecimento)).getSelectedItem().toString());
     	getImovel().setTipoFonteAbastecimento(codigo);
 
         if (lastKnownLocation != null) {

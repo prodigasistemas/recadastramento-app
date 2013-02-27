@@ -52,6 +52,9 @@ android:orientation="vertical">
 		<EditText android:id="@+id/face" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number"></EditText>
 	</LinearLayout>
 
+	<TextView android:text="Tipo Logradouro:" android:id="@+id/txtTipoLogradouroImovel" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<Spinner android:id="@+id/spinnerTipoLogradouroImovel" android:drawSelectorOnTop="true" android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
+	
 	<TextView android:text="Logradouro:" android:id="@+id/txtLogradouro" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/logradouro" android:maxLength="40" android:layout_width="fill_parent" android:background="@drawable/edittext_rounded_corners" android:layout_height="wrap_content" android:inputType="textCapCharacters"></EditText>
 	

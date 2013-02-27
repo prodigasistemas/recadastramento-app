@@ -42,6 +42,7 @@ public class MedidorTab extends Activity implements LocationListener {
 	private String dialogMessage = null;
 	private List<String> listCaixaProtecao;
 	private List<String> listMarcaHidrometro;
+	private List<String> listCapacidadeHidrometro;
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
@@ -117,9 +118,11 @@ public class MedidorTab extends Activity implements LocationListener {
 		}else{
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.SIM));
 			getMedidor().setNumeroHidrometro(((EditText)findViewById(R.id.numeroHidrometro)).getText().toString());
-			getMedidor().setCapacidade(((EditText)findViewById(R.id.capacidadeHidrometro)).getText().toString());
+			
+			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerCapacidadeHidrometro)).getSelectedItem().toString());
+			getMedidor().setCapacidade(codigo);
 
-			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_MARCA_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerMarcaHidrometro)).getSelectedItem().toString());
+			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_MARCA_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerMarcaHidrometro)).getSelectedItem().toString());
 			getMedidor().setMarca(codigo);
 			
 			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_PROTECAO_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerCaixaProtecao)).getSelectedItem().toString());
@@ -150,11 +153,29 @@ public class MedidorTab extends Activity implements LocationListener {
 
 		        	// popula o endereço do hidrometro, caso exista
 		            populateDadosHidrometro();
+		            
+		            
+		            // Spinner Capacidade Hidrômetro
+		            Spinner spinnerCapacidadeHidrometro = (Spinner) findViewById(R.id.spinnerCapacidadeHidrometro);
+		            listCapacidadeHidrometro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO);
+		            ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listCapacidadeHidrometro);
+		            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		            spinnerCapacidadeHidrometro.setAdapter(adapter);
+		    		// Popula Spinner Capacidade Hidrômetro
+		    		String descricaoCapacidadeHidrometro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricaoByCodigoFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO, String.valueOf(getMedidor().getCapacidade()));
+		    		if (descricaoCapacidadeHidrometro != null){
+		    			for (int i = 0; i < listCapacidadeHidrometro.size(); i++){
+		    	        	if (listCapacidadeHidrometro.get(i).equalsIgnoreCase(descricaoCapacidadeHidrometro)){
+		    	        		spinnerCapacidadeHidrometro.setSelection(i);
+		    	        		break;
+		    	        	}
+		    	        }
+		    		}
 
 		            // Spinner Marca Hidrômetro
 		            Spinner spinnerMarcaHidrometro = (Spinner) findViewById(R.id.spinnerMarcaHidrometro);
 		            listMarcaHidrometro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_MARCA_HIDROMETRO);
-		            ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listMarcaHidrometro);
+		            adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listMarcaHidrometro);
 		            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		            spinnerMarcaHidrometro.setAdapter(adapter);
 		    		// Popula Spinner Marca Hidrômetro
@@ -195,11 +216,6 @@ public class MedidorTab extends Activity implements LocationListener {
 		// Número do Hidrometro
         if ( String.valueOf(getMedidor().getNumeroHidrometro()) != Constantes.NULO_STRING){
             ((EditText)(findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
-        }
-        
-		// Capacidade do Hidrometro
-        if ( getMedidor().getCapacidade() != Constantes.NULO_DOUBLE){
-            ((EditText)(findViewById(R.id.capacidadeHidrometro))).setText(String.valueOf(getMedidor().getCapacidade()));
         }
 	}
 

@@ -8,7 +8,7 @@ public class Medidor {
 	private int possuiMedidor;
 	private String numeroHidrometro;
 	private int marca;
-	private double capacidade;
+	private int capacidade;
 	private int tipoCaixaProtecao;
 	private boolean tabSaved;
 	private double latitude;
@@ -39,7 +39,7 @@ public class Medidor {
 	}
 
 	public void setCapacidade(String capacidade) {
-		this.capacidade = Util.verificarNuloDouble(capacidade);
+		this.capacidade = Util.verificarNuloInt(capacidade);
 	}
 
 	public void setTipoCaixaProtecao(String tipoCaixaProtecao) {
@@ -74,7 +74,7 @@ public class Medidor {
 		return this.marca;
 	}
 
-	public double getCapacidade() {
+	public int getCapacidade() {
 		return this.capacidade;
 	}
 

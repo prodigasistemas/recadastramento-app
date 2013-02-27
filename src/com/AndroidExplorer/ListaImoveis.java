@@ -118,7 +118,7 @@ public class ListaImoveis extends ListActivity {
 			if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_A_SALVAR ){
 				imageView.setImageResource(R.drawable.todo);
 			
-			} else if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_SALVO){
+			} else if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_SALVO || Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_NOVO){
 				imageView.setImageResource(R.drawable.done);
 			
 			} else if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){

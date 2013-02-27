@@ -13,7 +13,7 @@ android:id="@+id/linearLayoutDadosHidrometro">
 	
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
 		<EditText android:id="@+id/numeroHidrometro" android:minWidth="160dp" android:maxLength="10" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters"></EditText>
-		<EditText android:id="@+id/capacidadeHidrometro" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal"></EditText>
+		<Spinner android:id="@+id/spinnerCapacidadeHidrometro" android:drawSelectorOnTop="true" android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
 	</LinearLayout>
 
 	<TextView android:text="Marca:" android:id="@+id/txtMarca" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" ></TextView>

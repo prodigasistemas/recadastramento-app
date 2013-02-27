@@ -43,6 +43,9 @@
 	
 	<TextView android:text="E-mail:" android:id="@+id/txtEmailProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	<EditText android:id="@+id/emailProprietario" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="textEmailAddress"></EditText>
+	
+	<TextView android:text="Tipo Logradouro:" android:id="@+id/txtTipoLogradouroProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<Spinner android:id="@+id/spinnerTipoLogradouroProprietario" android:drawSelectorOnTop="true" android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
 
 	<TextView android:text="Logradouro:" android:id="@+id/txtLogradouroProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/logradouroProprietario" android:maxLength="40" android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="@drawable/edittext_rounded_corners" android:inputType="textCapCharacters"></EditText>

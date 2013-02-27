@@ -164,6 +164,9 @@ public class ServicosTab extends Activity implements LocationListener{
 		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_ESGOTO, ((Spinner)findViewById(R.id.spinnerLigacaoEsgoto)).getSelectedItem().toString());
 		getServicos().setTipoLigacaoEsgoto(codigo);
 		
+		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_LOCAL_INSTALACAO_RAMAL, ((Spinner)findViewById(R.id.spinnerLocalizacaoPontoServico)).getSelectedItem().toString());
+		getServicos().setLocalInstalacaoRamal(codigo);
+		
         if (lastKnownLocation != null) {
         	getServicos().setLatitude(String.valueOf(lastKnownLocation.getLatitude()));
         	getServicos().setLongitude(String.valueOf(lastKnownLocation.getLongitude()));

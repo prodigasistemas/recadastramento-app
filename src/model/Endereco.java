@@ -4,6 +4,7 @@ import util.Util;
 
 public class Endereco {
 
+	private int tipoLogradouro;
     private String logradouro;
     private String numero;
     private String complemento;
@@ -20,6 +21,12 @@ public class Endereco {
     	cep = "";
     	municipio = "";
     }
+    
+
+	public void setTipoLogradouro(String tipoLogradouro) {
+		this.tipoLogradouro = Util.verificarNuloInt(tipoLogradouro);
+	}
+
 
 	public void setLogradouro(String logradouro) {
 		this.logradouro = Util.verificarNuloString(logradouro);
@@ -68,5 +75,9 @@ public class Endereco {
 
 	public String getMunicipio() {
 		return this.municipio;
+	}
+	
+	public int getTipoLogradouro() {
+		return tipoLogradouro;
 	}
 }

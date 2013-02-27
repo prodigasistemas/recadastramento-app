@@ -1,6 +1,9 @@
 package com.AndroidExplorer;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import dataBase.DataManipulator;
 
 import model.Imovel;
 import util.Constantes;
@@ -248,7 +251,14 @@ public class MainTab extends TabActivity {
 	    		public void onClick(View v) {
 	    			dialog.dismiss();
 	    			Controlador.getInstancia().setCadastroListPosition(posicao);
-	    			if (isInicioLista(posicao)) {
+	    			int qtdImoveisRota = Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis();
+
+	    			if (qtdImoveisRota == 1) {
+	    				indiceNovoImovel = 0;
+						int lote = (Integer.parseInt(getImovelSelecionado().getLote())+4);
+						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+						
+	    			} else if (isInicioLista(posicao)) {
 						
 	    				indiceNovoImovel = posicao+2;
 	    				int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(prox.getLote()))/2;
@@ -303,8 +313,11 @@ public class MainTab extends TabActivity {
 	
 	public void preencheNovoImovel(Imovel imovelReferencia, String lote) {
         Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
-		
+        
+        int qtdImoveisNovos = Controlador.getInstancia().getCadastroDataManipulator().getQtdImoveisNovo(); 
+        
 		Imovel imovel = new Imovel();
+		imovel.setMatricula(""+(++qtdImoveisNovos));
 		imovel.getEnderecoImovel().setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
 		imovel.getEnderecoImovel().setBairro(imovelReferencia.getEnderecoImovel().getBairro());
 		imovel.getEnderecoImovel().setCep(imovelReferencia.getEnderecoImovel().getCep());
@@ -318,7 +331,7 @@ public class MainTab extends TabActivity {
 		imovel.setLocalidade(imovelReferencia.getLocalidade());
 		imovel.setSetor(imovelReferencia.getSetor());
 		imovel.setQuadra(imovelReferencia.getQuadra());
-		imovel.setImovelStatus(""+Constantes.IMOVEL_A_SALVAR);
+		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
 		
 		Controlador.getInstancia().setImovelSelecionado(imovel);
 		

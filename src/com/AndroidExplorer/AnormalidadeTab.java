@@ -102,11 +102,14 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
         
+        if(mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        	mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
 		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setCostAllowed(true);
 		provider = mLocManager.getBestProvider(criteria, false);
-		Location location = mLocManager.getLastKnownLocation(provider);
-
-        lastKnownLocation = mLocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		lastKnownLocation = mLocManager.getLastKnownLocation(provider);
     	CellLocation.requestLocationUpdate();
 
         // Button Atualizar 

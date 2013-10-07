@@ -199,6 +199,9 @@ public class ImovelTab extends Activity implements LocationListener {
  	 				
  					isUpdatingRamoAtividade = true;  
  					((EditText)findViewById(R.id.codigoRamoAtividade)).setText(codigo);
+ 					
+	        	}else if (((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() == 0){
+	        		((EditText)findViewById(R.id.codigoRamoAtividade)).setText("");
 	        	}
 			}
 			
@@ -263,6 +266,7 @@ public class ImovelTab extends Activity implements LocationListener {
 
         	public void onClick(View v) {
         		boolean isRamoAtividadeJaAdicionado = false;
+        		
         		// Verifica se Ramo de Atividade já foi adicionado neste Imovel.
         		if (ramosAtividadeImovel != null){
 	        		for (int i=0; i< ramosAtividadeImovel.size(); i++){
@@ -277,7 +281,7 @@ public class ImovelTab extends Activity implements LocationListener {
 	        	    
         			if (((EditText)(findViewById(R.id.codigoRamoAtividade))).getText().toString().length() > 0){
 
-                		if (isRamoAtividadeOk()){
+ //               		if (isRamoAtividadeOk()){
 
 	        				ramosAtividadeImovel.add(((EditText)(findViewById(R.id.codigoRamoAtividade))).getText().toString());
 	     	        	    ListView listRamosAtividade = (ListView)findViewById(R.id.listRamosAtividade);
@@ -295,7 +299,7 @@ public class ImovelTab extends Activity implements LocationListener {
 	    	        	    params.height = (int) (33*(ramosAtividadeImovel.size())*(getResources().getDisplayMetrics().density));
 	    	                listRamosAtividade.setLayoutParams(params);
 	    	                listRamosAtividade.requestLayout();
-                		}
+//                		}
         			}else{
             			dialogMessage = " Ramo de Atividade inválido! ";
             	    	showDialog(Constantes.DIALOG_ID_ERRO);
@@ -318,13 +322,16 @@ public class ImovelTab extends Activity implements LocationListener {
             	if (areCamposObrigatoriosOk()){
             		
                 	// Ramo de atividade somente para imóvel com economia Comercial, publica ou industrial!!!
-            		if (ramosAtividadeImovel.size() > 0 && isRamoAtividadeOk() || ramosAtividadeImovel.size() == 0){
+            		if (isRamoAtividadeOk()){
+            			
+                    	// Se tipo de categoria estiver selecionado deve possuir pelo menos uma economia.
+                		if (isDadosCategoriaOk()){
 
-            			getImovel().setTabSaved(true);
-            			Toast.makeText(ImovelTab.this, "Dados do Imóvel atualizados com sucesso.", 5).show();
-//            			dialogMessage = " Dados do Imóvel atualizados com sucesso. ";
-//            	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
-
+                			getImovel().setTabSaved(true);
+	            			Toast.makeText(ImovelTab.this, "Dados do Imóvel atualizados com sucesso.", 5).show();
+	//            			dialogMessage = " Dados do Imóvel atualizados com sucesso. ";
+	//            	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
+                		}
             		}
             	}
             }
@@ -334,15 +341,22 @@ public class ImovelTab extends Activity implements LocationListener {
 	public boolean isRamoAtividadeOk(){
 		boolean result = true;
 
-		if (!cbComercial.isChecked() && 
-			!cbPublica.isChecked() &&
-			!cbIndustrial.isChecked()){
-		
-			dialogMessage = " Ramo de Atividade só deve existir para economia Comercial, Pública ou Industrial! ";
+		if ( !cbComercial.isChecked() && !cbPublica.isChecked() && !cbIndustrial.isChecked() && ramosAtividadeImovel.size() > 0){
+			dialogMessage = " Ramo de Atividade só deve existir para economia Comercial, Pública ou Industrial. ";
+	    	showDialog(Constantes.DIALOG_ID_ERRO);
+			result = false;
+
+		}else if ( (cbComercial.isChecked() || cbPublica.isChecked() || cbIndustrial.isChecked()) && ramosAtividadeImovel.size() == 0){
+			dialogMessage = " É necessário informar o Ramo de Atividade para economia Comercial, Pública ou Industrial. ";
 	    	showDialog(Constantes.DIALOG_ID_ERRO);
 			result = false;
 		}
-		
+		return result;
+	}
+
+	public boolean isDadosCategoriaOk(){
+		boolean result = true;
+
 		if ( cbComercial.isChecked() &&
 				((((EditText)findViewById(R.id.economiasC1)).getText().toString().trim().length() == 0) ||
 				( ((EditText)findViewById(R.id.economiasC1)).getText().toString().trim().length() >0 &&
@@ -365,7 +379,7 @@ public class ImovelTab extends Activity implements LocationListener {
 			
 			dialogMessage = " Número de economias comerciais inválido. ";
 	    	showDialog(Constantes.DIALOG_ID_ERRO);
-			return false;
+	    	result = false;
 		}
 
 		if ( cbIndustrial.isChecked() &&
@@ -390,7 +404,7 @@ public class ImovelTab extends Activity implements LocationListener {
 			
 			dialogMessage = " Número de economias industriais inválido. ";
 	    	showDialog(Constantes.DIALOG_ID_ERRO);
-			return false;
+	    	result = false;
 		}
 
 		if ( cbPublica.isChecked() &&
@@ -415,7 +429,7 @@ public class ImovelTab extends Activity implements LocationListener {
 			
 			dialogMessage = " Número de economias públicas inválido. ";
 	    	showDialog(Constantes.DIALOG_ID_ERRO);
-			return false;
+	    	result = false;
 		}
 
 		return result;
@@ -455,20 +469,20 @@ public class ImovelTab extends Activity implements LocationListener {
 		}
 		
 		// logradouro
-		if (((EditText)findViewById(R.id.logradouro)).getText().toString().trim().compareTo("") == 0){
-		    
-			dialogMessage = " Logradouro inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
-			return false;
-		}
+//		if (((EditText)findViewById(R.id.logradouro)).getText().toString().trim().compareTo("") == 0){
+//		    
+//			dialogMessage = " Logradouro inválido. ";
+//	    	showDialog(Constantes.DIALOG_ID_ERRO);
+//			return false;
+//		}
 		
 		// Bairro
-		if (((EditText)findViewById(R.id.bairro)).getText().toString().trim().compareTo("") == 0){
-		    
-			dialogMessage = " Bairro inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
-			return false;
-		}
+//		if (((EditText)findViewById(R.id.bairro)).getText().toString().trim().compareTo("") == 0){
+//		    
+//			dialogMessage = " Bairro inválido. ";
+//	    	showDialog(Constantes.DIALOG_ID_ERRO);
+//			return false;
+//		}
 		
 		// Municipio
 		if (((EditText)findViewById(R.id.municipio)).getText().toString().trim().compareTo("") == 0){
@@ -479,12 +493,12 @@ public class ImovelTab extends Activity implements LocationListener {
 		}
 		
 		// Verificar Categorias - pelo menos 1 categoria
-		if (!cbResidencial.isChecked() && !cbComercial.isChecked() && !cbIndustrial.isChecked() && !cbPublica.isChecked()){
-		    
-			dialogMessage = " Imóvel deve possuir pelo menos 1 economia. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
-			return false;
-		}
+//		if (!cbResidencial.isChecked() && !cbComercial.isChecked() && !cbIndustrial.isChecked() && !cbPublica.isChecked()){
+//		    
+//			dialogMessage = " Imóvel deve possuir pelo menos 1 economia. ";
+//	    	showDialog(Constantes.DIALOG_ID_ERRO);
+//			return false;
+//		}
 		
 		// Verificar Econominas. pelo menos 1 economia
 		if ( cbResidencial.isChecked() &&

@@ -114,7 +114,7 @@ public class ListaRotas extends ListActivity {
 	    		path.add(file.getPath());
 
 	    		if(!file.isDirectory()){
-	    			if ( ((file.getName().endsWith(".txt")) || (file.getName().endsWith(".gz")) && !file.getName().startsWith("._") )){
+	    			if ( ((file.getName().endsWith(".txt")) || (file.getName().endsWith(".gz"))) && !file.getName().startsWith("._")){
 	        				item.add(file.getName());
 	    			}
 	    		}

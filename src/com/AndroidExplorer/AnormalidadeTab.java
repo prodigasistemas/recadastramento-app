@@ -24,6 +24,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -142,7 +143,8 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 
         	((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
 			((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
-        	
+    		
+
         }else if (lastKnownLocation != null){
 			((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(lastKnownLocation.getLatitude()));
 			((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(lastKnownLocation.getLongitude()));
@@ -237,10 +239,9 @@ public class AnormalidadeTab extends Activity implements LocationListener {
             	updateAnormalidadeSelecionada();
             	
             	// Verificar se pode salvar!!!!!!
-               	
              	// Verificar os campos obrigatórios
-            	            	
-            	if (areOtherTabsOk()){
+            	
+            	if (areOtherTabsOk() && isLocationValid()){
             		        	    	
                 	// verificar se nao está criando imóvel duplicado.
 
@@ -547,6 +548,24 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 
 		return result;
 	}
+	
+	public boolean isLocationValid(){
+		boolean result = true;
+
+		// Descartar validacao para Emulador Android.
+		if (!Build.BRAND.startsWith("generic") || !Build.DEVICE.startsWith("generic")){
+		
+	    	if (  ((TextView)findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")
+	    		|| ((TextView)findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
+				
+	    		dialogMessage = "Por favor, atualize a Localização Geográfica antes de salvar.";
+		    	showDialog(Constantes.DIALOG_ID_ERRO);
+		    	result = false;
+	    	}
+		}
+		return result;
+	}
+	
 	
     // Handler on the main (UI) thread that will receive messages.
     final Handler handler = new Handler() {

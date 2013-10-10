@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
@@ -238,6 +239,8 @@ public class MenuPrincipal extends Activity {
 	        return passwordDialog;
 	    
 	    }else if (id == Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment) {
+            if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
 		    	progDialog = new ProgressDialog(this);
 	            progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	            progDialog.setCancelable(false);
@@ -246,6 +249,10 @@ public class MenuPrincipal extends Activity {
 	            progThread = new GerarArquivoCompletoThread(handler, this, increment);
 	            progThread.start();
 	            return progDialog;
+
+            }else{
+                Toast.makeText(getBaseContext(), "Cartão de memória não está disponível!", Toast.LENGTH_SHORT).show();
+            }
 	            
 	    }else if (id ==  Constantes.DIALOG_ID_ERRO || 
 	    		  id ==  Constantes.DIALOG_ID_SUCESSO || 

@@ -955,7 +955,7 @@ public class Util {
     	diretorioRetornoRota += Controlador.getInstancia().getDadosGerais().getRota() + "_";
     	diretorioRetornoRota += Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento();
     	
-        File fileRotaDiretorio = new File(Environment.getExternalStorageDirectory() + Constantes.DIRETORIO_RETORNO, diretorioRetornoRota);
+        File fileRotaDiretorio = new File(getExternalStorageDirectory() + Constantes.DIRETORIO_RETORNO, diretorioRetornoRota);
         if(!fileRotaDiretorio.exists()) {
         	fileRotaDiretorio.mkdirs();
         }

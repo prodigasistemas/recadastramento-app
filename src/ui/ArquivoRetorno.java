@@ -68,7 +68,7 @@ public class ArquivoRetorno {
 
     	try {
     		
-            File diretorioRetorno = new File(Environment.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
+            File diretorioRetorno = new File(Util.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
             if(!diretorioRetorno.exists()) {
             	diretorioRetorno.mkdirs();
             }

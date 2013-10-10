@@ -140,6 +140,29 @@ public List<String> selectEnderecoImoveis(String condition){
         return list;
    }
 
+	public List<String> selectSubLotesImovel(String localidadeSetorQuadraLote) {
+	
+		ArrayList<String> list = new ArrayList<String>();
+	
+		if (localidadeSetorQuadraLote != Constantes.NULO_STRING || localidadeSetorQuadraLote != null) {
+			Cursor cursor;
+			
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "inscricao" }, " inscricao LIKE '"+localidadeSetorQuadraLote+"%'",
+					null, null, null, "inscricao asc");
+			
+			if (cursor.moveToFirst()) {
+				do {
+					list.add(cursor.getString(0));
+				} while (cursor.moveToNext());
+			}
+	        if (cursor != null && !cursor.isClosed()) {
+	            cursor.close();
+	         }
+		}
+
+		return list;
+	}
+
 	public List<Imovel> selectEnderecoImovel(String condition){
 	
 		Cursor cursor;

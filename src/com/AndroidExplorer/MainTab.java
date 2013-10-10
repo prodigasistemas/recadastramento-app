@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -95,13 +96,13 @@ public class MainTab extends TabActivity {
     public static void setTabColor() {
         for(int i=0;i<tabHost.getTabWidget().getChildCount();i++){
             
-        	if (Controlador.getInstancia().getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO){
+        	if (getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO){
         		tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab_custom_green);
             
-            }else if (Controlador.getInstancia().getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE){
+            }else if (getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE){
             	tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab_custom_red);
             }
-            else if(Controlador.getInstancia().getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR){
+            else if(getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR){
             	tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab_custom_white);            	
             }
         }
@@ -116,13 +117,16 @@ public class MainTab extends TabActivity {
 	}
 
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle item selection
+		
+		final int posicao = Controlador.getInstancia().getCadastroListPosition();
+
+		// Handle item selection
 	    switch (item.getItemId()) {
 	    case R.id.proximoImovel:
 
 	    	Controlador.getInstancia().isCadastroAlterado();
 	    	
-	    	if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
+	    	if(Controlador.getInstancia().getCadastroListPosition() == (getCadastroDataManipulator().getNumeroImoveis())-1){
 				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
 
 			}else{
@@ -138,7 +142,7 @@ public class MainTab extends TabActivity {
 	    	Controlador.getInstancia().isCadastroAlterado();
 	    	
 	    	if(Controlador.getInstancia().getCadastroListPosition() <= 0){
-				Controlador.getInstancia().setCadastroSelecionadoByListPosition((int)Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()-1);
+				Controlador.getInstancia().setCadastroSelecionadoByListPosition((int)getCadastroDataManipulator().getNumeroImoveis()-1);
 			}else{
 		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()-1);
 			}
@@ -150,9 +154,8 @@ public class MainTab extends TabActivity {
 	    
 	    case R.id.adicionarNovo:
 	    	
-	    	final int posicao = Controlador.getInstancia().getCadastroListPosition();
 	    	
-	    	List<Imovel> imoveis = Controlador.getInstancia().getCadastroDataManipulator().selectEnderecoImovel(null);
+	    	List<Imovel> imoveis = getCadastroDataManipulator().selectEnderecoImovel(null);
 			
 	    	Imovel proximo = null;
 	    	
@@ -190,7 +193,7 @@ public class MainTab extends TabActivity {
 	    		((TextView) view.findViewById(R.id.txtImovelAnterior)).setText(imovelAnterior);
 	    	}
 	    	
-	    	if (posicao <= Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) {
+	    	if (posicao <= getCadastroDataManipulator().getNumeroImoveis()) {
 	    		((TextView) view.findViewById(R.id.txtImovelPosterior)).setText(imovelPosterior);
 	    	}
 	    	
@@ -251,7 +254,7 @@ public class MainTab extends TabActivity {
 	    		public void onClick(View v) {
 	    			dialog.dismiss();
 	    			Controlador.getInstancia().setCadastroListPosition(posicao);
-	    			int qtdImoveisRota = Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis();
+	    			int qtdImoveisRota = getCadastroDataManipulator().getNumeroImoveis();
 
 	    			if (qtdImoveisRota == 1) {
 	    				indiceNovoImovel = 0;
@@ -295,7 +298,11 @@ public class MainTab extends TabActivity {
 	        return true;
 	        
 	    case R.id.novoSublote:
-	    	
+
+	    	Controlador.getInstancia().setCadastroListPosition(posicao);
+			
+			indiceNovoImovel = posicao + 1;
+			preencheSubLote(getImovelSelecionado());
 			
 	    	return true;
 	        
@@ -314,7 +321,7 @@ public class MainTab extends TabActivity {
 	public void preencheNovoImovel(Imovel imovelReferencia, String lote) {
         Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
         
-        int qtdImoveisNovos = Controlador.getInstancia().getCadastroDataManipulator().getQtdImoveisNovo(); 
+        int qtdImoveisNovos = getCadastroDataManipulator().getQtdImoveisNovo(); 
         
 		Imovel imovel = new Imovel();
 		imovel.setMatricula(""+(++qtdImoveisNovos));
@@ -367,6 +374,52 @@ public class MainTab extends TabActivity {
 	        startActivity(myIntent);
 		}
 	}
+	
+	public void preencheSubLote(Imovel imovelReferencia) {
+        Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
+        
+        // Verifica se existem outros sublotes neste mesmo lote.
+        List<String> listaInscricao = getCadastroDataManipulator().selectSubLotesImovel(imovelReferencia.getLocalidade() + 
+        																				imovelReferencia.getSetor() + 
+        																				imovelReferencia.getQuadra() + 
+        																				imovelReferencia.getLote());
+        // Maior Sublote deste Lote
+        String ultimaInscricao = listaInscricao.get(listaInscricao.size()-1);
+        String ultimoSubLote = null;
+        
+        if (ultimaInscricao.trim().length() == 16){
+        	ultimoSubLote = ultimaInscricao.substring(13, 16);
+        }else{
+        	ultimoSubLote = ultimaInscricao.substring(14, 17);        	
+        }        
+        
+        int qtdImoveisNovos = getCadastroDataManipulator().getQtdImoveisNovo(); 
+        
+		Imovel imovel = new Imovel();
+		imovel.setMatricula(""+(++qtdImoveisNovos));
+		imovel.setLocalidade(imovelReferencia.getLocalidade());
+		imovel.setSetor(imovelReferencia.getSetor());
+		imovel.setQuadra(imovelReferencia.getQuadra());
+		imovel.setLote(imovelReferencia.getLote());
+		imovel.setSubLote(Util.adicionarZerosEsquerdaNumero(3, ""+(Integer.valueOf(ultimoSubLote)+1)));
+		imovel.setRota(imovelReferencia.getRota());
+		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
+		imovel.setFace(imovelReferencia.getFace());
+		imovel.getEnderecoImovel().setTipoLogradouro(""+imovelReferencia.getEnderecoImovel().getTipoLogradouro());
+		imovel.getEnderecoImovel().setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
+		imovel.getEnderecoImovel().setBairro(imovelReferencia.getEnderecoImovel().getBairro());
+		imovel.getEnderecoImovel().setCep(imovelReferencia.getEnderecoImovel().getCep());
+		imovel.getEnderecoImovel().setMunicipio(imovelReferencia.getEnderecoImovel().getMunicipio());
+		imovel.setCodigoMunicipio(""+imovelReferencia.getCodigoMunicipio());
+		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
+		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
+		
+		Controlador.getInstancia().setImovelSelecionado(imovel);
+		
+		finish();
+		Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
+        startActivity(myIntent);
+	}	
 	
 	/**
 	 * 
@@ -446,7 +499,7 @@ public class MainTab extends TabActivity {
 	}
 	
 	public boolean isFimLista(long id) {
-		return id == Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()-1;
+		return id == getCadastroDataManipulator().getNumeroImoveis()-1;
 	}
 	
 	public boolean isMesmoEndereco(String e1, String e2) {
@@ -458,7 +511,10 @@ public class MainTab extends TabActivity {
 	}
 	
 	public int getPosicaoImovelLista(Imovel imovel) {
-		return Controlador.getInstancia().getCadastroDataManipulator().getPosicaoImovelLista(imovel);
+		return getCadastroDataManipulator().getPosicaoImovelLista(imovel);
 	}
 
+	public static DataManipulator getCadastroDataManipulator(){
+		return Controlador.getInstancia().getCadastroDataManipulator();
+	}
 }

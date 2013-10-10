@@ -17,9 +17,11 @@ import business.ControladorAcessoOnline;
 import com.AndroidExplorer.ClienteTab;
 
 import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 
 public class Util {
@@ -1058,5 +1060,24 @@ public class Util {
     	
     	return novaString;
     }
+
+    public static File getExternalStorageDirectory(){
+    	File path = null;
+
+    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+    		path = new File("/mnt/sdcard/");
+    		Log.i("first External Path", "ExternalStorage :" + path.getAbsolutePath());
+    	}else{
+   	     	path = new File("/mnt/extSdCard/");
+   	     	
+   	     	if(!path.exists() || !path.isDirectory()) {
+   	    		path = new File("/mnt/sdcard/");
+   	     	}
+   	     	
+            Log.i("first External Path", "ExternalStorage :" + path.getAbsolutePath());
+    	}
+    	return path;
+    }
+    
 
 }

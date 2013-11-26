@@ -469,20 +469,20 @@ public class ImovelTab extends Activity implements LocationListener {
 		}
 		
 		// logradouro
-//		if (((EditText)findViewById(R.id.logradouro)).getText().toString().trim().compareTo("") == 0){
-//		    
-//			dialogMessage = " Logradouro inválido. ";
-//	    	showDialog(Constantes.DIALOG_ID_ERRO);
-//			return false;
-//		}
+		if (((EditText)findViewById(R.id.logradouro)).getText().toString().trim().compareTo("") == 0){
+		    
+			dialogMessage = " Logradouro inválido. ";
+	    	showDialog(Constantes.DIALOG_ID_ERRO);
+			return false;
+		}
 		
 		// Bairro
-//		if (((EditText)findViewById(R.id.bairro)).getText().toString().trim().compareTo("") == 0){
-//		    
-//			dialogMessage = " Bairro inválido. ";
-//	    	showDialog(Constantes.DIALOG_ID_ERRO);
-//			return false;
-//		}
+		if (((EditText)findViewById(R.id.bairro)).getText().toString().trim().compareTo("") == 0){
+		    
+			dialogMessage = " Bairro inválido. ";
+	    	showDialog(Constantes.DIALOG_ID_ERRO);
+			return false;
+		}
 		
 		// Municipio
 		if (((EditText)findViewById(R.id.municipio)).getText().toString().trim().compareTo("") == 0){
@@ -493,12 +493,12 @@ public class ImovelTab extends Activity implements LocationListener {
 		}
 		
 		// Verificar Categorias - pelo menos 1 categoria
-//		if (!cbResidencial.isChecked() && !cbComercial.isChecked() && !cbIndustrial.isChecked() && !cbPublica.isChecked()){
-//		    
-//			dialogMessage = " Imóvel deve possuir pelo menos 1 economia. ";
-//	    	showDialog(Constantes.DIALOG_ID_ERRO);
-//			return false;
-//		}
+		if (!cbResidencial.isChecked() && !cbComercial.isChecked() && !cbIndustrial.isChecked() && !cbPublica.isChecked()){
+		    
+			dialogMessage = " Imóvel deve possuir pelo menos 1 economia. ";
+	    	showDialog(Constantes.DIALOG_ID_ERRO);
+			return false;
+		}
 		
 		// Verificar Econominas. pelo menos 1 economia
 		if ( cbResidencial.isChecked() &&
@@ -630,6 +630,8 @@ public class ImovelTab extends Activity implements LocationListener {
 		getImovel().setIptu(((EditText)findViewById(R.id.iptu)).getText().toString());
 		getImovel().setNumeroCelpa(((EditText)findViewById(R.id.numeroCelpa)).getText().toString());
 		getImovel().setNumeroPontosUteis(((EditText)findViewById(R.id.numeroPontosUteis)).getText().toString());
+		getImovel().setNumeroOcupantes(((EditText)findViewById(R.id.numeroOcupantes)).getText().toString());
+		
 		
 		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)findViewById(R.id.spinnerTipoLogradouroImovel)).getSelectedItem().toString());
     	getImovel().getEnderecoImovel().setTipoLogradouro(codigo);
@@ -873,6 +875,11 @@ public class ImovelTab extends Activity implements LocationListener {
         // Numero Pontos Úteis
         if (getImovel().getNumeroPontosUteis() != Constantes.NULO_INT){
         	((EditText)(findViewById(R.id.numeroPontosUteis))).setText(String.valueOf(getImovel().getNumeroPontosUteis()));
+        }		
+        
+        // Numero Ocupantes
+        if (getImovel().getNumeroOcupantes() != Constantes.NULO_INT){
+        	((EditText)(findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
         }		
 	}
 

@@ -16,7 +16,6 @@ import business.ControladorAcessoOnline;
 
 import com.AndroidExplorer.ClienteTab;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Environment;
 import android.text.Editable;
@@ -63,6 +62,14 @@ public class Util {
 		return isCnpjResponsavelOk;
 	}
 
+	public static boolean isValidText(final String textName){
+		boolean result = false;
+		if (!textName.matches("[a-zA-Z ]*")) {
+			result = true;
+		}
+		return result;
+	}
+	
 	// Define a variavel editText para tratar os eventos de textChanged considerando mascara para CEP.
 	public static void addTextChangedListenerCepMask(final EditText edt){
     	edt.addTextChangedListener(new TextWatcher() {  

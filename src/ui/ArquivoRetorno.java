@@ -264,7 +264,7 @@ public class ArquivoRetorno {
     	registrosTipoImovel.append(Util.adicionarCharDireita(31, getImovelSelecionado().getIptu(), ' '));
     	registrosTipoImovel.append(Util.adicionarCharDireita(20, getImovelSelecionado().getNumeroCelpa(), ' '));
     	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getNumeroPontosUteis())));
-
+    	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getNumeroOcupantes())));
     	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, ""+getImovelSelecionado().getEnderecoImovel().getTipoLogradouro()));
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(40, getImovelSelecionado().getEnderecoImovel().getLogradouro(), ' '));
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(5, getImovelSelecionado().getEnderecoImovel().getNumero(), ' '));

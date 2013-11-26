@@ -257,11 +257,12 @@ public class ClienteTab extends Activity implements LocationListener {
 		boolean result = true;
 		
 		// Nome do Usuario
-//		if (((EditText)findViewById(R.id.nomeUsuario)).getText().toString().trim().compareTo("") == 0){
-//			dialogMessage = "Nome do usuário inválido.";
-//	    	showDialog(Constantes.DIALOG_ID_ERRO);
-//			return false;
-//		}
+		if (  Util.isValidText( ((EditText)findViewById(R.id.nomeUsuario)).getText().toString() ) ){
+			dialogMessage = "Nome do usuário inválido. Não é permitido abreviações nem caracteres especiais";
+	    	showDialog(Constantes.DIALOG_ID_ERRO);
+			return false;
+		}
+		
 		// CPF ou CNPJ do usuario
 		if (isUsuarioCpfSelected){
 			
@@ -287,12 +288,12 @@ public class ClienteTab extends Activity implements LocationListener {
 		if ( ((Spinner)findViewById(R.id.spinnerDefineResponsavel)).getSelectedItemPosition() > 1){
 			
 			// Nome do Responsavel
-//			if (((EditText)findViewById(R.id.nomeResponsavel)).getText().toString().trim().compareTo("") == 0){
-//				
-//				dialogMessage = "Nome do responsável inválido.";
-//		    	showDialog(Constantes.DIALOG_ID_ERRO);
-//				return false;
-//			}
+			if (  Util.isValidText( ((EditText)findViewById(R.id.nomeResponsavel)).getText().toString() ) ){
+				
+				dialogMessage = "Nome do responsável inválido. Não é permitido abreviações nem caracteres especiais";
+		    	showDialog(Constantes.DIALOG_ID_ERRO);
+				return false;
+			}
 			
 			// CPF ou CNPJ do Responsavel
 			if (isResponsavelCpfSelected){
@@ -318,12 +319,12 @@ public class ClienteTab extends Activity implements LocationListener {
 		if ( ((RadioGroup)findViewById(R.id.groupUsuarioEProprietario)).getCheckedRadioButtonId() == R.id.radioNao){
 			
 			// Nome do Proprietario
-//			if (((EditText)findViewById(R.id.nomeProprietario)).getText().toString().trim().compareTo("") == 0){
-//				
-//				dialogMessage = "Nome do proprietário inválido.";
-//		    	showDialog(Constantes.DIALOG_ID_ERRO);
-//				return false;
-//			}
+			if (  Util.isValidText( ((EditText)findViewById(R.id.nomeProprietario)).getText().toString() ) ){
+				
+				dialogMessage = "Nome do proprietário inválido. Não é permitido abreviações nem caracteres especiais";
+		    	showDialog(Constantes.DIALOG_ID_ERRO);
+				return false;
+			}
 			
 			// CPF ou CNPJ do Proprietario
 			if (isProprietarioCpfSelected){

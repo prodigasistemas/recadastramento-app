@@ -482,6 +482,7 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"numero_iptu",
 														        		"numero_celpa",
 														        		"numero_pontos_uteis",
+														        		"numero_ocupantes",
 														        		"tipo_logradouro_imovel",
 														        		"logradouro_imovel",
 														        		"numero_imovel",
@@ -525,39 +526,40 @@ public List<String> selectEnderecoImoveis(String condition){
         	getImovelSelecionado().setNumeroCelpa(cursor.getString(6));
         	getImovelSelecionado().setNumeroPontosUteis(cursor.getString(7));
         	
-        	getImovelSelecionado().getEnderecoImovel().setTipoLogradouro(cursor.getString(8));
-        	getImovelSelecionado().getEnderecoImovel().setLogradouro(cursor.getString(9));
-        	getImovelSelecionado().getEnderecoImovel().setNumero(cursor.getString(10));
-        	getImovelSelecionado().getEnderecoImovel().setComplemento(cursor.getString(11));
-        	getImovelSelecionado().getEnderecoImovel().setBairro(cursor.getString(12));
-        	getImovelSelecionado().getEnderecoImovel().setCep(cursor.getString(13));
-        	getImovelSelecionado().getEnderecoImovel().setMunicipio(cursor.getString(14));
-        	getImovelSelecionado().setCodigoLogradouro(cursor.getString(15));
+        	getImovelSelecionado().setNumeroOcupantes(cursor.getString(8));
+        	getImovelSelecionado().getEnderecoImovel().setTipoLogradouro(cursor.getString(9));
+        	getImovelSelecionado().getEnderecoImovel().setLogradouro(cursor.getString(10));
+        	getImovelSelecionado().getEnderecoImovel().setNumero(cursor.getString(11));
+        	getImovelSelecionado().getEnderecoImovel().setComplemento(cursor.getString(12));
+        	getImovelSelecionado().getEnderecoImovel().setBairro(cursor.getString(13));
+        	getImovelSelecionado().getEnderecoImovel().setCep(cursor.getString(14));
+        	getImovelSelecionado().getEnderecoImovel().setMunicipio(cursor.getString(15));
+        	getImovelSelecionado().setCodigoLogradouro(cursor.getString(16));
         	
-        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria1(cursor.getString(16));
-        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria2(cursor.getString(17));
-        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria3(cursor.getString(18));
-        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria4(cursor.getString(19));
-        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria1(cursor.getString(20));
-        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria2(cursor.getString(21));
-        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria3(cursor.getString(22));
-        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria4(cursor.getString(23));
-        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria1(cursor.getString(24));
-        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria2(cursor.getString(25));
-        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria3(cursor.getString(26));
-        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria4(cursor.getString(27));
-        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria1(cursor.getString(28));
-        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria2(cursor.getString(29));
-        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria3(cursor.getString(30));
-        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria4(cursor.getString(31));
+        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria1(cursor.getString(17));
+        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria2(cursor.getString(18));
+        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria3(cursor.getString(19));
+        	getImovelSelecionado().getCategoriaResidencial().setEconomiasSubCategoria4(cursor.getString(20));
+        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria1(cursor.getString(21));
+        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria2(cursor.getString(22));
+        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria3(cursor.getString(23));
+        	getImovelSelecionado().getCategoriaComercial().setEconomiasSubCategoria4(cursor.getString(24));
+        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria1(cursor.getString(25));
+        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria2(cursor.getString(26));
+        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria3(cursor.getString(27));
+        	getImovelSelecionado().getCategoriaPublica().setEconomiasSubCategoria4(cursor.getString(28));
+        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria1(cursor.getString(29));
+        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria2(cursor.getString(30));
+        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria3(cursor.getString(31));
+        	getImovelSelecionado().getCategoriaIndustrial().setEconomiasSubCategoria4(cursor.getString(32));
         	
-        	getImovelSelecionado().setTipoFonteAbastecimento(cursor.getString(32));
-        	getImovelSelecionado().setMatricula(cursor.getString(33));
-        	getImovelSelecionado().setImovelStatus(cursor.getString(34));
-        	getImovelSelecionado().setImovelEnviado(cursor.getString(35));
-        	getImovelSelecionado().setLatitude(cursor.getString(36));
-        	getImovelSelecionado().setLongitude(cursor.getString(37));
-        	getImovelSelecionado().setData(cursor.getString(38));
+        	getImovelSelecionado().setTipoFonteAbastecimento(cursor.getString(33));
+        	getImovelSelecionado().setMatricula(cursor.getString(34));
+        	getImovelSelecionado().setImovelStatus(cursor.getString(35));
+        	getImovelSelecionado().setImovelEnviado(cursor.getString(36));
+        	getImovelSelecionado().setLatitude(cursor.getString(37));
+        	getImovelSelecionado().setLongitude(cursor.getString(38));
+        	getImovelSelecionado().setData(cursor.getString(39));
        	
         	getImovelSelecionado().setListaRamoAtividade(selectRamoAtividadeImovel(id));
         }
@@ -951,7 +953,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("numero_iptu", parser.obterDadoParser(31));
 	   initialValues.put("numero_celpa", parser.obterDadoParser(20));
 	   initialValues.put("numero_pontos_uteis", parser.obterDadoParser(3));
-	   	
+// Numero de ocupantes - 3	   	
 	   
 	   initialValues.put("tipo_logradouro_imovel", parser.obterDadoParser(2));
 	   initialValues.put("logradouro_imovel", parser.obterDadoParser(40));
@@ -1278,6 +1280,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("numero_iptu", getImovelSelecionado().getIptu());
 	   initialValues.put("numero_celpa", getImovelSelecionado().getNumeroCelpa());
 	   initialValues.put("numero_pontos_uteis", getImovelSelecionado().getNumeroPontosUteis());
+	   initialValues.put("numero_ocupantes", getImovelSelecionado().getNumeroOcupantes());
 	   initialValues.put("tipo_logradouro_imovel", getImovelSelecionado().getEnderecoImovel().getTipoLogradouro());
 	   initialValues.put("logradouro_imovel", getImovelSelecionado().getEnderecoImovel().getLogradouro());
 	   initialValues.put("numero_imovel", getImovelSelecionado().getEnderecoImovel().getNumero());

@@ -100,7 +100,10 @@ android:orientation="vertical">
 	<TextView android:text="Nº de Pontos Úteis:" android:id="@+id/txtNumeroPontosUteis" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/numeroPontosUteis" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="3"></EditText>
 
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+	<TextView android:text="Nº de Ocupantes:" android:id="@+id/txtNumeroOcupantes" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<EditText android:id="@+id/numeroOcupantes" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="3"></EditText>
+
+		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Residencial" android:id="@+id/checkBoxResidencial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></CheckBox>
 		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		

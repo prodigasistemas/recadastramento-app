@@ -29,6 +29,7 @@ public class Imovel {
     private String iptu;
     private String numeroCelpa;
     private int numeroPontosUteis;
+    private int numeroOcupantes;
     private int tipoFonteAbastecimento;
     private int imovelStatus;
     private int imovelEnviado;
@@ -56,6 +57,7 @@ public class Imovel {
         iptu = "";
         numeroCelpa = "";
         numeroPontosUteis = 0;
+        numeroOcupantes = 0;
         tipoFonteAbastecimento = 0;
         imovelStatus = 0;
         imovelEnviado = 0;
@@ -155,6 +157,10 @@ public class Imovel {
 
 	public void setNumeroPontosUteis(String numeroPontosUteis) {
 		this.numeroPontosUteis = Util.verificarNuloInt(numeroPontosUteis);
+	}
+	
+	public void setNumeroOcupantes(String numeroOcupantes) {
+		this.numeroOcupantes = Util.verificarNuloInt(numeroOcupantes);
 	}
 
 	public void setTipoFonteAbastecimento(String tipoFonteAbastecimento) {
@@ -262,6 +268,10 @@ public class Imovel {
 		return this.numeroPontosUteis;
 	}
 
+	public int getNumeroOcupantes() {
+		return this.numeroOcupantes;
+	}
+	
 	public int getTipoFonteAbastecimento() {
 		return this.tipoFonteAbastecimento;
 	}

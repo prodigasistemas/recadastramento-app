@@ -1086,5 +1086,16 @@ public class Util {
     	return path;
     }
     
+	public static boolean allowPopulateDados(){
+		boolean result = false;
+		if ( (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO || 
+			 Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) 
+			 ||
+			 (Controlador.getInstancia().getImovelSelecionado().isTabSaved()) ){
+			
+			result = true;
+		}
+		return result;
+	}
 
 }

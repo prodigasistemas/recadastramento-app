@@ -21,7 +21,7 @@ public class Constantes {
     public static final int DIALOG_ID_ADD_NOVO_IMOVEL_ANTES_PRIMEIRO = 11;
     public static final int DIALOG_ID_ADD_NOVO_IMOVEL_APOS_ULTIMO = 12;
     public static final int DIALOG_ID_CONFIRM_BACK = 13;
-       
+    public static final int DIALOG_ID_CONFIRM_CHANGES = 14;
 
     public static final String DIRETORIO_ROTAS = "/external_sd/Cadastro/Roteiros";
     public static final String DIRETORIO_RETORNO = "/external_sd/Cadastro/Retorno";

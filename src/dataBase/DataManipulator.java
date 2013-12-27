@@ -953,7 +953,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("numero_iptu", parser.obterDadoParser(31));
 	   initialValues.put("numero_celpa", parser.obterDadoParser(20));
 	   initialValues.put("numero_pontos_uteis", parser.obterDadoParser(3));
-// Numero de ocupantes - 3	   	
+	   initialValues.put("numero_ocupantes", parser.obterDadoParser(3));
 	   
 	   initialValues.put("tipo_logradouro_imovel", parser.obterDadoParser(2));
 	   initialValues.put("logradouro_imovel", parser.obterDadoParser(40));

@@ -46,6 +46,8 @@ public class MedidorTab extends Activity implements LocationListener {
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
+	private boolean numeroMedidorOk = false;
+
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +83,7 @@ public class MedidorTab extends Activity implements LocationListener {
         lastKnownLocation = mLocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     	CellLocation.requestLocationUpdate();
 
-    	// RadioGroup proprietario reside no imovel.
+    	// RadioGroup - Possui Hidrômetro.
     	RadioGroup radioGroupPossuiHidrometro = (RadioGroup) findViewById(R.id.radioGroupPossuiHidrometro);
 		possuiHidrometroOnCheckedChangeListener(radioGroupPossuiHidrometro);
         
@@ -98,19 +100,57 @@ public class MedidorTab extends Activity implements LocationListener {
         buttonSave.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
-            	updateMedidorSelecionado();
-            	
-            	// Verificar se pode salvar!!!!!!
-             	// Verificar os campos obrigatórios
-            	
-         		getMedidor().setTabSaved(true);
-         		Toast.makeText(MedidorTab.this, "Dados do Medidor atualizados com sucesso.", 5).show();
-//    			dialogMessage = " Dados do Medidor atualizados com sucesso. ";
-//    	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
+            	if (!isNumeroMedidorValido()){
+		        	dialogMessage = "Por favor, informe o número do hidrômetro.";
+		        	showDialog(Constantes.DIALOG_ID_ERRO);
+		
+            	}else{
+            		
+	    			if ( !Util.allowPopulateDados()){
+						
+		            	if (!checkChangeNumeroMedidor()){
+		            		numeroMedidorOk = true;
+		            	}
+		
+		            	if (!numeroMedidorOk){
+		        	    	showDialog(Constantes.DIALOG_ID_CONFIRM_CHANGES);	            		
+		            	}
+		            		            	
+	    			}else{
+	            		numeroMedidorOk = true;
+	    			}
+	
+	    			if (numeroMedidorOk){
+		            	updateMedidorSelecionado();
+		            	
+		         		getMedidor().setTabSaved(true);
+		         		Toast.makeText(MedidorTab.this, "Dados do Medidor atualizados com sucesso.", 5).show();
+	            	}
+            	}
             }
         });
 	}
 	
+	public boolean isNumeroMedidorValido(){
+		boolean result = true;
+
+		if (((RadioGroup)findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioSim &&
+		   ((EditText)findViewById(R.id.numeroHidrometro)).getText().toString().length() == 0){
+
+			result = false;
+		}
+		return result;
+	}
+	
+	public boolean checkChangeNumeroMedidor(){
+		boolean result = false;
+
+		if (getMedidor().getNumeroHidrometro().compareTo(((EditText)findViewById(R.id.numeroHidrometro)).getText().toString()) != 0){
+			result = true;
+		}
+		return result;
+	}
+
 	public void updateMedidorSelecionado(){
 		
 		if ( ((RadioGroup)findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioNao){
@@ -214,9 +254,9 @@ public class MedidorTab extends Activity implements LocationListener {
 	public void populateDadosHidrometro(){
 
 		// Número do Hidrometro
-        if ( String.valueOf(getMedidor().getNumeroHidrometro()) != Constantes.NULO_STRING){
-            ((EditText)(findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
-        }
+//        if ( String.valueOf(getMedidor().getNumeroHidrometro()) != Constantes.NULO_STRING){
+//            ((EditText)(findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
+//        }
 	}
 
 	public Medidor getMedidor(){
@@ -285,6 +325,36 @@ public class MedidorTab extends Activity implements LocationListener {
 	        AlertDialog passwordDialog = builder.create();
 	        return passwordDialog;
 		    
+		}else if (id == Constantes.DIALOG_ID_CONFIRM_CHANGES){
+			
+	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	        final View layoutChangeDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
+    	    dialogMessage = "Houve alteração no número do hidrômetro. Por favor informe novamente para confirmação.";
+	        
+			((TextView)layoutChangeDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
+	
+	        builder = new AlertDialog.Builder(this);
+	        builder.setTitle("Confirmação");
+	        builder.setView(layoutChangeDialog);
+	        
+	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+	        	public void onClick(DialogInterface dialog, int whichButton) {
+	        		removeDialog(id);
+	        	}
+	        });
+	        	 
+	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+	        	public void onClick(DialogInterface dialog, int which) {
+	        		removeDialog(id);
+	            	if (!numeroMedidorOk){
+	            		numeroMedidorOk = true;
+	            		((EditText)(findViewById(R.id.numeroHidrometro))).setText("");
+	            	}
+	        	}
+	        });
+	        
+	        AlertDialog changeDialog = builder.create();
+	        return changeDialog;
 		}
 	    return null;
 	}

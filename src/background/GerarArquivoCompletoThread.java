@@ -1,7 +1,10 @@
 package background;
 
+import java.io.IOException;
+
 import ui.ArquivoRetorno;
 import ui.FileManager;
+import util.Util;
 import android.content.Context;
 import android.os.Handler;
     
@@ -46,7 +49,14 @@ public class GerarArquivoCompletoThread extends Thread {
     	FileManager.getInstancia();
     		
     	ArquivoRetorno.gerarArquivoCompleto(mHandler, context, increment);
-
+    	
+    	// Zipando conteúdo da pasta de dados de retorno da rota.
+    	try {
+			Util.zipArquivoCompleto();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	mState = DONE;
     }
     

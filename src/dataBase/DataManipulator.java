@@ -355,6 +355,7 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"usuario_proprietario", 
 														        		"tipo_responsavel", 
 
+														        		"matricula_usuario", 
 														        		"nome_usuario", 
 														        		"tipo_pessoa_usuario", 
 														        		"cpf_cnpj_usuario", 
@@ -365,6 +366,7 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"celular_usuario", 
 														        		"email_usuario",
 														        		
+														        		"matricula_proprietario",
 														        		"nome_proprietario",
 														        		"tipo_pessoa_proprietario", 
 														        		"cpf_cnpj_proprietario", 
@@ -382,6 +384,7 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"cep_proprietario", 
 														        		"municipio_proprietario",
 														
+														        		"matricula_responsavel", 
 														        		"nome_responsavel", 
 														        		"tipo_pessoa_responsavel", 
 														        		"cpf_cnpj_responsavel", 
@@ -414,57 +417,56 @@ public List<String> selectEnderecoImoveis(String condition){
         	getClienteSelecionado().setUsuarioEProprietario(cursor.getString(4));
         	getClienteSelecionado().setTipoResponsavel(cursor.getString(5));
         	
-        	getClienteSelecionado().getUsuario().setNome(cursor.getString(6));
-        	getClienteSelecionado().getUsuario().setTipoPessoa(cursor.getString(7));
-        	getClienteSelecionado().getUsuario().setCpfCnpj(cursor.getString(8));
-        	getClienteSelecionado().getUsuario().setRg(cursor.getString(9));
-        	getClienteSelecionado().getUsuario().setUf(cursor.getString(10));
-        	getClienteSelecionado().getUsuario().setTipoSexo(cursor.getString(11));
-        	getClienteSelecionado().getUsuario().setTelefone(cursor.getString(12));
-        	getClienteSelecionado().getUsuario().setCelular(cursor.getString(13));
-        	getClienteSelecionado().getUsuario().setEmail(cursor.getString(14));
+        	getClienteSelecionado().getUsuario().setMatricula(cursor.getString(6));
+        	getClienteSelecionado().getUsuario().setNome(cursor.getString(7));
+        	getClienteSelecionado().getUsuario().setTipoPessoa(cursor.getString(8));
+        	getClienteSelecionado().getUsuario().setCpfCnpj(cursor.getString(9));
+        	getClienteSelecionado().getUsuario().setRg(cursor.getString(10));
+        	getClienteSelecionado().getUsuario().setUf(cursor.getString(11));
+        	getClienteSelecionado().getUsuario().setTipoSexo(cursor.getString(12));
+        	getClienteSelecionado().getUsuario().setTelefone(cursor.getString(13));
+        	getClienteSelecionado().getUsuario().setCelular(cursor.getString(14));
+        	getClienteSelecionado().getUsuario().setEmail(cursor.getString(15));
         	
-        	getClienteSelecionado().getProprietario().setNome(cursor.getString(15));
-        	getClienteSelecionado().getProprietario().setTipoPessoa(cursor.getString(16));
-        	getClienteSelecionado().getProprietario().setCpfCnpj(cursor.getString(17));
-        	getClienteSelecionado().getProprietario().setRg(cursor.getString(18));
-        	getClienteSelecionado().getProprietario().setUf(cursor.getString(19));
-        	getClienteSelecionado().getProprietario().setTipoSexo(cursor.getString(20));
-        	getClienteSelecionado().getProprietario().setTelefone(cursor.getString(21));
-        	getClienteSelecionado().getProprietario().setCelular(cursor.getString(22));
-        	getClienteSelecionado().getProprietario().setEmail(cursor.getString(23));
-        	getClienteSelecionado().getEnderecoProprietario().setTipoLogradouro(cursor.getString(24));
-        	getClienteSelecionado().getEnderecoProprietario().setLogradouro(cursor.getString(25));
-        	getClienteSelecionado().getEnderecoProprietario().setNumero(cursor.getString(26));
-        	getClienteSelecionado().getEnderecoProprietario().setComplemento(cursor.getString(27));
-        	getClienteSelecionado().getEnderecoProprietario().setBairro(cursor.getString(28));
-        	getClienteSelecionado().getEnderecoProprietario().setCep(cursor.getString(29));
-        	getClienteSelecionado().getEnderecoProprietario().setMunicipio(cursor.getString(30));
+        	getClienteSelecionado().getProprietario().setMatricula(cursor.getString(16));
+        	getClienteSelecionado().getProprietario().setNome(cursor.getString(17));
+        	getClienteSelecionado().getProprietario().setTipoPessoa(cursor.getString(18));
+        	getClienteSelecionado().getProprietario().setCpfCnpj(cursor.getString(19));
+        	getClienteSelecionado().getProprietario().setRg(cursor.getString(20));
+        	getClienteSelecionado().getProprietario().setUf(cursor.getString(21));
+        	getClienteSelecionado().getProprietario().setTipoSexo(cursor.getString(22));
+        	getClienteSelecionado().getProprietario().setTelefone(cursor.getString(23));
+        	getClienteSelecionado().getProprietario().setCelular(cursor.getString(24));
+        	getClienteSelecionado().getProprietario().setEmail(cursor.getString(25));
+        	getClienteSelecionado().getEnderecoProprietario().setTipoLogradouro(cursor.getString(26));
+        	getClienteSelecionado().getEnderecoProprietario().setLogradouro(cursor.getString(27));
+        	getClienteSelecionado().getEnderecoProprietario().setNumero(cursor.getString(28));
+        	getClienteSelecionado().getEnderecoProprietario().setComplemento(cursor.getString(29));
+        	getClienteSelecionado().getEnderecoProprietario().setBairro(cursor.getString(30));
+        	getClienteSelecionado().getEnderecoProprietario().setCep(cursor.getString(31));
+        	getClienteSelecionado().getEnderecoProprietario().setMunicipio(cursor.getString(32));
 
-        	getClienteSelecionado().getResponsavel().setNome(cursor.getString(31));
-        	getClienteSelecionado().getResponsavel().setTipoPessoa(cursor.getString(32));
-        	getClienteSelecionado().getResponsavel().setCpfCnpj(cursor.getString(33));
-        	getClienteSelecionado().getResponsavel().setRg(cursor.getString(34));
-        	getClienteSelecionado().getResponsavel().setUf(cursor.getString(35));
-        	getClienteSelecionado().getResponsavel().setTipoSexo(cursor.getString(36));
-        	getClienteSelecionado().getResponsavel().setTelefone(cursor.getString(37));
-        	getClienteSelecionado().getResponsavel().setCelular(cursor.getString(38));
-        	getClienteSelecionado().getResponsavel().setEmail(cursor.getString(39));
-        	getClienteSelecionado().getEnderecoResponsavel().setTipoLogradouro(cursor.getString(40));
-        	getClienteSelecionado().getEnderecoResponsavel().setLogradouro(cursor.getString(41));
-        	getClienteSelecionado().getEnderecoResponsavel().setNumero(cursor.getString(42));
-        	getClienteSelecionado().getEnderecoResponsavel().setComplemento(cursor.getString(43));
-        	getClienteSelecionado().getEnderecoResponsavel().setBairro(cursor.getString(44));
-        	getClienteSelecionado().getEnderecoResponsavel().setCep(cursor.getString(45));
-        	getClienteSelecionado().getEnderecoResponsavel().setMunicipio(cursor.getString(46));
+        	getClienteSelecionado().getResponsavel().setMatricula(cursor.getString(33));
+        	getClienteSelecionado().getResponsavel().setNome(cursor.getString(34));
+        	getClienteSelecionado().getResponsavel().setTipoPessoa(cursor.getString(35));
+        	getClienteSelecionado().getResponsavel().setCpfCnpj(cursor.getString(36));
+        	getClienteSelecionado().getResponsavel().setRg(cursor.getString(37));
+        	getClienteSelecionado().getResponsavel().setUf(cursor.getString(38));
+        	getClienteSelecionado().getResponsavel().setTipoSexo(cursor.getString(39));
+        	getClienteSelecionado().getResponsavel().setTelefone(cursor.getString(40));
+        	getClienteSelecionado().getResponsavel().setCelular(cursor.getString(41));
+        	getClienteSelecionado().getResponsavel().setEmail(cursor.getString(42));
+        	getClienteSelecionado().getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
+        	getClienteSelecionado().getEnderecoResponsavel().setLogradouro(cursor.getString(44));
+        	getClienteSelecionado().getEnderecoResponsavel().setNumero(cursor.getString(45));
+        	getClienteSelecionado().getEnderecoResponsavel().setComplemento(cursor.getString(46));
+        	getClienteSelecionado().getEnderecoResponsavel().setBairro(cursor.getString(47));
+        	getClienteSelecionado().getEnderecoResponsavel().setCep(cursor.getString(48));
+        	getClienteSelecionado().getEnderecoResponsavel().setMunicipio(cursor.getString(49));
 
-        	getClienteSelecionado().setLatitude(cursor.getString(47));
-        	getClienteSelecionado().setLongitude(cursor.getString(48));
-        	getClienteSelecionado().setData(cursor.getString(49));
-        	
-        	getClienteSelecionado().getUsuario().setMatricula(cursor.getInt(50));
-        	getClienteSelecionado().getResponsavel().setMatricula(cursor.getInt(51));
-        	getClienteSelecionado().getProprietario().setMatricula(cursor.getInt(52));
+        	getClienteSelecionado().setLatitude(cursor.getString(50));
+        	getClienteSelecionado().setLongitude(cursor.getString(51));
+        	getClienteSelecionado().setData(cursor.getString(52));
         }
         if (cursor != null && !cursor.isClosed()) {
            cursor.close();
@@ -513,7 +515,9 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"imovel_enviado",
 														        		"latitude",
 														        		"longitude",
-														        		"data"}, "id = " + id, null, null, null,  "inscricao asc");
+														        		"data",
+														        		"entrevistado",
+														        		"tipo_operacao"}, "id = " + id, null, null, null,  "inscricao asc");
  
         if (cursor.moveToFirst()) {
         	getImovelSelecionado().setImovelId(id);
@@ -560,6 +564,8 @@ public List<String> selectEnderecoImoveis(String condition){
         	getImovelSelecionado().setLatitude(cursor.getString(37));
         	getImovelSelecionado().setLongitude(cursor.getString(38));
         	getImovelSelecionado().setData(cursor.getString(39));
+        	getImovelSelecionado().setEntrevistado(cursor.getString(40));
+        	getImovelSelecionado().setOperacoTipo(Integer.valueOf(cursor.getString(41)));
        	
         	getImovelSelecionado().setListaRamoAtividade(selectRamoAtividadeImovel(id));
         }
@@ -640,8 +646,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	    		getAnormalidadeImovelSelecionado().setLongitude(cursor.getString(1));
 	    		getAnormalidadeImovelSelecionado().setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
 	    		getAnormalidadeImovelSelecionado().setComentario(cursor.getString(3));
-	    		getAnormalidadeImovelSelecionado().setPathFoto1(cursor.getString(4));
-	    		getAnormalidadeImovelSelecionado().setPathFoto2(cursor.getString(5));
+	    		getAnormalidadeImovelSelecionado().setFoto1(cursor.getString(4));
+	    		getAnormalidadeImovelSelecionado().setFoto2(cursor.getString(5));
 	    		getAnormalidadeImovelSelecionado().setData(cursor.getString(6));
 	        }
 	
@@ -952,8 +958,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("codigo_municipio", parser.obterDadoParser(8));
 	   initialValues.put("numero_iptu", parser.obterDadoParser(31));
 	   initialValues.put("numero_celpa", parser.obterDadoParser(20));
-	   initialValues.put("numero_pontos_uteis", parser.obterDadoParser(3));
-	   initialValues.put("numero_ocupantes", parser.obterDadoParser(3));
+	   initialValues.put("numero_pontos_uteis", parser.obterDadoParser(5));
+	   initialValues.put("numero_ocupantes", parser.obterDadoParser(5));
 	   
 	   initialValues.put("tipo_logradouro_imovel", parser.obterDadoParser(2));
 	   initialValues.put("logradouro_imovel", parser.obterDadoParser(40));
@@ -990,6 +996,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
 	   initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
    	   initialValues.put("data", "");
+   	   initialValues.put("entrevistado", "");
+   	   initialValues.put("tipo_operacao", Constantes.OPERACAO_CADASTRO_ALTERADO);
 	   
 	   return db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
 	}
@@ -1316,6 +1324,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("latitude", getImovelSelecionado().getLatitude());
 	   initialValues.put("longitude", getImovelSelecionado().getLongitude());
    	   initialValues.put("data", getImovelSelecionado().getData());
+   	   initialValues.put("entrevistado", getImovelSelecionado().getEntrevistado());
+   	   initialValues.put("tipo_operacao", getImovelSelecionado().getOperacaoTipo());
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
 	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
@@ -1385,8 +1395,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("matricula", getImovelSelecionado().getMatricula());
 	   initialValues.put("codigo_anormalidade", String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()));
 	   initialValues.put("comentario", getAnormalidadeImovelSelecionado().getComentario());
-	   initialValues.put("path_image_1", getAnormalidadeImovelSelecionado().getPathFoto1());
-	   initialValues.put("path_image_2", getAnormalidadeImovelSelecionado().getPathFoto2());
+	   initialValues.put("path_image_1", getAnormalidadeImovelSelecionado().getFoto1());
+	   initialValues.put("path_image_2", getAnormalidadeImovelSelecionado().getFoto2());
 	   initialValues.put("latitude", getAnormalidadeImovelSelecionado().getLatitude());
 	   initialValues.put("longitude", getAnormalidadeImovelSelecionado().getLongitude());
    	   initialValues.put("data", getAnormalidadeImovelSelecionado().getData());

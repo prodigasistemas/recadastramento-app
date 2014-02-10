@@ -7,20 +7,16 @@ import business.Controlador;
 import model.Medidor;
 import util.Constantes;
 import util.Util;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.telephony.CellLocation;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,17 +24,16 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioGroup.OnCheckedChangeListener;
  
-public class MedidorTab extends Activity implements LocationListener {
+public class MedidorTab extends Fragment {
 	
+	private static View view;
 	private String dialogMessage = null;
 	private List<String> listCaixaProtecao;
 	private List<String> listMarcaHidrometro;
@@ -46,25 +41,34 @@ public class MedidorTab extends Activity implements LocationListener {
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
-	private boolean numeroMedidorOk = false;
+	private static boolean numeroMedidorOk = false;
 
 	
+	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.medidortab);
-        instanciate();
     }
  
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-		instanciate();
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		numeroMedidorOk = false;
+		view = inflater.inflate(R.layout.medidortab, container, false);
+		
+		// Define a imagem de fundo de acordo com a orientacao do dispositivo
+	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+	    else
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+
+        instanciate();
+        return view;
 	}
 
 	public void instanciate(){
 
         /* Use the LocationManager class to obtain GPS locations */
-        mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        mLocManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         
         boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -73,7 +77,7 @@ public class MedidorTab extends Activity implements LocationListener {
         // go to the settings
         if (!enabled){
 	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
         
 		Criteria criteria = new Criteria();
@@ -84,25 +88,25 @@ public class MedidorTab extends Activity implements LocationListener {
     	CellLocation.requestLocationUpdate();
 
     	// RadioGroup - Possui Hidrômetro.
-    	RadioGroup radioGroupPossuiHidrometro = (RadioGroup) findViewById(R.id.radioGroupPossuiHidrometro);
+    	RadioGroup radioGroupPossuiHidrometro = (RadioGroup) view.findViewById(R.id.radioGroupPossuiHidrometro);
 		possuiHidrometroOnCheckedChangeListener(radioGroupPossuiHidrometro);
         
 	      // Popula RadioButton - Possui Hidrometro
         if (getMedidor().getPossuiMedidor() == Constantes.NAO){
-        	((RadioButton)(findViewById(R.id.tipoMedicaoRadioNao))).setChecked(true);
+        	((RadioButton)(view.findViewById(R.id.tipoMedicaoRadioNao))).setChecked(true);
        
         }else if (getMedidor().getPossuiMedidor() == Constantes.SIM){
-            ((RadioButton)(findViewById(R.id.tipoMedicaoRadioSim))).setChecked(true);
+            ((RadioButton)(view.findViewById(R.id.tipoMedicaoRadioSim))).setChecked(true);
         }
         
         // Button Save 
-        final Button buttonSave = (Button)findViewById(R.id.buttonSave);
+        final Button buttonSave = (Button)view.findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
             	if (!isNumeroMedidorValido()){
-		        	dialogMessage = "Por favor, informe o número do hidrômetro.";
-		        	showDialog(Constantes.DIALOG_ID_ERRO);
+		        	dialogMessage = "Por favor, informe o número do hidrômetro ou selecione a anormalidade correspondente.";
+                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 		
             	}else{
             		
@@ -113,7 +117,8 @@ public class MedidorTab extends Activity implements LocationListener {
 		            	}
 		
 		            	if (!numeroMedidorOk){
-		        	    	showDialog(Constantes.DIALOG_ID_CONFIRM_CHANGES);	            		
+		            	    dialogMessage = "Houve alteração no número do hidrômetro. Por favor informe novamente para confirmação.";
+        					showCompleteDialog(R.drawable.aviso, "Confirmação:", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_MUDANCA);
 		            	}
 		            		            	
 	    			}else{
@@ -124,7 +129,7 @@ public class MedidorTab extends Activity implements LocationListener {
 		            	updateMedidorSelecionado();
 		            	
 		         		getMedidor().setTabSaved(true);
-		         		Toast.makeText(MedidorTab.this, "Dados do Medidor atualizados com sucesso.", 5).show();
+		         		Toast.makeText(getActivity(), "Dados do Medidor atualizados com sucesso.", 5).show();
 	            	}
             	}
             }
@@ -134,8 +139,14 @@ public class MedidorTab extends Activity implements LocationListener {
 	public boolean isNumeroMedidorValido(){
 		boolean result = true;
 
-		if (((RadioGroup)findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioSim &&
-		   ((EditText)findViewById(R.id.numeroHidrometro)).getText().toString().length() == 0){
+		int codigoAnormalidade = ((MainTab)getActivity()).getCodigoAnormalidade();
+		
+		if (((RadioGroup)view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioSim &&
+		   ((EditText)view.findViewById(R.id.numeroHidrometro)).getText().toString().length() == 0 && 
+		   codigoAnormalidade != Constantes.ANORMALIDADE_HIDR_NAO_LOCALIZADO &&
+		   codigoAnormalidade != Constantes.ANORMALIDADE_HIDR_SEM_IDENTIFICACAO){
+
+			Log.i("TESTE", String.valueOf(codigoAnormalidade));
 
 			result = false;
 		}
@@ -145,7 +156,9 @@ public class MedidorTab extends Activity implements LocationListener {
 	public boolean checkChangeNumeroMedidor(){
 		boolean result = false;
 
-		if (getMedidor().getNumeroHidrometro().compareTo(((EditText)findViewById(R.id.numeroHidrometro)).getText().toString()) != 0){
+		if (((RadioGroup)view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioSim &&
+			 getMedidor().getNumeroHidrometro().compareTo(((EditText)view.findViewById(R.id.numeroHidrometro)).getText().toString()) != 0){
+			
 			result = true;
 		}
 		return result;
@@ -153,19 +166,19 @@ public class MedidorTab extends Activity implements LocationListener {
 
 	public void updateMedidorSelecionado(){
 		
-		if ( ((RadioGroup)findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioNao){
+		if ( ((RadioGroup)view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioNao){
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.NAO));
 		}else{
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.SIM));
-			getMedidor().setNumeroHidrometro(((EditText)findViewById(R.id.numeroHidrometro)).getText().toString());
+			getMedidor().setNumeroHidrometro(((EditText)view.findViewById(R.id.numeroHidrometro)).getText().toString());
 			
-			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerCapacidadeHidrometro)).getSelectedItem().toString());
+			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO, ((Spinner)view.findViewById(R.id.spinnerCapacidadeHidrometro)).getSelectedItem().toString());
 			getMedidor().setCapacidade(codigo);
 
-			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_MARCA_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerMarcaHidrometro)).getSelectedItem().toString());
+			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_MARCA_HIDROMETRO, ((Spinner)view.findViewById(R.id.spinnerMarcaHidrometro)).getSelectedItem().toString());
 			getMedidor().setMarca(codigo);
 			
-			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_PROTECAO_HIDROMETRO, ((Spinner)findViewById(R.id.spinnerCaixaProtecao)).getSelectedItem().toString());
+			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_PROTECAO_HIDROMETRO, ((Spinner)view.findViewById(R.id.spinnerCaixaProtecao)).getSelectedItem().toString());
 			getMedidor().setTipoCaixaProtecao(codigo);
 
 	        if (lastKnownLocation != null) {
@@ -181,14 +194,14 @@ public class MedidorTab extends Activity implements LocationListener {
 		radioGroupPossuiHidrometro.setOnCheckedChangeListener(new OnCheckedChangeListener() 
         {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
- 		        LinearLayout submitAdditionalLayout = (LinearLayout)findViewById(R.id.linearLayoutDadosHidrometro);
+ 		        LinearLayout submitAdditionalLayout = (LinearLayout)view.findViewById(R.id.linearLayoutDadosHidrometro);
 	            
 		        if (submitAdditionalLayout != null){
 	            	submitAdditionalLayout.removeAllViews();
 	            }
 	            
             	if (checkedId == R.id.tipoMedicaoRadioSim){
-		            LayoutInflater inflater = getLayoutInflater();
+		            LayoutInflater inflater = getActivity().getLayoutInflater();
 		            submitAdditionalLayout.addView(inflater.inflate(R.layout.dadoshidrometro, null));
 
 		        	// popula o endereço do hidrometro, caso exista
@@ -196,9 +209,9 @@ public class MedidorTab extends Activity implements LocationListener {
 		            
 		            
 		            // Spinner Capacidade Hidrômetro
-		            Spinner spinnerCapacidadeHidrometro = (Spinner) findViewById(R.id.spinnerCapacidadeHidrometro);
+		            Spinner spinnerCapacidadeHidrometro = (Spinner) view.findViewById(R.id.spinnerCapacidadeHidrometro);
 		            listCapacidadeHidrometro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO);
-		            ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listCapacidadeHidrometro);
+		            ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listCapacidadeHidrometro);
 		            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		            spinnerCapacidadeHidrometro.setAdapter(adapter);
 		    		// Popula Spinner Capacidade Hidrômetro
@@ -213,9 +226,9 @@ public class MedidorTab extends Activity implements LocationListener {
 		    		}
 
 		            // Spinner Marca Hidrômetro
-		            Spinner spinnerMarcaHidrometro = (Spinner) findViewById(R.id.spinnerMarcaHidrometro);
+		            Spinner spinnerMarcaHidrometro = (Spinner) view.findViewById(R.id.spinnerMarcaHidrometro);
 		            listMarcaHidrometro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_MARCA_HIDROMETRO);
-		            adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listMarcaHidrometro);
+		            adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listMarcaHidrometro);
 		            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		            spinnerMarcaHidrometro.setAdapter(adapter);
 		    		// Popula Spinner Marca Hidrômetro
@@ -230,9 +243,9 @@ public class MedidorTab extends Activity implements LocationListener {
 		    		}
 
 		            // Spinner Caixa de Proteção
-		            Spinner spinnerCaixaProtecao = (Spinner) findViewById(R.id.spinnerCaixaProtecao);
+		            Spinner spinnerCaixaProtecao = (Spinner) view.findViewById(R.id.spinnerCaixaProtecao);
 		            listCaixaProtecao = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_PROTECAO_HIDROMETRO);
-		            adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listCaixaProtecao);
+		            adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listCaixaProtecao);
 		            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		            spinnerCaixaProtecao.setAdapter(adapter);
 		    		// Popula Spinner Caixa de Proteção
@@ -255,7 +268,7 @@ public class MedidorTab extends Activity implements LocationListener {
 
 		// Número do Hidrometro
 //        if ( String.valueOf(getMedidor().getNumeroHidrometro()) != Constantes.NULO_STRING){
-//            ((EditText)(findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
+//            ((EditText)(view.findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
 //        }
 	}
 
@@ -263,135 +276,42 @@ public class MedidorTab extends Activity implements LocationListener {
 		return Controlador.getInstancia().getMedidorSelecionado();
 	}
 		
-	@Override
-	protected Dialog onCreateDialog(final int id) {
-	        
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		AlertDialog.Builder builder;
-	  
-		if (id == Constantes.DIALOG_ID_SUCESSO || id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        View layout = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
-	        ((TextView)layout.findViewById(R.id.messageDialog)).setText(dialogMessage);
-	        
-	        if (id == Constantes.DIALOG_ID_SUCESSO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.save);
-	
-	        }else if (id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.aviso);
-	        }
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setView(layout);
-	        builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-
-	        		if (id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	        			startActivity(intent);
-	        		}
-	        	}
-	        });
-	
-	        AlertDialog messageDialog = builder.create();
-	        return messageDialog;
-	
-		}else if (id == Constantes.DIALOG_ID_CONFIRM_BACK){
-	        
-			inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-			((TextView)layoutConfirmationDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Atenção!");
-	        builder.setView(layoutConfirmationDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	        		MainTab.indiceNovoImovel = null;
-	    			finish();
-	        	}
-	        });
-	        
-	        AlertDialog passwordDialog = builder.create();
-	        return passwordDialog;
-		    
-		}else if (id == Constantes.DIALOG_ID_CONFIRM_CHANGES){
-			
-	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutChangeDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-    	    dialogMessage = "Houve alteração no número do hidrômetro. Por favor informe novamente para confirmação.";
-	        
-			((TextView)layoutChangeDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-	
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Confirmação");
-	        builder.setView(layoutChangeDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	            	if (!numeroMedidorOk){
-	            		numeroMedidorOk = true;
-	            		((EditText)(findViewById(R.id.numeroHidrometro))).setText("");
-	            	}
-	        	}
-	        });
-	        
-	        AlertDialog changeDialog = builder.create();
-	        return changeDialog;
-		}
-	    return null;
-	}
-
-	public boolean onKeyDown(int keyCode, KeyEvent event){
-        
-    	if ((keyCode == KeyEvent.KEYCODE_BACK)){
-    		dialogMessage = " Deseja voltar para a lista de cadastros? ";
-	    	showDialog(Constantes.DIALOG_ID_CONFIRM_BACK);
-            return true;
-
-        }else{
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
-	
 	public void onLocationChanged(Location location) {
 		lastKnownLocation = location;
 	}
-
 	
 	public void onProviderDisabled(String provider) {
 
         // Check if enabled and if not send user to the GSP settings
         // Better solution would be to display a dialog and suggesting to 
         // go to the settings
-		dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
+        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
 	}
-
 	
 	public void onProviderEnabled(String provider) {
-		Toast.makeText( getApplicationContext(),"GPS ligado",Toast.LENGTH_SHORT).show();
+		Toast.makeText( getActivity(),"GPS ligado",Toast.LENGTH_SHORT).show();
 	}
-
 	
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+	public static void setChangesConfirmed(){
+    	if (!numeroMedidorOk){
+    		numeroMedidorOk = true;
+    		((EditText)(view.findViewById(R.id.numeroHidrometro))).setText("");
+    	}
+	}
+
+	void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_MEDIDOR);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+    }
+	
+	void showCompleteDialog(int iconId, String title, String message, int messageType) {
+		CompleteAlertDialogFragment newFragment = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_MEDIDOR);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+    }
 
 }

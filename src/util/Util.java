@@ -4,15 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-import ui.ArquivoRetorno;
-import ui.MessageDispatcher;
-
 import business.Controlador;
-import business.ControladorAcessoOnline;
 
 import com.AndroidExplorer.ClienteTab;
 
@@ -26,6 +23,7 @@ import android.widget.EditText;
 public class Util {
 
 	static boolean isUpdatingCep;
+	static boolean isUpdatingIptu;
 	static boolean isUpdatingPhone;
 	static boolean isUpdatingCpfCnpj;
 	static boolean isCpfProprietarioOk = false;
@@ -64,7 +62,7 @@ public class Util {
 
 	public static boolean isValidText(final String textName){
 		boolean result = false;
-		if (!textName.matches("[a-zA-Z ]*")) {
+		if (!textName.matches("[a-zA-Z &/]*")) {
 			result = true;
 		}
 		return result;
@@ -132,6 +130,105 @@ public class Util {
         });
 		
 	}
+	
+	
+	// Define a variavel editText para tratar os eventos de textChanged considerando mascara para CEP.
+	public static void addTextChangedListenerIPTUMask(final EditText edt){
+    	edt.addTextChangedListener(new TextWatcher() {  
+    	    
+    		
+    		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}  
+    		
+    	    public void onTextChanged(CharSequence s, int start, int before, int after) {  
+    	      
+    			// Quando o texto é alterado o onTextChange é chamado. Essa flag evita a chamada infinita desse método  
+    			if (isUpdatingIptu){
+    				isUpdatingIptu = false;  
+    				return;  
+    			}  
+    	      
+    			boolean hasMask = s.toString().indexOf('-') > -1;  
+    	      
+    			// Remove o '-' da String  
+    			String str = s.toString().replaceAll("[-]", "").replaceAll("[/]", "");  
+    	      
+    			if (after > before) {  
+
+    				if (str.length() > 3) {  
+    					str = str.substring(0,3) + '/' + str.substring(3);  
+    				}  
+    				if (str.length() > 9) {  
+    					str = str.substring(0,9) + '/' + str.substring(9);  
+    				}  
+    				if (str.length() > 12) {  
+    					str = str.substring(0,12) + '/' + str.substring(12);  
+    				}  
+    				if (str.length() > 15) {  
+    					str = str.substring(0,15) + '/' + str.substring(15);  
+    				}  
+    				if (str.length() > 20) {  
+    					str = str.substring(0,20) + '/' + str.substring(20);  
+    				}  
+    				// Se tem mais de 3 caracteres (sem máscara) coloca o '/'  
+    				if (str.length() > 24) {  
+    					str = str.substring(0,24) + '/' + str.substring(24);  
+    				}  
+    				// Se tem mais de 28 caracteres (sem máscara) coloca o '-'  
+    				if (str.length() > 28) {  
+    					str = str.substring(0,28) + '-' + str.substring(28);  
+    				}  
+    				
+     				// Seta a flag pra evitar chamada infinita  
+    				isUpdatingIptu = true;  
+    				
+    				// seta o novo texto  
+    				edt.setText(str);  
+    				
+    				// seta a posição do cursor  
+    				if(start == 3 || start == 9 || start == 12 || start == 15 || start == 20 || start == 24 || start == 28){
+        				edt.setSelection(start + 2);  
+    				}else{
+        				edt.setSelection(start + 1);  
+    				}
+    	      
+    			} else {  
+    				isUpdatingIptu = true;  
+
+    				if (str.length() > 3) {  
+    					str = str.substring(0,3) + '/' + str.substring(3);  
+    				}  
+    				if (str.length() > 9) {  
+    					str = str.substring(0,9) + '/' + str.substring(9);  
+    				}  
+    				if (str.length() > 12) {  
+    					str = str.substring(0,12) + '/' + str.substring(12);  
+    				}  
+    				if (str.length() > 15) {  
+    					str = str.substring(0,15) + '/' + str.substring(15);  
+    				}  
+    				if (str.length() > 20) {  
+    					str = str.substring(0,20) + '/' + str.substring(20);  
+    				}  
+    				// Se tem mais de 3 caracteres (sem máscara) coloca o '/'  
+    				if (str.length() > 24) {  
+    					str = str.substring(0,24) + '/' + str.substring(24);  
+    				}  
+    				// Se tem mais de 28 caracteres (sem máscara) coloca o '-'  
+    				if (str.length() > 28) {  
+    					str = str.substring(0,28) + '-' + str.substring(28);  
+    				}  
+
+    				edt.setText(str);  
+    				
+    				// Se estiver apagando posiciona o cursor no local correto. Isso trata a deleção dos caracteres da máscara.  
+    				edt.setSelection(Math.max(0, Math.min(hasMask ? start + 1 - before : start, str.length() ) ) );  
+    			}  
+    		}  
+    		
+    	    public void afterTextChanged(Editable s) {}  
+        });
+		
+	}
 
 	// Define a variavel editText para tratar os eventos de textChanged considerando mascara para Telefone.
 	public static void addTextChangedListenerPhoneMask(final EditText edt){
@@ -163,6 +260,11 @@ public class Util {
     				
     				if (str.length() > 8) {  
     					str = str.substring(0,8) + '-' + str.substring(8);  
+    				}  
+    				
+    				if (str.length() > 13) {
+    					str = str.toString().replaceAll("[-]", "");
+    					str = str.substring(0,9) + '-' + str.substring(9);  
     				}  
     				
     				// Seta a flag pra evitar chamada infinita  
@@ -199,7 +301,6 @@ public class Util {
     				edt.setSelection(Math.max(0, Math.min(start + 1 - before, str.length() ) ) ); 
     			}  
     		}  
-    	         
     		
     	    public void afterTextChanged(Editable s) {  
     	    }  
@@ -1098,4 +1199,35 @@ public class Util {
 		return result;
 	}
 
+	public static void zipArquivoCompleto() throws IOException {
+		ArrayList<String> filesToZip = new ArrayList<String>();
+		String zipFilename;
+    	Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
+    	File diretorioRetornoRota = new File(getRetornoRotaDirectory());
+
+    	zipFilename = diretorioRetornoRota.getPath() + "/";
+    	zipFilename +=  Controlador.getInstancia().getDadosGerais().getLocalidade() + "_";
+    	zipFilename += Controlador.getInstancia().getDadosGerais().getSetor() + "_";
+    	zipFilename += Controlador.getInstancia().getDadosGerais().getRota() + "_";
+    	zipFilename += Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento();
+    	zipFilename += ".zip";
+
+    	File[] files = diretorioRetornoRota.listFiles();
+    	
+    	if(files != null){
+
+    		for(int i=0; i < files.length; i++){
+
+    			File file = files[i];
+	    		if(!file.isDirectory()){
+	    			if ( !file.getName().endsWith(".zip") && !file.getName().startsWith("._")){
+	    				filesToZip.add(file.getPath());
+	    			}
+	    		}
+	    	}
+    	}
+
+        Compress zipRetornoCompleto = new Compress(filesToZip, zipFilename);
+        zipRetornoCompleto.zip();
+	}
 }

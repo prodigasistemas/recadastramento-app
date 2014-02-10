@@ -91,12 +91,21 @@
        	<item>Outro</item>
      </string-array>
 
+    <string-array name="listaEntrevistado">
+		<item>Usuário</item>
+        <item>Proprietário</item>
+       	<item>Responsável</item>
+       	<item>Parente</item>
+       	<item>Funcionário</item>
+	</string-array>
+    
     <string name="options_adicionar_imovel">Novo Cadastro</string>
     <string name="options_adicionar_sublote">Adicionar Sublote</string>
+    <string name="excluir_imovel">Excluir Imóvel</string>
     <string name="options_menu_principal">Menu Principal</string>
     <string name="options_lista_cadastro">Lista de Cadastros</string>
-	<string name="options_proximo">Próximo</string>
-	<string name="options_anterior">Anterior</string>
+	<string name="options_proximo">Próximo Imóvel</string>
+	<string name="options_anterior">Imóvel Anterior</string>
 	<string name="options_sair">Sair</string>
 	                
 </resources>

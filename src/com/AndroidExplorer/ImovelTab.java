@@ -8,22 +8,17 @@ import model.Imovel;
 import business.Controlador;
 import util.Constantes;
 import util.Util;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.telephony.CellLocation;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +29,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -42,13 +36,14 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
  
-public class ImovelTab extends Activity implements LocationListener {
+public class ImovelTab extends Fragment implements LocationListener {
 
 	static boolean isUpdatingRamoAtividade;
-	private CheckBox cbResidencial;;
-	private CheckBox cbComercial;
-	private CheckBox cbPublica;
-	private CheckBox cbIndustrial;
+	private static View view;
+	private static CheckBox cbResidencial;;
+	private static CheckBox cbComercial;
+	private static CheckBox cbPublica;
+	private static CheckBox cbIndustrial;
 	private MySimpleArrayAdapter ramoAtividadeList;
 	private ArrayList<String> ramosAtividadeImovel;
 	private List<String> listRamosAtividade;
@@ -59,30 +54,41 @@ public class ImovelTab extends Activity implements LocationListener {
 	Location lastKnownLocation;
 	private String provider;
 
-	private boolean categResidencialOk = false;
-	private boolean categComercialOk = false;
-	private boolean categPublicaOk = false;
-	private boolean categIndustrialOk = false;
+	private static boolean categResidencialOk = false;
+	private static boolean categComercialOk = false;
+	private static boolean categPublicaOk = false;
+	private static boolean categIndustrialOk = false;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	
-        setContentView(R.layout.imoveltab);
-        instanciate();
  	}
 	
-	protected void onNewIntent(Intent intent) {
-		  super.onNewIntent(intent);
-		  setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-		  instanciate();
-		}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+		categResidencialOk = false;
+		categComercialOk = false;
+		categPublicaOk = false;
+		categIndustrialOk = false;
+
+		view = inflater.inflate(R.layout.imoveltab, container, false);
+		
+		// Define a imagem de fundo de acordo com a orientacao do dispositivo
+	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+	    else
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+
+        instanciate();
+        return view;
+	}
 
 	public void instanciate(){
 	
         /* Use the LocationManager class to obtain GPS locations */
-        mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        mLocManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         
         boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -91,7 +97,7 @@ public class ImovelTab extends Activity implements LocationListener {
         // go to the settings
         if (!enabled){
 	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
         
 		Criteria criteria = new Criteria();
@@ -101,18 +107,19 @@ public class ImovelTab extends Activity implements LocationListener {
         lastKnownLocation = mLocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     	CellLocation.requestLocationUpdate();
 
-    	cbResidencial = (CheckBox) findViewById(R.id.checkBoxResidencial);;
-    	cbComercial = (CheckBox) findViewById(R.id.checkBoxComercial);
-    	cbPublica = (CheckBox) findViewById(R.id.checkBoxPublica);
-    	cbIndustrial = (CheckBox) findViewById(R.id.checkBoxIndustrial);
+		Util.addTextChangedListenerIPTUMask((EditText)view.findViewById(R.id.iptu));
+    	cbResidencial = (CheckBox) view.findViewById(R.id.checkBoxResidencial);;
+    	cbComercial = (CheckBox) view.findViewById(R.id.checkBoxComercial);
+    	cbPublica = (CheckBox) view.findViewById(R.id.checkBoxPublica);
+    	cbIndustrial = (CheckBox) view.findViewById(R.id.checkBoxIndustrial);
     	ramosAtividadeImovel = new ArrayList<String>();
         
-    	Util.addTextChangedListenerCepMask((EditText)findViewById(R.id.cepImovel));
+    	Util.addTextChangedListenerCepMask((EditText)view.findViewById(R.id.cepImovel));
     	
     	// Spinner Tipo Logradouro
-        Spinner spinnerTipoLogradouro = (Spinner) findViewById(R.id.spinnerTipoLogradouroImovel);
+        Spinner spinnerTipoLogradouro = (Spinner) view.findViewById(R.id.spinnerTipoLogradouroImovel);
         listTiposLogradouroImovel = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_TIPO_LOGRADOURO);
-        ArrayAdapter<CharSequence> arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listTiposLogradouroImovel);
+        ArrayAdapter<CharSequence> arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listTiposLogradouroImovel);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoLogradouro.setAdapter(arrayAdapter);
 		
@@ -192,29 +199,29 @@ public class ImovelTab extends Activity implements LocationListener {
     	}); 
 
 		// Descrição do Ramo de Atividade
-        Spinner spinnerDescricaoRamoAtividade = (Spinner) findViewById(R.id.spinnerDescricaoRamoAtividade);
+        Spinner spinnerDescricaoRamoAtividade = (Spinner) view.findViewById(R.id.spinnerDescricaoRamoAtividade);
         
         listRamosAtividade = new ArrayList<String>();
         listRamosAtividade = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_RAMO_ATIVIDADE);
         listRamosAtividade.add(0, "");
 
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listRamosAtividade);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listRamosAtividade);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDescricaoRamoAtividade.setAdapter(adapter);
         spinnerDescricaoRamoAtividade.setOnItemSelectedListener(new OnItemSelectedListener () {
 
         	
 			public void onItemSelected(AdapterView parent, View v, int position, long id){
- 				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_RAMO_ATIVIDADE, ((Spinner)findViewById(R.id.spinnerDescricaoRamoAtividade)).getSelectedItem().toString());
+ 				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_RAMO_ATIVIDADE, ((Spinner)view.findViewById(R.id.spinnerDescricaoRamoAtividade)).getSelectedItem().toString());
  				
- 				if (codigo.compareTo(((EditText)findViewById(R.id.codigoRamoAtividade)).getText().toString()) != 0 &&
- 					((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() != 0){
+ 				if (codigo.compareTo(((EditText)view.findViewById(R.id.codigoRamoAtividade)).getText().toString()) != 0 &&
+ 					((Spinner)(view.findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() != 0){
  	 				
  					isUpdatingRamoAtividade = true;  
- 					((EditText)findViewById(R.id.codigoRamoAtividade)).setText(codigo);
+ 					((EditText)view.findViewById(R.id.codigoRamoAtividade)).setText(codigo);
  					
-	        	}else if (((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() == 0){
-	        		((EditText)findViewById(R.id.codigoRamoAtividade)).setText("");
+	        	}else if (((Spinner)(view.findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() == 0){
+	        		((EditText)view.findViewById(R.id.codigoRamoAtividade)).setText("");
 	        	}
 			}
 			
@@ -222,7 +229,7 @@ public class ImovelTab extends Activity implements LocationListener {
 		});
 
 		// Codigo do Ramo de Atividade
-        EditText codigoRamoAtividade = (EditText)findViewById(R.id.codigoRamoAtividade);
+        EditText codigoRamoAtividade = (EditText)view.findViewById(R.id.codigoRamoAtividade);
         codigoRamoAtividade.addTextChangedListener(new TextWatcher() {
 
     		
@@ -240,10 +247,10 @@ public class ImovelTab extends Activity implements LocationListener {
  				if (descricaoRamoAtividade != null){
  					for (int i = 0; i < listRamosAtividade.size(); i++){
  			        	if (listRamosAtividade.get(i).equalsIgnoreCase(descricaoRamoAtividade)){
- 			                ((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).setSelection(i);
+ 			                ((Spinner)(view.findViewById(R.id.spinnerDescricaoRamoAtividade))).setSelection(i);
  			        		break;
  			        	}else{
- 			                ((Spinner)(findViewById(R.id.spinnerDescricaoRamoAtividade))).setSelection(0);
+ 			                ((Spinner)(view.findViewById(R.id.spinnerDescricaoRamoAtividade))).setSelection(0);
  			        	}
  			        }
  				}
@@ -253,13 +260,13 @@ public class ImovelTab extends Activity implements LocationListener {
 		});
 
         // Fonte de Abastecimento
-        Spinner spinnerFonteAbastecimento = (Spinner) findViewById(R.id.spinnerFonteAbastecimento);
+        Spinner spinnerFonteAbastecimento = (Spinner) view.findViewById(R.id.spinnerFonteAbastecimento);
 
         listFonteAbastecimento = new ArrayList<String>();
         listFonteAbastecimento = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_FONTE_ABASTECIMENTO);
         listFonteAbastecimento.add(0, "");
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listFonteAbastecimento);
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listFonteAbastecimento);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFonteAbastecimento.setAdapter(adapter);
 		
@@ -282,7 +289,7 @@ public class ImovelTab extends Activity implements LocationListener {
     	}   
     	
         // Button Add Ramo Atividade 
-        final Button buttonAddRamoAtividade = (Button)findViewById(R.id.buttonAddRamoAtividade);
+        final Button buttonAddRamoAtividade = (Button)view.findViewById(R.id.buttonAddRamoAtividade);
         buttonAddRamoAtividade.setOnClickListener(new OnClickListener() {
 
         	public void onClick(View v) {
@@ -291,7 +298,7 @@ public class ImovelTab extends Activity implements LocationListener {
         		// Verifica se Ramo de Atividade já foi adicionado neste Imovel.
         		if (ramosAtividadeImovel != null){
 	        		for (int i=0; i< ramosAtividadeImovel.size(); i++){
-	        			if ((ramosAtividadeImovel.get(i)).equalsIgnoreCase(((EditText)(findViewById(R.id.codigoRamoAtividade))).getText().toString())){
+	        			if ((ramosAtividadeImovel.get(i)).equalsIgnoreCase(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString())){
 	        				
 	        				isRamoAtividadeJaAdicionado = true;
 	        			}
@@ -300,20 +307,20 @@ public class ImovelTab extends Activity implements LocationListener {
         		
         		if (!isRamoAtividadeJaAdicionado){
 	        	    
-        			if (((EditText)(findViewById(R.id.codigoRamoAtividade))).getText().toString().length() > 0){
+        			if (((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString().length() > 0){
 
 //                		if (isRamoAtividadeOk()){
 
-	        				ramosAtividadeImovel.add(((EditText)(findViewById(R.id.codigoRamoAtividade))).getText().toString());
-	     	        	    ListView listRamosAtividade = (ListView)findViewById(R.id.listRamosAtividade);
-	    	        	    ramoAtividadeList = new MySimpleArrayAdapter(getBaseContext());
+	        				ramosAtividadeImovel.add(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString());
+	     	        	    ListView listRamosAtividade = (ListView)view.findViewById(R.id.listRamosAtividade);
+	    	        	    ramoAtividadeList = new MySimpleArrayAdapter(getActivity().getBaseContext());
 	    	        	    listRamosAtividade.setAdapter(ramoAtividadeList);
 	    	       	    
 	    	        	    // Hide txtEmpty se lista de ramos de atividade for maior que ZERO.
 	    	        	    if (ramosAtividadeImovel.size() > 0){
-	    		        		((TextView)findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
+	    		        		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
 	    	        	    }else{
-	    		        		((TextView)findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
+	    		        		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
 	    	        	    }
 	
 	    	        	    ViewGroup.LayoutParams params = listRamosAtividade.getLayoutParams();
@@ -323,70 +330,97 @@ public class ImovelTab extends Activity implements LocationListener {
 //                		}
         			}else{
             			dialogMessage = " Ramo de Atividade inválido! ";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+                        showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
         			}
         		}else{
         			dialogMessage = " Ramo de Atividade já existente! ";
-        	    	showDialog(Constantes.DIALOG_ID_ERRO);
+                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
         		}
             }
         });
 
         // Button Save 
-        final Button buttonSave = (Button)findViewById(R.id.buttonSave);
+        final Button buttonSave = (Button)view.findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
-    			if ( !Util.allowPopulateDados()){
-    					
-	            	if (!checkChangesSubCategoriasResidenciais()){
-	            		categResidencialOk = true;
-	            	}
-	
-	            	if (!checkChangesSubCategoriasComerciais()){
-	            		categComercialOk = true;
-	            	}
-	
-	            	if (!checkChangesSubCategoriasPublicas()){
-	            		categPublicaOk = true;
-	            	}
-	
-	            	if (!checkChangesSubCategoriasIndustriais()){
-	            		categIndustrialOk = true;
-	            	}
-	            	
-	            	if (!categResidencialOk || !categComercialOk || !categPublicaOk || !categIndustrialOk){
-	        	    	showDialog(Constantes.DIALOG_ID_CONFIRM_CHANGES);	            		
-	            	}
-	            		            	
-    			}else{
-            		categResidencialOk = true;
-            		categComercialOk = true;
-            		categPublicaOk = true;
-            		categIndustrialOk = true;
-    			}
-
-    			if (categResidencialOk && 
-    				categComercialOk && 
-    				categPublicaOk && 
-    				categIndustrialOk ){
+             	// Verifica os campos obrigatórios
+            	if (areCamposObrigatoriosOk()){
+            		
+                	// Ramo de atividade somente para imóvel com economia Comercial, publica ou industrial!!!
+            		if (isRamoAtividadeOk()){
+            			
+                    	// Se tipo de categoria estiver selecionado deve possuir pelo menos uma economia.
+                		if (isDadosCategoriaOk()){
             	
-	            	updateImovelSelecionado();
-	            	
-	             	// Verifica os campos obrigatórios
-	            	if (areCamposObrigatoriosOk()){
-	            		
-	                	// Ramo de atividade somente para imóvel com economia Comercial, publica ou industrial!!!
-	            		if (isRamoAtividadeOk()){
-	            			
-	                    	// Se tipo de categoria estiver selecionado deve possuir pelo menos uma economia.
-	                		if (isDadosCategoriaOk()){
-	
-	                			getImovel().setTabSaved(true);
-		            			Toast.makeText(ImovelTab.this, "Dados do Imóvel atualizados com sucesso.", 5).show();
-	                		}
-	            		}
-	            	}
+                			if ( !Util.allowPopulateDados()){
+                				
+                				if (!checkChangesSubCategoriasResidenciais()){
+                					categResidencialOk = true;
+                				}
+                				
+                				if (!checkChangesSubCategoriasComerciais()){
+                					categComercialOk = true;
+                				}
+                				
+                				if (!checkChangesSubCategoriasPublicas()){
+                					categPublicaOk = true;
+                				}
+                				
+                				if (!checkChangesSubCategoriasIndustriais()){
+                					categIndustrialOk = true;
+                				}
+                				
+                				if (!categResidencialOk || !categComercialOk || !categPublicaOk || !categIndustrialOk){
+                					String categorias = "";
+                					
+                					if (!categResidencialOk){
+                						categorias = " residencial";
+                					}
+                					
+                					if (!categComercialOk){
+                						categorias += " comercial";
+                					}
+                					
+                					if (!categPublicaOk){
+                						categorias += " pública";
+                					}
+                					
+                					if (!categIndustrialOk){
+                						categorias += " industrial";
+                					}
+                					
+                					String[] split = categorias.split( " " );        	
+                					
+                					if (split.length > 1){
+                						dialogMessage = "Houve alteração nos dados das categorias" + categorias + ". Por favor informe os dados novamente.";
+                					}else{
+                						dialogMessage = "Houve alteração nos dados da categoria" + categorias + ". Por favor informe os dados novamente.";
+                					}
+                					
+                					showCompleteDialog(R.drawable.aviso, "Confirmação:", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_MUDANCA);
+                					
+                				}
+                				
+                			}else{
+                				categResidencialOk = true;
+                				categComercialOk = true;
+                				categPublicaOk = true;
+                				categIndustrialOk = true;
+                			}
+                			
+                			if (categResidencialOk && 
+                					categComercialOk && 
+                					categPublicaOk && 
+                					categIndustrialOk ){
+                				
+                				updateImovelSelecionado();
+                				
+                				getImovel().setTabSaved(true);
+                				Toast.makeText(getActivity(), "Dados do Imóvel atualizados com sucesso.", 5).show();
+                			}
+                		}
+            		}
             	}
             }
         });
@@ -397,12 +431,12 @@ public class ImovelTab extends Activity implements LocationListener {
 
 		if ( !cbComercial.isChecked() && !cbPublica.isChecked() && !cbIndustrial.isChecked() && ramosAtividadeImovel.size() > 0){
 			dialogMessage = " Ramo de Atividade só deve existir para economia Comercial, Pública ou Industrial. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			result = false;
 
 		}else if ( (cbComercial.isChecked() || cbPublica.isChecked() || cbIndustrial.isChecked()) && ramosAtividadeImovel.size() == 0){
 			dialogMessage = " É necessário informar o Ramo de Atividade para economia Comercial, Pública ou Industrial. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			result = false;
 		}
 		return result;
@@ -412,77 +446,77 @@ public class ImovelTab extends Activity implements LocationListener {
 		boolean result = true;
 
 		if ( cbComercial.isChecked() &&
-				((((EditText)findViewById(R.id.economiasC1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasC1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasC2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasC2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasC3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasC3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasC4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasC4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias comerciais inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 	    	result = false;
 		}
 
 		if ( cbIndustrial.isChecked() &&
-				((((EditText)findViewById(R.id.economiasI1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasI1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasI2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasI2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasI3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasI3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasI4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasI4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias industriais inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 	    	result = false;
 		}
 
 		if ( cbPublica.isChecked() &&
-				((((EditText)findViewById(R.id.economiasP1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasP1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasP2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasP2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasP3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasP3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasP4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasP4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias públicas inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 	    	result = false;
 		}
 
@@ -493,56 +527,56 @@ public class ImovelTab extends Activity implements LocationListener {
 		boolean result = true;
 		
 		//localidade
-		if ( (((EditText)findViewById(R.id.localidade)).getText().toString().trim().length() == 0) ||
-			 ( ((EditText)findViewById(R.id.localidade)).getText().toString().trim().length() >0 &&
-				(Integer.parseInt(((EditText)findViewById(R.id.localidade)).getText().toString().trim()) == 0 ) ) ){
+		if ( (((EditText)view.findViewById(R.id.localidade)).getText().toString().trim().length() == 0) ||
+			 ( ((EditText)view.findViewById(R.id.localidade)).getText().toString().trim().length() >0 &&
+				(Integer.parseInt(((EditText)view.findViewById(R.id.localidade)).getText().toString().trim()) == 0 ) ) ){
 		    
 			dialogMessage = " Localidade inválida. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 
 		//setor
-		if ( (((EditText)findViewById(R.id.setor)).getText().toString().trim().length() == 0) ||
-				 ( ((EditText)findViewById(R.id.setor)).getText().toString().trim().length() >0 &&
-					(Integer.parseInt(((EditText)findViewById(R.id.setor)).getText().toString().trim()) == 0 ) ) ){
+		if ( (((EditText)view.findViewById(R.id.setor)).getText().toString().trim().length() == 0) ||
+				 ( ((EditText)view.findViewById(R.id.setor)).getText().toString().trim().length() >0 &&
+					(Integer.parseInt(((EditText)view.findViewById(R.id.setor)).getText().toString().trim()) == 0 ) ) ){
 		    
 			dialogMessage = " Setor inválido ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
 		// rota
-		if ( (((EditText)findViewById(R.id.rota)).getText().toString().trim().length() == 0) ||
-				 ( ((EditText)findViewById(R.id.rota)).getText().toString().trim().length() >0 &&
-					(Integer.parseInt(((EditText)findViewById(R.id.rota)).getText().toString().trim()) == 0 ) ) ){
+		if ( (((EditText)view.findViewById(R.id.rota)).getText().toString().trim().length() == 0) ||
+				 ( ((EditText)view.findViewById(R.id.rota)).getText().toString().trim().length() >0 &&
+					(Integer.parseInt(((EditText)view.findViewById(R.id.rota)).getText().toString().trim()) == 0 ) ) ){
 		    
 			dialogMessage = " Rota inválida. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
 		// logradouro
-		if (((EditText)findViewById(R.id.logradouro)).getText().toString().trim().compareTo("") == 0){
+		if (((EditText)view.findViewById(R.id.logradouro)).getText().toString().trim().compareTo("") == 0){
 		    
 			dialogMessage = " Logradouro inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
 		// Bairro
-		if (((EditText)findViewById(R.id.bairro)).getText().toString().trim().compareTo("") == 0){
+		if (((EditText)view.findViewById(R.id.bairro)).getText().toString().trim().compareTo("") == 0){
 		    
 			dialogMessage = " Bairro inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
 		// Municipio
-		if (((EditText)findViewById(R.id.municipio)).getText().toString().trim().compareTo("") == 0){
+		if (((EditText)view.findViewById(R.id.municipio)).getText().toString().trim().compareTo("") == 0){
 		    
 			dialogMessage = " Município inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
@@ -550,108 +584,108 @@ public class ImovelTab extends Activity implements LocationListener {
 		if (!cbResidencial.isChecked() && !cbComercial.isChecked() && !cbIndustrial.isChecked() && !cbPublica.isChecked()){
 		    
 			dialogMessage = " Imóvel deve possuir pelo menos 1 economia. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
 		// Verificar Econominas. pelo menos 1 economia
 		if ( cbResidencial.isChecked() &&
-				((((EditText)findViewById(R.id.economiasR1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasR1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasR1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasR1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasR1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasR1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasR2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasR2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasR2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasR2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasR2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasR2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasR3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasR3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasR3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasR3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasR3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasR3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasR4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasR4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasR4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasR4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasR4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasR4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias residenciais inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 
 		if ( cbComercial.isChecked() &&
-				((((EditText)findViewById(R.id.economiasC1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasC1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasC2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasC2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasC3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasC3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasC4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasC4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasC4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasC4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasC4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasC4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias comerciais inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 
 		if ( cbIndustrial.isChecked() &&
-				((((EditText)findViewById(R.id.economiasI1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasI1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasI2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasI2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasI3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasI3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasI4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasI4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasI4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasI4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasI4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasI4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias industriais inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 
 		if ( cbPublica.isChecked() &&
-				((((EditText)findViewById(R.id.economiasP1)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP1)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP1)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasP1)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP1)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP1)).getText().toString().trim()) == 0 ))) 
 				&&
 				
-				((((EditText)findViewById(R.id.economiasP2)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP2)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP2)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasP2)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP2)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP2)).getText().toString().trim()) == 0 ))) 
 				&&
 						
-				((((EditText)findViewById(R.id.economiasP3)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP3)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP3)).getText().toString().trim()) == 0 ))) 
+				((((EditText)view.findViewById(R.id.economiasP3)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP3)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP3)).getText().toString().trim()) == 0 ))) 
 				&&
 								
-				((((EditText)findViewById(R.id.economiasP4)).getText().toString().trim().length() == 0) ||
-				( ((EditText)findViewById(R.id.economiasP4)).getText().toString().trim().length() >0 &&
-				   (Integer.parseInt(((EditText)findViewById(R.id.economiasP4)).getText().toString().trim()) == 0 )))){
+				((((EditText)view.findViewById(R.id.economiasP4)).getText().toString().trim().length() == 0) ||
+				( ((EditText)view.findViewById(R.id.economiasP4)).getText().toString().trim().length() >0 &&
+				   (Integer.parseInt(((EditText)view.findViewById(R.id.economiasP4)).getText().toString().trim()) == 0 )))){
 			
 			dialogMessage = " Número de economias públicas inválido. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 
@@ -666,43 +700,43 @@ public class ImovelTab extends Activity implements LocationListener {
 			getImovel().setMatricula(""+(qtdImoveisNovos == 0 ? 1 : qtdImoveisNovos+1));
 			
 		} else {
-			getImovel().setMatricula(((EditText)findViewById(R.id.matricula)).getText().toString());
+			getImovel().setMatricula(((EditText)view.findViewById(R.id.matricula)).getText().toString());
 		}
 		
-		getImovel().setCodigoCliente(((EditText)findViewById(R.id.codCliente)).getText().toString());
-		getImovel().setLocalidade(Util.adicionarZerosEsquerdaNumero(3, ((EditText)findViewById(R.id.localidade)).getText().toString()));
-		getImovel().setSetor(Util.adicionarZerosEsquerdaNumero(3, ((EditText)findViewById(R.id.setor)).getText().toString()));
-		getImovel().setQuadra(Util.adicionarZerosEsquerdaNumero(4, ((EditText)findViewById(R.id.quadra)).getText().toString()));
-		getImovel().setLote(Util.adicionarZerosEsquerdaNumero(4, ((EditText)findViewById(R.id.lote)).getText().toString()));
-		getImovel().setSubLote(Util.adicionarZerosEsquerdaNumero(3, ((EditText)findViewById(R.id.subLote)).getText().toString()));
+		getImovel().setCodigoCliente(((EditText)view.findViewById(R.id.codCliente)).getText().toString());
+		getImovel().setLocalidade(Util.adicionarZerosEsquerdaNumero(3, ((EditText)view.findViewById(R.id.localidade)).getText().toString()));
+		getImovel().setSetor(Util.adicionarZerosEsquerdaNumero(3, ((EditText)view.findViewById(R.id.setor)).getText().toString()));
+		getImovel().setQuadra(Util.adicionarZerosEsquerdaNumero(4, ((EditText)view.findViewById(R.id.quadra)).getText().toString()));
+		getImovel().setLote(Util.adicionarZerosEsquerdaNumero(4, ((EditText)view.findViewById(R.id.lote)).getText().toString()));
+		getImovel().setSubLote(Util.adicionarZerosEsquerdaNumero(3, ((EditText)view.findViewById(R.id.subLote)).getText().toString()));
 		getImovel().getInscricao();
 		
-		getImovel().setRota(Util.adicionarZerosEsquerdaNumero(2, ((EditText)findViewById(R.id.rota)).getText().toString()));
-		getImovel().setFace(Util.adicionarZerosEsquerdaNumero(2, ((EditText)findViewById(R.id.face)).getText().toString()));
-		getImovel().setCodigoMunicipio(((EditText)findViewById(R.id.codMunicipio)).getText().toString());
+		getImovel().setRota(Util.adicionarZerosEsquerdaNumero(2, ((EditText)view.findViewById(R.id.rota)).getText().toString()));
+		getImovel().setFace(Util.adicionarZerosEsquerdaNumero(2, ((EditText)view.findViewById(R.id.face)).getText().toString()));
+		getImovel().setCodigoMunicipio(((EditText)view.findViewById(R.id.codMunicipio)).getText().toString());
 		getImovel().setListaRamoAtividade(ramosAtividadeImovel);
-		getImovel().setIptu(((EditText)findViewById(R.id.iptu)).getText().toString());
-		getImovel().setNumeroCelpa(((EditText)findViewById(R.id.numeroCelpa)).getText().toString());
-		getImovel().setNumeroPontosUteis(((EditText)findViewById(R.id.numeroPontosUteis)).getText().toString());
-		getImovel().setNumeroOcupantes(((EditText)findViewById(R.id.numeroOcupantes)).getText().toString());
+		getImovel().setIptu(((EditText)view.findViewById(R.id.iptu)).getText().toString());
+		getImovel().setNumeroCelpa(((EditText)view.findViewById(R.id.numeroCelpa)).getText().toString());
+		getImovel().setNumeroPontosUteis(((EditText)view.findViewById(R.id.numeroPontosUteis)).getText().toString());
+		getImovel().setNumeroOcupantes(((EditText)view.findViewById(R.id.numeroOcupantes)).getText().toString());
 		
 		
-		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)findViewById(R.id.spinnerTipoLogradouroImovel)).getSelectedItem().toString());
+		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)view.findViewById(R.id.spinnerTipoLogradouroImovel)).getSelectedItem().toString());
     	getImovel().getEnderecoImovel().setTipoLogradouro(codigo);
-		getImovel().getEnderecoImovel().setLogradouro(((EditText)findViewById(R.id.logradouro)).getText().toString());
-		getImovel().getEnderecoImovel().setNumero(((EditText)findViewById(R.id.numero)).getText().toString());
-		getImovel().getEnderecoImovel().setComplemento(((EditText)findViewById(R.id.complemento)).getText().toString());
-		getImovel().getEnderecoImovel().setBairro(((EditText)findViewById(R.id.bairro)).getText().toString());
-		getImovel().getEnderecoImovel().setCep(((EditText)findViewById(R.id.cepImovel)).getText().toString());
-		getImovel().getEnderecoImovel().setMunicipio(((EditText)findViewById(R.id.municipio)).getText().toString());
+		getImovel().getEnderecoImovel().setLogradouro(((EditText)view.findViewById(R.id.logradouro)).getText().toString());
+		getImovel().getEnderecoImovel().setNumero(((EditText)view.findViewById(R.id.numero)).getText().toString());
+		getImovel().getEnderecoImovel().setComplemento(((EditText)view.findViewById(R.id.complemento)).getText().toString());
+		getImovel().getEnderecoImovel().setBairro(((EditText)view.findViewById(R.id.bairro)).getText().toString());
+		getImovel().getEnderecoImovel().setCep(((EditText)view.findViewById(R.id.cepImovel)).getText().toString());
+		getImovel().getEnderecoImovel().setMunicipio(((EditText)view.findViewById(R.id.municipio)).getText().toString());
 		
-		getImovel().setCodigoLogradouro(((EditText)findViewById(R.id.codLogradouro)).getText().toString());
+		getImovel().setCodigoLogradouro(((EditText)view.findViewById(R.id.codLogradouro)).getText().toString());
 
 		if (cbResidencial.isChecked()){
-    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria1(((EditText)findViewById(R.id.economiasR1)).getText().toString());
-    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria2(((EditText)findViewById(R.id.economiasR2)).getText().toString());
-    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria3(((EditText)findViewById(R.id.economiasR3)).getText().toString());
-    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria4(((EditText)findViewById(R.id.economiasR4)).getText().toString());
+    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria1(((EditText)view.findViewById(R.id.economiasR1)).getText().toString());
+    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria2(((EditText)view.findViewById(R.id.economiasR2)).getText().toString());
+    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria3(((EditText)view.findViewById(R.id.economiasR3)).getText().toString());
+    		getImovel().getCategoriaResidencial().setEconomiasSubCategoria4(((EditText)view.findViewById(R.id.economiasR4)).getText().toString());
     	}else{
     		getImovel().getCategoriaResidencial().setEconomiasSubCategoria1(String.valueOf(Constantes.NULO_INT));
     		getImovel().getCategoriaResidencial().setEconomiasSubCategoria2(String.valueOf(Constantes.NULO_INT));
@@ -711,10 +745,10 @@ public class ImovelTab extends Activity implements LocationListener {
     	}
 		
     	if (cbComercial.isChecked()){
-    		getImovel().getCategoriaComercial().setEconomiasSubCategoria1(((EditText)findViewById(R.id.economiasC1)).getText().toString());
-    		getImovel().getCategoriaComercial().setEconomiasSubCategoria2(((EditText)findViewById(R.id.economiasC2)).getText().toString());
-    		getImovel().getCategoriaComercial().setEconomiasSubCategoria3(((EditText)findViewById(R.id.economiasC3)).getText().toString());
-    		getImovel().getCategoriaComercial().setEconomiasSubCategoria4(((EditText)findViewById(R.id.economiasC4)).getText().toString());
+    		getImovel().getCategoriaComercial().setEconomiasSubCategoria1(((EditText)view.findViewById(R.id.economiasC1)).getText().toString());
+    		getImovel().getCategoriaComercial().setEconomiasSubCategoria2(((EditText)view.findViewById(R.id.economiasC2)).getText().toString());
+    		getImovel().getCategoriaComercial().setEconomiasSubCategoria3(((EditText)view.findViewById(R.id.economiasC3)).getText().toString());
+    		getImovel().getCategoriaComercial().setEconomiasSubCategoria4(((EditText)view.findViewById(R.id.economiasC4)).getText().toString());
     	}else{
     		getImovel().getCategoriaComercial().setEconomiasSubCategoria1(String.valueOf(Constantes.NULO_INT));
     		getImovel().getCategoriaComercial().setEconomiasSubCategoria2(String.valueOf(Constantes.NULO_INT));
@@ -723,10 +757,10 @@ public class ImovelTab extends Activity implements LocationListener {
     	}
 		
     	if (cbPublica.isChecked()){
-    		getImovel().getCategoriaPublica().setEconomiasSubCategoria1(((EditText)findViewById(R.id.economiasP1)).getText().toString());
-    		getImovel().getCategoriaPublica().setEconomiasSubCategoria2(((EditText)findViewById(R.id.economiasP2)).getText().toString());
-    		getImovel().getCategoriaPublica().setEconomiasSubCategoria3(((EditText)findViewById(R.id.economiasP3)).getText().toString());
-    		getImovel().getCategoriaPublica().setEconomiasSubCategoria4(((EditText)findViewById(R.id.economiasP4)).getText().toString());
+    		getImovel().getCategoriaPublica().setEconomiasSubCategoria1(((EditText)view.findViewById(R.id.economiasP1)).getText().toString());
+    		getImovel().getCategoriaPublica().setEconomiasSubCategoria2(((EditText)view.findViewById(R.id.economiasP2)).getText().toString());
+    		getImovel().getCategoriaPublica().setEconomiasSubCategoria3(((EditText)view.findViewById(R.id.economiasP3)).getText().toString());
+    		getImovel().getCategoriaPublica().setEconomiasSubCategoria4(((EditText)view.findViewById(R.id.economiasP4)).getText().toString());
     	}else{
     		getImovel().getCategoriaPublica().setEconomiasSubCategoria1(String.valueOf(Constantes.NULO_INT));
     		getImovel().getCategoriaPublica().setEconomiasSubCategoria2(String.valueOf(Constantes.NULO_INT));
@@ -735,10 +769,10 @@ public class ImovelTab extends Activity implements LocationListener {
     	}
 		
     	if (cbIndustrial.isChecked()){
-    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria1(((EditText)findViewById(R.id.economiasI1)).getText().toString());
-    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria2(((EditText)findViewById(R.id.economiasI2)).getText().toString());
-    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria3(((EditText)findViewById(R.id.economiasI3)).getText().toString());
-    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria4(((EditText)findViewById(R.id.economiasI4)).getText().toString());
+    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria1(((EditText)view.findViewById(R.id.economiasI1)).getText().toString());
+    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria2(((EditText)view.findViewById(R.id.economiasI2)).getText().toString());
+    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria3(((EditText)view.findViewById(R.id.economiasI3)).getText().toString());
+    		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria4(((EditText)view.findViewById(R.id.economiasI4)).getText().toString());
     	}else{
     		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria1(String.valueOf(Constantes.NULO_INT));
     		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria2(String.valueOf(Constantes.NULO_INT));
@@ -746,7 +780,7 @@ public class ImovelTab extends Activity implements LocationListener {
     		getImovel().getCategoriaIndustrial().setEconomiasSubCategoria4(String.valueOf(Constantes.NULO_INT));
     	}
 
-		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_FONTE_ABASTECIMENTO, ((Spinner)findViewById(R.id.spinnerFonteAbastecimento)).getSelectedItem().toString());
+		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_FONTE_ABASTECIMENTO, ((Spinner)view.findViewById(R.id.spinnerFonteAbastecimento)).getSelectedItem().toString());
     	getImovel().setTipoFonteAbastecimento(codigo);
 
         if (lastKnownLocation != null) {
@@ -757,66 +791,66 @@ public class ImovelTab extends Activity implements LocationListener {
 
 	}
 	
-	public void enableEconominasResidencial(boolean enable){
-    	((EditText)(findViewById(R.id.economiasR1))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasR2))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasR3))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasR4))).setEnabled(enable);
+	public static void enableEconominasResidencial(boolean enable){
+    	((EditText)(view.findViewById(R.id.economiasR1))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasR2))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasR3))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasR4))).setEnabled(enable);
     	
     	// limpa textfields se os mesmos estiverem desabilitados
     	if (!enable){
-        	((EditText)(findViewById(R.id.economiasR1))).setText("");
-        	((EditText)(findViewById(R.id.economiasR2))).setText("");
-        	((EditText)(findViewById(R.id.economiasR3))).setText("");
-        	((EditText)(findViewById(R.id.economiasR4))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasR1))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasR2))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasR3))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasR4))).setText("");
 
     	}
 	}
 	
-	public void enableEconominasComercial(boolean enable){
-    	((EditText)(findViewById(R.id.economiasC1))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasC2))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasC3))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasC4))).setEnabled(enable);
+	public static void enableEconominasComercial(boolean enable){
+    	((EditText)(view.findViewById(R.id.economiasC1))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasC2))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasC3))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasC4))).setEnabled(enable);
     	
     	// limpa textfields se os mesmos estiverem desabilitados
     	if (!enable){
-        	((EditText)(findViewById(R.id.economiasC1))).setText("");
-        	((EditText)(findViewById(R.id.economiasC2))).setText("");
-        	((EditText)(findViewById(R.id.economiasC3))).setText("");
-        	((EditText)(findViewById(R.id.economiasC4))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasC1))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasC2))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasC3))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasC4))).setText("");
 
     	}
 	}
 
-	public void enableEconominasPublica(boolean enable){
-    	((EditText)(findViewById(R.id.economiasP1))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasP2))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasP3))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasP4))).setEnabled(enable);
+	public static void enableEconominasPublica(boolean enable){
+    	((EditText)(view.findViewById(R.id.economiasP1))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasP2))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasP3))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasP4))).setEnabled(enable);
     	
     	// limpa textfields se os mesmos estiverem desabilitados
     	if (!enable){
-        	((EditText)(findViewById(R.id.economiasP1))).setText("");
-        	((EditText)(findViewById(R.id.economiasP2))).setText("");
-        	((EditText)(findViewById(R.id.economiasP3))).setText("");
-        	((EditText)(findViewById(R.id.economiasP4))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasP1))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasP2))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasP3))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasP4))).setText("");
 
     	}
 	}
 
-	public void enableEconominasIndustrial(boolean enable){
-    	((EditText)(findViewById(R.id.economiasI1))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasI2))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasI3))).setEnabled(enable);
-    	((EditText)(findViewById(R.id.economiasI4))).setEnabled(enable);
+	public static void enableEconominasIndustrial(boolean enable){
+    	((EditText)(view.findViewById(R.id.economiasI1))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasI2))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasI3))).setEnabled(enable);
+    	((EditText)(view.findViewById(R.id.economiasI4))).setEnabled(enable);
     	
     	// limpa textfields se os mesmos estiverem desabilitados
     	if (!enable){
-        	((EditText)(findViewById(R.id.economiasI1))).setText("");
-        	((EditText)(findViewById(R.id.economiasI2))).setText("");
-        	((EditText)(findViewById(R.id.economiasI3))).setText("");
-        	((EditText)(findViewById(R.id.economiasI4))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasI1))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasI2))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasI3))).setText("");
+        	((EditText)(view.findViewById(R.id.economiasI4))).setText("");
 
     	}
 	}
@@ -825,76 +859,76 @@ public class ImovelTab extends Activity implements LocationListener {
 		
         // Código do Cliente
         if (getImovel().getCodigoCliente() != Constantes.NULO_INT){
-        	((EditText)findViewById(R.id.codCliente)).setText(String.valueOf(getImovel().getCodigoCliente()));
+        	((EditText)view.findViewById(R.id.codCliente)).setText(String.valueOf(getImovel().getCodigoCliente()));
         }
         
 		// Matricula
         if (getImovel().getMatricula() != Constantes.NULO_INT){
-        	((EditText)findViewById(R.id.matricula)).setText(String.valueOf(getImovel().getMatricula()));
+        	((EditText)view.findViewById(R.id.matricula)).setText(String.valueOf(getImovel().getMatricula()));
         }
         
 		// Localidade
         if (getImovel().getLocalidade() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.localidade)).setText(String.valueOf(getImovel().getLocalidade()));
+        	((EditText)view.findViewById(R.id.localidade)).setText(String.valueOf(getImovel().getLocalidade()));
         }
         
 		// Setor
         if (getImovel().getSetor() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.setor)).setText(String.valueOf(getImovel().getSetor()));
+        	((EditText)view.findViewById(R.id.setor)).setText(String.valueOf(getImovel().getSetor()));
         }
         
 		// Quadra
         if (getImovel().getQuadra() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.quadra)).setText(String.valueOf(getImovel().getQuadra()));
+        	((EditText)view.findViewById(R.id.quadra)).setText(String.valueOf(getImovel().getQuadra()));
         }
        
 		// Lote
         if (getImovel().getLote() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.lote)).setText(String.valueOf(getImovel().getLote()));
+        	((EditText)view.findViewById(R.id.lote)).setText(String.valueOf(getImovel().getLote()));
         }
         
 		// Sub Lote
         if (getImovel().getSubLote() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.subLote)).setText(String.valueOf(getImovel().getSubLote()));
+        	((EditText)view.findViewById(R.id.subLote)).setText(String.valueOf(getImovel().getSubLote()));
         }
 		
 		// Rota
         if (getImovel().getRota() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.rota)).setText(String.valueOf(getImovel().getRota()));
+        	((EditText)view.findViewById(R.id.rota)).setText(String.valueOf(getImovel().getRota()));
         }
 		
 		// Face
         if (getImovel().getFace() != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.face)).setText(String.valueOf(getImovel().getFace()));
+        	((EditText)view.findViewById(R.id.face)).setText(String.valueOf(getImovel().getFace()));
         }
 		
 		// Logradouro
         if ( String.valueOf(getImovel().getEnderecoImovel().getLogradouro()) != Constantes.NULO_STRING){
-        	((EditText)findViewById(R.id.logradouro)).setText(String.valueOf(getImovel().getEnderecoImovel().getLogradouro()));
+        	((EditText)view.findViewById(R.id.logradouro)).setText(String.valueOf(getImovel().getEnderecoImovel().getLogradouro()));
         }
         
 		// Numero
-		((EditText)findViewById(R.id.numero)).setText(getImovel().getEnderecoImovel().getNumero());
+		((EditText)view.findViewById(R.id.numero)).setText(getImovel().getEnderecoImovel().getNumero());
 		
 		// Codigo do Logradouro
         if (getImovel().getCodigoLogradouro() != Constantes.NULO_INT){
-        	((EditText)findViewById(R.id.codLogradouro)).setText(String.valueOf(getImovel().getCodigoLogradouro()));
+        	((EditText)view.findViewById(R.id.codLogradouro)).setText(String.valueOf(getImovel().getCodigoLogradouro()));
         }
         
 		// Complemento
-		((EditText)findViewById(R.id.complemento)).setText(getImovel().getEnderecoImovel().getComplemento());
+		((EditText)view.findViewById(R.id.complemento)).setText(getImovel().getEnderecoImovel().getComplemento());
 		
 		// Bairro
-		((EditText)findViewById(R.id.bairro)).setText(getImovel().getEnderecoImovel().getBairro());
+		((EditText)view.findViewById(R.id.bairro)).setText(getImovel().getEnderecoImovel().getBairro());
 		
 		// Cep
-		((EditText)findViewById(R.id.cepImovel)).setText(String.valueOf(getImovel().getEnderecoImovel().getCep()));
+		((EditText)view.findViewById(R.id.cepImovel)).setText(String.valueOf(getImovel().getEnderecoImovel().getCep()));
 		
 		// Municipio
-		((EditText)findViewById(R.id.municipio)).setText(getImovel().getEnderecoImovel().getMunicipio());
+		((EditText)view.findViewById(R.id.municipio)).setText(getImovel().getEnderecoImovel().getMunicipio());
 		
 		// Código do Municipio
-		((EditText)findViewById(R.id.codMunicipio)).setText(String.valueOf(getImovel().getCodigoMunicipio()));
+		((EditText)view.findViewById(R.id.codMunicipio)).setText(String.valueOf(getImovel().getCodigoMunicipio()));
 		
 		// Codigo do Ramo de Atividade
         // popula lista dos Ramos de Atividade do Imovel
@@ -902,15 +936,15 @@ public class ImovelTab extends Activity implements LocationListener {
     	    ramosAtividadeImovel.add(getImovel().getListaRamoAtividade().get(i));
 		}
         
- 	    ListView listRamosAtividade = (ListView)findViewById(R.id.listRamosAtividade);
- 	    ramoAtividadeList = new MySimpleArrayAdapter(getBaseContext());
+ 	    ListView listRamosAtividade = (ListView)view.findViewById(R.id.listRamosAtividade);
+ 	    ramoAtividadeList = new MySimpleArrayAdapter(getActivity().getBaseContext());
 	    listRamosAtividade.setAdapter(ramoAtividadeList);
 	    
 	    // Hide txtEmpty se lista de ramos de atividade for maior que ZERO.
 	    if (ramosAtividadeImovel.size() > 0){
-    		((TextView)findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
+    		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
 	    }else{
-    		((TextView)findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
+    		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
 	    }
 
 	    ViewGroup.LayoutParams params = listRamosAtividade.getLayoutParams();
@@ -919,21 +953,21 @@ public class ImovelTab extends Activity implements LocationListener {
         listRamosAtividade.requestLayout();
         
 		// IPTU
-		((EditText)(findViewById(R.id.iptu))).setText(getImovel().getIptu());
+		((EditText)(view.findViewById(R.id.iptu))).setText(getImovel().getIptu());
 		
 		// Numero UC CELPA
         if (getImovel().getNumeroCelpa() != Constantes.NULO_STRING){
-        	((EditText)(findViewById(R.id.numeroCelpa))).setText(String.valueOf(getImovel().getNumeroCelpa()));
+        	((EditText)(view.findViewById(R.id.numeroCelpa))).setText(String.valueOf(getImovel().getNumeroCelpa()));
         }		
 
         // Numero Pontos Úteis
         if (getImovel().getNumeroPontosUteis() != Constantes.NULO_INT){
-        	((EditText)(findViewById(R.id.numeroPontosUteis))).setText(String.valueOf(getImovel().getNumeroPontosUteis()));
+        	((EditText)(view.findViewById(R.id.numeroPontosUteis))).setText(String.valueOf(getImovel().getNumeroPontosUteis()));
         }		
         
         // Numero Ocupantes
         if (getImovel().getNumeroOcupantes() != Constantes.NULO_INT){
-        	((EditText)(findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
+        	((EditText)(view.findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
         }		
 	}
 
@@ -941,19 +975,19 @@ public class ImovelTab extends Activity implements LocationListener {
 		
 		if (getImovel().hasCategoria(getImovel().getCategoriaResidencial())){
 			if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria1() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasR1))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria1()));
+				((EditText)(view.findViewById(R.id.economiasR1))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria1()));
 			}
 			
 			if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria2() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasR2))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria2()));
+				((EditText)(view.findViewById(R.id.economiasR2))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria2()));
 			}
 			
 			if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria3() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasR3))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria3()));
+				((EditText)(view.findViewById(R.id.economiasR3))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria3()));
 			}
 			
 			if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria4() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasR4))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria4()));
+				((EditText)(view.findViewById(R.id.economiasR4))).setText(String.valueOf(getImovel().getCategoriaResidencial().getEconomiasSubCategoria4()));
 			}
 		}
 	}
@@ -962,19 +996,19 @@ public class ImovelTab extends Activity implements LocationListener {
 
 		if (getImovel().hasCategoria(getImovel().getCategoriaComercial())){
 			if (getImovel().getCategoriaComercial().getEconomiasSubCategoria1() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasC1))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria1()));
+				((EditText)(view.findViewById(R.id.economiasC1))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria1()));
 			}
 			
 			if (getImovel().getCategoriaComercial().getEconomiasSubCategoria2() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasC2))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria2()));
+				((EditText)(view.findViewById(R.id.economiasC2))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria2()));
 			}
 			
 			if (getImovel().getCategoriaComercial().getEconomiasSubCategoria3() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasC3))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria3()));
+				((EditText)(view.findViewById(R.id.economiasC3))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria3()));
 			}
 			
 			if (getImovel().getCategoriaComercial().getEconomiasSubCategoria4() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasC4))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria4()));
+				((EditText)(view.findViewById(R.id.economiasC4))).setText(String.valueOf(getImovel().getCategoriaComercial().getEconomiasSubCategoria4()));
 			}
 		}
 	}
@@ -983,18 +1017,18 @@ public class ImovelTab extends Activity implements LocationListener {
 
 		if (getImovel().hasCategoria(getImovel().getCategoriaPublica())){
 			if (getImovel().getCategoriaPublica().getEconomiasSubCategoria1() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasP1))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria1()));
+				((EditText)(view.findViewById(R.id.economiasP1))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria1()));
 			}
 			if (getImovel().getCategoriaPublica().getEconomiasSubCategoria2() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasP2))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria2()));
+				((EditText)(view.findViewById(R.id.economiasP2))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria2()));
 			}
 			
 			if (getImovel().getCategoriaPublica().getEconomiasSubCategoria3() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasP3))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria3()));
+				((EditText)(view.findViewById(R.id.economiasP3))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria3()));
 			}
 			
 			if (getImovel().getCategoriaPublica().getEconomiasSubCategoria4() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasP4))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria4()));
+				((EditText)(view.findViewById(R.id.economiasP4))).setText(String.valueOf(getImovel().getCategoriaPublica().getEconomiasSubCategoria4()));
 			}
 		}
 	}
@@ -1003,36 +1037,36 @@ public class ImovelTab extends Activity implements LocationListener {
 
 		if (getImovel().hasCategoria(getImovel().getCategoriaIndustrial())){
 			if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria1() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasI1))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria1()));
+				((EditText)(view.findViewById(R.id.economiasI1))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria1()));
 			}
 			
 			if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria2() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasI2))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria2()));
+				((EditText)(view.findViewById(R.id.economiasI2))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria2()));
 			}
 			
 			if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria3() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasI3))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria3()));
+				((EditText)(view.findViewById(R.id.economiasI3))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria3()));
 			}
 			if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria4() != Constantes.NULO_INT){
-				((EditText)(findViewById(R.id.economiasI4))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria4()));
+				((EditText)(view.findViewById(R.id.economiasI4))).setText(String.valueOf(getImovel().getCategoriaIndustrial().getEconomiasSubCategoria4()));
 			}
 		}
 	}
 	
 	public boolean checkChangesSubCategoriasResidenciais(){
 		boolean result = false;
-		if (getImovel().hasCategoria(getImovel().getCategoriaResidencial()) == ((EditText)(findViewById(R.id.economiasR1))).isEnabled()){
+		if (getImovel().hasCategoria(getImovel().getCategoriaResidencial()) == ((EditText)(view.findViewById(R.id.economiasR1))).isEnabled()){
 			
-			if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria1() != (((EditText)findViewById(R.id.economiasR1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasR1)).getText().toString()) : Constantes.NULO_INT)){
+			if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria1() != (((EditText)view.findViewById(R.id.economiasR1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasR1)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 				
-			}else if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria2() != (((EditText)findViewById(R.id.economiasR2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasR2)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria2() != (((EditText)view.findViewById(R.id.economiasR2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasR2)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria3() != (((EditText)findViewById(R.id.economiasR3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasR3)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria3() != (((EditText)view.findViewById(R.id.economiasR3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasR3)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria4() != (((EditText)findViewById(R.id.economiasR4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasR4)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaResidencial().getEconomiasSubCategoria4() != (((EditText)view.findViewById(R.id.economiasR4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasR4)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 			}
 		}else{
@@ -1043,18 +1077,18 @@ public class ImovelTab extends Activity implements LocationListener {
 
 	public boolean checkChangesSubCategoriasComerciais(){
 		boolean result = false;
-		if (getImovel().hasCategoria(getImovel().getCategoriaComercial()) == ((EditText)(findViewById(R.id.economiasC1))).isEnabled()){
+		if (getImovel().hasCategoria(getImovel().getCategoriaComercial()) == ((EditText)(view.findViewById(R.id.economiasC1))).isEnabled()){
 			
-			if (getImovel().getCategoriaComercial().getEconomiasSubCategoria1() != (((EditText)findViewById(R.id.economiasC1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasC1)).getText().toString()) : Constantes.NULO_INT)){
+			if (getImovel().getCategoriaComercial().getEconomiasSubCategoria1() != (((EditText)view.findViewById(R.id.economiasC1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasC1)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 				
-			}else if (getImovel().getCategoriaComercial().getEconomiasSubCategoria2() != (((EditText)findViewById(R.id.economiasC2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasC2)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaComercial().getEconomiasSubCategoria2() != (((EditText)view.findViewById(R.id.economiasC2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasC2)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaComercial().getEconomiasSubCategoria3() != (((EditText)findViewById(R.id.economiasC3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasC3)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaComercial().getEconomiasSubCategoria3() != (((EditText)view.findViewById(R.id.economiasC3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasC3)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaComercial().getEconomiasSubCategoria4() != (((EditText)findViewById(R.id.economiasC4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasC4)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaComercial().getEconomiasSubCategoria4() != (((EditText)view.findViewById(R.id.economiasC4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasC4)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 			}
 		}else{
@@ -1065,18 +1099,18 @@ public class ImovelTab extends Activity implements LocationListener {
 
 	public boolean checkChangesSubCategoriasPublicas(){
 		boolean result = false;
-		if (getImovel().hasCategoria(getImovel().getCategoriaPublica()) == ((EditText)(findViewById(R.id.economiasP1))).isEnabled()){
+		if (getImovel().hasCategoria(getImovel().getCategoriaPublica()) == ((EditText)(view.findViewById(R.id.economiasP1))).isEnabled()){
 			
-			if (getImovel().getCategoriaPublica().getEconomiasSubCategoria1() != (((EditText)findViewById(R.id.economiasP1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasP1)).getText().toString()) : Constantes.NULO_INT)){
+			if (getImovel().getCategoriaPublica().getEconomiasSubCategoria1() != (((EditText)view.findViewById(R.id.economiasP1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasP1)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 				
-			}else if (getImovel().getCategoriaPublica().getEconomiasSubCategoria2() != (((EditText)findViewById(R.id.economiasP2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasP2)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaPublica().getEconomiasSubCategoria2() != (((EditText)view.findViewById(R.id.economiasP2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasP2)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaPublica().getEconomiasSubCategoria3() != (((EditText)findViewById(R.id.economiasP3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasP3)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaPublica().getEconomiasSubCategoria3() != (((EditText)view.findViewById(R.id.economiasP3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasP3)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaPublica().getEconomiasSubCategoria4() != (((EditText)findViewById(R.id.economiasP4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasP4)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaPublica().getEconomiasSubCategoria4() != (((EditText)view.findViewById(R.id.economiasP4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasP4)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 			}
 		}else{
@@ -1087,18 +1121,18 @@ public class ImovelTab extends Activity implements LocationListener {
 	
 	public boolean checkChangesSubCategoriasIndustriais(){
 		boolean result = false;
-		if (getImovel().hasCategoria(getImovel().getCategoriaIndustrial()) == ((EditText)(findViewById(R.id.economiasI1))).isEnabled()){
+		if (getImovel().hasCategoria(getImovel().getCategoriaIndustrial()) == ((EditText)(view.findViewById(R.id.economiasI1))).isEnabled()){
 			
-			if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria1() != (((EditText)findViewById(R.id.economiasI1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasI1)).getText().toString()) : Constantes.NULO_INT)){
+			if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria1() != (((EditText)view.findViewById(R.id.economiasI1)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasI1)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 				
-			}else if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria2() != (((EditText)findViewById(R.id.economiasI2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasI2)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria2() != (((EditText)view.findViewById(R.id.economiasI2)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasI2)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria3() != (((EditText)findViewById(R.id.economiasI3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasI3)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria3() != (((EditText)view.findViewById(R.id.economiasI3)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasI3)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 
-			}else if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria4() != (((EditText)findViewById(R.id.economiasI4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)findViewById(R.id.economiasI4)).getText().toString()) : Constantes.NULO_INT)){
+			}else if (getImovel().getCategoriaIndustrial().getEconomiasSubCategoria4() != (((EditText)view.findViewById(R.id.economiasI4)).getText().toString().length() > 0 ? Integer.valueOf(((EditText)view.findViewById(R.id.economiasI4)).getText().toString()) : Constantes.NULO_INT)){
 				result = true;
 			}
 		}else{
@@ -1156,9 +1190,9 @@ public class ImovelTab extends Activity implements LocationListener {
 	        	    
 	        	    // Hide txtEmpty se lista de ramos de atividade for maior que ZERO.
 	        	    if (ramosAtividadeImovel.size() > 0){
-		        		((TextView)findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
+		        		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
 	        	    }else{
-		        		((TextView)findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
+		        		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
 	        	    }
 	        	    
 	        	    ViewGroup.LayoutParams params = parent.getLayoutParams();
@@ -1175,178 +1209,60 @@ public class ImovelTab extends Activity implements LocationListener {
 		}
 	}	
 
-	@Override
-	protected Dialog onCreateDialog(final int id) {
-	        
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		AlertDialog.Builder builder;
-	  
-		switch (id){
-		case Constantes.DIALOG_ID_SUCESSO:
-		case Constantes.DIALOG_ID_ERRO:
-		case Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO:
-	        View layout = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
-	        ((TextView)layout.findViewById(R.id.messageDialog)).setText(dialogMessage);
-	        
-	        if (id == Constantes.DIALOG_ID_SUCESSO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.save);
-	
-	        }else if (id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.aviso);
-	        }
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setView(layout);
-	        builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-
-	        		if (id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	        			startActivity(intent);
-	        		}
-	        	}
-	        });
-	
-	        AlertDialog messageDialog = builder.create();
-	        return messageDialog;
-	        
-		case Constantes.DIALOG_ID_CONFIRM_BACK:
-	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-			((TextView)layoutConfirmationDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-	
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Atenção!");
-	        builder.setView(layoutConfirmationDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	        		MainTab.indiceNovoImovel = null;
-	    			finish();
-	        	}
-	        });
-	        
-	        AlertDialog confirmDialog = builder.create();
-	        return confirmDialog;
-		    	        
-		case Constantes.DIALOG_ID_CONFIRM_CHANGES:
-			
-	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutChangeDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-	        String categorias = "";
-	                	
-        	if (!categResidencialOk){
-        		categorias = " residencial";
-        	}
-
-        	if (!categComercialOk){
-        		categorias += " comercial";
-        	}
-
-        	if (!categPublicaOk){
-        		categorias += " pública";
-        	}
-
-        	if (!categIndustrialOk){
-        		categorias += " industrial";
-        	}
-        	
-        	String[] split = categorias.split( " " );        	
-	        
-        	if (split.length > 1){
-    	        dialogMessage = "Houve alteração nos dados das categorias" + categorias + ". Por favor informe os dados novamente.";
-        	}else{
-    	        dialogMessage = "Houve alteração nos dados da categoria" + categorias + ". Por favor informe os dados novamente.";
-        	}
-	        
-			((TextView)layoutChangeDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-	
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Confirmação");
-	        builder.setView(layoutChangeDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	        		
-	            	if (!categResidencialOk){
-	            		categResidencialOk = true;
-		        		enableEconominasResidencial(false);
-		        		cbResidencial.setChecked(false);
-	            	}
-
-	            	if (!categComercialOk){
-	            		categComercialOk = true;
-		        		enableEconominasComercial(false);
-		        		cbComercial.setChecked(false);
-	            	}
-
-	            	if (!categPublicaOk){
-	            		categPublicaOk = true;
-		        		enableEconominasPublica(false);
-		        		cbPublica.setChecked(false);
-	            	}
-
-	            	if (!categIndustrialOk){
-	            		categIndustrialOk = true;
-		        		enableEconominasIndustrial(false);
-		        		cbIndustrial.setChecked(false);
-	            	}
-	        	}
-	        });
-	        
-	        AlertDialog changeDialog = builder.create();
-	        return changeDialog;
-		    
-		}
-	    return null;
-	}
-
-    @SuppressWarnings("deprecation")
-	public boolean onKeyDown(int keyCode, KeyEvent event){
-        
-    	if ((keyCode == KeyEvent.KEYCODE_BACK)){
-    		dialogMessage = " Deseja voltar para a lista de cadastros? ";
-	    	showDialog(Constantes.DIALOG_ID_CONFIRM_BACK);
-            return true;
-
-        }else{
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
 	public void onLocationChanged(Location location) {
 		lastKnownLocation = location;
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void onProviderDisabled(String provider) {
         // Check if enabled and if not send user to the GSP settings
         // Better solution would be to display a dialog and suggesting to 
         // go to the settings
-		dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
+        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
 	}
 	
 	public void onProviderEnabled(String provider) {
-		Toast.makeText( getApplicationContext(),"GPS ligado",Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity().getApplicationContext(),"GPS ligado",Toast.LENGTH_SHORT).show();
 	}
 	
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+	public static void setChangesConfirmed(){
+    	if (!categResidencialOk){
+    		categResidencialOk = true;
+    		enableEconominasResidencial(false);
+    		cbResidencial.setChecked(false);
+    	}
+
+    	if (!categComercialOk){
+    		categComercialOk = true;
+    		enableEconominasComercial(false);
+    		cbComercial.setChecked(false);
+    	}
+
+    	if (!categPublicaOk){
+    		categPublicaOk = true;
+    		enableEconominasPublica(false);
+    		cbPublica.setChecked(false);
+    	}
+
+    	if (!categIndustrialOk){
+    		categIndustrialOk = true;
+    		enableEconominasIndustrial(false);
+    		cbIndustrial.setChecked(false);
+    	}
+	}
+
+	void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_IMOVEL);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+    }
+	
+	void showCompleteDialog(int iconId, String title, String message, int messageType) {
+		CompleteAlertDialogFragment newFragment = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_IMOVEL);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+    }
+
 }

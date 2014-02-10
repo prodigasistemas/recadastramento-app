@@ -10,13 +10,11 @@ import java.util.List;
 import model.AnormalidadeImovel;
 import util.Constantes;
 import util.Util;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.support.v4.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Criteria;
@@ -31,12 +29,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
-import android.provider.Settings;
 import android.telephony.CellLocation;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,8 +49,9 @@ import android.widget.Toast;
 import background.EnviarCadastroOnlineThread;
 import business.Controlador;
  
-public class AnormalidadeTab extends Activity implements LocationListener {
+public class AnormalidadeTab extends Fragment implements LocationListener {
 
+	private View view;
 	static boolean consideraEventoItemSelectedListenerCodigoAnormalidade;
 	List<String> listAnormalidades;
     static final int TAKE_PICTURE_1 = 1;
@@ -70,19 +67,27 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 	Location lastKnownLocation;
 	private String provider;
 
-	private EnviarCadastroOnlineThread progThread;
+	private static EnviarCadastroOnlineThread progThread;
 	private static int increment= 0;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.anormalidadetab);
-        instanciate();
     }
     
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-		instanciate();
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		view = inflater.inflate(R.layout.anormalidadetab, container, false);
+		
+		// Define a imagem de fundo de acordo com a orientacao do dispositivo
+	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+	    else
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+
+        instanciate();
+        return view;
 	}
 
 	public void instanciate(){
@@ -91,7 +96,10 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         foto2Taken = false;
 
         /* Use the LocationManager class to obtain GPS locations */
-        mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        mLocManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if(mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        	mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
         
         boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -100,7 +108,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         // go to the settings
         if (!enabled){
 	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
         
         if(mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -114,25 +122,25 @@ public class AnormalidadeTab extends Activity implements LocationListener {
     	CellLocation.requestLocationUpdate();
 
         // Button Atualizar 
-        final Button buttonAtualizar = (Button)findViewById(R.id.buttonAtualizar);
+        final Button buttonAtualizar = (Button)view.findViewById(R.id.buttonAtualizar);
         buttonAtualizar.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	CellLocation.requestLocationUpdate();
                 lastKnownLocation = mLocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
                 if (lastKnownLocation != null){
-        			((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(lastKnownLocation.getLatitude()));
-        			((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(lastKnownLocation.getLongitude()));
+        			((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(lastKnownLocation.getLatitude()));
+        			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(lastKnownLocation.getLongitude()));
 
                 }else if (getAnormalidadeImovel().getLatitude() != Constantes.NULO_DOUBLE && getAnormalidadeImovel().getLatitude() != 0 &&
                 		getAnormalidadeImovel().getLongitude() != 0 && getAnormalidadeImovel().getLongitude() != Constantes.NULO_DOUBLE ){
         			
-                	((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
-        			((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
+                	((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
+        			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
 
                 } else{
-        			((TextView)findViewById(R.id.txtValorLatitude)).setText("----");
-        			((TextView)findViewById(R.id.txtValorLongitude)).setText("----");
+        			((TextView)view.findViewById(R.id.txtValorLatitude)).setText("----");
+        			((TextView)view.findViewById(R.id.txtValorLongitude)).setText("----");
                 	
                 }
             }
@@ -141,38 +149,37 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         if (getAnormalidadeImovel().getLatitude() != Constantes.NULO_DOUBLE && getAnormalidadeImovel().getLatitude() != 0 &&
         		getAnormalidadeImovel().getLongitude() != 0 && getAnormalidadeImovel().getLongitude() != Constantes.NULO_DOUBLE ){
 
-        	((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
-			((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
+        	((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
+			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
     		
 
         }else if (lastKnownLocation != null){
-			((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(lastKnownLocation.getLatitude()));
-			((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(lastKnownLocation.getLongitude()));
+			((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(lastKnownLocation.getLatitude()));
+			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(lastKnownLocation.getLongitude()));
 
         }else{
-			((TextView)findViewById(R.id.txtValorLatitude)).setText("----");
-			((TextView)findViewById(R.id.txtValorLongitude)).setText("----");
+			((TextView)view.findViewById(R.id.txtValorLatitude)).setText("----");
+			((TextView)view.findViewById(R.id.txtValorLongitude)).setText("----");
         	
         }        
        
 		// Spinner Tipo de Anormalidade
-        Spinner spinnerTipoAnormalidade = (Spinner) findViewById(R.id.spinnerTipoAnormalidade);
+        Spinner spinnerTipoAnormalidade = (Spinner) view.findViewById(R.id.spinnerTipoAnormalidade);
         
         listAnormalidades = new ArrayList<String>();
         listAnormalidades = Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidades();
-//        listAnormalidades.add(0, "");
         
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, listAnormalidades);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listAnormalidades);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoAnormalidade.setAdapter(adapter);
         spinnerTipoAnormalidade.setOnItemSelectedListener(new OnItemSelectedListener () {
 
         	
 			public void onItemSelected(AdapterView parent, View v, int position, long id){
- 				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_ANORMALIDADE, ((Spinner)findViewById(R.id.spinnerTipoAnormalidade)).getSelectedItem().toString());
+ 				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_ANORMALIDADE, ((Spinner)view.findViewById(R.id.spinnerTipoAnormalidade)).getSelectedItem().toString());
  
- 				if (codigo.compareTo(((EditText)findViewById(R.id.codigoAnormalidade)).getText().toString()) != 0 &&
- 					((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() != 0){
+ 				if (codigo.compareTo(((EditText)view.findViewById(R.id.codigoAnormalidade)).getText().toString()) != 0 &&
+ 					((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() != 0){
  					
  					consideraEventoItemSelectedListenerCodigoAnormalidade = true;  
  					codigoAnormalidade.setText(codigo);
@@ -183,7 +190,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 		});
 
 		// Codigo de Anormalidade
-        codigoAnormalidade = (EditText)findViewById(R.id.codigoAnormalidade);
+        codigoAnormalidade = (EditText)view.findViewById(R.id.codigoAnormalidade);
         codigoAnormalidade.addTextChangedListener(new TextWatcher() {
 
     		
@@ -201,10 +208,10 @@ public class AnormalidadeTab extends Activity implements LocationListener {
  				if (descricaoAnormalidade != null){
  					for (int i = 0; i < listAnormalidades.size(); i++){
  			        	if (listAnormalidades.get(i).equalsIgnoreCase(descricaoAnormalidade)){
- 			                ((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).setSelection(i);
+ 			                ((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).setSelection(i);
  			        		break;
  			        	}else{
- 			                ((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).setSelection(0); 			        		
+ 			                ((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).setSelection(0); 			        		
  			        	}
  			        }
  				}
@@ -214,7 +221,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 		});
         
         // Button Picture 1 
-        final Button buttonPicture1 = (Button)findViewById(R.id.buttonPicture1);
+        final Button buttonPicture1 = (Button)view.findViewById(R.id.buttonPicture1);
         buttonPicture1.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
     		    
@@ -223,7 +230,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         });
         
         // Button Picture 2 
-        final Button buttonPicture2 = (Button)findViewById(R.id.buttonPicture2);
+        final Button buttonPicture2 = (Button)view.findViewById(R.id.buttonPicture2);
         buttonPicture2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
     		    
@@ -232,7 +239,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         });
         
         // Button Save 
-        final Button buttonSave = (Button)findViewById(R.id.buttonSave);
+        final Button buttonSave = (Button)view.findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
             	
@@ -241,53 +248,56 @@ public class AnormalidadeTab extends Activity implements LocationListener {
             	// Verificar se pode salvar!!!!!!
              	// Verificar os campos obrigatórios
             	
-            	if (areOtherTabsOk() && isLocationValid()){
+            	if (areOtherTabsOk()){
             		        	    	
-                	// verificar se nao está criando imóvel duplicado.
-
-        	    	
-                	if (((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() > 0) {
-                		if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_NOVO) {
-                    		Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO_COM_ANORMALIDADE));
-                    	} else { 
-                    		Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
-                    	}
-                		
-                	} else if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO) {
-                    	Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
-                	}
-
-                	// Cadastro configurado como Nao Transmitido
-                	Controlador.getInstancia().getImovelSelecionado().setImovelEnviado(String.valueOf(Constantes.NAO));
-                	
-                	Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
-                	Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
-                	Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
-                	Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
-                	Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
-	    	        ((MainTab)getParent()).setTabColor();
-
-            		getAnormalidadeImovel().setTabSaved(true);
-        			dialogMessage = " Todas as informações do cadastro foram atualizadas com sucesso. ";
-        	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
-            	
+            		if(isLocationValid()){
+            			// verificar se nao está criando imóvel duplicado.
+            			
+            			if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() > 0) {
+            				if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_NOVO) {
+            					Controlador.getInstancia().getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
+            					Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO_COM_ANORMALIDADE));
+            				} else { 
+            					Controlador.getInstancia().getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
+            					Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
+            				}
+            				
+            			} else if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO) {
+            				Controlador.getInstancia().getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
+            				Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
+            			}
+            			
+            			// Cadastro configurado como Nao Transmitido
+            			Controlador.getInstancia().getImovelSelecionado().setImovelEnviado(String.valueOf(Constantes.NAO));
+            			
+            			Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
+            			Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
+            			Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
+            			Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
+            			Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
+            			((MainTab)getActivity()).setTabColor();
+            			
+            			getAnormalidadeImovel().setTabSaved(true);
+            			dialogMessage = " Todas as informações do cadastro foram atualizadas com sucesso. ";
+            			showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO);
+            		}
             	}else{
             		
             		if (!Controlador.getInstancia().getClienteSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados do cliente antes de finalizar. ";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+    			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
            			
             		}else if (!Controlador.getInstancia().getImovelSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados do imóvel antes de finalizar. ";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+    			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
             			
             		}else if (!Controlador.getInstancia().getServicosSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados de serviço antes de finalizar. ";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+    			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
             			
             		}else if (!Controlador.getInstancia().getMedidorSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados do medidor antes de finalizar. ";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+    			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
             		}
             	}
             }
@@ -298,73 +308,73 @@ public class AnormalidadeTab extends Activity implements LocationListener {
         codigoAnormalidade.setText(String.valueOf(getAnormalidadeImovel().getCodigoAnormalidade()));
         
         // Comentario
-        ((EditText)findViewById(R.id.editComentario)).setText(getAnormalidadeImovel().getComentario());
+        ((EditText)view.findViewById(R.id.editComentario)).setText(getAnormalidadeImovel().getComentario());
         
         
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
         	
 	        // Foto 1
-	        if (getAnormalidadeImovel().getPathFoto1().trim().compareTo("") != 0  && getAnormalidadeImovel().getPathFoto1().trim().length() > 0){
+	        if (getAnormalidadeImovel().getFoto1().trim().compareTo("") != 0  && getAnormalidadeImovel().getFoto1().trim().length() > 0){
 	        	
 	   		
 	        	try {
-		    		bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(getAnormalidadeImovel().getPathFoto1())) );
+		    		bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovel().getFoto1())) );
 		    	} catch (FileNotFoundException e) {
 		    		e.printStackTrace();
 		    	} catch (IOException e) {
 		    		e.printStackTrace();
 		    	}  
 	
-	//    		((ImageView)findViewById(R.id.imageView1)).setImageBitmap(Bitmap.createScaledBitmap(bPicture1, 80, 80, false));
-	        	((ImageView)findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
-	        	((ImageView)findViewById(R.id.imageView1)).invalidate(); 
+	//    		((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(Bitmap.createScaledBitmap(bPicture1, 80, 80, false));
+	        	((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
+	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
 	        
 	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
 	    		
 	        	try {
-	    			bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg")) );
+	    			bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg")) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
 	    			e.printStackTrace();
 	    		}  
 	
-	//    		((ImageView)findViewById(R.id.imageView1)).setImageBitmap(Bitmap.createScaledBitmap(bPicture1, 80, 80, false));
-	        	((ImageView)findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
-	        	((ImageView)findViewById(R.id.imageView1)).invalidate(); 
+	//    		((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(Bitmap.createScaledBitmap(bPicture1, 80, 80, false));
+	        	((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
+	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
 	        	
 	        }
 	        
 	        // Foto 2
-	        if (getAnormalidadeImovel().getPathFoto2().trim().compareTo("") != 0 && getAnormalidadeImovel().getPathFoto2().trim().length() > 0 ){
+	        if (getAnormalidadeImovel().getFoto2().trim().compareTo("") != 0 && getAnormalidadeImovel().getFoto2().trim().length() > 0 ){
 	
 	    		try {
-	    			bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(getAnormalidadeImovel().getPathFoto2())) );
+	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovel().getFoto2())) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
 	    			e.printStackTrace();
 	    		}  
 	
-	        	((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
-	        	((ImageView)findViewById(R.id.imageView2)).invalidate(); 
+	        	((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
+	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
 	        
 	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
 	        	
 	    		try {
-	    			bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );
+	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
 	    			e.printStackTrace();
 	    		}  
 	
-	        	((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
-	        	((ImageView)findViewById(R.id.imageView2)).invalidate(); 
+	        	((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
+	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
 	        }
         
         }else {
-        	Toast.makeText(this, " Cartão de memória não está disponível ", Toast.LENGTH_SHORT);
+        	Toast.makeText(getActivity(), " Cartão de memória não está disponível ", Toast.LENGTH_SHORT).show();;
         }
 	}
 	
@@ -419,59 +429,59 @@ public class AnormalidadeTab extends Activity implements LocationListener {
     	return fotoFile;  
 	}  
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        
-    	if (data != null){
-    		Log.i("DATA NOT NULL", "DATA NOT NULL!!!");
-    	}
-    	
-    	if (resultCode == RESULT_OK) {  
-
-	    	switch(requestCode) {
-
-	    	case TAKE_PICTURE_1: 
-
-	             try {  
-	             
-	            	 bPicture1 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() +"_1.jpg")) );  
-	                 foto1Taken = true;
-	            	 
-	             } catch (FileNotFoundException e) {  
-	               e.printStackTrace();  
-	             } catch (IOException e) {  
-	               e.printStackTrace();  
-	             }  
-
-	             ((ImageView)findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
-	        	((ImageView)findViewById(R.id.imageView1)).invalidate(); 
-	    		break;
-
-	    	case TAKE_PICTURE_2:
-
-	             try {  
-	             
-	            	 bPicture2 = Media.getBitmap(getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );  
-	                 foto2Taken = true;
-
-	             } catch (FileNotFoundException e) {  
-	               e.printStackTrace();  
-	             } catch (IOException e) {  
-	               e.printStackTrace();  
-	             }  
-
-	    		((ImageView)findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
-	        	((ImageView)findViewById(R.id.imageView2)).invalidate(); 
-	    		break;
-	    	}
-    	}
-    	
-    	removeImage(getLastImageId());
-    }
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        
+//    	if (data != null){
+//    		Log.i("DATA NOT NULL", "DATA NOT NULL!!!");
+//    	}
+//    	
+//    	if (resultCode == RESULT_OK) {  
+//
+//	    	switch(requestCode) {
+//
+//	    	case TAKE_PICTURE_1: 
+//
+//	             try {  
+//	             
+//	            	 bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() +"_1.jpg")) );  
+//	                 foto1Taken = true;
+//	            	 
+//	             } catch (FileNotFoundException e) {  
+//	               e.printStackTrace();  
+//	             } catch (IOException e) {  
+//	               e.printStackTrace();  
+//	             }  
+//
+//	             ((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
+//	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
+//	    		break;
+//
+//	    	case TAKE_PICTURE_2:
+//
+//	             try {  
+//	             
+//	            	 bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );  
+//	                 foto2Taken = true;
+//
+//	             } catch (FileNotFoundException e) {  
+//	               e.printStackTrace();  
+//	             } catch (IOException e) {  
+//	               e.printStackTrace();  
+//	             }  
+//
+//	    		((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
+//	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
+//	    		break;
+//	    	}
+//    	}
+//    	
+//    	removeImage(getLastImageId());
+//    }
     
     private int getLastImageId(){
         final String[] imageColumns = { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
         final String imageOrderBy = MediaStore.Images.Media._ID+" DESC";
-        Cursor imageCursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns, null, null, imageOrderBy);
+        Cursor imageCursor = getActivity().managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns, null, null, imageOrderBy);
         if(imageCursor.moveToFirst()){
             int id = imageCursor.getInt(imageCursor.getColumnIndex(MediaStore.Images.Media._ID));
             String fullPath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
@@ -485,7 +495,7 @@ public class AnormalidadeTab extends Activity implements LocationListener {
     }
     
     private void removeImage(int id) {
-    	   ContentResolver cr = getContentResolver();
+    	   ContentResolver cr = getActivity().getContentResolver();
     	   cr.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media._ID + "=?", new String[]{ Long.toString(id) } );
     	}
 
@@ -501,37 +511,37 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 			getAnormalidadeImovel().setCodigoAnormalidade(0);			
 		}
 		
-		getAnormalidadeImovel().setComentario(((EditText)findViewById(R.id.editComentario)).getText().toString());
+		getAnormalidadeImovel().setComentario(((EditText)view.findViewById(R.id.editComentario)).getText().toString());
 		
 		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
-			getAnormalidadeImovel().setPathFoto1(Util.getRetornoRotaDirectory() + "/" + Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg");
+			getAnormalidadeImovel().setFoto1(Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg");
 		}
 		
 		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
-			getAnormalidadeImovel().setPathFoto2(Util.getRetornoRotaDirectory() + "/" + Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg");	
+			getAnormalidadeImovel().setFoto2(Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg");	
 		}
 
-		if (!((TextView)findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
-			getAnormalidadeImovel().setLatitude(((TextView)findViewById(R.id.txtValorLatitude)).getText().toString());
+		if (!((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
+			getAnormalidadeImovel().setLatitude(((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString());
 		}
 
-		if (!((TextView)findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")){
-			getAnormalidadeImovel().setLongitude(((TextView)findViewById(R.id.txtValorLongitude)).getText().toString());
+		if (!((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")){
+			getAnormalidadeImovel().setLongitude(((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString());
 		}
 
 		getAnormalidadeImovel().setData(Util.formatarData(Calendar.getInstance().getTime()));
-
     }
 	
 	public AnormalidadeImovel getAnormalidadeImovel(){
 		return Controlador.getInstancia().getAnormalidadeImovelSelecionado();
 	}
 
+	
 	public boolean areOtherTabsOk(){
 		boolean result = true;
     	
     	// Somente verifica as outras tabs se não houver nenhuma anormalidade.
-		if (((Spinner)(findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() == 0) {
+		if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() == 0) {
     	
 			if ( Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR ||
 				 Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
@@ -545,181 +555,55 @@ public class AnormalidadeTab extends Activity implements LocationListener {
 		    	}
 			}
     	}
-
 		return result;
 	}
 	
 	public boolean isLocationValid(){
 		boolean result = true;
 
+        boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        if (!enabled){
+	        dialogMessage = " GPS está desligado. Por favor, ligue-o para finalizar o cadastro";
+	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	        result = false;
+        }	    
+		
 		// Descartar validacao para Emulador Android.
 		if (!Build.BRAND.startsWith("generic") || !Build.DEVICE.startsWith("generic")){
 		
-	    	if (  ((TextView)findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")
-	    		|| ((TextView)findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
+	    	if (  ((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")
+	    		|| ((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
 				
 	    		dialogMessage = "Por favor, atualize a Localização Geográfica antes de salvar.";
-		    	showDialog(Constantes.DIALOG_ID_ERRO);
+		        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 		    	result = false;
 	    	}
 		}
 		return result;
 	}
 	
-	
-    // Handler on the main (UI) thread that will receive messages.
-    final Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            
-        	// Get the current value of the variable total from the message data and update the progress bar.
-        	int cadastroOnline = msg.getData().getInt("envioCadastroOnline" + String.valueOf(increment));
-
-            if (progThread.getCustomizedState() == EnviarCadastroOnlineThread.DONE_OK){
-
-            	// SETAR CADASTRO PARA TRANSMITIDO
-			    increment++;
-            
-            }else if (progThread.getCustomizedState() == EnviarCadastroOnlineThread.DONE_ERROR){
-			    increment++;
-            }
-         }
-    };
-	
-	@Override
-	protected Dialog onCreateDialog(final int id) {
-	        
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		AlertDialog.Builder builder;
-	  
-		if (id == Constantes.DIALOG_ID_SUCESSO || id == Constantes.DIALOG_ID_ERRO  || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        View layout = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
-	        ((TextView)layout.findViewById(R.id.messageDialog)).setText(dialogMessage);
-	        
-	        if (id == Constantes.DIALOG_ID_SUCESSO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.save);
-	
-	        }else if (id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.aviso);
-	        }
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setView(layout);
-	        builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-
-	        		if (id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	        			startActivity(intent);
-	        		
-	        		}else if (id == Constantes.DIALOG_ID_SUCESSO){
-	        			
-	        			Controlador.getInstancia().isCadastroAlterado();
-
-	        			// Thread para obter dados do cadastro finalizado e transmiti-lo ao servidor.        			
-	        			progThread = new EnviarCadastroOnlineThread(handler, getApplicationContext(), increment);
-	    	            progThread.start();
-	        			
-	    	            if (MainTab.indiceNovoImovel != null) {
-	    	            	Controlador.getInstancia().setCadastroSelecionadoByListPosition(MainTab.indiceNovoImovel);
-	    	            	MainTab.indiceNovoImovel = null;
-	    	            } else if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
-	        				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
-
-	        			}else{
-	        		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()+1);
-	        			}
-	        	    	finish();
-	        			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-	        			startActivity(myIntent);
-
-	        		}
-	        	}
-	        });
-	
-	        AlertDialog messageDialog = builder.create();
-	        return messageDialog;
-		}else if (id == Constantes.DIALOG_ID_CONFIRM_BACK){
-	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-			((TextView)layoutConfirmationDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-	
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Atenção!");
-	        builder.setView(layoutConfirmationDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	        		MainTab.indiceNovoImovel = null;
-	    			finish();
-	        	}
-	        });
-	        
-	        AlertDialog passwordDialog = builder.create();
-	        return passwordDialog;
-		    
-		}
-	    return null;
+	public int getCodigoAnormalidade(){
+        return Integer.valueOf(((EditText)view.findViewById(R.id.codigoAnormalidade)).getText().toString());
 	}
 
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        
-    	if ((keyCode == KeyEvent.KEYCODE_BACK)){
-    		dialogMessage = " Deseja voltar para a lista de cadastros? ";
-	    	showDialog(Constantes.DIALOG_ID_CONFIRM_BACK);
-            return true;
-
-        }else{
-            return super.onKeyDown(keyCode, event);
-        }
+	void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_ANORMALIDADE);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
     }
 
-	
-	public void onLocationChanged(Location location) {
-		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
-		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
-	}
-
-	
-	public void onProviderDisabled(String provider) {
-
-        // Check if enabled and if not send user to the GSP settings
-        // Better solution would be to display a dialog and suggesting to 
-        // go to the settings
-		dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
-	}
-
-	
-	public void onProviderEnabled(String provider) {
-		Toast.makeText( getApplicationContext(),"GPS ligado",Toast.LENGTH_SHORT).show();
-	}
-
-	
-	public void onStatusChanged(String provider, int status, Bundle extras) {}
-	
 	/* Request updates at startup */
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		super.onResume();
 		mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
 	}
 
-	/* Remove the locationlistener updates when Activity is paused */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mLocManager.removeUpdates(this);
-	}
+	public void onLocationChanged(Location location) {}
 
+	public void onProviderDisabled(String provider) {}
+
+	public void onProviderEnabled(String provider) {}
+
+	public void onStatusChanged(String provider, int status, Bundle extras) {}
 }

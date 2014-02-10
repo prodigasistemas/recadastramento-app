@@ -36,7 +36,7 @@ android:orientation="vertical">
 		        		
 		<TextView android:text="Comentários:" android:id="@+id/txtComentario" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 		<ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
-			<EditText android:id="@+id/editComentario" android:singleLine="false" android:lines="6" android:layout_width="fill_parent"  android:layout_height="wrap_content" android:inputType="textMultiLine" > <requestFocus /> </EditText>
+			<EditText android:id="@+id/editComentario" android:singleLine="false" android:lines="6" android:layout_width="fill_parent"  android:layout_height="wrap_content" android:inputType="textMultiLine" ></EditText>
 		</ScrollView>
 		
 		<LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="horizontal" android:padding="10dp" >

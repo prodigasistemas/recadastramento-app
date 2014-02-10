@@ -38,9 +38,12 @@ public class Imovel {
 	private double latitude;
 	private double longitude;
 	private String data;
+	private int operacaoTipo;
+	private String entrevistado;
+
     
     public Imovel() {
-    	
+    	operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
     	imovelId = 0;
     	codigoCliente = 0;
         matricula = 0;
@@ -72,7 +75,16 @@ public class Imovel {
 		latitude = 0;
 		longitude = 0;
 		data = "";
+		entrevistado = "";
     }
+    
+    public void setOperacoTipo(int operacaoTipo){
+    	this.operacaoTipo = operacaoTipo;
+    }
+    
+    public void setEntrevistado(String entrevistado){
+    	this.entrevistado = entrevistado;
+    }    
     
 	public void setImovelId(long id) {
 		this.imovelId = id;
@@ -195,6 +207,14 @@ public class Imovel {
 		this.listaRamoAtividade = listaRamoAtividade;
     }
 	
+	public int getOperacaoTipo(){
+		return this.operacaoTipo;
+	}
+	
+	public String getEntrevistado(){
+		return this.entrevistado;
+	}
+
 	public long getImovelId() {
 		return this.imovelId;
 	}

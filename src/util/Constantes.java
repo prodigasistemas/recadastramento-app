@@ -20,8 +20,17 @@ public class Constantes {
     public static final int DIALOG_ID_ADD_NOVO_IMOVEL = 10;
     public static final int DIALOG_ID_ADD_NOVO_IMOVEL_ANTES_PRIMEIRO = 11;
     public static final int DIALOG_ID_ADD_NOVO_IMOVEL_APOS_ULTIMO = 12;
-    public static final int DIALOG_ID_CONFIRM_BACK = 13;
-    public static final int DIALOG_ID_CONFIRM_CHANGES = 14;
+    public static final int DIALOG_ID_CONFIRMA_VOLTAR = 13;
+    public static final int DIALOG_ID_CONFIRMA_MUDANCA = 14;
+    public static final int DIALOG_ID_CONFIRMA_EXCLUSAO = 15;
+    public static final int DIALOG_ID_CONFIRMA_IMOVEL_SALVO = 16;
+    public static final int DIALOG_ID_IMOVEL_EXCLUIDO = 17;
+    
+    public static final int FRAGMENT_ID_CLIENTE = 0;
+    public static final int FRAGMENT_ID_IMOVEL = 1;
+    public static final int FRAGMENT_ID_SERVICOS = 2;
+    public static final int FRAGMENT_ID_MEDIDOR = 3;
+    public static final int FRAGMENT_ID_ANORMALIDADE = 4;
 
     public static final String DIRETORIO_ROTAS = "/external_sd/Cadastro/Roteiros";
     public static final String DIRETORIO_RETORNO = "/external_sd/Cadastro/Retorno";
@@ -115,4 +124,11 @@ public class Constantes {
     public static final int IMOVEL_NAO_TRANSMITIDO = 5;
     public static final int IMOVEL_NOVO_COM_ANORMALIDADE = 6;
 
+    
+    public static final int OPERACAO_CADASTRO_ALTERADO = 1;
+    public static final int OPERACAO_CADASTRO_NOVO = 2;
+    public static final int OPERACAO_CADASTRO_EXCLUIDO = 3;
+
+    public static final int ANORMALIDADE_HIDR_NAO_LOCALIZADO = 34;
+    public static final int ANORMALIDADE_HIDR_SEM_IDENTIFICACAO = 35;
 }

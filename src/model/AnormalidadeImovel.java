@@ -7,8 +7,8 @@ public class AnormalidadeImovel {
 	private int codigoAnormalidade;
 	private String descricaoAnormalidade;
 	private String comentario;
-	private String pathFoto1;
-	private String pathFoto2;
+	private String foto1;
+	private String foto2;
 	private boolean tabSaved;
 	private double latitude;
 	private double longitude;
@@ -18,8 +18,8 @@ public class AnormalidadeImovel {
 	public AnormalidadeImovel(){
 		descricaoAnormalidade = "";
 		comentario = "";
-		pathFoto1 = "";
-		pathFoto2 = "";
+		foto1 = "";
+		foto2 = "";
 		codigoAnormalidade = 0;
 		latitude = 0;
 		longitude = 0;
@@ -38,12 +38,12 @@ public class AnormalidadeImovel {
 		return comentario;
 	}
 	
-	public String getPathFoto1(){
-		return pathFoto1;
+	public String getFoto1(){
+		return foto1;
 	}
 	
-	public String getPathFoto2(){
-		return pathFoto2;
+	public String getFoto2(){
+		return foto2;
 	}
 	
 	public void setCodigoAnormalidade(int codigoAnormalidade){
@@ -58,12 +58,12 @@ public class AnormalidadeImovel {
 		this.comentario = comentario;
 	}
 	
-	public void setPathFoto1(String pathFoto1){
-		this.pathFoto1 = pathFoto1;
+	public void setFoto1(String pathFoto1){
+		this.foto1 = pathFoto1;
 	}
 	
-	public void setPathFoto2(String pathFoto2){
-		this.pathFoto2 = pathFoto2;
+	public void setFoto2(String pathFoto2){
+		this.foto2 = pathFoto2;
 	}
 		
 	public void setTabSaved(boolean tabSaved) {

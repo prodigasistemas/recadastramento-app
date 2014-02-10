@@ -9,6 +9,7 @@ import business.Controlador;
 
 import ui.FileManager;
 import util.Constantes;
+import util.Util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -75,7 +76,7 @@ public class ListaRotas extends ListActivity {
     	if (Environment.MEDIA_MOUNTED.equals(state)) {
     	    
     		// We can read and write the media
-            File path = Environment.getExternalStorageDirectory();
+            File path = Util.getExternalStorageDirectory();
             path.getAbsolutePath();
             Log.i("ExternalStorage", "ExternalStorage :" + path.getAbsolutePath());
             root = path.getAbsolutePath() + Constantes.DIRETORIO_ROTAS;

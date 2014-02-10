@@ -28,19 +28,13 @@ public class Pessoa {
     	eMail = "";
     }
     
-    
-
 	public int getMatricula() {
 		return matricula;
 	}
 
-
-
-	public void setMatricula(int matricula) {
-		this.matricula = matricula;
+	public void setMatricula(String matricula) {
+		this.matricula = Util.verificarNuloInt(matricula);
 	}
-
-
 
 	public void setNome(String nome) {
 		this.nome = Util.verificarNuloString(nome);

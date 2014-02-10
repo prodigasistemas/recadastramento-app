@@ -16,8 +16,8 @@ android:orientation="vertical">
 	</LinearLayout>
 
  	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
-		<EditText android:id="@+id/codCliente" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
-		<EditText android:id="@+id/matricula" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
+		<EditText android:id="@+id/codCliente" android:focusable="false" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
+		<EditText android:id="@+id/matricula" android:focusable="false" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
 	</LinearLayout>
 	
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3">
@@ -26,8 +26,8 @@ android:orientation="vertical">
 	</LinearLayout>
 
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout4">
-		<EditText android:id="@+id/localidade" android:minWidth="150dp" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-		<EditText android:id="@+id/setor" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
+		<EditText android:id="@+id/localidade" android:focusable="false" android:minWidth="150dp" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
+		<EditText android:id="@+id/setor" android:focusable="false" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
 	</LinearLayout>
 
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout5">
@@ -37,9 +37,9 @@ android:orientation="vertical">
 	</LinearLayout>
 
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout6">
-		<EditText android:id="@+id/quadra" android:minWidth="90dp" android:maxLength="4" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-		<EditText android:id="@+id/lote" android:minWidth="90dp" android:maxLength="4" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-		<EditText android:id="@+id/subLote" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
+		<EditText android:id="@+id/quadra" android:focusable="false" android:minWidth="90dp" android:maxLength="4" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
+		<EditText android:id="@+id/lote" android:focusable="false" android:minWidth="90dp" android:maxLength="4" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
+		<EditText android:id="@+id/subLote" android:focusable="false" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
 	</LinearLayout>
 	    	
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout7">
@@ -48,8 +48,8 @@ android:orientation="vertical">
 	</LinearLayout>
 
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout8">
-		<EditText android:id="@+id/rota" android:minWidth="170dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number"></EditText>
-		<EditText android:id="@+id/face" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number"></EditText>
+		<EditText android:id="@+id/rota" android:focusable="false" android:minWidth="170dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number"></EditText>
+		<EditText android:id="@+id/face" android:focusable="false" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number"></EditText>
 	</LinearLayout>
 
 	<TextView android:text="Tipo Logradouro:" android:id="@+id/txtTipoLogradouroImovel" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
@@ -87,8 +87,8 @@ android:orientation="vertical">
 	</LinearLayout>
 
 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout14">
-		<EditText android:id="@+id/municipio" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="15"></EditText>
-		<EditText android:id="@+id/codMunicipio" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="8"></EditText>
+		<EditText android:id="@+id/municipio" android:focusable="false" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="15"></EditText>
+		<EditText android:id="@+id/codMunicipio" android:focusable="false" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="8"></EditText>
 	</LinearLayout>
 
 	<TextView android:text="IPTU:" android:id="@+id/txtIptu" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
@@ -98,10 +98,10 @@ android:orientation="vertical">
 	<EditText android:id="@+id/numeroCelpa" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
 	<TextView android:text="Nº de Pontos Úteis:" android:id="@+id/txtNumeroPontosUteis" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/numeroPontosUteis" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="3"></EditText>
+	<EditText android:id="@+id/numeroPontosUteis" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
 	<TextView android:text="Nº de Ocupantes:" android:id="@+id/txtNumeroOcupantes" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/numeroOcupantes" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="3"></EditText>
+	<EditText android:id="@+id/numeroOcupantes" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
 		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Residencial" android:id="@+id/checkBoxResidencial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></CheckBox>

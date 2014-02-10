@@ -9,34 +9,26 @@ import util.Util;
 import model.Imovel;
 import model.Servicos;
 import business.Controlador;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+import android.support.v4.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.telephony.CellLocation;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
  
-public class ServicosTab extends Activity implements LocationListener{
+public class ServicosTab extends Fragment{
     
+	private static View view;
 	Spinner spinnerLigacaoAgua;
 	Spinner spinnerLigacaoEsgoto;
 	Spinner spinnerLocalInstalacaoRamal;
@@ -47,25 +39,35 @@ public class ServicosTab extends Activity implements LocationListener{
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
-	private boolean ligacaoAguaOk = false;
+	private static boolean ligacaoAguaOk = false;
 
 	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.servicotab);
-        instanciate();
     }
     
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-		instanciate();
-	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		
+		ligacaoAguaOk = false;
+		
+		view = inflater.inflate(R.layout.servicotab, container, false);
+		
+		// Define a imagem de fundo de acordo com a orientacao do dispositivo
+	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
+	    else
+	    	view.setBackgroundResource(R.drawable.fundocadastro);
 
+        instanciate();
+        return view;
+	}
+	
 	public void instanciate(){
         
         /* Use the LocationManager class to obtain GPS locations */
-        mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        mLocManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         
         boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
@@ -74,7 +76,7 @@ public class ServicosTab extends Activity implements LocationListener{
         // go to the settings
         if (!enabled){
 	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-	    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
 
         Criteria criteria = new Criteria();
@@ -86,10 +88,10 @@ public class ServicosTab extends Activity implements LocationListener{
 
         
         // Spinner Tipo de Ligação de água
-        spinnerLigacaoAgua = (Spinner) findViewById(R.id.spinnerLigacaoAgua);
+        spinnerLigacaoAgua = (Spinner) view.findViewById(R.id.spinnerLigacaoAgua);
         listLigacaoAgua = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_SITUACAO_LIGACAO_AGUA);
         listLigacaoAgua.add(0, "");
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listLigacaoAgua);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listLigacaoAgua);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLigacaoAgua.setAdapter(adapter);
 
@@ -105,9 +107,9 @@ public class ServicosTab extends Activity implements LocationListener{
 //		}
 
         // Spinner Tipo de Ligação de Esgoto
-        spinnerLigacaoEsgoto = (Spinner) findViewById(R.id.spinnerLigacaoEsgoto);
+        spinnerLigacaoEsgoto = (Spinner) view.findViewById(R.id.spinnerLigacaoEsgoto);
         listLigacaoEsgoto = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_SITUACAO_LIGACAO_ESGOTO);
-        adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_SITUACAO_LIGACAO_ESGOTO));
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_SITUACAO_LIGACAO_ESGOTO));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLigacaoEsgoto.setAdapter(adapter);
         spinnerLigacaoEsgoto.setSelection(getServicos().getTipoLigacaoEsgoto());
@@ -124,13 +126,13 @@ public class ServicosTab extends Activity implements LocationListener{
 		}
 		
         // Spinner Local de Instalação do Ramal
-        spinnerLocalInstalacaoRamal = (Spinner) findViewById(R.id.spinnerLocalizacaoPontoServico);
+        spinnerLocalInstalacaoRamal = (Spinner) view.findViewById(R.id.spinnerLocalizacaoPontoServico);
 
         listLocalInstalacaoRamal = new ArrayList<String>();
         listLocalInstalacaoRamal = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_LOCAL_INSTALACAO_RAMAL);
         listLocalInstalacaoRamal.add(0, "");
         
-        adapter = new ArrayAdapter(getBaseContext(), android.R.layout.simple_spinner_item, listLocalInstalacaoRamal);
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listLocalInstalacaoRamal);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLocalInstalacaoRamal.setAdapter(adapter);
 
@@ -148,13 +150,13 @@ public class ServicosTab extends Activity implements LocationListener{
 		}
 
 		// Button Save 
-        final Button buttonSave = (Button)findViewById(R.id.buttonSave);
+        final Button buttonSave = (Button)view.findViewById(R.id.buttonSave);
         buttonSave.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
 
-				if (((Spinner)findViewById(R.id.spinnerLigacaoAgua)).getSelectedItemPosition() == 0){
+				if (((Spinner)view.findViewById(R.id.spinnerLigacaoAgua)).getSelectedItemPosition() == 0){
 		        	dialogMessage = "Por favor, informe tipo de ligação de água.";
-		        	showDialog(Constantes.DIALOG_ID_ERRO);
+			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 
 				}else{					
 
@@ -165,7 +167,8 @@ public class ServicosTab extends Activity implements LocationListener{
 		            	}
 		
 		            	if (!ligacaoAguaOk){
-		        	    	showDialog(Constantes.DIALOG_ID_CONFIRM_CHANGES);	            		
+		            	    dialogMessage = "Houve alteração nos dados de ligação de água. Por favor informe novamente para confirmação.";
+        					showCompleteDialog(R.drawable.aviso, "Confirmação:", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_MUDANCA);
 		            	}
 		            		            	
 	    			}else{
@@ -173,17 +176,9 @@ public class ServicosTab extends Activity implements LocationListener{
 	    			}
 	
 	    			if (ligacaoAguaOk){
-	            	
     					updateServicoSelecionado();
-	    					
-//    					if (!((TextView)findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
-    						getServicos().setTabSaved(true);
-    						Toast.makeText(ServicosTab.this, "Dados do Serviço atualizados com sucesso.", 5).show();
-    						
-//    					}else{
-//    						dialogMessage = "Atualize a Localização Geográfica antes de salvar.";
-//    						showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
-//    					}
+    					getServicos().setTabSaved(true);
+    					Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso.", 5).show();
 	            	}
 	            }
             }
@@ -192,7 +187,7 @@ public class ServicosTab extends Activity implements LocationListener{
 	
 	public boolean checkChangeLigacaoAgua(){
 		boolean result = false;
-		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_AGUA, ((Spinner)findViewById(R.id.spinnerLigacaoAgua)).getSelectedItem().toString());
+		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_AGUA, ((Spinner)view.findViewById(R.id.spinnerLigacaoAgua)).getSelectedItem().toString());
 
 		if (codigo.length() > 0 && getServicos().getTipoLigacaoAgua() != Integer.parseInt(codigo)){
 			result = true;
@@ -202,13 +197,13 @@ public class ServicosTab extends Activity implements LocationListener{
 
 	public void updateServicoSelecionado(){
 		
-		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_AGUA, ((Spinner)findViewById(R.id.spinnerLigacaoAgua)).getSelectedItem().toString());
+		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_AGUA, ((Spinner)view.findViewById(R.id.spinnerLigacaoAgua)).getSelectedItem().toString());
 		getServicos().setTipoLigacaoAgua(codigo);
 
-		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_ESGOTO, ((Spinner)findViewById(R.id.spinnerLigacaoEsgoto)).getSelectedItem().toString());
+		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_SITUACAO_LIGACAO_ESGOTO, ((Spinner)view.findViewById(R.id.spinnerLigacaoEsgoto)).getSelectedItem().toString());
 		getServicos().setTipoLigacaoEsgoto(codigo);
 		
-		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_LOCAL_INSTALACAO_RAMAL, ((Spinner)findViewById(R.id.spinnerLocalizacaoPontoServico)).getSelectedItem().toString());
+		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_LOCAL_INSTALACAO_RAMAL, ((Spinner)view.findViewById(R.id.spinnerLocalizacaoPontoServico)).getSelectedItem().toString());
 		getServicos().setLocalInstalacaoRamal(codigo);
 		
         if (lastKnownLocation != null) {
@@ -230,146 +225,39 @@ public class ServicosTab extends Activity implements LocationListener{
 	public void onLocationChanged(Location location) {
 		lastKnownLocation = location;
 	}
-
 	
 	public void onProviderDisabled(String provider) {
 
         // Check if enabled and if not send user to the GSP settings
         // Better solution would be to display a dialog and suggesting to 
         // go to the settings
-		dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
+        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
 	}
-
 	
 	public void onProviderEnabled(String provider) {
-		Toast.makeText( getApplicationContext(),"GPS ligado",Toast.LENGTH_SHORT).show();
+		Toast.makeText( getActivity(),"GPS ligado",Toast.LENGTH_SHORT).show();
 	}
-
 	
 	public void onStatusChanged(String provider, int status, Bundle extras) {}
 	
-	/* Request updates at startup */
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+	public static void setChangesConfirmed(){
+    	if (!ligacaoAguaOk){
+    		ligacaoAguaOk = true;
+    		((Spinner)view.findViewById(R.id.spinnerLigacaoAgua)).setSelection(0);
+    	}
 	}
-
-	/* Remove the locationlistener updates when Activity is paused */
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mLocManager.removeUpdates(this);
-	}
-
-	@Override
-	protected Dialog onCreateDialog(final int id) {
-	        
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		AlertDialog.Builder builder;
-		
-		if (id == Constantes.DIALOG_ID_SUCESSO || id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-
-	        View layout = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
-	        ((TextView)layout.findViewById(R.id.messageDialog)).setText(dialogMessage);
-	        
-	        if (id == Constantes.DIALOG_ID_SUCESSO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.save);
 	
-	        }else if (id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-		        ((ImageView)layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.aviso);
-	        }
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setView(layout);
-	        builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	
-	        		if (id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	        			startActivity(intent);
-	        		}
-	            }
-	        });
-	
-	        AlertDialog messageDialog = builder.create();
-	        return messageDialog;
-		
-		}else if (id == Constantes.DIALOG_ID_CONFIRM_BACK){
-	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-			((TextView)layoutConfirmationDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Atenção!");
-	        builder.setView(layoutConfirmationDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	        		MainTab.indiceNovoImovel = null;
-	    			finish();
-	        	}
-	        });
-	        
-	        AlertDialog passwordDialog = builder.create();
-	        return passwordDialog;
-		    
-		}else if (id == Constantes.DIALOG_ID_CONFIRM_CHANGES){
-			
-	        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	        final View layoutChangeDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
-    	    dialogMessage = "Houve alteração nos dados de ligação de água. Por favor informe novamente para confirmação.";
-	        
-			((TextView)layoutChangeDialog.findViewById(R.id.textViewUser)).setText(dialogMessage);
-	
-	        builder = new AlertDialog.Builder(this);
-	        builder.setTitle("Confirmação");
-	        builder.setView(layoutChangeDialog);
-	        
-	        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-	        	}
-	        });
-	        	 
-	        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	public void onClick(DialogInterface dialog, int which) {
-	        		removeDialog(id);
-	            	if (!ligacaoAguaOk){
-	            		ligacaoAguaOk = true;
-	            		((Spinner)findViewById(R.id.spinnerLigacaoAgua)).setSelection(0);
-	            	}
-	        	}
-	        });
-	        
-	        AlertDialog changeDialog = builder.create();
-	        return changeDialog;
-			
-		}
-        return null;
-	}
-
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-        
-    	if ((keyCode == KeyEvent.KEYCODE_BACK)){
-    		dialogMessage = " Deseja voltar para a lista de cadastros? ";
-	    	showDialog(Constantes.DIALOG_ID_CONFIRM_BACK);
-            return true;
-
-        }else{
-            return super.onKeyDown(keyCode, event);
-        }
+	void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_SERVICOS);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
     }
+	
+	void showCompleteDialog(int iconId, String title, String message, int messageType) {
+		CompleteAlertDialogFragment newFragment = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_SERVICOS);
+        newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
+    }
+
 }

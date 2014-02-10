@@ -6,19 +6,17 @@ import util.Constantes;
 import background.CarregarRotaThread;
 import background.GerarArquivoCompletoThread;
 import business.Controlador;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.support.v4.app.FragmentActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
  
-public class MenuPrincipal extends Activity {
+public class MenuPrincipal extends FragmentActivity {
 	
 	static final int MENU_LISTA_CADASTROS = 0;
 	static final int MENU_INFO = 1;
@@ -46,7 +44,6 @@ public class MenuPrincipal extends Activity {
 	private ProgressDialog progDialog;
 	private GerarArquivoCompletoThread progThread;
 	private String dialogMessage = null;
-	public LocationManager mLocManager;
 	private static int increment= 0;
 	
     //---the images to display---
@@ -98,26 +95,8 @@ public class MenuPrincipal extends Activity {
         		String text = parent.getItemAtPosition(position).toString();
 				
             	if (position == MENU_LISTA_CADASTROS){
-            		
-            		// Verifica se GPS esta ligado
-            		/* Use the LocationManager class to obtain GPS locations */
-                    mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-                    
-                    boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-                    // Check if enabled and if not send user to the GSP settings
-                    // Better solution would be to display a dialog and suggesting to 
-                    // go to the settings
-                    if (!enabled){
-            	        dialogMessage = "GPS está desligado. Por favor, ligue-o para continuar o cadastro.";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
-                    }
-            		
-                    // Permite abrir a lista de cadastros apenas se GPS estiver ligado.
-                    if (enabled){
-						Intent myIntent = new Intent(getApplicationContext(),ListaImoveis.class);
-		        		startActivity(myIntent);
-                    }
+					Intent myIntent = new Intent(getApplicationContext(),ListaImoveis.class);
+	        		startActivity(myIntent);
 				
             	}else if (position == MENU_INFO){
 					Intent myIntent = new Intent(getApplicationContext(),TelaInformacoes.class);
@@ -145,7 +124,7 @@ public class MenuPrincipal extends Activity {
         	    	}else{
             		
         	    		dialogMessage = "Roteiro ainda não concluído. Não foi possível gerar arquivo de retorno Completo.";
-            	    	showDialog(Constantes.DIALOG_ID_ERRO);
+            	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO);
         	    	}
             		
             	}else if (position == MENU_CADASTROS_CONCLUIDOS){
@@ -177,7 +156,7 @@ public class MenuPrincipal extends Activity {
             	dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
             	
 	    		dialogMessage = "Arquivo de retorno Completo gerado com sucesso!";
-    	    	showDialog(Constantes.DIALOG_ID_SUCESSO);
+                showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_SUCESSO);
 			    increment = increment + 5;
             }
          }
@@ -253,44 +232,15 @@ public class MenuPrincipal extends Activity {
             }else{
                 Toast.makeText(getBaseContext(), "Cartão de memória não está disponível!", Toast.LENGTH_SHORT).show();
             }
-	            
-	    }else if (id ==  Constantes.DIALOG_ID_ERRO || 
-	    		  id ==  Constantes.DIALOG_ID_SUCESSO || 
-	    		  id ==  Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	    	
-			inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			  
-			final View layoutCustonDialog = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
-	        ((TextView)layoutCustonDialog.findViewById(R.id.messageDialog)).setText(dialogMessage);
-	        
-	        if (id == Constantes.DIALOG_ID_SUCESSO){
-		        ((ImageView)layoutCustonDialog.findViewById(R.id.imageDialog)).setImageResource(R.drawable.save);
-
-	        }else if (id == Constantes.DIALOG_ID_ERRO || id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-		        ((ImageView)layoutCustonDialog.findViewById(R.id.imageDialog)).setImageResource(R.drawable.aviso);
-	        }
-	        
-	        builder = new AlertDialog.Builder(this);
-	        builder.setView(layoutCustonDialog);
-	        builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-	        	
-	        	public void onClick(DialogInterface dialog, int whichButton) {
-	        		removeDialog(id);
-
-	        		if (id == Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO){
-	        			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-	        			startActivity(intent);
-	        		}
-	        	}
-	        });
-
-	        AlertDialog messageDialog = builder.create();
-	        return messageDialog;
 	    }
-
 	    return null;
 	}
  
+	void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
     public class ImageAdapter extends BaseAdapter 
     {
         private Context context;

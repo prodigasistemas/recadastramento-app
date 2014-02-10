@@ -3,7 +3,7 @@
       package="com.AndroidExplorer"
       android:versionCode="1"
       android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="4"/>
+    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="10"/>
 	<uses-permission android:name="android.permission.ACCESS_GPS" />
 	<uses-permission android:name="android.permission.ACCESS_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="MainTab" android:launchMode="singleTask" android:theme="@android:style/Theme.NoTitleBar">
+        <activity android:name="MainTab" android:launchMode="singleTask" android:screenOrientation="portrait" configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
         <activity android:name=".ListaRotas" android:screenOrientation="portrait" configChanges="orientation|keyboardHidden" android:theme="@android:style/Theme.NoTitleBar">

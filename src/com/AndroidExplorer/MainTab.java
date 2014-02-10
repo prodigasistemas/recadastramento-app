@@ -1,6 +1,6 @@
 package com.AndroidExplorer;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import dataBase.DataManipulator;
@@ -9,13 +9,22 @@ import model.Imovel;
 import util.Constantes;
 import util.Util;
 import android.app.AlertDialog;
-import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Settings;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -27,20 +36,37 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TabHost.TabContentFactory;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
+import background.EnviarCadastroOnlineThread;
 import business.Controlador;
  
-public class MainTab extends TabActivity {
+public class MainTab extends FragmentActivity implements TabHost.OnTabChangeListener, OnItemClickListener, LocationListener {
 
 	private static TabHost tabHost;
 	public static Integer indiceNovoImovel;
 	public boolean numeroLoteInsuficiente = false;
 	private static final int IMOVEL_ANTERIOR = 0; 
 	private static final int IMOVEL_POSTERIOR = 1; 
+	private String dialogMessage = null;
+	public LocationManager mLocManager;
+	private static EnviarCadastroOnlineThread progThread;
+	private static int increment= 0;
+	Fragment clienteFragment;
+	Fragment imovelFragment;
+	Fragment servicosFragment;
+	Fragment medidorFragment;
+	Fragment anormalidadeFragment;
+	ClienteTab clienteTab = new ClienteTab();
+	ImovelTab imovelTab = new ImovelTab();
+	ServicosTab servicosTab = new ServicosTab();
+	MedidorTab medidorTab = new MedidorTab();
+	AnormalidadeTab anormalidadeTab = new AnormalidadeTab();
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
@@ -50,50 +76,94 @@ public class MainTab extends TabActivity {
 	}
 	
     public boolean onKeyDown(int keyCode, KeyEvent event){
-        
     	if ((keyCode == KeyEvent.KEYCODE_BACK)){
-			finish();
+    		dialogMessage = " Deseja voltar para a lista de cadastros? ";
+    		showCompleteDialog(R.drawable.aviso, "Atenção!", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_VOLTAR);
             return true;
 
         }else{
             return super.onKeyDown(keyCode, event);
         }
     }
-	
+
     private void initializeTabs(){
 	    
-    	Resources res = getResources(); // Resource object to get Drawables
-	    tabHost = getTabHost();  // The activity TabHost
-	    TabHost.TabSpec spec;  // Reusable TabSpec for each tab
-	    Intent intent;  // Reusable Intent for each tab
+        /* Use the LocationManager class to obtain GPS locations */
+        mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        
+        boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-	    intent = new Intent().setClass(this, ClienteTab.class);
-	    spec = tabHost.newTabSpec("cliente").setIndicator("Cliente1", res.getDrawable(R.drawable.tab_cliente)).setContent(intent);
-	    tabHost.addTab(spec);
+        // Check if enabled and if not send user to the GPS settings
+        // Better solution would be to display a dialog and suggesting to 
+        // go to the settings
+        if (!enabled){
+	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
+	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+        }	    
 
-	    intent = new Intent().setClass(this, ImovelTab.class);
-	    spec = tabHost.newTabSpec("imovel").setIndicator("Imóvel", res.getDrawable(R.drawable.tab_imovel)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, ServicosTab.class);
-	    spec = tabHost.newTabSpec("servico").setIndicator("Serviço", res.getDrawable(R.drawable.tab_servico)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, MedidorTab.class);
-	    spec = tabHost.newTabSpec("medidor").setIndicator("Medidor", res.getDrawable(R.drawable.tab_medidor)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    intent = new Intent().setClass(this, AnormalidadeTab.class);
-	    spec = tabHost.newTabSpec("anormalidade").setIndicator("Anormalidade", res.getDrawable(R.drawable.tab_anormalidade)).setContent(intent);
-	    tabHost.addTab(spec);
-
-	    // TODO guardar a ultima tab selecionada para restaurá-la
+	    tabHost = (TabHost) findViewById(android.R.id.tabhost);
+	    tabHost.setup();
+	    tabHost.setOnTabChangedListener(this);
 	    
+	    // Define a imagem de fundo de acordo com a orientacao do dispositivo
+	    if (getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
+	    	tabHost.setBackgroundResource(R.drawable.fundocadastro);
+	    }else{
+	    	tabHost.setBackgroundResource(R.drawable.fundocadastro);
+	    }
+	    
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+
+		ft.add(R.id.tabCliente, clienteTab);
+    	ft.add(R.id.tabImovel, imovelTab);
+    	ft.add(R.id.tabServicos, servicosTab);
+    	ft.add(R.id.tabMedidor, medidorTab);
+    	ft.add(R.id.tabAnormalidade, anormalidadeTab);
+    	
+    	clienteFragment = fm.findFragmentById(R.id.tabCliente);
+    	imovelFragment = fm.findFragmentById(R.id.tabImovel);
+    	servicosFragment = fm.findFragmentById(R.id.tabServicos);
+    	medidorFragment = fm.findFragmentById(R.id.tabMedidor);
+    	anormalidadeFragment = fm.findFragmentById(R.id.tabAnormalidade);
+
+    	ft.show(clienteFragment);
+    	ft.hide(imovelFragment);
+    	ft.hide(servicosFragment);
+    	ft.hide(medidorFragment);
+    	ft.hide(anormalidadeFragment);
+    	ft.commit();
+
+	    addTab("cliente", "Cliente", R.drawable.tab_cliente, R.layout.clientetab);
+	    addTab("imovel", "Imóvel", R.drawable.tab_imovel, R.layout.imoveltab);
+	    addTab("servico", "Serviço", R.drawable.tab_servico, R.layout.servicotab);
+	    addTab("medidor", "Medidor", R.drawable.tab_medidor, R.layout.medidortab);
+	    addTab("anormalidade", "Anormalidade", R.drawable.tab_anormalidade, R.layout.anormalidadetab);
+
 	    setTabColor();
 	    tabHost.setCurrentTab(0);
     }
         
-    public static void setTabColor() {
+	// Instancia novas tabs
+	public void addTab(String tag, String titulo, int imagem, final int view) {
+		TabHost.TabSpec tabSpec;
+	    Resources res = getResources();
+	    		
+	    tabSpec = tabHost.newTabSpec(tag).setIndicator(titulo, res.getDrawable(imagem)).setContent(new TabContentFactory() {
+
+            public View createTabContent(String tag) {
+            	LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            	View layout = inflater.inflate(view, (ViewGroup) findViewById(R.layout.maintab));
+                return layout;
+            }
+        });
+	    
+	    tabHost.addTab(tabSpec);
+	    
+	    setTabColor();
+	}
+	
+    public void setTabColor() {
         for(int i=0;i<tabHost.getTabWidget().getChildCount();i++){
             
         	if (getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO){
@@ -306,6 +376,11 @@ public class MainTab extends TabActivity {
 			
 	    	return true;
 	        
+	    case R.id.imovelExcluir:
+    		dialogMessage = "Confirma exclusão deste imóvel?";
+    		showCompleteDialog(R.drawable.aviso, "Atenção!", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
+            return true;
+	    		        
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
@@ -317,7 +392,32 @@ public class MainTab extends TabActivity {
 		super.onResume();
 	}
 
-	
+    public boolean ImovelExcluidoDialog(){
+
+    	// setando dados do imóvel excluído.
+    	getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_EXCLUIDO);
+    	getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
+    	getImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+
+    	Controlador.getInstancia().getClienteSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+    	Controlador.getInstancia().getServicosSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+    	Controlador.getInstancia().getMedidorSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+    	Controlador.getInstancia().getAnormalidadeImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+    	
+    	// Cadastro configurado como Nao Transmitido
+    	Controlador.getInstancia().getImovelSelecionado().setImovelEnviado(String.valueOf(Constantes.NAO));
+    	
+    	Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
+    	Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
+    	Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
+    	Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
+    	Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
+        this.setTabColor();
+   		dialogMessage = " Imovel excluído com sucesso!";
+        showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
+        return true;
+    }
+    
 	public void preencheNovoImovel(Imovel imovelReferencia, String lote) {
         Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
         
@@ -339,6 +439,7 @@ public class MainTab extends TabActivity {
 		imovel.setSetor(imovelReferencia.getSetor());
 		imovel.setQuadra(imovelReferencia.getQuadra());
 		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
+		imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
 		
 		Controlador.getInstancia().setImovelSelecionado(imovel);
 		
@@ -413,7 +514,8 @@ public class MainTab extends TabActivity {
 		imovel.setCodigoMunicipio(""+imovelReferencia.getCodigoMunicipio());
 		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
 		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
-		
+		imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
+
 		Controlador.getInstancia().setImovelSelecionado(imovel);
 		
 		finish();
@@ -489,7 +591,75 @@ public class MainTab extends TabActivity {
 		});
 
 	}
+
+	private void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
 	
+	private void showCompleteDialog(int iconId, String title, String message, int messageType) {
+		CompleteAlertDialogFragment newFragment = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+	public int getCodigoAnormalidade(){
+		return anormalidadeTab.getCodigoAnormalidade();
+	}
+
+	public void doPositiveClick() {
+        // Do stuff here.
+        Log.i("FragmentAlertDialog", "Positive click!");
+    }
+
+	public void doNegativeClick() {
+		// Do stuff here.
+		Log.i("FragmentAlertDialog", "Negative click!");
+	}
+	
+	public void doGpsDesligado() {
+		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		startActivity(intent);
+    }
+    
+	public void chamaProximoImovel() {
+		Controlador.getInstancia().isCadastroAlterado();
+		
+		// Thread para obter dados do cadastro finalizado e transmiti-lo ao servidor.        			
+		progThread = new EnviarCadastroOnlineThread(handler,this, increment);
+		progThread.start();
+		
+		if (indiceNovoImovel != null) {
+			Controlador.getInstancia().setCadastroSelecionadoByListPosition(indiceNovoImovel);
+			indiceNovoImovel = null;
+		} else if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
+			Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
+			
+		}else{
+			Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()+1);
+		}
+		finish();
+		Intent myIntent = new Intent( this, MainTab.class);
+		startActivity(myIntent);
+    }
+
+    // Handler on the main (UI) thread that will receive messages.
+    final Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            
+        	// Get the current value of the variable total from the message data and update the progress bar.
+        	int cadastroOnline = msg.getData().getInt("envioCadastroOnline" + String.valueOf(increment));
+
+            if (progThread.getCustomizedState() == EnviarCadastroOnlineThread.DONE_OK){
+
+            	// SETAR CADASTRO PARA TRANSMITIDO
+			    increment++;
+            
+            }else if (progThread.getCustomizedState() == EnviarCadastroOnlineThread.DONE_ERROR){
+			    increment++;
+            }
+         }
+    };
+    
 	public String montarLote(String lote) {
 		return Util.adicionarZerosEsquerdaNumero(4, lote);
 	}
@@ -517,4 +687,77 @@ public class MainTab extends TabActivity {
 	public static DataManipulator getCadastroDataManipulator(){
 		return Controlador.getInstancia().getCadastroDataManipulator();
 	}
+
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onTabChanged(String tabId) {
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+
+		if (tabId.equals("cliente")){
+	    	ft.show(clienteFragment);
+	    	ft.hide(imovelFragment);
+	    	ft.hide(servicosFragment);
+	    	ft.hide(medidorFragment);
+	    	ft.hide(anormalidadeFragment);
+		
+		}else if (tabId.equals("imovel")){
+	    	ft.show(imovelFragment);
+	    	ft.hide(clienteFragment);
+	    	ft.hide(servicosFragment);
+	    	ft.hide(medidorFragment);
+	    	ft.hide(anormalidadeFragment);
+		
+		}else if (tabId.equals("servico")){
+	    	ft.show(servicosFragment);
+	    	ft.hide(clienteFragment);
+	    	ft.hide(imovelFragment);
+	    	ft.hide(medidorFragment);
+	    	ft.hide(anormalidadeFragment);
+		
+		}else if (tabId.equals("medidor")){
+	    	ft.show(medidorFragment);
+	    	ft.hide(clienteFragment);
+	    	ft.hide(imovelFragment);
+	    	ft.hide(servicosFragment);
+	    	ft.hide(anormalidadeFragment);
+		
+		}else if (tabId.equals("anormalidade")){
+	    	ft.show(anormalidadeFragment);
+	    	ft.hide(clienteFragment);
+	    	ft.hide(imovelFragment);
+	    	ft.hide(servicosFragment);
+	    	ft.hide(medidorFragment);
+		}
+//		if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_STATUS_CONCLUIDO) {
+//			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(R.drawable.tab_custom_green);
+//		} else if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_STATUS_PENDENTE) {
+//			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(R.drawable.tab_custom_white);
+//		}
+		
+    	ft.commit();
+	}
+
+	public void onLocationChanged(Location location) {
+		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
+		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+	}
+	
+	public void onProviderDisabled(String provider) {
+        // Check if enabled and if not send user to the GSP settings
+        // Better solution would be to display a dialog and suggesting to 
+        // go to the settings
+		dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
+        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	}
+	
+	public void onProviderEnabled(String provider) {
+		Toast.makeText(this,"GPS ligado",Toast.LENGTH_SHORT).show();
+	}
+	
+	public void onStatusChanged(String provider, int status, Bundle extras) {}
+
 }

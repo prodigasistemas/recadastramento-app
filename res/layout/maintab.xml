@@ -12,11 +12,51 @@
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
+                
         <FrameLayout
             android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:padding="2dp" 
+	        android:layout_width="0dp"
+    	    android:layout_height="0dp"
+        	android:layout_weight="0"/>
+        
+		<fragment android:name="com.AndroidExplorer.ClienteTab"
+		    android:id="@+id/tabCliente"
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
+			android:padding="2dp" 
             android:scrollbars="vertical"/>
+		
+		<fragment android:name="com.AndroidExplorer.ImovelTab"
+		    android:id="@+id/tabImovel"
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
+			android:padding="2dp" 
+            android:scrollbars="vertical"
+		    android:visibility="gone"/>
+		
+		<fragment android:name="com.AndroidExplorer.ServicosTab"
+		    android:id="@+id/tabServicos"
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
+			android:padding="2dp" 
+            android:scrollbars="vertical"
+		    android:visibility="gone"/>
+		
+		<fragment android:name="com.AndroidExplorer.MedidorTab"
+		    android:id="@+id/tabMedidor"
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
+			android:padding="2dp" 
+            android:scrollbars="vertical"
+		    android:visibility="gone"/>
+		
+		<fragment android:name="com.AndroidExplorer.AnormalidadeTab"
+		    android:id="@+id/tabAnormalidade"
+		    android:layout_height="match_parent"
+		    android:layout_width="match_parent"
+			android:padding="2dp" 
+            android:scrollbars="vertical"
+		    android:visibility="gone"/>
+        
     </LinearLayout>
 </TabHost>

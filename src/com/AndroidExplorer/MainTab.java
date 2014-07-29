@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.telephony.CellLocation;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -54,7 +56,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	private static final int IMOVEL_ANTERIOR = 0; 
 	private static final int IMOVEL_POSTERIOR = 1; 
 	private String dialogMessage = null;
-	public LocationManager mLocManager;
 	private static EnviarCadastroOnlineThread progThread;
 	private static int increment= 0;
 	Fragment clienteFragment;
@@ -67,7 +68,11 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	ServicosTab servicosTab = new ServicosTab();
 	MedidorTab medidorTab = new MedidorTab();
 	AnormalidadeTab anormalidadeTab = new AnormalidadeTab();
-	
+
+	public LocationManager mLocManager;
+	Location lastKnownLocation;
+	private String provider;
+
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.maintab);
@@ -90,7 +95,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	    
         /* Use the LocationManager class to obtain GPS locations */
         mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        
+        if(mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        	mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
+
         boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         // Check if enabled and if not send user to the GPS settings
@@ -100,6 +108,13 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
 	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }	    
+
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setCostAllowed(true);
+		provider = mLocManager.getBestProvider(criteria, false);
+		lastKnownLocation = mLocManager.getLastKnownLocation(provider);
+    	CellLocation.requestLocationUpdate();
 
 	    tabHost = (TabHost) findViewById(android.R.id.tabhost);
 	    tabHost.setup();
@@ -732,11 +747,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	    	ft.hide(servicosFragment);
 	    	ft.hide(medidorFragment);
 		}
-//		if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_STATUS_CONCLUIDO) {
-//			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(R.drawable.tab_custom_green);
-//		} else if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_STATUS_PENDENTE) {
-//			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(R.drawable.tab_custom_white);
-//		}
 		
     	ft.commit();
 	}
@@ -744,6 +754,8 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	public void onLocationChanged(Location location) {
 		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
 		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+		
+		Log.i("Latitude!!!!!!!!!!!!!!", "Latitude" + location.getLongitude());
 	}
 	
 	public void onProviderDisabled(String provider) {

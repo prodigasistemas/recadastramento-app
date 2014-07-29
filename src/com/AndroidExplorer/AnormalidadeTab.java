@@ -10,7 +10,6 @@ import java.util.List;
 import model.AnormalidadeImovel;
 import util.Constantes;
 import util.Util;
-import android.support.v4.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +24,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
+import android.support.v4.app.Fragment;
 import android.telephony.CellLocation;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -111,9 +109,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
         
-        if(mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-        	mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		criteria.setCostAllowed(true);
@@ -569,16 +564,16 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
         }	    
 		
 		// Descartar validacao para Emulador Android.
-		if (!Build.BRAND.startsWith("generic") || !Build.DEVICE.startsWith("generic")){
-		
-	    	if (  ((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")
-	    		|| ((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
-				
-	    		dialogMessage = "Por favor, atualize a Localização Geográfica antes de salvar.";
-		        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-		    	result = false;
-	    	}
-		}
+//		if (!Build.BRAND.startsWith("generic") || !Build.DEVICE.startsWith("generic")){
+//		
+//	    	if (  ((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")
+//	    		|| ((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
+//				
+//	    		dialogMessage = "Por favor, atualize a Localização Geográfica antes de salvar.";
+//		        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+//		    	result = false;
+//	    	}
+//		}
 		return result;
 	}
 	
@@ -596,10 +591,13 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	@Override
 	public void onResume() {
 		super.onResume();
-		mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 400, 1, this);
+    	mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 	}
 
-	public void onLocationChanged(Location location) {}
+	public void onLocationChanged(Location location) {
+		((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
+		((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+	}
 
 	public void onProviderDisabled(String provider) {}
 

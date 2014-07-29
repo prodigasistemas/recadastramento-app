@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -108,6 +109,22 @@ public class ImovelTab extends Fragment implements LocationListener {
     	CellLocation.requestLocationUpdate();
 
 		Util.addTextChangedListenerIPTUMask((EditText)view.findViewById(R.id.iptu));
+    	// Verifica após preencher o campo se está válido
+    	((EditText)view.findViewById(R.id.iptu)).setOnFocusChangeListener(new OnFocusChangeListener() {          
+    		public void onFocusChange(View v, boolean hasFocus) {
+    			
+    			if(!hasFocus){
+    				
+    				if ( ((EditText)view.findViewById(R.id.iptu)).getText().toString().length() > 0 &&
+    					 ((EditText)view.findViewById(R.id.iptu)).getText().toString().length() < 31){
+    					
+    						dialogMessage = "Número de IPTU inválido.";
+                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+    				}
+    			}
+    		}
+    	});
+		
     	cbResidencial = (CheckBox) view.findViewById(R.id.checkBoxResidencial);;
     	cbComercial = (CheckBox) view.findViewById(R.id.checkBoxComercial);
     	cbPublica = (CheckBox) view.findViewById(R.id.checkBoxPublica);
@@ -309,25 +326,23 @@ public class ImovelTab extends Fragment implements LocationListener {
 	        	    
         			if (((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString().length() > 0){
 
-//                		if (isRamoAtividadeOk()){
+        				ramosAtividadeImovel.add(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString());
+        				ListView listRamosAtividade = (ListView)view.findViewById(R.id.listRamosAtividade);
+        				ramoAtividadeList = new MySimpleArrayAdapter(getActivity().getBaseContext());
+        				listRamosAtividade.setAdapter(ramoAtividadeList);
+        				
+        				// Hide txtEmpty se lista de ramos de atividade for maior que ZERO.
+        				if (ramosAtividadeImovel.size() > 0){
+        					((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
+        				}else{
+        					((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
+        				}
+        				
+        				ViewGroup.LayoutParams params = listRamosAtividade.getLayoutParams();
+        				params.height = (int) (33*(ramosAtividadeImovel.size())*(getResources().getDisplayMetrics().density));
+        				listRamosAtividade.setLayoutParams(params);
+        				listRamosAtividade.requestLayout();
 
-	        				ramosAtividadeImovel.add(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString());
-	     	        	    ListView listRamosAtividade = (ListView)view.findViewById(R.id.listRamosAtividade);
-	    	        	    ramoAtividadeList = new MySimpleArrayAdapter(getActivity().getBaseContext());
-	    	        	    listRamosAtividade.setAdapter(ramoAtividadeList);
-	    	       	    
-	    	        	    // Hide txtEmpty se lista de ramos de atividade for maior que ZERO.
-	    	        	    if (ramosAtividadeImovel.size() > 0){
-	    		        		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.GONE);
-	    	        	    }else{
-	    		        		((TextView)view.findViewById(R.id.txtEmpty)).setVisibility(TextView.VISIBLE);	        	    	
-	    	        	    }
-	
-	    	        	    ViewGroup.LayoutParams params = listRamosAtividade.getLayoutParams();
-	    	        	    params.height = (int) (33*(ramosAtividadeImovel.size())*(getResources().getDisplayMetrics().density));
-	    	                listRamosAtividade.setLayoutParams(params);
-	    	                listRamosAtividade.requestLayout();
-//                		}
         			}else{
             			dialogMessage = " Ramo de Atividade inválido! ";
                         showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
@@ -580,6 +595,13 @@ public class ImovelTab extends Fragment implements LocationListener {
 			return false;
 		}
 		
+		if ( ((EditText)view.findViewById(R.id.iptu)).getText().toString().length() > 0 &&
+				 ((EditText)view.findViewById(R.id.iptu)).getText().toString().length() < 31){
+				
+					dialogMessage = "Número de IPTU inválido.";
+                   showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+		}
+
 		// Verificar Categorias - pelo menos 1 categoria
 		if (!cbResidencial.isChecked() && !cbComercial.isChecked() && !cbIndustrial.isChecked() && !cbPublica.isChecked()){
 		    

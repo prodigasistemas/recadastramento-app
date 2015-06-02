@@ -365,7 +365,7 @@ public class ArquivoRetorno {
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getAnormalidadeImovelSelecionado().getData(), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getEntrevistado(), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, getImovelSelecionado().getEntrevistado(), ' '));
     	registroTipoAnormalidadeImovel.append("\n");
 
     	arquivo.append(registroTipoAnormalidadeImovel);

@@ -389,7 +389,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			getCliente().getProprietario().setCpfCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""));
 			getCliente().getProprietario().setRg(((EditText)view.findViewById(R.id.rgProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""));
 			getCliente().getProprietario().setUf(((EditText)view.findViewById(R.id.ufProprietario)).getText().toString());
-			getCliente().getProprietario().setTipoSexo(String.valueOf(((Spinner)view.findViewById(R.id.spinnerSexoProprietario)).getSelectedItemPosition()));
+			getCliente().getProprietario().setTipoSexo(getSexo(String.valueOf(((Spinner)view.findViewById(R.id.spinnerSexoProprietario)).getSelectedItemPosition())));
 			getCliente().getProprietario().setTelefone(((EditText)view.findViewById(R.id.foneProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getProprietario().setCelular(((EditText)view.findViewById(R.id.celularProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getProprietario().setEmail(((EditText)view.findViewById(R.id.emailProprietario)).getText().toString());
@@ -418,7 +418,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			getCliente().getResponsavel().setCpfCnpj(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""));
 			getCliente().getResponsavel().setRg(((EditText)view.findViewById(R.id.rgResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""));
 			getCliente().getResponsavel().setUf(((EditText)view.findViewById(R.id.ufResponsavel)).getText().toString());
-			getCliente().getResponsavel().setTipoSexo(String.valueOf(((Spinner)view.findViewById(R.id.spinnerSexoResponsavel)).getSelectedItemPosition()));
+			getCliente().getResponsavel().setTipoSexo(getSexo(String.valueOf(((Spinner)view.findViewById(R.id.spinnerSexoResponsavel)).getSelectedItemPosition())));
 			getCliente().getResponsavel().setTelefone(((EditText)view.findViewById(R.id.foneResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getResponsavel().setCelular(((EditText)view.findViewById(R.id.celularResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 			getCliente().getResponsavel().setEmail(((EditText)view.findViewById(R.id.emailResponsavel)).getText().toString());
@@ -437,7 +437,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		getCliente().getUsuario().setCpfCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""));
 		getCliente().getUsuario().setRg(((EditText)view.findViewById(R.id.rgUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""));
 		getCliente().getUsuario().setUf(((EditText)view.findViewById(R.id.ufUsuario)).getText().toString());
-		getCliente().getUsuario().setTipoSexo(String.valueOf(((Spinner)view.findViewById(R.id.spinnerSexoUsuario)).getSelectedItemPosition()));
+		getCliente().getUsuario().setTipoSexo(getSexo(String.valueOf(((Spinner)view.findViewById(R.id.spinnerSexoUsuario)).getSelectedItemPosition())));
 		getCliente().getUsuario().setTelefone(((EditText)view.findViewById(R.id.foneUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 		getCliente().getUsuario().setCelular(((EditText)view.findViewById(R.id.celularUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 		getCliente().getUsuario().setEmail(((EditText)view.findViewById(R.id.emailUsuario)).getText().toString());
@@ -1058,5 +1058,12 @@ public class ClienteTab extends Fragment implements LocationListener {
 		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_CLIENTE);
         newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
     }
+	
+	public String getSexo(String indiceSpinner) {
+		if (indiceSpinner.equals("0"))
+			return "1";
+		else
+			return "2";
+	}
 
 }

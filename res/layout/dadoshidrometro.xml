@@ -11,7 +11,7 @@ android:id="@+id/linearLayoutDadosHidrometro">
 		<TextView android:text="Capacidade (m³/h):" android:id="@+id/txtCapacidade" android:minWidth="110dp" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
 	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
 		<EditText android:id="@+id/numeroHidrometro" android:minWidth="160dp" android:maxLength="10" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters"></EditText>
 		<Spinner android:id="@+id/spinnerCapacidadeHidrometro" android:drawSelectorOnTop="true" android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
 	</LinearLayout>

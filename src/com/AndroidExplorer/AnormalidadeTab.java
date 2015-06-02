@@ -173,8 +173,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 			public void onItemSelected(AdapterView parent, View v, int position, long id){
  				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_ANORMALIDADE, ((Spinner)view.findViewById(R.id.spinnerTipoAnormalidade)).getSelectedItem().toString());
  
- 				if (codigo.compareTo(((EditText)view.findViewById(R.id.codigoAnormalidade)).getText().toString()) != 0 &&
- 					((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() != 0){
+ 				if (codigo.compareTo(((EditText)view.findViewById(R.id.codigoAnormalidade)).getText().toString()) != 0){
  					
  					consideraEventoItemSelectedListenerCodigoAnormalidade = true;  
  					codigoAnormalidade.setText(codigo);

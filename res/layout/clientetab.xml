@@ -25,27 +25,27 @@ android:orientation="vertical">
 		<TextView android:text="RG:" android:id="@+id/txtRgUsuario" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
 		<EditText android:id="@+id/cpfCnpjUsuario" android:minWidth="150dp" android:maxLength="18" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number"></EditText>
 		<EditText android:id="@+id/rgUsuario" android:maxLength="10" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number"></EditText>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3">
 		<TextView android:text="UF:" android:id="@+id/uf" android:minWidth="110dp" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 		<TextView android:text="Sexo:" android:id="@+id/sexo" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout4">
 		<EditText android:id="@+id/ufUsuario" android:minWidth="50dp" android:background="@drawable/edittext_rounded_corners" android:layout_height="wrap_content" android:drawSelectorOnTop="true" android:layout_width="wrap_content" android:maxLength="2" android:inputType="textCapCharacters"></EditText>
 		<Spinner android:id="@+id/spinnerSexoUsuario" android:minWidth="200dp" android:layout_height="wrap_content" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
 	</LinearLayout>
 	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout5">
 		<TextView android:text="Telefone:" android:id="@+id/txtTelefone" android:minWidth="150dp" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 		<TextView android:text="Celular:" android:id="@+id/txtCelular" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout6">
 		<EditText android:id="@+id/foneUsuario" android:minWidth="150dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLength="14" android:inputType="phone"></EditText>
 		<EditText android:id="@+id/celularUsuario" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLength="14" android:inputType="phone"></EditText>
 	</LinearLayout>
@@ -53,11 +53,11 @@ android:orientation="vertical">
 	<TextView android:text="E-mail:" android:id="@+id/txtEmailUsuario" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	<EditText android:id="@+id/emailUsuario" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="textEmailAddress"></EditText>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout7">
 		<TextView android:text="Usuário é proprietário do imóvel:" android:id="@+id/txtUsuarioEProprietario" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout8">
 		<RadioGroup android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" 	android:id="@+id/groupUsuarioEProprietario">
 			<RadioButton android:text="Não" android:id="@+id/radioNao" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
 			<RadioButton android:text="Sim" android:id="@+id/radioSim" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>

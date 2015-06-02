@@ -103,11 +103,11 @@ android:orientation="vertical">
 	<TextView android:text="Nº de Ocupantes:" android:id="@+id/txtNumeroOcupantes" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/numeroOcupantes" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
-		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Residencial" android:id="@+id/checkBoxResidencial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></CheckBox>
 		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2"> 
+		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout16"> 
 			<TextView android:text="R1:" android:id="@+id/txtR1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
 			<EditText android:id="@+id/economiasR1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
 			<TextView android:text=" R2:" android:id="@+id/txtR2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
@@ -119,11 +119,11 @@ android:orientation="vertical">
 		</LinearLayout>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout17" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Comercial" android:id="@+id/checkBoxComercial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
+		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasComercial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2"> 
+		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout18"> 
 			<TextView android:text="C1:" android:id="@+id/txtC1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
 			<EditText android:id="@+id/economiasC1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
 			<TextView android:text=" C2:" android:id="@+id/txtC2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
@@ -135,11 +135,11 @@ android:orientation="vertical">
 		</LinearLayout>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout19" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Pública" android:id="@+id/checkBoxPublica" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
+		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasPublica" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2"> 
+		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout20"> 
 			<TextView android:text="P1:" android:id="@+id/txtP1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
 			<EditText android:id="@+id/economiasP1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
 			<TextView android:text=" P2:" android:id="@+id/txtP2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
@@ -151,11 +151,11 @@ android:orientation="vertical">
 		</LinearLayout>
 	</LinearLayout>
 
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2" android:layout_marginTop="3dp" android:layout_marginBottom="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout21" android:layout_marginTop="3dp" android:layout_marginBottom="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Industrial" android:id="@+id/checkBoxIndustrial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
+		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasIndustrial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2"> 
+		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout22"> 
 			<TextView android:text="I1:" android:id="@+id/txtI1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
 			<EditText android:id="@+id/economiasI1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
 			<TextView android:text=" I2:" android:id="@+id/txtI2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
@@ -170,7 +170,7 @@ android:orientation="vertical">
 	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutPrincipalListaPeriodos" android:layout_marginTop="3dp" android:layout_marginRight="1dp" android:layout_marginLeft="1dp"> 
 		<TextView android:text="Ramo de Atividade:" android:id="@+id/txtRamoAtividade" android:textColor="@color/textColorYellowBackground" android:textSize="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	
-	   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15">
+	   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout23">
 			<EditText android:id="@+id/codigoRamoAtividade" android:minWidth="65dp" android:background="@drawable/edittext_rounded_corners" android:layout_weight="1" android:ellipsize="end" android:layout_width="65dp" android:layout_height="wrap_content" android:inputType="numberDecimal" android:maxLength="3"></EditText>
 			<Spinner android:id="@+id/spinnerDescricaoRamoAtividade" android:minWidth="150dp" android:layout_weight="2" android:ellipsize="end" android:layout_height="wrap_content" android:layout_width="wrap_content" android:drawSelectorOnTop="true"></Spinner>
 			<Button android:id="@+id/buttonAddRamoAtividade" android:background="@drawable/btn_add_custom" android:layout_weight="0" android:layout_width="wrap_content" android:layout_height="wrap_content"/>

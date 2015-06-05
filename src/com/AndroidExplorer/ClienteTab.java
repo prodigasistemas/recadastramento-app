@@ -7,7 +7,6 @@ import model.Cliente;
 import model.Endereco;
 import util.Constantes;
 import util.Util;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.location.Criteria;
@@ -15,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.telephony.CellLocation;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -366,6 +366,16 @@ public class ClienteTab extends Fragment implements LocationListener {
 					return false;
 				}
 			}
+		} else {
+			RadioGroup radio = ((RadioGroup)view.findViewById(R.id.groupTipoEnderecoUsuario));
+			
+			int radioSelecionado = radio.getCheckedRadioButtonId();
+			
+			if (radioSelecionado != R.id.radioComercial && radioSelecionado != R.id.radioResidencial) {
+				dialogMessage = "Tipo de endereço de usuário inválido.";
+                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+				return false;
+			}
 		}
 		return result;
 	}
@@ -374,6 +384,12 @@ public class ClienteTab extends Fragment implements LocationListener {
 		
 		if ( ((RadioGroup)view.findViewById(R.id.groupUsuarioEProprietario)).getCheckedRadioButtonId() == R.id.radioSim){
 			getCliente().setUsuarioEProprietario(String.valueOf(Constantes.SIM));
+			
+			if (((RadioGroup)view.findViewById(R.id.groupTipoEnderecoUsuario)).getCheckedRadioButtonId() == R.id.radioComercial) {
+				getCliente().setTipoEnderecoProprietario(String.valueOf(Constantes.IMOVEL_PROPRIETARIO_COMERCIAL));
+			} else if (((RadioGroup)view.findViewById(R.id.groupTipoEnderecoUsuario)).getCheckedRadioButtonId() == R.id.radioResidencial) {
+				getCliente().setTipoEnderecoProprietario(String.valueOf(Constantes.IMOVEL_PROPRIETARIO_RESIDENCIAL));
+			}
 		}else{
 			getCliente().setUsuarioEProprietario(String.valueOf(Constantes.NAO));
 
@@ -690,6 +706,9 @@ public class ClienteTab extends Fragment implements LocationListener {
 	            
             	if (checkedId == R.id.radioNao){
 		        	inflateDadosProprietario();
+		        	enableAndDisableRadioEndereco(View.GONE);
+            	} else {
+            		enableAndDisableRadioEndereco(View.VISIBLE);
             	}
             }
         });
@@ -761,6 +780,12 @@ public class ClienteTab extends Fragment implements LocationListener {
     		public void onNothingSelected(AdapterView<?> arg0) {
     		}
     	});
+	}
+	
+	public void enableAndDisableRadioEndereco(int visibility) {
+		LinearLayout linearLayoutEndereco = (LinearLayout) view.findViewById(R.id.linearLayoutTipoEnderecoUsuario);
+		
+		linearLayoutEndereco.setVisibility(visibility);
 	}
 	
 	public void inflateDadosProprietario(){

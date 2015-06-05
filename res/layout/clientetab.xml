@@ -63,10 +63,21 @@ android:orientation="vertical">
 			<RadioButton android:text="Sim" android:id="@+id/radioSim" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
 		</RadioGroup>
 	</LinearLayout>
+	
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayoutTextoTipoEnderecoUsuario">
+		<TextView android:text="Tipo de endereço do proprietário:" android:id="@+id/txtTipoEnderecoUsuario" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	</LinearLayout>
+	
+	<LinearLayout     android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutTipoEnderecoUsuario">
+	    <RadioGroup android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" 	android:id="@+id/groupTipoEnderecoUsuario">
+			<RadioButton android:text="Residencial" android:id="@+id/radioResidencial" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
+			<RadioButton android:text="Comercial" android:id="@+id/radioComercial" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
+		</RadioGroup>
+	</LinearLayout>
 
 	<LinearLayout     android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutUsuarioEProprietario">
 	</LinearLayout>
-
+	
 	<TextView android:text="Responsável pelo Pagamento:" android:id="@+id/responsavelPagamento" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerDefineResponsavel" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
 	

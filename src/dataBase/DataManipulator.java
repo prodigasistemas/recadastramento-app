@@ -637,7 +637,7 @@ public List<String> selectEnderecoImoveis(String condition){
 																					 "comentario", 
 																					 "path_image_1", 
 																					 "path_image_2", 
-																					 "data"}, "id = " + id, null, null, null,  "codigo_anormalidade asc");
+																					 "data"}, "id=?", new String[] {String.valueOf(id)}, null, null,  "codigo_anormalidade asc");
         
 		if (cursor != null){
         	

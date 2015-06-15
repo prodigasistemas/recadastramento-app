@@ -175,12 +175,19 @@ public class ServicosTab extends Fragment{
 	            		ligacaoAguaOk = true;
 	    			}
 	
-	    			if (ligacaoAguaOk){
-    					updateServicoSelecionado();
-    					getServicos().setTabSaved(true);
-    					Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso.", 5).show();
-	            	}
 	            }
+				
+				if (((Spinner)view.findViewById(R.id.spinnerLocalizacaoPontoServico)).getSelectedItemPosition() == 0) {
+                    dialogMessage = "Por favor, informe a localização do ponto de serviço.";
+                    showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+                    ligacaoAguaOk = false;
+                }
+
+                if (ligacaoAguaOk){
+                    updateServicoSelecionado();
+                    getServicos().setTabSaved(true);
+                    Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso.", 5).show();
+                }
             }
         });
 	}

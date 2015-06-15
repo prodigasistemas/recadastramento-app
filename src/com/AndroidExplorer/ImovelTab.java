@@ -717,10 +717,10 @@ public class ImovelTab extends Fragment implements LocationListener {
 	public void updateImovelSelecionado(){
 		
 		if (getImovel().getImovelStatus() == Constantes.IMOVEL_NOVO) {
-			ArrayList<Integer> listStatus = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
-	        int qtdImoveisNovos = listStatus.get(Constantes.IMOVEL_NOVO);
-			getImovel().setMatricula(""+(qtdImoveisNovos == 0 ? 1 : qtdImoveisNovos+1));
-			
+//			ArrayList<Integer> listStatus = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
+//	        int qtdImoveisNovos = listStatus.get(Constantes.IMOVEL_NOVO);
+//			getImovel().setMatricula(""+(qtdImoveisNovos == 0 ? 1 : qtdImoveisNovos+1));
+			getImovel().setMatricula("-1");
 		} else {
 			getImovel().setMatricula(((EditText)view.findViewById(R.id.matricula)).getText().toString());
 		}

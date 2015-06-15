@@ -537,17 +537,17 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
     	// Somente verifica as outras tabs se não houver nenhuma anormalidade.
 		if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() == 0) {
     	
-			if ( Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR ||
-				 Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
+//			if ( Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR ||
+//				 Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
 				
 				if ( !Controlador.getInstancia().getClienteSelecionado().isTabSaved() ||
 		        	 !Controlador.getInstancia().getImovelSelecionado().isTabSaved()  ||
-		        	 !Controlador.getInstancia().getClienteSelecionado().isTabSaved() ||
-		        	 !Controlador.getInstancia().getClienteSelecionado().isTabSaved() ){
+		        	 !Controlador.getInstancia().getServicosSelecionado().isTabSaved() ||
+		        	 !Controlador.getInstancia().getMedidorSelecionado().isTabSaved() ){
 		    	
 		    		result = false;
 		    	}
-			}
+//			}
     	}
 		return result;
 	}

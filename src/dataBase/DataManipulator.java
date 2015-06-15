@@ -661,6 +661,45 @@ public List<String> selectEnderecoImoveis(String condition){
     		getAnormalidadeImovelSelecionado().setComentario("");
         }
 	}
+	
+	public AnormalidadeImovel selectAnormalidadeImovel(String matricula){
+
+        AnormalidadeImovel anormalidadeImovel = new AnormalidadeImovel();
+
+        ArrayList<String> list = new ArrayList<String>();
+        Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] {"latitude",
+                "longitude",
+                "codigo_anormalidade",
+                "comentario",
+                "path_image_1",
+                "path_image_2",
+                "data",
+                "matricula"}, "matricula=?", new String[] {matricula}, null, null,  "codigo_anormalidade asc");
+
+        if (cursor != null){
+
+            if (cursor.moveToFirst()) {
+                anormalidadeImovel.setLatitude(cursor.getString(0));
+                anormalidadeImovel.setLongitude(cursor.getString(1));
+                anormalidadeImovel.setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
+                anormalidadeImovel.setComentario(cursor.getString(3));
+                anormalidadeImovel.setFoto1(cursor.getString(4));
+                anormalidadeImovel.setFoto2(cursor.getString(5));
+                anormalidadeImovel.setData(cursor.getString(6));
+                anormalidadeImovel.setMatricula(Integer.parseInt(cursor.getString(7)));
+
+                Controlador.getInstancia().setAnormalidadeImovelSelecionado(anormalidadeImovel);
+            }
+
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            cursor.close();
+
+        }
+
+        return anormalidadeImovel;
+    }
                 
 	public void selectGeral(){
                 	
@@ -1401,10 +1440,12 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("longitude", getAnormalidadeImovelSelecionado().getLongitude());
    	   initialValues.put("data", getAnormalidadeImovelSelecionado().getData());
 
+   	   AnormalidadeImovel anormalidadeImovel = selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
+
 	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
-		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-   		   
+	   if (anormalidadeImovel.getMatricula() == getImovelSelecionado().getMatricula()){
+		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String []{String.valueOf(anormalidadeImovel.getMatricula())});
+		   
 	   }else{
 		   Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
 	   }

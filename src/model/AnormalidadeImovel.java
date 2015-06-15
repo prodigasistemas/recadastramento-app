@@ -5,6 +5,7 @@ import util.Util;
 public class AnormalidadeImovel {
 
 	private int codigoAnormalidade;
+	private int matricula;
 	private String descricaoAnormalidade;
 	private String comentario;
 	private String foto1;
@@ -97,5 +98,13 @@ public class AnormalidadeImovel {
 	public boolean isTabSaved(){
 		return tabSaved;
 	}
+	
+    public int getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(int matricula) {
+        this.matricula = matricula;
+    }
 
 }

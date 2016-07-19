@@ -49,6 +49,8 @@ public class ImovelTab extends Fragment implements LocationListener {
 	private ArrayList<String> ramosAtividadeImovel;
 	private List<String> listRamosAtividade;
 	private List<String> listFonteAbastecimento;
+	private List<String> listClasseSocial;
+	private List<String> listTipo;
 	private List<String> listTiposLogradouroImovel;
 	private String dialogMessage = null;
 	public LocationManager mLocManager;
@@ -300,6 +302,33 @@ public class ImovelTab extends Fragment implements LocationListener {
 	        }
 		}
 		
+		Spinner spinnerClasseSocial = (Spinner) view.findViewById(R.id.spinnerClasseSocial);
+
+        listClasseSocial = new ArrayList<String>();
+        listClasseSocial.add(0, "");
+        listClasseSocial.add(1, "Alta");
+        listClasseSocial.add(2, "Média");
+        listClasseSocial.add(3, "Baixa");
+        listClasseSocial.add(4, "Sub");
+
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listClasseSocial);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerClasseSocial.setAdapter(adapter);
+		
+        
+        Spinner spinnerTipo = (Spinner) view.findViewById(R.id.spinnerTipo);
+
+        listTipo = new ArrayList<String>();
+        listTipo.add(0, "");
+        listTipo.add(1, "Dormitório");
+        listTipo.add(2, "Morada");
+        listTipo.add(3, "Veraneio");
+        listTipo.add(4, "Outros");
+
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listTipo);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTipo.setAdapter(adapter);
+        
     	populateImovel();
     	if (Util.allowPopulateDados()){
     		populateCategorias();
@@ -990,7 +1019,12 @@ public class ImovelTab extends Fragment implements LocationListener {
         // Numero Ocupantes
         if (getImovel().getNumeroOcupantes() != Constantes.NULO_INT){
         	((EditText)(view.findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
-        }		
+        }	
+        
+        ((EditText)(view.findViewById(R.id.numeroAnimais))).setText("0");
+        ((EditText)(view.findViewById(R.id.volumeCisterna))).setText("0");
+        ((EditText)(view.findViewById(R.id.volumePiscina))).setText("0");
+        ((EditText)(view.findViewById(R.id.volumeCaixaDagua))).setText("0");
 	}
 
 	public void populateSubCategoriasResidenciais(){

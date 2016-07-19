@@ -90,6 +90,22 @@ android:orientation="vertical">
 		<EditText android:id="@+id/municipio" android:focusable="false" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="15"></EditText>
 		<EditText android:id="@+id/codMunicipio" android:focusable="false" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="8"></EditText>
 	</LinearLayout>
+	
+	<TextView android:text="Classe Social:" android:id="@+id/txtClasseSocial" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
+	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerClasseSocial" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
+	
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout77">
+		<TextView android:text="Área Construída:" android:id="@+id/txtAreaConstruida" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	</LinearLayout>
+	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout88">
+		<RadioGroup android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" 	android:id="@+id/groupUsuarioEProprietario">
+			<RadioButton android:text="Menor 200Mtr" android:id="@+id/radioMenor200" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
+			<RadioButton android:text="Maior 200Mtr" android:id="@+id/radioMaior200" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
+		</RadioGroup>
+	</LinearLayout>
+	
+	<TextView android:text="Tipo:" android:id="@+id/txtTipo" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
+	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerTipo" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
 
 	<TextView android:text="IPTU:" android:id="@+id/txtIptu" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
    	<EditText android:id="@+id/iptu" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
@@ -100,10 +116,13 @@ android:orientation="vertical">
 	<TextView android:text="Nº de Pontos Úteis:" android:id="@+id/txtNumeroPontosUteis" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/numeroPontosUteis" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
-	<TextView android:text="Nº de Ocupantes:" android:id="@+id/txtNumeroOcupantes" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<TextView android:text="Nº de Moradores:" android:id="@+id/txtNumeroOcupantes" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/numeroOcupantes" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
-		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+	<TextView android:text="Nº de Animais" android:id="@+id/txtNumeroAnimais" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+	<EditText android:id="@+id/numeroAnimais" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
+	
+	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Residencial" android:id="@+id/checkBoxResidencial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></CheckBox>
 		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		
@@ -166,6 +185,15 @@ android:orientation="vertical">
 			<EditText android:id="@+id/economiasI4" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
 		</LinearLayout>
 	</LinearLayout>
+	
+	<TextView android:text="Volume da Cisterna:" android:id="@+id/txtVolumeCisterna" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+   	<EditText android:id="@+id/volumeCisterna" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
+   	
+   	<TextView android:text="Volume da Piscina:" android:id="@+id/txtVolumePiscina" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+   	<EditText android:id="@+id/volumePiscina" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
+   	
+   	<TextView android:text="Volume da Caixa D'água:" android:id="@+id/txtVolumeCaixaDagua" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+   	<EditText android:id="@+id/volumeCaixaDagua" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
 	
 	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutPrincipalListaPeriodos" android:layout_marginTop="3dp" android:layout_marginRight="1dp" android:layout_marginLeft="1dp"> 
 		<TextView android:text="Ramo de Atividade:" android:id="@+id/txtRamoAtividade" android:textColor="@color/textColorYellowBackground" android:textSize="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>

@@ -113,16 +113,84 @@ android:orientation="vertical">
 	<TextView android:text="Nº UC Celpa:" android:id="@+id/txtNumeroCelpa" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	<EditText android:id="@+id/numeroCelpa" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
 
-	<TextView android:text="Nº de Pontos Úteis:" android:id="@+id/txtNumeroPontosUteis" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/numeroPontosUteis" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:orientation="vertical" >
 
-	<TextView android:text="Nº de Moradores:" android:id="@+id/txtNumeroOcupantes" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/numeroOcupantes" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
 
-	<TextView android:text="Nº de Animais Domésticos" android:id="@+id/txtNumeroAnimais" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/numeroAnimais" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
-	
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
+	    	<TextView
+	    	    android:text="Nº Pontos Úteis:"
+	    	    android:id="@+id/txtNumeroPontosUteis"
+	    	    android:textSize="15dp"
+	    	    android:textColor="@color/textColor"
+	    	    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"/>
+	    	
+			<TextView
+			    android:text="Nº Moradores:"
+			    android:id="@+id/txtNumeroOcupantes"
+			    android:textSize="15dp" 
+			    android:textColor="@color/textColor" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"/>
+			
+			<TextView 
+			    android:text="Nº Animais Domésticos" 
+			    android:id="@+id/txtNumeroAnimais" 
+			    android:textSize="15dp" 
+			    android:textColor="@color/textColor" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"/>
+		
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+
+			<EditText 
+			    android:id="@+id/numeroPontosUteis"
+			    android:background="@drawable/edittext_rounded_corners" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+			    android:inputType="number" 
+			    android:maxLength="5"/>
+			
+			<EditText 
+			    android:id="@+id/numeroOcupantes" 
+			    android:background="@drawable/edittext_rounded_corners" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+			    android:inputType="number" 
+			    android:maxLength="5"/>
+			
+			<EditText 
+			    android:id="@+id/numeroAnimais" 
+			    android:background="@drawable/edittext_rounded_corners" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+			    android:inputType="number" 
+			    android:maxLength="5"/>
+		</LinearLayout>
+
+	</LinearLayout>
+
+		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
 		<CheckBox android:text="Residencial" android:id="@+id/checkBoxResidencial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></CheckBox>
 		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
 		
@@ -186,16 +254,89 @@ android:orientation="vertical">
 		</LinearLayout>
 	</LinearLayout>
 	
-	<TextView android:text="Volume da Cisterna:" android:id="@+id/txtVolumeCisterna" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-   	<EditText android:id="@+id/volumeCisterna" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
-   	
-   	<TextView android:text="Volume da Piscina:" android:id="@+id/txtVolumePiscina" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-   	<EditText android:id="@+id/volumePiscina" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
-   	
-   	<TextView android:text="Volume da Caixa D'água:" android:id="@+id/txtVolumeCaixaDagua" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-   	<EditText android:id="@+id/volumeCaixaDagua" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:orientation="vertical" >
+
+		<TextView
+		    android:id="@+id/txtVolumes"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Volumes:"
+		    android:textColor="@color/white"
+		    android:textSize="15dp" />
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+	    	<TextView
+	    	    android:text="Cisterna:"
+	    	    android:id="@+id/txtVolumeCisterna"
+	    	    android:textSize="15dp"
+	    	    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"/>
+	    	
+			<TextView
+			    android:text="Piscina:"
+			    android:id="@+id/txtVolumePiscina"
+			    android:textSize="15dp" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"/>
+			
+			<TextView 
+			    android:text="Caixa D'água:"
+			    android:id="@+id/txtVolumeCaixaDagua"
+			    android:textSize="15dp" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"/>
+		
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+
+			<EditText 
+			    android:id="@+id/volumeCisterna"
+			    android:background="@drawable/edittext_rounded_corners" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+			    android:inputType="number" 
+			    android:maxLength="5"/>
+			
+			<EditText 
+			    android:id="@+id/volumePiscina"
+			    android:background="@drawable/edittext_rounded_corners" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+			    android:inputType="number" 
+			    android:maxLength="5"/>
+			
+			<EditText 
+			    android:id="@+id/volumeCaixaDagua"
+			    android:background="@drawable/edittext_rounded_corners" 
+			    android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+			    android:inputType="number" 
+			    android:maxLength="5"/>
+		</LinearLayout>
+
+	</LinearLayout>
 	
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutPrincipalListaPeriodos" android:layout_marginTop="3dp" android:layout_marginRight="1dp" android:layout_marginLeft="1dp"> 
+	<LinearLayout android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutPrincipalListaPeriodos" android:layout_marginTop="3dp" android:layout_marginRight="1dp" android:layout_marginLeft="1dp"> 
 		<TextView android:text="Ramo de Atividade:" android:id="@+id/txtRamoAtividade" android:textColor="@color/textColorYellowBackground" android:textSize="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 	
 	   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout23">

@@ -25,7 +25,9 @@ public class DbHelper extends SQLiteOpenHelper {
     	"sub_categoria_comercial_1 TEXT, sub_categoria_comercial_2 TEXT, sub_categoria_comercial_3 TEXT, sub_categoria_comercial_4 TEXT, " +
     	"sub_categoria_publica_1 TEXT, sub_categoria_publica_2 TEXT, sub_categoria_publica_3 TEXT, sub_categoria_publica_4 TEXT, " +
     	"sub_categoria_industrial_1 TEXT, sub_categoria_industrial_2 TEXT, sub_categoria_industrial_3 TEXT, sub_categoria_industrial_4 TEXT," +
-    	"tipo_fonte_abastecimento TEXT, imovel_status TEXT, imovel_enviado TEXT, latitude TEXT, longitude TEXT, data TEXT, entrevistado TEXT, tipo_operacao TEXT)";
+    	"tipo_fonte_abastecimento TEXT, imovel_status TEXT, imovel_enviado TEXT, latitude TEXT, longitude TEXT, data TEXT, entrevistado TEXT, tipo_operacao TEXT," +
+    	"numero_animais INTEGER, volume_piscina INTEGER, volume_cisterna INTEGER, volume_caixa_dagua INTEGER, "+
+    	"numero_criancas INTEGER, numero_adultos INTEGER, numero_alunos INTEGER, numero_caes INTEGER, numero_idosos INTEGER, numero_empregados INTEGER, numero_outros INTEGER)";
 
     private static final String DATABASE_RAMO_ATIVIDADE_IMOVEL_QUERY =
     	"CREATE TABLE ramo_atividade_imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, id_imovel INTEGER, codigo INTEGER)";
@@ -76,7 +78,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_CONFIGURACAO_QUERY =
     	"CREATE TABLE configuracao (id INTEGER PRIMARY KEY autoincrement, rota_carregada INTEGER, posicao_cadastro_selecionado INTEGER)";
-
+    
     public DbHelper(Context context) {
 		super(context, Constantes.DATABASE_NAME, null, DATABASE_VERSION);
 	}

@@ -354,6 +354,180 @@ android:orientation="vertical">
 	<TextView android:text="Fonte de Abastecimento:" android:id="@+id/txtFonteAbastecimento" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerFonteAbastecimento" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
 
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_weight="1"
+	    android:orientation="vertical" >
+
+		<TextView
+		    android:id="@+id/txtOcupacaoImovel"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Ocupação do Imóvel:"
+		    android:textColor="@color/white"
+		    android:textSize="15dp" />
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+		    <TextView
+		        android:id="@+id/txtCriancas"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="Crianças" />
+
+		    <TextView
+		        android:id="@+id/txtAdultos"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="Adultos" />
+
+		    <TextView
+		        android:id="@+id/txtAlunos"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="Alunos" />
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal" >
+
+		    <EditText
+		        android:id="@+id/numCriancas"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		    <EditText
+		        android:id="@+id/numAdultos"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		    <EditText
+		        android:id="@+id/numAlunos"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+		    <TextView
+		        android:id="@+id/txtIdosos"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="Idosos" />
+
+		    <TextView
+		        android:id="@+id/txtCaes"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="Cães" />
+
+		    <TextView
+		        android:id="@+id/txtEmpregados"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:text="Empregados" />
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+		    <EditText
+		        android:id="@+id/numIdosos"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		    <EditText
+		        android:id="@+id/numCaes"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		    <EditText
+		        android:id="@+id/numEmpregados"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+			<TextView
+			    android:id="@+id/txtOutros"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="Outros" />
+
+		</LinearLayout>
+
+		<LinearLayout
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+
+		    <EditText
+		        android:id="@+id/numOutros"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1"
+		        android:ems="10"
+		        android:inputType="number"
+		        android:maxLength="4" />
+
+		    <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1" />
+
+		    <TextView
+		        android:id="@+id/textView2"
+		        android:layout_width="0dp"
+		        android:layout_height="wrap_content"
+		        android:layout_weight="1" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+	
 	<LinearLayout     android:orientation="horizontal" android:paddingTop="5dp" android:paddingRight="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayoutPeriodo">
 		<TextView android:id="@+id/list_item_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" />
 		<Button android:id="@+id/buttonSave" android:text="  OK  " android:textColor="@color/white" android:textSize="20dp" android:background="@drawable/button_rounded_corners" android:gravity="right" android:layout_weight="0" android:layout_width="wrap_content" android:layout_height="wrap_content" />

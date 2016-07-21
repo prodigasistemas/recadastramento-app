@@ -840,6 +840,18 @@ public class ImovelTab extends Fragment implements LocationListener {
         }
     	getImovel().setData(Util.formatarData(Calendar.getInstance().getTime()));
 
+    	getImovel().setNumeroAnimais(((EditText)view.findViewById(R.id.numeroAnimais)).getText().toString());
+    	getImovel().setVolumePiscina(((EditText)view.findViewById(R.id.volumePiscina)).getText().toString());
+    	getImovel().setVolumeCisterna(((EditText)view.findViewById(R.id.volumeCisterna)).getText().toString());
+    	getImovel().setVolumeCaixaDagua(((EditText)view.findViewById(R.id.volumeCaixaDagua)).getText().toString());
+    	
+    	getImovel().getOcupacaoImovel().setCriancas(((EditText)view.findViewById(R.id.numCriancas)).getText().toString());
+    	getImovel().getOcupacaoImovel().setAdultos(((EditText)view.findViewById(R.id.numAdultos)).getText().toString());
+    	getImovel().getOcupacaoImovel().setAlunos(((EditText)view.findViewById(R.id.numAlunos)).getText().toString());
+    	getImovel().getOcupacaoImovel().setCaes(((EditText)view.findViewById(R.id.numCaes)).getText().toString());
+    	getImovel().getOcupacaoImovel().setIdosos(((EditText)view.findViewById(R.id.numIdosos)).getText().toString());
+    	getImovel().getOcupacaoImovel().setIdosos(((EditText)view.findViewById(R.id.numEmpregados)).getText().toString());
+    	getImovel().getOcupacaoImovel().setOutros(((EditText)view.findViewById(R.id.numOutros)).getText().toString());
 	}
 	
 	public static void enableEconominasResidencial(boolean enable){
@@ -1021,10 +1033,18 @@ public class ImovelTab extends Fragment implements LocationListener {
         	((EditText)(view.findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
         }	
         
-        ((EditText)(view.findViewById(R.id.numeroAnimais))).setText("0");
-        ((EditText)(view.findViewById(R.id.volumeCisterna))).setText("0");
-        ((EditText)(view.findViewById(R.id.volumePiscina))).setText("0");
-        ((EditText)(view.findViewById(R.id.volumeCaixaDagua))).setText("0");
+        ((EditText)(view.findViewById(R.id.numeroAnimais))).setText(String.valueOf(getImovel().getNumeroAnimais()));
+        ((EditText)(view.findViewById(R.id.volumeCisterna))).setText(String.valueOf(getImovel().getVolumeCisterna()));
+        ((EditText)(view.findViewById(R.id.volumePiscina))).setText(String.valueOf(getImovel().getVolumePiscina()));
+        ((EditText)(view.findViewById(R.id.volumeCaixaDagua))).setText(String.valueOf(getImovel().getVolumeCaixaDagua()));
+        
+        ((EditText) view.findViewById(R.id.numCriancas)).setText(String.valueOf(getImovel().getOcupacaoImovel().getCriancas()));
+        ((EditText) view.findViewById(R.id.numAdultos)).setText(String.valueOf(getImovel().getOcupacaoImovel().getAdultos()));
+        ((EditText) view.findViewById(R.id.numAlunos)).setText(String.valueOf(getImovel().getOcupacaoImovel().getAlunos()));
+        ((EditText) view.findViewById(R.id.numCaes)).setText(String.valueOf(getImovel().getOcupacaoImovel().getCaes()));
+        ((EditText) view.findViewById(R.id.numIdosos)).setText(String.valueOf(getImovel().getOcupacaoImovel().getIdosos()));
+        ((EditText) view.findViewById(R.id.numEmpregados)).setText(String.valueOf(getImovel().getOcupacaoImovel().getEmpregados()));
+        ((EditText) view.findViewById(R.id.numOutros)).setText(String.valueOf(getImovel().getOcupacaoImovel().getOutros()));
 	}
 
 	public void populateSubCategoriasResidenciais(){

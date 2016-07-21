@@ -602,14 +602,6 @@ public class ClienteTab extends Fragment implements LocationListener {
         if (getCliente().getUsuario().getEmail() != Constantes.NULO_STRING){
             ((EditText)(view.findViewById(R.id.emailUsuario))).setText(String.valueOf(getCliente().getUsuario().getEmail()));
         }
-        
-        ((EditText) view.findViewById(R.id.numCriancas)).setText("0");
-        ((EditText) view.findViewById(R.id.numAdultos)).setText("0");
-        ((EditText) view.findViewById(R.id.numAlunos)).setText("0");
-        ((EditText) view.findViewById(R.id.numCaes)).setText("0");
-        ((EditText) view.findViewById(R.id.numIdosos)).setText("0");
-        ((EditText) view.findViewById(R.id.numEmpregados)).setText("0");
-        ((EditText) view.findViewById(R.id.numOutros)).setText("0");
 	}
 		
 	public void populateResponsavel(){

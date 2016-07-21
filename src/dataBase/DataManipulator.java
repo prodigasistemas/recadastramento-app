@@ -517,7 +517,18 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"longitude",
 														        		"data",
 														        		"entrevistado",
-														        		"tipo_operacao"}, "id = " + id, null, null, null,  "inscricao asc");
+														        		"tipo_operacao",
+														        		"numero_animais",
+														        		"volume_piscina",
+														        		"volume_cisterna",
+														        		"volume_caixa_dagua",
+														        		"numero_criancas",
+														        		"numero_adultos",
+														        		"numero_alunos",
+														        		"numero_caes",
+														        		"numero_idosos",
+														        		"numero_empregados",
+														        		"numero_outros"}, "id = " + id, null, null, null,  "inscricao asc");
  
         if (cursor.moveToFirst()) {
         	getImovelSelecionado().setImovelId(id);
@@ -568,6 +579,19 @@ public List<String> selectEnderecoImoveis(String condition){
         	getImovelSelecionado().setOperacoTipo(Integer.valueOf(cursor.getString(41)));
        	
         	getImovelSelecionado().setListaRamoAtividade(selectRamoAtividadeImovel(id));
+        	
+        	getImovelSelecionado().setNumeroAnimais(cursor.getString(cursor.getColumnIndex("numero_animais")));
+        	getImovelSelecionado().setVolumePiscina(cursor.getString(cursor.getColumnIndex("volume_piscina")));
+        	getImovelSelecionado().setVolumeCisterna(cursor.getString(cursor.getColumnIndex("volume_cisterna")));
+        	getImovelSelecionado().setVolumeCaixaDagua(cursor.getString(cursor.getColumnIndex("volume_caixa_dagua")));
+        	
+        	getImovelSelecionado().getOcupacaoImovel().setCriancas(cursor.getString(cursor.getColumnIndex("numero_criancas")));
+        	getImovelSelecionado().getOcupacaoImovel().setAdultos(cursor.getString(cursor.getColumnIndex("numero_adultos")));
+        	getImovelSelecionado().getOcupacaoImovel().setAlunos(cursor.getString(cursor.getColumnIndex("numero_alunos")));
+        	getImovelSelecionado().getOcupacaoImovel().setCaes(cursor.getString(cursor.getColumnIndex("numero_caes")));
+        	getImovelSelecionado().getOcupacaoImovel().setIdosos(cursor.getString(cursor.getColumnIndex("numero_idosos")));
+        	getImovelSelecionado().getOcupacaoImovel().setEmpregados(cursor.getString(cursor.getColumnIndex("numero_empregados")));
+        	getImovelSelecionado().getOcupacaoImovel().setOutros(cursor.getString(cursor.getColumnIndex("numero_outros")));
         }
 
         if (cursor != null && !cursor.isClosed()) {
@@ -1365,6 +1389,20 @@ public List<String> selectEnderecoImoveis(String condition){
    	   initialValues.put("data", getImovelSelecionado().getData());
    	   initialValues.put("entrevistado", getImovelSelecionado().getEntrevistado());
    	   initialValues.put("tipo_operacao", getImovelSelecionado().getOperacaoTipo());
+   	   
+   	   //novos campos de cadastramento
+   	   initialValues.put("numero_animais", getImovelSelecionado().getNumeroAnimais());
+	   initialValues.put("volume_piscina", getImovelSelecionado().getVolumePiscina());
+	   initialValues.put("volume_cisterna", getImovelSelecionado().getVolumeCisterna());
+	   initialValues.put("volume_caixa_dagua", getImovelSelecionado().getVolumeCaixaDagua());
+	   
+	   initialValues.put("numero_criancas", getImovelSelecionado().getOcupacaoImovel().getCriancas());
+	   initialValues.put("numero_adultos", getImovelSelecionado().getOcupacaoImovel().getAdultos());
+	   initialValues.put("numero_alunos", getImovelSelecionado().getOcupacaoImovel().getAlunos());
+	   initialValues.put("numero_caes", getImovelSelecionado().getOcupacaoImovel().getCaes());
+	   initialValues.put("numero_idosos", getImovelSelecionado().getOcupacaoImovel().getIdosos());
+	   initialValues.put("numero_empregados", getImovelSelecionado().getOcupacaoImovel().getEmpregados());
+	   initialValues.put("numero_outros", getImovelSelecionado().getOcupacaoImovel().getOutros());
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
 	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){

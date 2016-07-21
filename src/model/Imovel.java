@@ -2,6 +2,10 @@ package model;
 
 import java.util.ArrayList;
 
+import android.widget.EditText;
+
+import com.AndroidExplorer.R;
+
 import util.Constantes;
 import util.Util;
 
@@ -13,6 +17,7 @@ public class Imovel {
 	private Categoria categoriaPublica;
 	private Categoria categoriaIndustrial;
 	private Endereco enderecoImovel;
+	private Ocupacao ocupacaoImovel;
 
 	private int codigoCliente;
     private int matricula;
@@ -40,7 +45,11 @@ public class Imovel {
 	private String data;
 	private int operacaoTipo;
 	private String entrevistado;
-
+	
+	private int numeroAnimais;
+    private int volumeCisterna;
+    private int volumePiscina;
+    private int volumeCaixaDagua;
     
     public Imovel() {
     	operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
@@ -71,11 +80,17 @@ public class Imovel {
     	categoriaComercial = new Categoria();
     	categoriaPublica = new Categoria();
     	categoriaIndustrial = new Categoria();
+    	ocupacaoImovel = new Ocupacao();
 
 		latitude = 0;
 		longitude = 0;
 		data = "";
 		entrevistado = "";
+		
+		numeroAnimais = 0;
+		volumePiscina = 0;
+		volumeCisterna = 0;
+		volumeCaixaDagua = 0;
     }
     
     public void setOperacoTipo(int operacaoTipo){
@@ -338,6 +353,42 @@ public class Imovel {
 
 	public boolean isTabSaved(){
 		return tabSaved;
+	}
+	
+	public Ocupacao getOcupacaoImovel(){
+		return this.ocupacaoImovel;
+	}
+
+	public int getNumeroAnimais() {
+		return numeroAnimais;
+	}
+
+	public void setNumeroAnimais(String numeroAnimais) {
+		this.numeroAnimais = Util.verificarNuloInt(numeroAnimais);
+	}
+
+	public int getVolumeCisterna() {
+		return volumeCisterna;
+	}
+
+	public void setVolumeCisterna(String volumeCisterna) {
+		this.volumeCisterna = Util.verificarNuloInt(volumeCisterna);
+	}
+
+	public int getVolumePiscina() {
+		return volumePiscina;
+	}
+
+	public void setVolumePiscina(String volumePiscina) {
+		this.volumePiscina = Util.verificarNuloInt(volumePiscina);
+	}
+
+	public int getVolumeCaixaDagua() {
+		return volumeCaixaDagua;
+	}
+
+	public void setVolumeCaixaDagua(String volumeCaixaDagua) {
+		this.volumeCaixaDagua = Util.verificarNuloInt(volumeCaixaDagua);
 	}
 
 	// Verifica se o imovel possui uma economia ou mais da categoria desejada

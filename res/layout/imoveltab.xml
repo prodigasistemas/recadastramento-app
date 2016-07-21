@@ -94,19 +94,29 @@ android:orientation="vertical">
 	<TextView android:text="Classe Social:" android:id="@+id/txtClasseSocial" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerClasseSocial" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
 	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout77">
+	<LinearLayout
+	    android:id="@+id/linearLayout77"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+
 		<TextView android:text="Área Construída:" android:id="@+id/txtAreaConstruida" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout88">
-		<RadioGroup android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" 	android:id="@+id/groupUsuarioEProprietario">
-			<RadioButton android:text="Menor 200Mtr" android:id="@+id/radioMenor200" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-			<RadioButton android:text="Maior 200Mtr" android:id="@+id/radioMaior200" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-		</RadioGroup>
+
+		<EditText
+		    android:id="@+id/valorAreaConstruida"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:ems="10"
+		    android:inputType="numberDecimal" />
+
 	</LinearLayout>
 	
 	<TextView android:text="Tipo:" android:id="@+id/txtTipo" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
 	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerTipo" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
 
+	<TextView android:text="Acesso ao hidrômetro:" android:id="@+id/txtAcessoHidrometro" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
+	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerAcessoHidrometro" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
+	
 	<TextView android:text="IPTU:" android:id="@+id/txtIptu" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
    	<EditText android:id="@+id/iptu" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
 	
@@ -303,35 +313,36 @@ android:orientation="vertical">
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal" >
 
-			<EditText 
+			<EditText
 			    android:id="@+id/volumeCisterna"
-			    android:background="@drawable/edittext_rounded_corners" 
 			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-			    android:inputType="number" 
-			    android:maxLength="5"/>
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:background="@drawable/edittext_rounded_corners"
+			    android:ems="10"
+			    android:inputType="numberDecimal"
+			    android:maxLength="5" />
 			
-			<EditText 
+			<EditText
 			    android:id="@+id/volumePiscina"
-			    android:background="@drawable/edittext_rounded_corners" 
 			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-			    android:inputType="number" 
-			    android:maxLength="5"/>
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:background="@drawable/edittext_rounded_corners"
+			    android:ems="10"
+			    android:inputType="numberDecimal"
+			    android:maxLength="5" />
 			
-			<EditText 
+			<EditText
 			    android:id="@+id/volumeCaixaDagua"
-			    android:background="@drawable/edittext_rounded_corners" 
 			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-			    android:inputType="number" 
-			    android:maxLength="5"/>
+			    android:layout_height="wrap_content"
+			    android:layout_weight="1"
+			    android:background="@drawable/edittext_rounded_corners"
+			    android:ems="10"
+			    android:inputType="numberDecimal"
+			    android:maxLength="5" />
+
 		</LinearLayout>
 
 	</LinearLayout>

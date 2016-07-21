@@ -197,7 +197,6 @@ public final class R {
         public static final int linearLayout7=0x7f08003b;
         public static final int linearLayout77=0x7f0800d3;
         public static final int linearLayout8=0x7f08003d;
-        public static final int linearLayout88=0x7f0800d5;
         public static final int linearLayout9=0x7f08007d;
         public static final int linearLayoutConsulta=0x7f08004d;
         public static final int linearLayoutDadosHidrometro=0x7f080057;
@@ -266,8 +265,6 @@ public final class R {
         public static final int radioGroupPossuiHidrometro=0x7f080143;
         public static final int radioGroupTipoEnderecoProprietario=0x7f080086;
         public static final int radioGroupTipoEnderecoResponsavel=0x7f0800a7;
-        public static final int radioMaior200=0x7f0800d7;
-        public static final int radioMenor200=0x7f0800d6;
         public static final int radioNao=0x7f08003f;
         public static final int radioResidencial=0x7f080045;
         public static final int radioResidencialProprietario=0x7f080087;
@@ -281,6 +278,7 @@ public final class R {
         public static final int rota=0x7f0800be;
         public static final int setor=0x7f0800b5;
         public static final int sexo=0x7f08002f;
+        public static final int spinnerAcessoHidrometro=0x7f0800d9;
         public static final int spinnerCaixaProtecao=0x7f08005f;
         public static final int spinnerCapacidadeHidrometro=0x7f08005b;
         public static final int spinnerClasseSocial=0x7f0800d2;
@@ -297,7 +295,7 @@ public final class R {
         public static final int spinnerSexoProprietario=0x7f08006c;
         public static final int spinnerSexoResponsavel=0x7f080095;
         public static final int spinnerSexoUsuario=0x7f080032;
-        public static final int spinnerTipo=0x7f0800d9;
+        public static final int spinnerTipo=0x7f0800d7;
         public static final int spinnerTipoAnormalidade=0x7f080016;
         public static final int spinnerTipoLogradouroImovel=0x7f0800c1;
         public static final int spinnerTipoLogradouroProprietario=0x7f080074;
@@ -320,6 +318,7 @@ public final class R {
         public static final int tipoMedicaoRadioSim=0x7f080144;
         public static final int tipoendereco=0x7f080084;
         public static final int titulo=0x7f0800ad;
+        public static final int txtAcessoHidrometro=0x7f0800d8;
         public static final int txtAdultos=0x7f080127;
         public static final int txtAlunos=0x7f080128;
         public static final int txtAnoMes=0x7f080159;
@@ -435,7 +434,7 @@ public final class R {
         public static final int txtTelefone=0x7f080034;
         public static final int txtTelefoneProprietario=0x7f08006d;
         public static final int txtTelefoneResponsavel=0x7f080096;
-        public static final int txtTipo=0x7f0800d8;
+        public static final int txtTipo=0x7f0800d6;
         public static final int txtTipoEnderecoUsuario=0x7f080042;
         public static final int txtTipoLogradouroImovel=0x7f0800c0;
         public static final int txtTipoLogradouroProprietario=0x7f080073;
@@ -463,6 +462,7 @@ public final class R {
         public static final int ufResponsavel=0x7f080094;
         public static final int ufUsuario=0x7f080031;
         public static final int valorAnoMesReferencia=0x7f08015a;
+        public static final int valorAreaConstruida=0x7f0800d5;
         public static final int valorGrupo=0x7f080155;
         public static final int valorLocalidade=0x7f080156;
         public static final int valorRota=0x7f080158;

@@ -51,6 +51,7 @@ public class ImovelTab extends Fragment implements LocationListener {
 	private List<String> listFonteAbastecimento;
 	private List<String> listClasseSocial;
 	private List<String> listTipo;
+	private List<String> listAcessoHidrometro;
 	private List<String> listTiposLogradouroImovel;
 	private String dialogMessage = null;
 	public LocationManager mLocManager;
@@ -317,7 +318,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 		
         
         Spinner spinnerTipo = (Spinner) view.findViewById(R.id.spinnerTipo);
-
         listTipo = new ArrayList<String>();
         listTipo.add(0, "");
         listTipo.add(1, "Dormitório");
@@ -328,6 +328,17 @@ public class ImovelTab extends Fragment implements LocationListener {
         adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listTipo);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipo.setAdapter(adapter);
+        
+        Spinner spinnerAcessoHidrometro = (Spinner) view.findViewById(R.id.spinnerAcessoHidrometro);
+        listAcessoHidrometro = new ArrayList<String>();
+        listAcessoHidrometro.add(0, "");
+        listAcessoHidrometro.add(1, "Bom");
+        listAcessoHidrometro.add(2, "Ruim");
+        listAcessoHidrometro.add(3, "Sem");
+
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listAcessoHidrometro);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAcessoHidrometro.setAdapter(adapter);
         
     	populateImovel();
     	if (Util.allowPopulateDados()){

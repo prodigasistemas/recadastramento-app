@@ -27,7 +27,7 @@ public class Ocupacao {
 	}
 
 	public void setCriancas(String criancas) {
-		this.criancas = Util.verificarNuloInt(criancas);
+		this.criancas = Util.verificarNuloIntParaZero(criancas);
 	}
 
 	public int getAdultos() {
@@ -35,7 +35,7 @@ public class Ocupacao {
 	}
 
 	public void setAdultos(String adultos) {
-		this.adultos = Util.verificarNuloInt(adultos);
+		this.adultos = Util.verificarNuloIntParaZero(adultos);
 	}
 
 	public int getAlunos() {
@@ -43,7 +43,7 @@ public class Ocupacao {
 	}
 
 	public void setAlunos(String alunos) {
-		this.alunos = Util.verificarNuloInt(alunos);
+		this.alunos = Util.verificarNuloIntParaZero(alunos);
 	}
 
 	public int getCaes() {
@@ -51,7 +51,7 @@ public class Ocupacao {
 	}
 
 	public void setCaes(String caes) {
-		this.caes = Util.verificarNuloInt(caes);
+		this.caes = Util.verificarNuloIntParaZero(caes);
 	}
 
 	public int getIdosos() {
@@ -59,7 +59,7 @@ public class Ocupacao {
 	}
 
 	public void setIdosos(String idosos) {
-		this.idosos = Util.verificarNuloInt(idosos);
+		this.idosos = Util.verificarNuloIntParaZero(idosos);
 	}
 
 	public int getEmpregados() {
@@ -67,7 +67,7 @@ public class Ocupacao {
 	}
 
 	public void setEmpregados(String empregados) {
-		this.empregados = Util.verificarNuloInt(empregados);
+		this.empregados = Util.verificarNuloIntParaZero(empregados);
 	}
 
 	public int getOutros() {
@@ -75,6 +75,6 @@ public class Ocupacao {
 	}
 
 	public void setOutros(String outros) {
-		this.outros = Util.verificarNuloInt(outros);
+		this.outros = Util.verificarNuloIntParaZero(outros);
 	}
 }

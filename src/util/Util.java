@@ -815,6 +815,14 @@ public class Util {
 		    return Integer.parseInt(valor.trim());
 		}
     }
+    
+    public static int verificarNuloIntParaZero(String valor) {
+		if (valor == null || valor.trim().equals(Constantes.NULO_STRING)) {
+		    return Integer.valueOf(0);
+		} else {
+		    return Integer.parseInt(valor.trim());
+		}
+    }
 
     /**
      * Verifica se o valor da String.trim() veio como null ou como

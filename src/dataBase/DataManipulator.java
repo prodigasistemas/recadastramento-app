@@ -518,10 +518,14 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"data",
 														        		"entrevistado",
 														        		"tipo_operacao",
+														        		"area_construida",
+														        		"classe_social",
 														        		"numero_animais",
 														        		"volume_piscina",
 														        		"volume_cisterna",
 														        		"volume_caixa_dagua",
+														        		"tipo_uso",
+														        		"acesso_hidrometro",
 														        		"numero_criancas",
 														        		"numero_adultos",
 														        		"numero_alunos",
@@ -580,10 +584,14 @@ public List<String> selectEnderecoImoveis(String condition){
        	
         	getImovelSelecionado().setListaRamoAtividade(selectRamoAtividadeImovel(id));
         	
+        	getImovelSelecionado().setAreaConstruida(cursor.getString(cursor.getColumnIndex("area_construida")));
+        	getImovelSelecionado().setClasseSocial(cursor.getString(cursor.getColumnIndex("classe_social")));
         	getImovelSelecionado().setNumeroAnimais(cursor.getString(cursor.getColumnIndex("numero_animais")));
         	getImovelSelecionado().setVolumePiscina(cursor.getString(cursor.getColumnIndex("volume_piscina")));
         	getImovelSelecionado().setVolumeCisterna(cursor.getString(cursor.getColumnIndex("volume_cisterna")));
         	getImovelSelecionado().setVolumeCaixaDagua(cursor.getString(cursor.getColumnIndex("volume_caixa_dagua")));
+        	getImovelSelecionado().setTipoUso(cursor.getString(cursor.getColumnIndex("tipo_uso")));
+        	getImovelSelecionado().setAcessoHidrometro(cursor.getString(cursor.getColumnIndex("acesso_hidrometro")));
         	
         	getImovelSelecionado().getOcupacaoImovel().setCriancas(cursor.getString(cursor.getColumnIndex("numero_criancas")));
         	getImovelSelecionado().getOcupacaoImovel().setAdultos(cursor.getString(cursor.getColumnIndex("numero_adultos")));
@@ -1053,7 +1061,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("sub_categoria_industrial_3", parser.obterDadoParser(3));
 	   initialValues.put("sub_categoria_industrial_4", parser.obterDadoParser(3));
 	   initialValues.put("tipo_fonte_abastecimento", parser.obterDadoParser(2));
-
+	   
 	   initialValues.put("imovel_status", String.valueOf(Constantes.IMOVEL_A_SALVAR));
 	   initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
 	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
@@ -1268,6 +1276,42 @@ public List<String> selectEnderecoImoveis(String condition){
 		return db.insert(Constantes.TABLE_TIPO_LOGRADOURO, null, initialValues);
 	}
 	
+	public long insertClasseSocial(String linhaArquivo){
+
+		   ParserUtil parser = new ParserUtil(linhaArquivo);
+		   parser.obterDadoParser(2);
+		   ContentValues initialValues = new ContentValues();
+		   
+		   initialValues.put("codigo", parser.obterDadoParser(2));
+		   initialValues.put("descricao", parser.obterDadoParser(20));
+
+		   return db.insert(Constantes.TABLE_CLASSE_SOCIAL, null, initialValues);
+	}
+	
+	public long insertTipoUso(String linhaArquivo){
+
+		   ParserUtil parser = new ParserUtil(linhaArquivo);
+		   parser.obterDadoParser(2);
+		   ContentValues initialValues = new ContentValues();
+		   
+		   initialValues.put("codigo", parser.obterDadoParser(2));
+		   initialValues.put("descricao", parser.obterDadoParser(20));
+
+		   return db.insert(Constantes.TABLE_TIPO_USO, null, initialValues);
+	}
+	
+	public long insertAcessoHidrometro(String linhaArquivo){
+
+		   ParserUtil parser = new ParserUtil(linhaArquivo);
+		   parser.obterDadoParser(2);
+		   ContentValues initialValues = new ContentValues();
+		   
+		   initialValues.put("codigo", parser.obterDadoParser(2));
+		   initialValues.put("descricao", parser.obterDadoParser(20));
+
+		   return db.insert(Constantes.TABLE_ACESSO_HIDROMETRO, null, initialValues);
+	}
+	
 	public void salvarCliente(){
 
 	   ContentValues initialValues = new ContentValues();
@@ -1391,10 +1435,14 @@ public List<String> selectEnderecoImoveis(String condition){
    	   initialValues.put("tipo_operacao", getImovelSelecionado().getOperacaoTipo());
    	   
    	   //novos campos de cadastramento
+   	   initialValues.put("area_construida", getImovelSelecionado().getAreaConstruida());
+   	   initialValues.put("classe_social", getImovelSelecionado().getClasseSocial());
    	   initialValues.put("numero_animais", getImovelSelecionado().getNumeroAnimais());
 	   initialValues.put("volume_piscina", getImovelSelecionado().getVolumePiscina());
 	   initialValues.put("volume_cisterna", getImovelSelecionado().getVolumeCisterna());
 	   initialValues.put("volume_caixa_dagua", getImovelSelecionado().getVolumeCaixaDagua());
+	   initialValues.put("tipo_uso", getImovelSelecionado().getTipoUso());
+	   initialValues.put("acesso_hidrometro", getImovelSelecionado().getAcessoHidrometro());
 	   
 	   initialValues.put("numero_criancas", getImovelSelecionado().getOcupacaoImovel().getCriancas());
 	   initialValues.put("numero_adultos", getImovelSelecionado().getOcupacaoImovel().getAdultos());

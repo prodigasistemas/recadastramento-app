@@ -57,7 +57,11 @@ public class ImovelTab extends Fragment implements LocationListener {
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
-
+	
+	private Spinner spinnerClasseSocial;
+	private Spinner spinnerTipoUso;
+	private Spinner spinnerAcessoHidrometro;
+	
 	private static boolean categResidencialOk = false;
 	private static boolean categComercialOk = false;
 	private static boolean categPublicaOk = false;
@@ -90,7 +94,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 	}
 
 	public void instanciate(){
-	
         /* Use the LocationManager class to obtain GPS locations */
         mLocManager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
         
@@ -303,42 +306,75 @@ public class ImovelTab extends Fragment implements LocationListener {
 	        }
 		}
 		
-		Spinner spinnerClasseSocial = (Spinner) view.findViewById(R.id.spinnerClasseSocial);
-
+		// Spinners de classe_social
+        spinnerClasseSocial = (Spinner) view.findViewById(R.id.spinnerClasseSocial);
         listClasseSocial = new ArrayList<String>();
+        listClasseSocial = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_CLASSE_SOCIAL);
         listClasseSocial.add(0, "");
-        listClasseSocial.add(1, "Alta");
-        listClasseSocial.add(2, "Média");
-        listClasseSocial.add(3, "Baixa");
-        listClasseSocial.add(4, "Sub");
-
+        
         adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listClasseSocial);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClasseSocial.setAdapter(adapter);
-		
-        
-        Spinner spinnerTipo = (Spinner) view.findViewById(R.id.spinnerTipo);
-        listTipo = new ArrayList<String>();
-        listTipo.add(0, "");
-        listTipo.add(1, "Dormitório");
-        listTipo.add(2, "Morada");
-        listTipo.add(3, "Veraneio");
-        listTipo.add(4, "Outros");
 
+        // populate classe social
+		String descricaoClasseSocial = Controlador.getInstancia().getCadastroDataManipulator().
+				selectDescricaoByCodigoFromTable(Constantes.TABLE_CLASSE_SOCIAL, String.valueOf(getImovel().getClasseSocial()));
+		if (descricaoClasseSocial != null){
+			for (int i = 0; i < listClasseSocial.size(); i++){
+	        	if (listClasseSocial.get(i).equalsIgnoreCase(descricaoClasseSocial)){
+	        		spinnerClasseSocial.setSelection(i);
+	        		break;
+	        	}else{
+	        		spinnerClasseSocial.setSelection(0);
+	        	}
+	        }
+		}
+		
+		spinnerTipoUso = (Spinner) view.findViewById(R.id.spinnerTipo);
+		listTipo = new ArrayList<String>();
+        listTipo = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_TIPO_USO);
+        listTipo.add(0, "");
+        
         adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listTipo);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTipo.setAdapter(adapter);
-        
-        Spinner spinnerAcessoHidrometro = (Spinner) view.findViewById(R.id.spinnerAcessoHidrometro);
-        listAcessoHidrometro = new ArrayList<String>();
-        listAcessoHidrometro.add(0, "");
-        listAcessoHidrometro.add(1, "Bom");
-        listAcessoHidrometro.add(2, "Ruim");
-        listAcessoHidrometro.add(3, "Sem");
+        spinnerTipoUso.setAdapter(adapter);
 
+        // populate tipo uso
+		String descricaoTipoUso = Controlador.getInstancia().getCadastroDataManipulator().
+				selectDescricaoByCodigoFromTable(Constantes.TABLE_TIPO_USO, String.valueOf(getImovel().getTipoUso()));
+		if (descricaoTipoUso != null){
+			for (int i = 0; i < listTipo.size(); i++){
+	        	if (listTipo.get(i).equalsIgnoreCase(descricaoTipoUso)){
+	        		spinnerTipoUso.setSelection(i);
+	        		break;
+	        	}else{
+	        		spinnerTipoUso.setSelection(0);
+	        	}
+	        }
+		}
+        
+		spinnerAcessoHidrometro = (Spinner) view.findViewById(R.id.spinnerAcessoHidrometro);
+		listAcessoHidrometro = new ArrayList<String>();
+		listAcessoHidrometro = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_ACESSO_HIDROMETRO);
+		listAcessoHidrometro.add(0, "");
+        
         adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listAcessoHidrometro);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAcessoHidrometro.setAdapter(adapter);
+
+        // populate acesso hidrometro
+		String descricaoAcessoHidrometro = Controlador.getInstancia().getCadastroDataManipulator().
+				selectDescricaoByCodigoFromTable(Constantes.TABLE_ACESSO_HIDROMETRO, String.valueOf(getImovel().getAcessoHidrometro()));
+		if (descricaoAcessoHidrometro != null){
+			for (int i = 0; i < listAcessoHidrometro.size(); i++){
+	        	if (listAcessoHidrometro.get(i).equalsIgnoreCase(descricaoAcessoHidrometro)){
+	        		spinnerAcessoHidrometro.setSelection(i);
+	        		break;
+	        	}else{
+	        		spinnerAcessoHidrometro.setSelection(0);
+	        	}
+	        }
+		}
         
     	populateImovel();
     	if (Util.allowPopulateDados()){
@@ -782,7 +818,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 		getImovel().setNumeroPontosUteis(((EditText)view.findViewById(R.id.numeroPontosUteis)).getText().toString());
 		getImovel().setNumeroOcupantes(((EditText)view.findViewById(R.id.numeroOcupantes)).getText().toString());
 		
-		
 		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_TIPO_LOGRADOURO, ((Spinner)view.findViewById(R.id.spinnerTipoLogradouroImovel)).getSelectedItem().toString());
     	getImovel().getEnderecoImovel().setTipoLogradouro(codigo);
 		getImovel().getEnderecoImovel().setLogradouro(((EditText)view.findViewById(R.id.logradouro)).getText().toString());
@@ -851,6 +886,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         }
     	getImovel().setData(Util.formatarData(Calendar.getInstance().getTime()));
 
+    	getImovel().setAreaConstruida(((EditText)view.findViewById(R.id.areaConstruida)).getText().toString());
     	getImovel().setNumeroAnimais(((EditText)view.findViewById(R.id.numeroAnimais)).getText().toString());
     	getImovel().setVolumePiscina(((EditText)view.findViewById(R.id.volumePiscina)).getText().toString());
     	getImovel().setVolumeCisterna(((EditText)view.findViewById(R.id.volumeCisterna)).getText().toString());
@@ -863,6 +899,10 @@ public class ImovelTab extends Fragment implements LocationListener {
     	getImovel().getOcupacaoImovel().setIdosos(((EditText)view.findViewById(R.id.numIdosos)).getText().toString());
     	getImovel().getOcupacaoImovel().setIdosos(((EditText)view.findViewById(R.id.numEmpregados)).getText().toString());
     	getImovel().getOcupacaoImovel().setOutros(((EditText)view.findViewById(R.id.numOutros)).getText().toString());
+    	
+    	getImovel().setClasseSocial(String.valueOf(((Spinner)view.findViewById(R.id.spinnerClasseSocial)).getSelectedItemId()));
+    	getImovel().setTipoUso(String.valueOf(((Spinner)view.findViewById(R.id.spinnerTipo)).getSelectedItemId()));
+    	getImovel().setAcessoHidrometro(String.valueOf(((Spinner)view.findViewById(R.id.spinnerAcessoHidrometro)).getSelectedItemId()));
 	}
 	
 	public static void enableEconominasResidencial(boolean enable){
@@ -1044,6 +1084,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         	((EditText)(view.findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
         }	
         
+        ((EditText)(view.findViewById(R.id.areaConstruida))).setText(String.valueOf(getImovel().getAreaConstruida()));
         ((EditText)(view.findViewById(R.id.numeroAnimais))).setText(String.valueOf(getImovel().getNumeroAnimais()));
         ((EditText)(view.findViewById(R.id.volumeCisterna))).setText(String.valueOf(getImovel().getVolumeCisterna()));
         ((EditText)(view.findViewById(R.id.volumePiscina))).setText(String.valueOf(getImovel().getVolumePiscina()));
@@ -1055,7 +1096,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         ((EditText) view.findViewById(R.id.numCaes)).setText(String.valueOf(getImovel().getOcupacaoImovel().getCaes()));
         ((EditText) view.findViewById(R.id.numIdosos)).setText(String.valueOf(getImovel().getOcupacaoImovel().getIdosos()));
         ((EditText) view.findViewById(R.id.numEmpregados)).setText(String.valueOf(getImovel().getOcupacaoImovel().getEmpregados()));
-        ((EditText) view.findViewById(R.id.numOutros)).setText(String.valueOf(getImovel().getOcupacaoImovel().getOutros()));
+        ((EditText) view.findViewById(R.id.numOutros)).setText(String.valueOf(getImovel().getOcupacaoImovel().getOutros()));        
 	}
 
 	public void populateSubCategoriasResidenciais(){

@@ -26,7 +26,9 @@ public class DbHelper extends SQLiteOpenHelper {
     	"sub_categoria_publica_1 TEXT, sub_categoria_publica_2 TEXT, sub_categoria_publica_3 TEXT, sub_categoria_publica_4 TEXT, " +
     	"sub_categoria_industrial_1 TEXT, sub_categoria_industrial_2 TEXT, sub_categoria_industrial_3 TEXT, sub_categoria_industrial_4 TEXT," +
     	"tipo_fonte_abastecimento TEXT, imovel_status TEXT, imovel_enviado TEXT, latitude TEXT, longitude TEXT, data TEXT, entrevistado TEXT, tipo_operacao TEXT," +
-    	"numero_animais INTEGER, volume_piscina INTEGER, volume_cisterna INTEGER, volume_caixa_dagua INTEGER, "+
+    	"area_construida DECIMAL, classe_social TEXT, numero_animais INTEGER, "+
+    	"volume_piscina DECIMAL, volume_cisterna DECIMAL, volume_caixa_dagua DECIMAL, "+
+    	"tipo_uso TEXT, acesso_hidrometro TEXT, "+
     	"numero_criancas INTEGER, numero_adultos INTEGER, numero_alunos INTEGER, numero_caes INTEGER, numero_idosos INTEGER, numero_empregados INTEGER, numero_outros INTEGER)";
 
     private static final String DATABASE_RAMO_ATIVIDADE_IMOVEL_QUERY =
@@ -79,6 +81,15 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_CONFIGURACAO_QUERY =
     	"CREATE TABLE configuracao (id INTEGER PRIMARY KEY autoincrement, rota_carregada INTEGER, posicao_cadastro_selecionado INTEGER)";
     
+    private static final String DATABASE_CLASSE_SOCIAL_QUERY =
+            "CREATE TABLE "+Constantes.TABLE_CLASSE_SOCIAL+" (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
+    
+    private static final String DATABASE_TIPO_USO_QUERY =
+            "CREATE TABLE "+Constantes.TABLE_TIPO_USO+" (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
+    
+    private static final String DATABASE_ACESSO_HIDROMETRO_QUERY =
+            "CREATE TABLE "+Constantes.TABLE_ACESSO_HIDROMETRO+" (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
+    
     public DbHelper(Context context) {
 		super(context, Constantes.DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -104,6 +115,9 @@ public class DbHelper extends SQLiteOpenHelper {
      	db.execSQL(DATABASE_TIPO_LOGRADOURO_QUERY);
      	db.execSQL(DATABASE_LOCAL_INSTALACAO_RAMAL_QUERY);
      	db.execSQL(DATABASE_CONFIGURACAO_QUERY);
+     	db.execSQL(DATABASE_CLASSE_SOCIAL_QUERY);
+     	db.execSQL(DATABASE_TIPO_USO_QUERY);
+     	db.execSQL(DATABASE_ACESSO_HIDROMETRO_QUERY);
     }
 
 	// Method is called during an upgrade of the database, e.g. if you increase the database version

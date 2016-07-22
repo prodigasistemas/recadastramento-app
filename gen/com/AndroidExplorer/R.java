@@ -100,6 +100,7 @@ public final class R {
         public static final int TextView_User=0x7f080136;
         public static final int add_lote_dialog=0x7f080002;
         public static final int adicionarNovo=0x7f080146;
+        public static final int areaConstruida=0x7f0800d5;
         public static final int bairro=0x7f0800ca;
         public static final int bairroProprietario=0x7f080081;
         public static final int bairroResponsavel=0x7f0800a5;
@@ -462,7 +463,6 @@ public final class R {
         public static final int ufResponsavel=0x7f080094;
         public static final int ufUsuario=0x7f080031;
         public static final int valorAnoMesReferencia=0x7f08015a;
-        public static final int valorAreaConstruida=0x7f0800d5;
         public static final int valorGrupo=0x7f080155;
         public static final int valorLocalidade=0x7f080156;
         public static final int valorRota=0x7f080158;

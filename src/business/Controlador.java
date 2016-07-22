@@ -325,6 +325,15 @@ public class Controlador {
 				    	
 				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOGRADOURO) {
 				    	dmCadastro.insertLogradouro(line);
+				    
+				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_CLASSE_SOCIAL) {
+				    	dmCadastro.insertClasseSocial(line);
+				    
+				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_USO) {
+				    	dmCadastro.insertTipoUso(line);
+				    
+				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_HIDROMETRO) {
+				    	dmCadastro.insertAcessoHidrometro(line);
 				    }
 				    
 				    if (linhasLidas < qtdRegistros){

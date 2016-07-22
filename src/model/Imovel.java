@@ -46,10 +46,14 @@ public class Imovel {
 	private int operacaoTipo;
 	private String entrevistado;
 	
+	private double areaConstruida;
+	private int classeSocial;
 	private int numeroAnimais;
     private int volumeCisterna;
     private int volumePiscina;
     private int volumeCaixaDagua;
+    private int tipoUso;
+    private int acessoHidrometro;
     
     public Imovel() {
     	operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
@@ -87,6 +91,9 @@ public class Imovel {
 		data = "";
 		entrevistado = "";
 		
+		classeSocial = 0;
+		
+		areaConstruida = 0;
 		numeroAnimais = 0;
 		volumePiscina = 0;
 		volumeCisterna = 0;
@@ -389,6 +396,38 @@ public class Imovel {
 
 	public void setVolumeCaixaDagua(String volumeCaixaDagua) {
 		this.volumeCaixaDagua = Util.verificarNuloInt(volumeCaixaDagua);
+	}
+
+	public double getAreaConstruida() {
+		return areaConstruida;
+	}
+
+	public void setAreaConstruida(String areaConstruida) {
+		this.areaConstruida = Util.verificarNuloDouble(areaConstruida);
+	}
+
+	public int getClasseSocial() {
+		return classeSocial;
+	}
+
+	public void setClasseSocial(String classeSocial) {
+		this.classeSocial = Util.verificarNuloInt(classeSocial);
+	}
+
+	public int getTipoUso() {
+		return tipoUso;
+	}
+
+	public void setTipoUso(String tipoUso) {
+		this.tipoUso = Util.verificarNuloInt(tipoUso);
+	}
+
+	public int getAcessoHidrometro() {
+		return acessoHidrometro;
+	}
+
+	public void setAcessoHidrometro(String acessoHidrometro) {
+		this.acessoHidrometro = Util.verificarNuloInt(acessoHidrometro);
 	}
 
 	// Verifica se o imovel possui uma economia ou mais da categoria desejada

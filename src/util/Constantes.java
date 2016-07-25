@@ -138,4 +138,7 @@ public class Constantes {
 
     public static final int ANORMALIDADE_HIDR_NAO_LOCALIZADO = 34;
     public static final int ANORMALIDADE_HIDR_SEM_IDENTIFICACAO = 35;
+    
+    //Samsung galaxy tab E
+    public static final String SAMSUNG_TAB_CODENAME = "goyavewifixtc";
 }

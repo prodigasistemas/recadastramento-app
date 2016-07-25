@@ -1178,8 +1178,11 @@ public class Util {
     }
 
     public static File getExternalStorageDirectory(){
+    	if(Build.PRODUCT.equals(Constantes.SAMSUNG_TAB_CODENAME))
+    		return new File("/mnt/sdcard/");
+    	
     	File path = null;
-
+    	
     	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
     		path = new File("/mnt/sdcard/");
     		Log.i("first External Path", "ExternalStorage :" + path.getAbsolutePath());
@@ -1192,6 +1195,7 @@ public class Util {
    	     	
             Log.i("first External Path", "ExternalStorage :" + path.getAbsolutePath());
     	}
+    	
     	return path;
     }
     

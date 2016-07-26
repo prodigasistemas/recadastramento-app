@@ -26,10 +26,11 @@ public class DbHelper extends SQLiteOpenHelper {
     	"sub_categoria_publica_1 TEXT, sub_categoria_publica_2 TEXT, sub_categoria_publica_3 TEXT, sub_categoria_publica_4 TEXT, " +
     	"sub_categoria_industrial_1 TEXT, sub_categoria_industrial_2 TEXT, sub_categoria_industrial_3 TEXT, sub_categoria_industrial_4 TEXT," +
     	"tipo_fonte_abastecimento TEXT, imovel_status TEXT, imovel_enviado TEXT, latitude TEXT, longitude TEXT, data TEXT, entrevistado TEXT, tipo_operacao TEXT," +
-    	"area_construida DECIMAL, classe_social TEXT, numero_animais INTEGER, "+
-    	"volume_piscina DECIMAL, volume_cisterna DECIMAL, volume_caixa_dagua DECIMAL, "+
+    	"area_construida TEXT, classe_social TEXT, numero_animais INTEGER, "+
+    	"volume_piscina TEXT, volume_cisterna TEXT, volume_caixa_dagua TEXT, "+
     	"tipo_uso TEXT, acesso_hidrometro TEXT, "+
-    	"numero_criancas INTEGER, numero_adultos INTEGER, numero_alunos INTEGER, numero_caes INTEGER, numero_idosos INTEGER, numero_empregados INTEGER, numero_outros INTEGER)";
+    	"numero_criancas INTEGER, numero_adultos INTEGER, numero_alunos INTEGER, numero_caes INTEGER, numero_idosos INTEGER, numero_empregados INTEGER, numero_outros INTEGER, " +
+    	"quantidade_economias_social INTEGER, quantidade_economias_outros INTEGER )";
 
     private static final String DATABASE_RAMO_ATIVIDADE_IMOVEL_QUERY =
     	"CREATE TABLE ramo_atividade_imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, id_imovel INTEGER, codigo INTEGER)";

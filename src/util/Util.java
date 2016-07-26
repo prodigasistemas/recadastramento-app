@@ -1242,4 +1242,14 @@ public class Util {
         Compress zipRetornoCompleto = new Compress(filesToZip, zipFilename);
         zipRetornoCompleto.zip();
 	}
+	
+	public static String getDecimalView(String value){
+		StringBuilder builder = new StringBuilder(value);
+		
+		return builder.insert(value.length()-2, '.').toString();
+	}
+	
+	public static String removeDecimalChar(String value){
+		return value.replace(".","");
+	}
 }

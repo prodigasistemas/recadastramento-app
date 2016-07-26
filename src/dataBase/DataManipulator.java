@@ -532,7 +532,9 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"numero_caes",
 														        		"numero_idosos",
 														        		"numero_empregados",
-														        		"numero_outros"}, "id = " + id, null, null, null,  "inscricao asc");
+														        		"numero_outros",
+														        		"quantidade_economias_social",
+														        		"quantidade_economias_outros"}, "id = " + id, null, null, null,  "inscricao asc");
  
         if (cursor.moveToFirst()) {
         	getImovelSelecionado().setImovelId(id);
@@ -600,6 +602,9 @@ public List<String> selectEnderecoImoveis(String condition){
         	getImovelSelecionado().getOcupacaoImovel().setIdosos(cursor.getString(cursor.getColumnIndex("numero_idosos")));
         	getImovelSelecionado().getOcupacaoImovel().setEmpregados(cursor.getString(cursor.getColumnIndex("numero_empregados")));
         	getImovelSelecionado().getOcupacaoImovel().setOutros(cursor.getString(cursor.getColumnIndex("numero_outros")));
+        	
+        	getImovelSelecionado().setQuantidadeEconomiasSocial(cursor.getString(cursor.getColumnIndex("quantidade_economias_social")));
+        	getImovelSelecionado().setQuantidadeEconomiasOutros(cursor.getString(cursor.getColumnIndex("quantidade_economias_outros")));
         }
 
         if (cursor != null && !cursor.isClosed()) {
@@ -1062,6 +1067,28 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("sub_categoria_industrial_4", parser.obterDadoParser(3));
 	   initialValues.put("tipo_fonte_abastecimento", parser.obterDadoParser(2));
 	   
+	   initialValues.put("area_construida", parser.obterDadoParser(10));
+	   initialValues.put("classe_social", parser.obterDadoParser(1));
+	   initialValues.put("numero_animais", parser.obterDadoParser(4));
+	   
+	   initialValues.put("volume_cisterna", parser.obterDadoParser(7));
+	   initialValues.put("volume_piscina", parser.obterDadoParser(7));
+	   initialValues.put("volume_caixa_dagua", parser.obterDadoParser(7));
+	   
+	   initialValues.put("tipo_uso", parser.obterDadoParser(1));
+	   initialValues.put("acesso_hidrometro", parser.obterDadoParser(1));
+	   
+	   initialValues.put("numero_criancas", parser.obterDadoParser(4));
+	   initialValues.put("numero_adultos", parser.obterDadoParser(4));
+	   initialValues.put("numero_idosos", parser.obterDadoParser(4));
+	   initialValues.put("numero_empregados", parser.obterDadoParser(4));
+	   initialValues.put("numero_alunos", parser.obterDadoParser(4));
+	   initialValues.put("numero_caes", parser.obterDadoParser(4));
+	   initialValues.put("numero_outros", parser.obterDadoParser(4));
+	   
+	   initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
+	   initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
+	   
 	   initialValues.put("imovel_status", String.valueOf(Constantes.IMOVEL_A_SALVAR));
 	   initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
 	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
@@ -1451,6 +1478,9 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("numero_idosos", getImovelSelecionado().getOcupacaoImovel().getIdosos());
 	   initialValues.put("numero_empregados", getImovelSelecionado().getOcupacaoImovel().getEmpregados());
 	   initialValues.put("numero_outros", getImovelSelecionado().getOcupacaoImovel().getOutros());
+	   
+	   initialValues.put("quantidade_economias_social", getImovelSelecionado().getQuantidadeEconomiasSocial());
+	   initialValues.put("quantidade_economias_outros", getImovelSelecionado().getQuantidadeEconomiasOutros());
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
 	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){

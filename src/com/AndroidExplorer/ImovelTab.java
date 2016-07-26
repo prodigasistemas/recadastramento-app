@@ -1,5 +1,6 @@
 package com.AndroidExplorer;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -886,11 +887,11 @@ public class ImovelTab extends Fragment implements LocationListener {
         }
     	getImovel().setData(Util.formatarData(Calendar.getInstance().getTime()));
 
-    	getImovel().setAreaConstruida(((EditText)view.findViewById(R.id.areaConstruida)).getText().toString());
+    	getImovel().setAreaConstruida(Util.removeDecimalChar(((EditText)view.findViewById(R.id.areaConstruida)).getText().toString()));
     	getImovel().setNumeroAnimais(((EditText)view.findViewById(R.id.numeroAnimais)).getText().toString());
-    	getImovel().setVolumePiscina(((EditText)view.findViewById(R.id.volumePiscina)).getText().toString());
-    	getImovel().setVolumeCisterna(((EditText)view.findViewById(R.id.volumeCisterna)).getText().toString());
-    	getImovel().setVolumeCaixaDagua(((EditText)view.findViewById(R.id.volumeCaixaDagua)).getText().toString());
+    	getImovel().setVolumePiscina(Util.removeDecimalChar(((EditText)view.findViewById(R.id.volumePiscina)).getText().toString()));
+    	getImovel().setVolumeCisterna(Util.removeDecimalChar(((EditText)view.findViewById(R.id.volumeCisterna)).getText().toString()));
+    	getImovel().setVolumeCaixaDagua(Util.removeDecimalChar(((EditText)view.findViewById(R.id.volumeCaixaDagua)).getText().toString()));
     	
     	getImovel().getOcupacaoImovel().setCriancas(((EditText)view.findViewById(R.id.numCriancas)).getText().toString());
     	getImovel().getOcupacaoImovel().setAdultos(((EditText)view.findViewById(R.id.numAdultos)).getText().toString());
@@ -903,6 +904,9 @@ public class ImovelTab extends Fragment implements LocationListener {
     	getImovel().setClasseSocial(String.valueOf(((Spinner)view.findViewById(R.id.spinnerClasseSocial)).getSelectedItemId()));
     	getImovel().setTipoUso(String.valueOf(((Spinner)view.findViewById(R.id.spinnerTipo)).getSelectedItemId()));
     	getImovel().setAcessoHidrometro(String.valueOf(((Spinner)view.findViewById(R.id.spinnerAcessoHidrometro)).getSelectedItemId()));
+    	
+    	getImovel().setQuantidadeEconomiasSocial(((EditText)view.findViewById(R.id.quantidadeEconomiasSocial)).getText().toString());
+    	getImovel().setQuantidadeEconomiasOutros(((EditText)view.findViewById(R.id.quantidadeEconomiasOutros)).getText().toString());
 	}
 	
 	public static void enableEconominasResidencial(boolean enable){
@@ -1082,13 +1086,13 @@ public class ImovelTab extends Fragment implements LocationListener {
         // Numero Ocupantes
         if (getImovel().getNumeroOcupantes() != Constantes.NULO_INT){
         	((EditText)(view.findViewById(R.id.numeroOcupantes))).setText(String.valueOf(getImovel().getNumeroOcupantes()));
-        }	
+        }
         
-        ((EditText)(view.findViewById(R.id.areaConstruida))).setText(String.valueOf(getImovel().getAreaConstruida()));
+        ((EditText)(view.findViewById(R.id.areaConstruida))).setText(Util.getDecimalView(getImovel().getAreaConstruida()));
         ((EditText)(view.findViewById(R.id.numeroAnimais))).setText(String.valueOf(getImovel().getNumeroAnimais()));
-        ((EditText)(view.findViewById(R.id.volumeCisterna))).setText(String.valueOf(getImovel().getVolumeCisterna()));
-        ((EditText)(view.findViewById(R.id.volumePiscina))).setText(String.valueOf(getImovel().getVolumePiscina()));
-        ((EditText)(view.findViewById(R.id.volumeCaixaDagua))).setText(String.valueOf(getImovel().getVolumeCaixaDagua()));
+        ((EditText)(view.findViewById(R.id.volumeCisterna))).setText(Util.getDecimalView(getImovel().getVolumeCisterna()));
+        ((EditText)(view.findViewById(R.id.volumePiscina))).setText(Util.getDecimalView(getImovel().getVolumePiscina()));
+        ((EditText)(view.findViewById(R.id.volumeCaixaDagua))).setText(Util.getDecimalView(getImovel().getVolumeCaixaDagua()));
         
         ((EditText) view.findViewById(R.id.numCriancas)).setText(String.valueOf(getImovel().getOcupacaoImovel().getCriancas()));
         ((EditText) view.findViewById(R.id.numAdultos)).setText(String.valueOf(getImovel().getOcupacaoImovel().getAdultos()));
@@ -1096,7 +1100,10 @@ public class ImovelTab extends Fragment implements LocationListener {
         ((EditText) view.findViewById(R.id.numCaes)).setText(String.valueOf(getImovel().getOcupacaoImovel().getCaes()));
         ((EditText) view.findViewById(R.id.numIdosos)).setText(String.valueOf(getImovel().getOcupacaoImovel().getIdosos()));
         ((EditText) view.findViewById(R.id.numEmpregados)).setText(String.valueOf(getImovel().getOcupacaoImovel().getEmpregados()));
-        ((EditText) view.findViewById(R.id.numOutros)).setText(String.valueOf(getImovel().getOcupacaoImovel().getOutros()));        
+        ((EditText) view.findViewById(R.id.numOutros)).setText(String.valueOf(getImovel().getOcupacaoImovel().getOutros()));      
+        
+        ((EditText) view.findViewById(R.id.quantidadeEconomiasSocial)).setText(String.valueOf(getImovel().getQuantidadeEconomiasSocial()));      
+        ((EditText) view.findViewById(R.id.quantidadeEconomiasOutros)).setText(String.valueOf(getImovel().getQuantidadeEconomiasOutros()));      
 	}
 
 	public void populateSubCategoriasResidenciais(){

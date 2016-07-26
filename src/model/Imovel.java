@@ -46,14 +46,17 @@ public class Imovel {
 	private int operacaoTipo;
 	private String entrevistado;
 	
-	private double areaConstruida;
+	private String areaConstruida;
 	private int classeSocial;
 	private int numeroAnimais;
-    private int volumeCisterna;
-    private int volumePiscina;
-    private int volumeCaixaDagua;
+    private String volumeCisterna;
+    private String volumePiscina;
+    private String volumeCaixaDagua;
     private int tipoUso;
     private int acessoHidrometro;
+    
+    private int quantidadeEconomiasSocial;
+    private int quantidadeEconomiasOutros;
     
     public Imovel() {
     	operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
@@ -93,11 +96,14 @@ public class Imovel {
 		
 		classeSocial = 0;
 		
-		areaConstruida = 0;
+		areaConstruida = "0";
 		numeroAnimais = 0;
-		volumePiscina = 0;
-		volumeCisterna = 0;
-		volumeCaixaDagua = 0;
+		volumePiscina = "0";
+		volumeCisterna = "0";
+		volumeCaixaDagua = "0";
+		
+		quantidadeEconomiasSocial = 0;
+	    quantidadeEconomiasOutros = 0;
     }
     
     public void setOperacoTipo(int operacaoTipo){
@@ -374,36 +380,28 @@ public class Imovel {
 		this.numeroAnimais = Util.verificarNuloInt(numeroAnimais);
 	}
 
-	public int getVolumeCisterna() {
+	public String getVolumeCisterna() {
 		return volumeCisterna;
 	}
 
 	public void setVolumeCisterna(String volumeCisterna) {
-		this.volumeCisterna = Util.verificarNuloInt(volumeCisterna);
+		this.volumeCisterna = volumeCisterna;
 	}
 
-	public int getVolumePiscina() {
+	public String getVolumePiscina() {
 		return volumePiscina;
 	}
 
 	public void setVolumePiscina(String volumePiscina) {
-		this.volumePiscina = Util.verificarNuloInt(volumePiscina);
+		this.volumePiscina = volumePiscina;
 	}
 
-	public int getVolumeCaixaDagua() {
+	public String getVolumeCaixaDagua() {
 		return volumeCaixaDagua;
 	}
 
 	public void setVolumeCaixaDagua(String volumeCaixaDagua) {
-		this.volumeCaixaDagua = Util.verificarNuloInt(volumeCaixaDagua);
-	}
-
-	public double getAreaConstruida() {
-		return areaConstruida;
-	}
-
-	public void setAreaConstruida(String areaConstruida) {
-		this.areaConstruida = Util.verificarNuloDouble(areaConstruida);
+		this.volumeCaixaDagua = volumeCaixaDagua;
 	}
 
 	public int getClasseSocial() {
@@ -428,6 +426,30 @@ public class Imovel {
 
 	public void setAcessoHidrometro(String acessoHidrometro) {
 		this.acessoHidrometro = Util.verificarNuloInt(acessoHidrometro);
+	}
+
+	public int getQuantidadeEconomiasSocial() {
+		return quantidadeEconomiasSocial;
+	}
+
+	public void setQuantidadeEconomiasSocial(String quantidadeEconomiasSocial) {
+		this.quantidadeEconomiasSocial = Util.verificarNuloIntParaZero(quantidadeEconomiasSocial);
+	}
+
+	public int getQuantidadeEconomiasOutros() {
+		return quantidadeEconomiasOutros;
+	}
+
+	public void setQuantidadeEconomiasOutros(String quantidadeEconomiasOutros) {
+		this.quantidadeEconomiasOutros = Util.verificarNuloIntParaZero(quantidadeEconomiasOutros);
+	}
+
+	public String getAreaConstruida() {
+		return areaConstruida;
+	}
+
+	public void setAreaConstruida(String areaConstruida) {
+		this.areaConstruida = areaConstruida;
 	}
 
 	// Verifica se o imovel possui uma economia ou mais da categoria desejada

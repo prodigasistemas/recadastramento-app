@@ -296,6 +296,27 @@ public class ArquivoRetorno {
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4())));
 
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, ""+getImovelSelecionado().getTipoFonteAbastecimento()));
+	   	
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(10, getImovelSelecionado().getAreaConstruida()));
+	   	registrosTipoImovel.append(getImovelSelecionado().getClasseSocial());
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getNumeroAnimais())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumeCisterna()));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumePiscina()));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumeCaixaDagua()));
+	   	registrosTipoImovel.append(getImovelSelecionado().getTipoUso());
+	   	registrosTipoImovel.append(getImovelSelecionado().getAcessoHidrometro());
+	   	
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCriancas())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getAdultos())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getIdosos())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getEmpregados())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getAlunos())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCaes())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getOutros())));
+	   	
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasSocial())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasOutros())));
+	   	
 	   	registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLatitude() : " "), ' '));
     	registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLongitude() : " "), ' '));
     	registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));

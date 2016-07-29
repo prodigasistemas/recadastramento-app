@@ -94,13 +94,13 @@ public class Imovel {
 		data = "";
 		entrevistado = "";
 		
-		classeSocial = 0;
+		areaConstruida = "0000000000";
 		
-		areaConstruida = "0";
+		classeSocial = 0;
 		numeroAnimais = 0;
-		volumePiscina = "0";
-		volumeCisterna = "0";
-		volumeCaixaDagua = "0";
+		volumePiscina =  "0000000";
+		volumeCisterna = "0000000";
+		volumeCaixaDagua="0000000";
 		
 		quantidadeEconomiasSocial = 0;
 	    quantidadeEconomiasOutros = 0;

@@ -1244,6 +1244,8 @@ public class Util {
 	}
 	
 	public static String getDecimalView(String value){
+		if(value==null) return "";
+		
 		StringBuilder builder = new StringBuilder(value);
 		
 		return builder.insert(value.length()-2, '.').toString();

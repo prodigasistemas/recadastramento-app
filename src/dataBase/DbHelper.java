@@ -4,11 +4,28 @@ import util.Constantes;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
+	
+	private static final String[] UPDATE_IMOVEL_DATABASE = {" alter table imovel add column area_construida TEXT; ",
+	           " alter table imovel add column classe_social TEXT; ",
+	           " alter table imovel add column numero_animais INTEGER; ",
+	           " alter table imovel add column volume_piscina TEXT; ",
+	           " alter table imovel add column volume_cisterna TEXT; ",
+	           " alter table imovel add column volume_caixa_dagua TEXT; ",
+	           " alter table imovel add column tipo_uso TEXT; ",
+	           " alter table imovel add column acesso_hidrometro TEXT; ",
+	           " alter table imovel add column quantidade_economias_social INTEGER; ",
+	           " alter table imovel add column numero_criancas INTEGER; ",
+	           " alter table imovel add column numero_adultos INTEGER; ",
+	           " alter table imovel add column numero_alunos INTEGER; ",
+	           " alter table imovel add column numero_caes INTEGER; ",
+	           " alter table imovel add column numero_idosos INTEGER; ",
+	           " alter table imovel add column numero_empregados INTEGER; ",
+	           " alter table imovel add column numero_outros INTEGER; ",
+	           " alter table imovel add column quantidade_economias_outros  INTEGER;"};
 
     private static final String DATABASE_CLIENTE_QUERY =
     	"CREATE TABLE cliente (id INTEGER PRIMARY KEY autoincrement, matricula_usuario INTEGER, matricula_responsavel INTEGER, matricula_proprietario INTEGER, matricula TEXT not null, gerencia TEXT, tipo_endereco_proprietario TEXT, tipo_endereco_responsavel TEXT, usuario_proprietario TEXT, tipo_responsavel TEXT, " +
@@ -125,8 +142,14 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-		Log.w(DbHelper.class.getName(), "Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data");
-         db.execSQL("DROP TABLE IF EXISTS " + Constantes.TABLE_IMOVEL);
-         onCreate(db);
+		if(newVersion==2 && oldVersion==1){
+			
+			for (String string : UPDATE_IMOVEL_DATABASE) {
+				db.execSQL(string);
+			}
+	    	db.execSQL(DATABASE_CLASSE_SOCIAL_QUERY);
+	     	db.execSQL(DATABASE_TIPO_USO_QUERY);
+	     	db.execSQL(DATABASE_ACESSO_HIDROMETRO_QUERY);
+		}
     }
 }

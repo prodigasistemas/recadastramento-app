@@ -23,7 +23,7 @@ Em seguida, deve ser selecionada a chave para a IDE assinar a aplicação, que s
 Instalação do Aplicativo
 ===
 
-Inicialmente, deve ser criada a pasta ``external_sd`` com a seguinte estrutura de pastas na memória interna ou cartão de memória do celular/tablet:
+Inicialmente, deve ser criada a pasta ``external_sd`` na memória interna ou cartão de memória do celular/tablet com a seguinte estrutura de pastas:
 
 * ``Cadastro``
   * ``Log``

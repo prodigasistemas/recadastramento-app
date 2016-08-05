@@ -23,13 +23,12 @@ Em seguida, deve ser selecionada a chave para a IDE assinar a aplicação, que s
 Instalação do Aplicativo
 ===
 
-Inicialmente, deve ser criada a seguinte estrutura de pasta na memória interna ou cartão de memória do celular/tablet:
+Inicialmente, deve ser criada a pasta ``external_sd`` com a seguinte estrutura de pastas na memória interna ou cartão de memória do celular/tablet:
 
-* ``external_sd``
-  * ``Cadastro``
-    * ``Log``
-    * ``Retorno``
-    * ``Roteiros``
-    * ``Versões``
+* ``Cadastro``
+  * ``Log``
+  * ``Retorno``
+  * ``Roteiros``
+  * ``Versões``
 
 Após isso, basta fazer o download do instalador (.apk), mover para a pasta ``Versões`` e instalar o aplicativo.

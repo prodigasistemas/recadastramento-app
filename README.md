@@ -9,14 +9,27 @@ O aplicativo de Recadastramento desenvolvido na plataforma Android, tem como fin
 * Cliente: nome; endereço; contato; CPF e RG; e informações complementares.
 
 
-Instalação
+Geração do Instalador (.apk)
 ===
-Para efetuar a instalação é necessário gerar o arquivo .apk e transferi-lo para o dispositivo que será utilizado. Para tal, com o ADT instalado no eclipse, ``Clique com o botão direito na pasta do projeto > Android Tools > Exportar aplicativo assinado``
-Em seguida deve ser provida a chave para a IDE assinar a aplicação.
-
-
+Para gerar o arquivo .apk via ADT instalado no Eclipse, clique com o botão direito no projeto ``recadastramento-android > Android Tools > Exportar aplicativo assinado``
+Em seguida, deve ser selecionada a chave para a IDE assinar a aplicação, que se encontra na pasta ``/.android`` do usuário. Por último, informar a senha ``android`` e finalizar.
 
 **Tecnologias Utilizadas:**
 
 * [Android na versão mínima 2.3](http://developer.android.com/index.html)
 * [Java 1.7](https://github.com/prodigasistemas/gsan/wiki/Instala%C3%A7%C3%A3o-do-Java)
+
+
+Instalação do Aplicativo
+===
+
+Inicialmente, deve ser criada a seguinte estrutura de pasta na memória interna ou cartão de memória do celular/tablet:
+
+* ``external_sd``
+  * ``Cadastro``
+    * ``Log``
+    * ``Retorno``
+    * ``Roteiros``
+    * ``Versões``
+
+Após isso, basta fazer o download do instalador (.apk), mover para a pasta ``Versões`` e instalar o aplicativo.

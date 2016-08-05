@@ -457,6 +457,7 @@ public final class R {
         public static final int txtUsuarioEProprietario=0x7f08003c;
         public static final int txtValorLatitude=0x7f08000f;
         public static final int txtValorLongitude=0x7f080012;
+        public static final int txtVersao=0x7f080181;
         public static final int txtVisitados=0x7f080167;
         public static final int txtVisitadosAnormalidade=0x7f08016a;
         public static final int txtVolumeCaixaDagua=0x7f080116;
@@ -474,7 +475,7 @@ public final class R {
         public static final int valorSetor=0x7f08015c;
         public static final int valorTotalImoveis=0x7f080161;
         public static final int valorUsuario=0x7f080162;
-        public static final int versao=0x7f080181;
+        public static final int versao=0x7f080182;
         public static final int volumeCaixaDagua=0x7f080119;
         public static final int volumeCisterna=0x7f080117;
         public static final int volumePiscina=0x7f080118;
@@ -517,24 +518,26 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f060000;
-        public static final int auth_problem=0x7f060003;
-        public static final int excluir_imovel=0x7f06000e;
-        public static final int menu_arquivo_completo=0x7f06000b;
-        public static final int menu_cadastros=0x7f060004;
-        public static final int menu_cadastros_concluidos=0x7f060008;
-        public static final int menu_consulta=0x7f060006;
-        public static final int menu_finalizar=0x7f060009;
-        public static final int menu_info=0x7f060005;
-        public static final int menu_novo_roteiro=0x7f06000a;
-        public static final int menu_relatorio=0x7f060007;
-        public static final int options_adicionar_imovel=0x7f06000c;
-        public static final int options_adicionar_sublote=0x7f06000d;
-        public static final int options_anterior=0x7f060012;
-        public static final int options_lista_cadastro=0x7f060010;
-        public static final int options_menu_principal=0x7f06000f;
-        public static final int options_proximo=0x7f060011;
-        public static final int options_sair=0x7f060013;
-        public static final int password=0x7f060002;
-        public static final int user=0x7f060001;
+        public static final int app_titulo=0x7f060015;
+        public static final int app_versao=0x7f060001;
+        public static final int auth_problem=0x7f060004;
+        public static final int excluir_imovel=0x7f06000f;
+        public static final int menu_arquivo_completo=0x7f06000c;
+        public static final int menu_cadastros=0x7f060005;
+        public static final int menu_cadastros_concluidos=0x7f060009;
+        public static final int menu_consulta=0x7f060007;
+        public static final int menu_finalizar=0x7f06000a;
+        public static final int menu_info=0x7f060006;
+        public static final int menu_novo_roteiro=0x7f06000b;
+        public static final int menu_relatorio=0x7f060008;
+        public static final int options_adicionar_imovel=0x7f06000d;
+        public static final int options_adicionar_sublote=0x7f06000e;
+        public static final int options_anterior=0x7f060013;
+        public static final int options_lista_cadastro=0x7f060011;
+        public static final int options_menu_principal=0x7f060010;
+        public static final int options_proximo=0x7f060012;
+        public static final int options_sair=0x7f060014;
+        public static final int password=0x7f060003;
+        public static final int user=0x7f060002;
     }
 }

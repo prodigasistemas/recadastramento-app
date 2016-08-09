@@ -208,11 +208,15 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getProprietario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getProprietario().getUf(), ' '));
+		
+		String tipoSexo = "";
 		if (getClienteSelecionado().isUsuarioProprietario() == Constantes.SIM) {
-			registrosTipoCLiente.append(getClienteSelecionado().getUsuario().getTipoSexo());
+			tipoSexo = getClienteSelecionado().getUsuario().getTipoSexo();
 		} else {
-			registrosTipoCLiente.append(getClienteSelecionado().getProprietario().getTipoSexo());
+			tipoSexo = getClienteSelecionado().getProprietario().getTipoSexo();
 		}
+		registrosTipoCLiente.append(Util.adicionarCharDireita(1, tipoSexo, ' '));
+		
 		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getProprietario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getProprietario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getProprietario().getEmail(), ' '));

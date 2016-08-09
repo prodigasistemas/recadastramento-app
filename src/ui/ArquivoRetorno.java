@@ -198,8 +198,8 @@ public class ArquivoRetorno {
     	registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getUsuario().getUf(), ' '));
     	registrosTipoCLiente.append(!getClienteSelecionado().getUsuario().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getUsuario().getTipoSexo() : " ");
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getUsuario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getUsuario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getUsuario().getEmail(), ' '));
     	
 		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getProprietario().getMatricula())));
@@ -213,8 +213,8 @@ public class ArquivoRetorno {
 		} else {
 			registrosTipoCLiente.append(getClienteSelecionado().getProprietario().getTipoSexo());
 		}
-		registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getProprietario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getProprietario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getProprietario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getProprietario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getProprietario().getEmail(), ' '));
 		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, ""+getClienteSelecionado().getEnderecoProprietario().getTipoLogradouro()));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getEnderecoProprietario().getLogradouro(), ' '));
@@ -231,8 +231,8 @@ public class ArquivoRetorno {
     	registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getResponsavel().getUf(), ' '));
     	registrosTipoCLiente.append(!getClienteSelecionado().getResponsavel().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getResponsavel().getTipoSexo() : " ");
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getResponsavel().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-    	registrosTipoCLiente.append(Util.adicionarCharDireita(10, getClienteSelecionado().getResponsavel().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getResponsavel().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+    	registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getResponsavel().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getResponsavel().getEmail(), ' '));
     	registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, ""+getClienteSelecionado().getEnderecoResponsavel().getTipoLogradouro()));
     	registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getEnderecoResponsavel().getLogradouro(), ' '));

@@ -302,13 +302,13 @@ public class ArquivoRetorno {
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, ""+getImovelSelecionado().getTipoFonteAbastecimento()));
 	   	
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(10, getImovelSelecionado().getAreaConstruida()));
-	   	registrosTipoImovel.append(getImovelSelecionado().getClasseSocial());
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1,  String.valueOf(getImovelSelecionado().getClasseSocial())));
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getNumeroAnimais())));
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumeCisterna()));
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumePiscina()));
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumeCaixaDagua()));
-	   	registrosTipoImovel.append(getImovelSelecionado().getTipoUso());
-	   	registrosTipoImovel.append(getImovelSelecionado().getAcessoHidrometro());
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(getImovelSelecionado().getTipoUso())));
+	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(getImovelSelecionado().getAcessoHidrometro())));
 	   	
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCriancas())));
 	   	registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getAdultos())));

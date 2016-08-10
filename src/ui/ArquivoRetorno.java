@@ -92,7 +92,11 @@ public class ArquivoRetorno {
 		    for (int i = 0; i < listIdImoveis.size(); i++){
 
 		       	Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
-		    	Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
+		       	Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
+		       	
+		       	if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR)
+		       		continue;
+		       	
 		    	Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
 		       	Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
 		    	Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));

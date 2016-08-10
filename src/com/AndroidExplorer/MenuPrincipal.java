@@ -45,6 +45,7 @@ public class MenuPrincipal extends FragmentActivity {
 	private GerarArquivoCompletoThread progThread;
 	private String dialogMessage = null;
 	private static int increment= 0;
+	private int numeroImoveis;
 	
     //---the images to display---
     Integer[] imageIDs = {
@@ -107,14 +108,15 @@ public class MenuPrincipal extends FragmentActivity {
 	        		startActivity(myIntent);            		
 					
             	}else if (position == MENU_ARQUIVO_COMPLETO){
-                    boolean statusOk = true;
+                    boolean statusOk = false;
         	    	
                     // 	Verifica se todos os imoveis já foram visitados.
         	    	ArrayList<String> listStatusImoveis = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(null);
         	    	
         	    	for (int i=0; i < listStatusImoveis.size(); i++){
-        	    		if ( Integer.parseInt(listStatusImoveis.get(i)) == Constantes.IMOVEL_A_SALVAR ){
-        	    			statusOk = false;
+        	    		if (Integer.parseInt(listStatusImoveis.get(i)) != Constantes.IMOVEL_A_SALVAR ){
+        	    			statusOk = true;
+        	    			numeroImoveis++;
         				}
         	    	}
         	    	
@@ -150,15 +152,14 @@ public class MenuPrincipal extends FragmentActivity {
         	int totalArquivoCompleto = msg.getData().getInt("arquivoCompleto" + String.valueOf(increment));
             progDialog.setProgress(totalArquivoCompleto);
             
-            if (totalArquivoCompleto >= Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis() || 
-            	progThread.getCustomizedState() == CarregarRotaThread.DONE){
-                
-            	dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
-            	
-	    		dialogMessage = "Arquivo de retorno Completo gerado com sucesso!";
-                showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_SUCESSO);
-			    increment = increment + 5;
-            }
+			if (totalArquivoCompleto >= numeroImoveis || progThread.getCustomizedState() == CarregarRotaThread.DONE) {
+
+				dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
+
+				dialogMessage = "Arquivo de retorno Completo gerado com sucesso!";
+				showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_SUCESSO);
+				increment = increment + 5;
+			}
          }
     };
 
@@ -224,7 +225,7 @@ public class MenuPrincipal extends FragmentActivity {
 	            progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 	            progDialog.setCancelable(false);
 	            progDialog.setMessage("Por favor, espere enquanto o Arquivo de Retorno Completo está sendo gerado...");
-	            progDialog.setMax(Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis());
+	            progDialog.setMax(numeroImoveis);
 	            progThread = new GerarArquivoCompletoThread(handler, this, increment);
 	            progThread.start();
 	            return progDialog;

@@ -509,7 +509,11 @@ public class ImovelTab extends Fragment implements LocationListener {
                 				updateImovelSelecionado();
                 				
                 				getImovel().setTabSaved(true);
-                				Toast.makeText(getActivity(), "Dados do Imóvel atualizados com sucesso.", 5).show();
+                				Toast.makeText(getActivity(), "Dados do Imovel atualizados com sucesso.", 5).show();
+                				
+                				if(getImovel().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
+                					Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
+                				}
                 			}
                 		}
             		}

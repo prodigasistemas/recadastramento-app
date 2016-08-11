@@ -130,6 +130,10 @@ public class MedidorTab extends Fragment {
 		            	
 		         		getMedidor().setTabSaved(true);
 		         		Toast.makeText(getActivity(), "Dados do Medidor atualizados com sucesso.", 5).show();
+		         		
+		         		if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
+        					Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
+        				}
 	            	}
             	}
             }

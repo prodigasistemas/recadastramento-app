@@ -275,7 +275,10 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
             			dialogMessage = " Todas as informações do cadastro foram atualizadas com sucesso. ";
             			showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO);
             		}
-            	}else{
+            	}else if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
+					Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
+					Toast.makeText(getActivity(), "Dados de Anormalidade atualizados com sucesso.", 5).show();
+				}else{
             		
             		if (!Controlador.getInstancia().getClienteSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados do cliente antes de finalizar. ";

@@ -1484,6 +1484,7 @@ public List<String> selectEnderecoImoveis(String condition){
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
 	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
+		   
 		   db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
    		   
    		// deve-se agora substituir os ramos de atividade so imovel. 

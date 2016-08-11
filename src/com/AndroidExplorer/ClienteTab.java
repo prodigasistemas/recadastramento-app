@@ -209,6 +209,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 	                	
 	            		getCliente().setTabSaved(true);
 	            		Toast.makeText(getActivity(), "Dados do Cliente atualizados com sucesso.", 5).show();
+	            		
+	            		if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
+        					Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
+        				}
+	            		
 //	        			dialogMessage = "Dados do Cliente atualizados com sucesso.";
 //	        	    	getActivity().showDialog(Constantes.DIALOG_ID_SUCESSO);
 	            	}

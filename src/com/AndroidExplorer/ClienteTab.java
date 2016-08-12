@@ -561,52 +561,60 @@ public class ClienteTab extends Fragment implements LocationListener {
 //        }
 	}
 	
-	public void populateUsuario(){
-		
-        // Nome do Usuario
-		((EditText)(view.findViewById(R.id.nomeUsuario))).setText(getCliente().getUsuario().getNome());
-        
+	public void populateUsuario() {
+
+		// Nome do Usuario
+		((EditText) (view.findViewById(R.id.nomeUsuario))).setText(getCliente().getUsuario().getNome());
+
 		// Tipo de Pessoa do Usuario
-		((Spinner)(view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(getCliente().getUsuario().getTipoPessoa() - 1);
-        
-        // UF do Usuario
-        if (getCliente().getUsuario().getUf() != Constantes.NULO_STRING){
-			((EditText)(view.findViewById(R.id.ufUsuario))).setText(getCliente().getUsuario().getUf());
-        }
-        
-        // Sexo do Usuario
+		((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(getCliente().getUsuario().getTipoPessoa() - 1);
+
+		// UF do Usuario
+		if (getCliente().getUsuario().getUf() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.ufUsuario))).setText(getCliente().getUsuario().getUf());
+		}
+
+		// Sexo do Usuario
 		String[] lista = getResources().getStringArray(R.array.sexo);
-		for (int i = 0; i < lista.length; i++){
-        	if (lista[i].equalsIgnoreCase(getCliente().getUsuario().getTipoSexo())){
-                ((Spinner)(view.findViewById(R.id.spinnerSexoUsuario))).setSelection(i);
-        		break;
-        	}
-        }
-        
+		for (int i = 0; i < lista.length; i++) {
+			if (lista[i].equalsIgnoreCase(getCliente().getUsuario().getTipoSexo())) {
+				((Spinner) (view.findViewById(R.id.spinnerSexoUsuario))).setSelection(i);
+				break;
+			}
+		}
+
 		// CPF / CNPJ do Usuario
-        if (getCliente().getUsuario().getCpfCnpj() != Constantes.NULO_STRING){
-            ((EditText)(view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj()));
-        }
-        
-        // RG do Usuario
-        if (getCliente().getUsuario().getRg() != Constantes.NULO_STRING){
-            ((EditText)(view.findViewById(R.id.rgUsuario))).setText(String.valueOf(getCliente().getUsuario().getRg()));
-        }
-        
-        // Telefone do Usuario
-        if (getCliente().getUsuario().getTelefone() != Constantes.NULO_STRING){
-            ((EditText)(view.findViewById(R.id.foneUsuario))).setText(String.valueOf(getCliente().getUsuario().getTelefone()));
-        }
-        
-        // Celular do Usuario
-        if (getCliente().getUsuario().getCelular() != Constantes.NULO_STRING){
-            ((EditText)(view.findViewById(R.id.celularUsuario))).setText(String.valueOf(getCliente().getUsuario().getCelular()));
-        }
-        
-        // Email do Usuario
-        if (getCliente().getUsuario().getEmail() != Constantes.NULO_STRING){
-            ((EditText)(view.findViewById(R.id.emailUsuario))).setText(String.valueOf(getCliente().getUsuario().getEmail()));
-        }
+		if (getCliente().getUsuario().getCpfCnpj() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj()));
+		}
+
+		// RG do Usuario
+		if (getCliente().getUsuario().getRg() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.rgUsuario))).setText(String.valueOf(getCliente().getUsuario().getRg()));
+		}
+
+		// Telefone do Usuario
+		if (getCliente().getUsuario().getTelefone() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.foneUsuario))).setText(String.valueOf(getCliente().getUsuario().getTelefone()));
+		}
+
+		// Celular do Usuario
+		if (getCliente().getUsuario().getCelular() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.celularUsuario))).setText(String.valueOf(getCliente().getUsuario().getCelular()));
+		}
+
+		// Email do Usuario
+		if (getCliente().getUsuario().getEmail() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.emailUsuario))).setText(String.valueOf(getCliente().getUsuario().getEmail()));
+		}
+
+		// Tipo de Endereço do Proprietario
+		if (getCliente().getTipoEnderecoProprietario() == Constantes.IMOVEL_PROPRIETARIO_RESIDENCIAL) {
+			((RadioButton) (view.findViewById(R.id.radioResidencial))).setChecked(true);
+
+		} else if (getCliente().getTipoEnderecoProprietario() == Constantes.IMOVEL_PROPRIETARIO_COMERCIAL) {
+			((RadioButton) (view.findViewById(R.id.radioComercial))).setChecked(true);
+		}
 	}
 		
 	public void populateResponsavel(){
@@ -788,9 +796,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 	}
 	
 	public void enableAndDisableRadioEndereco(int visibility) {
-		LinearLayout linearLayoutEndereco = (LinearLayout) view.findViewById(R.id.linearLayoutTipoEnderecoUsuario);
+		LinearLayout layoutTipoEnderecoUsuario = (LinearLayout) view.findViewById(R.id.linearLayoutTipoEnderecoUsuario);
+		LinearLayout layoutTextoTipoEnderecoUsuario = (LinearLayout) view.findViewById(R.id.linearLayoutTextoTipoEnderecoUsuario);
 		
-		linearLayoutEndereco.setVisibility(visibility);
+		layoutTipoEnderecoUsuario.setVisibility(visibility);
+		layoutTextoTipoEnderecoUsuario.setVisibility(visibility);
 	}
 	
 	public void inflateDadosProprietario(){

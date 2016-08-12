@@ -1100,29 +1100,22 @@ public List<String> selectEnderecoImoveis(String condition){
 	   return db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
 	}
 
-	public void insertAnormalidadeImovel(String linhaArquivo){
-		
+	public long insertAnormalidadeImovel(String linhaArquivo) {
 		ParserUtil parser = new ParserUtil(linhaArquivo);
-    	parser.obterDadoParser(2);
+		parser.obterDadoParser(2);
 
-    	ContentValues initialValues = new ContentValues();
-    	
-    		initialValues.put("matricula", String.valueOf(Integer.parseInt(parser.obterDadoParser(9))));
-    		initialValues.put("latitude", String.valueOf(Integer.parseInt(parser.obterDadoParser(15))));
-    		initialValues.put("longitude", String.valueOf(Integer.parseInt(parser.obterDadoParser(15))));
-    		initialValues.put("codigo_anormalidade", "0");
-    		initialValues.put("comentario", "");
-    		initialValues.put("path_image_1", "");
-    		initialValues.put("path_image_2", "");
-    		initialValues.put("data", "");
+		ContentValues initialValues = new ContentValues();
 
-		   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-		   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
-			   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-	   		   
-		   }else{
-			   Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
-		   }
+		initialValues.put("matricula", String.valueOf(Integer.parseInt(parser.obterDadoParser(9))));
+		initialValues.put("latitude", String.valueOf(Integer.parseInt(parser.obterDadoParser(15))));
+		initialValues.put("longitude", String.valueOf(Integer.parseInt(parser.obterDadoParser(15))));
+		initialValues.put("codigo_anormalidade", "0");
+		initialValues.put("comentario", "");
+		initialValues.put("path_image_1", "");
+		initialValues.put("path_image_2", "");
+		initialValues.put("data", "");
+		
+		return db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues);
 	}
 
 	public long insertRamosAtividadeImovel(String linhaArquivo){

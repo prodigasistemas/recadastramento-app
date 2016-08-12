@@ -392,13 +392,13 @@ public class ArquivoRetorno {
     	registroTipoAnormalidadeImovel.append("06");
     	registroTipoAnormalidadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, String.valueOf(getAnormalidadeImovelSelecionado().getComentario()), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, String.valueOf(getAnormalidadeImovelSelecionado().getFoto1()), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, String.valueOf(getAnormalidadeImovelSelecionado().getFoto2()), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, getAnormalidadeImovelSelecionado().getComentario().toUpperCase(), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto1(), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto2(), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "), ' '));
     	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getAnormalidadeImovelSelecionado().getData(), ' '));
-    	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, getImovelSelecionado().getEntrevistado(), ' '));
+    	registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, getImovelSelecionado().getEntrevistado().toUpperCase(), ' '));
     	registroTipoAnormalidadeImovel.append("\n");
 
     	arquivo.append(registroTipoAnormalidadeImovel);

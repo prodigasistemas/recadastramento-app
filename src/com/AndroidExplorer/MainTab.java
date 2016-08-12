@@ -754,8 +754,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	public void onLocationChanged(Location location) {
 		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
 		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
-		
-		Log.i("Latitude!!!!!!!!!!!!!!", "Latitude" + location.getLongitude());
 	}
 	
 	public void onProviderDisabled(String provider) {

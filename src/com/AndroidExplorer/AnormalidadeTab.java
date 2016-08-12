@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import model.AnormalidadeImovel;
+import model.Imovel;
 import util.Constantes;
 import util.Util;
 import android.content.ContentResolver;
@@ -21,7 +22,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -127,11 +127,11 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
         			((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(lastKnownLocation.getLatitude()));
         			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(lastKnownLocation.getLongitude()));
 
-                }else if (getAnormalidadeImovel().getLatitude() != Constantes.NULO_DOUBLE && getAnormalidadeImovel().getLatitude() != 0 &&
-                		getAnormalidadeImovel().getLongitude() != 0 && getAnormalidadeImovel().getLongitude() != Constantes.NULO_DOUBLE ){
+                }else if (getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE && getAnormalidadeImovelSelecionado().getLatitude() != 0 &&
+                		getAnormalidadeImovelSelecionado().getLongitude() != 0 && getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ){
         			
-                	((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
-        			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
+                	((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovelSelecionado().getLatitude()));
+        			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovelSelecionado().getLongitude()));
 
                 } else{
         			((TextView)view.findViewById(R.id.txtValorLatitude)).setText("----");
@@ -141,11 +141,11 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
             }
         });
         
-        if (getAnormalidadeImovel().getLatitude() != Constantes.NULO_DOUBLE && getAnormalidadeImovel().getLatitude() != 0 &&
-        		getAnormalidadeImovel().getLongitude() != 0 && getAnormalidadeImovel().getLongitude() != Constantes.NULO_DOUBLE ){
+        if (getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE && getAnormalidadeImovelSelecionado().getLatitude() != 0 &&
+        		getAnormalidadeImovelSelecionado().getLongitude() != 0 && getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ){
 
-        	((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovel().getLatitude()));
-			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovel().getLongitude()));
+        	((TextView)view.findViewById(R.id.txtValorLatitude)).setText(String.valueOf(getAnormalidadeImovelSelecionado().getLatitude()));
+			((TextView)view.findViewById(R.id.txtValorLongitude)).setText(String.valueOf(getAnormalidadeImovelSelecionado().getLongitude()));
     		
 
         }else if (lastKnownLocation != null){
@@ -245,24 +245,11 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
             	if (areOtherTabsOk()){
             		        	    	
             		if(isLocationValid()){
-            			// verificar se nao está criando imóvel duplicado.
-            			
-            			if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() > 0) {
-            				if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_NOVO) {
-            					Controlador.getInstancia().getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
-            					Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO_COM_ANORMALIDADE));
-            				} else { 
-            					Controlador.getInstancia().getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
-            					Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
-            				}
-            				
-            			} else if (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO) {
-            				Controlador.getInstancia().getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
-            				Controlador.getInstancia().getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
-            			}
+            			// verificar se nao está criando imóvel duplicado.            			
+            			verificarImovelStatus();
             			
             			// Cadastro configurado como Nao Transmitido
-            			Controlador.getInstancia().getImovelSelecionado().setImovelEnviado(String.valueOf(Constantes.NAO));
+            			getImovelSelecionado().setImovelEnviado(String.valueOf(Constantes.NAO));
             			
             			Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
             			Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
@@ -271,20 +258,26 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
             			Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
             			((MainTab)getActivity()).setTabColor();
             			
-            			getAnormalidadeImovel().setTabSaved(true);
+            			getAnormalidadeImovelSelecionado().setTabSaved(true);
             			dialogMessage = " Todas as informações do cadastro foram atualizadas com sucesso. ";
             			showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO);
             		}
-            	}else if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
+            	}else if(getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
+            		verificarImovelStatus();
 					Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
-					Toast.makeText(getActivity(), "Dados de Anormalidade atualizados com sucesso.", 5).show();
+					((MainTab)getActivity()).setTabColor();
+        			getAnormalidadeImovelSelecionado().setTabSaved(true);
+        			
+//					Toast.makeText(getActivity(), "Dados de Anormalidade atualizados com sucesso.", 5).show();
+					dialogMessage = " Todas as informações do cadastro foram atualizadas com sucesso. ";
+        			showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO);
 				}else{
             		
             		if (!Controlador.getInstancia().getClienteSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados do cliente antes de finalizar. ";
     			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
            			
-            		}else if (!Controlador.getInstancia().getImovelSelecionado().isTabSaved()){
+            		}else if (!getImovelSelecionado().isTabSaved()){
                			dialogMessage = " Atualize os dados do imóvel antes de finalizar. ";
     			        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
             			
@@ -302,20 +295,20 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
         
         // Populate
         // Anormalidade
-        codigoAnormalidade.setText(String.valueOf(getAnormalidadeImovel().getCodigoAnormalidade()));
+        codigoAnormalidade.setText(String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()));
         
         // Comentario
-        ((EditText)view.findViewById(R.id.editComentario)).setText(getAnormalidadeImovel().getComentario());
+        ((EditText)view.findViewById(R.id.editComentario)).setText(getAnormalidadeImovelSelecionado().getComentario());
         
         
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
         	
 	        // Foto 1
-	        if (getAnormalidadeImovel().getFoto1().trim().compareTo("") != 0  && getAnormalidadeImovel().getFoto1().trim().length() > 0){
+	        if (getAnormalidadeImovelSelecionado().getFoto1().trim().compareTo("") != 0  && getAnormalidadeImovelSelecionado().getFoto1().trim().length() > 0){
 	        	
 	   		
 	        	try {
-		    		bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovel().getFoto1())) );
+		    		bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovelSelecionado().getFoto1())) );
 		    	} catch (FileNotFoundException e) {
 		    		e.printStackTrace();
 		    	} catch (IOException e) {
@@ -326,10 +319,10 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        	((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
 	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
 	        
-	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
+	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
 	    		
 	        	try {
-	    			bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg")) );
+	    			bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg")) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
@@ -343,10 +336,10 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        }
 	        
 	        // Foto 2
-	        if (getAnormalidadeImovel().getFoto2().trim().compareTo("") != 0 && getAnormalidadeImovel().getFoto2().trim().length() > 0 ){
+	        if (getAnormalidadeImovelSelecionado().getFoto2().trim().compareTo("") != 0 && getAnormalidadeImovelSelecionado().getFoto2().trim().length() > 0 ){
 	
 	    		try {
-	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovel().getFoto2())) );
+	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovelSelecionado().getFoto2())) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
@@ -356,10 +349,10 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        	((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
 	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
 	        
-	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
+	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
 	        	
 	    		try {
-	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );
+	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg")) );
 	    		} catch (FileNotFoundException e) {
 	    			e.printStackTrace();
 	    		} catch (IOException e) {
@@ -373,6 +366,22 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
         }else {
         	Toast.makeText(getActivity(), " Cartão de memória não está disponível ", Toast.LENGTH_SHORT).show();;
         }
+	}
+	
+	private void verificarImovelStatus() {
+		if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() > 0) {
+			if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_NOVO) {
+				getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
+				getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO_COM_ANORMALIDADE));
+			} else { 
+				getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
+				getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
+			}
+			
+		} else if (getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO) {
+			getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
+			getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
+		}
 	}
 	
     public void startCamera(int fotoNumber) {
@@ -392,17 +401,17 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 
         if (fotoNumber == TAKE_PICTURE_1){
         	
-        	if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
-        		getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").delete();
+        	if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
+        		getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").delete();
         	}
         	
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg")));
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg")));
  
         }else{
-        	if (getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
-        		getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").delete();
+        	if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
+        		getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").delete();
         	}
-        	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")));
+        	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg")));
         }
 
         startActivityForResult(intent, fotoNumber);
@@ -440,7 +449,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 //
 //	             try {  
 //	             
-//	            	 bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() +"_1.jpg")) );  
+//	            	 bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() +"_1.jpg")) );  
 //	                 foto1Taken = true;
 //	            	 
 //	             } catch (FileNotFoundException e) {  
@@ -457,7 +466,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 //
 //	             try {  
 //	             
-//	            	 bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg")) );  
+//	            	 bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg")) );  
 //	                 foto2Taken = true;
 //
 //	             } catch (FileNotFoundException e) {  
@@ -495,44 +504,45 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
     	   ContentResolver cr = getActivity().getContentResolver();
     	   cr.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media._ID + "=?", new String[]{ Long.toString(id) } );
     	}
-
-    public long getImovelSelecionadoId(){
-    	return Controlador.getInstancia().getImovelSelecionado().getImovelId();
+    
+    public Imovel getImovelSelecionado() {
+    	return Controlador.getInstancia().getImovelSelecionado();
     }
 
     public void updateAnormalidadeSelecionada(){
 
+    	getAnormalidadeImovelSelecionado().setMatricula(getImovelSelecionado().getMatricula());
+    	
 		if (codigoAnormalidade.getText().toString().length() > 0){
-			getAnormalidadeImovel().setCodigoAnormalidade(Integer.parseInt(codigoAnormalidade.getText().toString()));
+			getAnormalidadeImovelSelecionado().setCodigoAnormalidade(Integer.parseInt(codigoAnormalidade.getText().toString()));
 		}else{
-			getAnormalidadeImovel().setCodigoAnormalidade(0);			
+			getAnormalidadeImovelSelecionado().setCodigoAnormalidade(0);			
 		}
 		
-		getAnormalidadeImovel().setComentario(((EditText)view.findViewById(R.id.editComentario)).getText().toString());
+		getAnormalidadeImovelSelecionado().setComentario(((EditText)view.findViewById(R.id.editComentario)).getText().toString());
 		
-		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
-			getAnormalidadeImovel().setFoto1(Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_1.jpg");
+		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
+			getAnormalidadeImovelSelecionado().setFoto1(getImovelSelecionado().getMatricula() + "_1.jpg");
 		}
 		
-		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
-			getAnormalidadeImovel().setFoto2(Controlador.getInstancia().getImovelSelecionado().getMatricula() + "_2.jpg");	
+		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
+			getAnormalidadeImovelSelecionado().setFoto2(getImovelSelecionado().getMatricula() + "_2.jpg");	
 		}
 
 		if (!((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
-			getAnormalidadeImovel().setLatitude(((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString());
+			getAnormalidadeImovelSelecionado().setLatitude(((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString());
 		}
 
 		if (!((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")){
-			getAnormalidadeImovel().setLongitude(((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString());
+			getAnormalidadeImovelSelecionado().setLongitude(((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString());
 		}
 
-		getAnormalidadeImovel().setData(Util.formatarData(Calendar.getInstance().getTime()));
+		getAnormalidadeImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
     }
 	
-	public AnormalidadeImovel getAnormalidadeImovel(){
+	public AnormalidadeImovel getAnormalidadeImovelSelecionado() {
 		return Controlador.getInstancia().getAnormalidadeImovelSelecionado();
 	}
-
 	
 	public boolean areOtherTabsOk(){
 		boolean result = true;
@@ -540,11 +550,11 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
     	// Somente verifica as outras tabs se não houver nenhuma anormalidade.
 		if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() == 0) {
     	
-//			if ( Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR ||
-//				 Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
+//			if ( getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR ||
+//				 getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
 				
 				if ( !Controlador.getInstancia().getClienteSelecionado().isTabSaved() ||
-		        	 !Controlador.getInstancia().getImovelSelecionado().isTabSaved()  ||
+		        	 !getImovelSelecionado().isTabSaved()  ||
 		        	 !Controlador.getInstancia().getServicosSelecionado().isTabSaved() ||
 		        	 !Controlador.getInstancia().getMedidorSelecionado().isTabSaved() ){
 		    	

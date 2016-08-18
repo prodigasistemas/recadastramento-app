@@ -110,5 +110,12 @@
 	<string name="options_anterior">Imóvel Anterior</string>
 	<string name="options_sair">Sair</string>
 	<string name="app_titulo">Sistema de Recadastramento de Imóveis</string>
-	                
+	
+	<string-array name="listaPercentualAbastecimento">
+		<item>25</item>
+        <item>50</item>
+       	<item>75</item>
+       	<item>100</item>
+	</string-array>
+	
 </resources>

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	
 	private static final String[] UPDATE_IMOVEL_DATABASE = {" alter table imovel add column area_construida TEXT; ",
 	           " alter table imovel add column classe_social TEXT; ",
@@ -26,6 +26,8 @@ public class DbHelper extends SQLiteOpenHelper {
 	           " alter table imovel add column numero_empregados INTEGER; ",
 	           " alter table imovel add column numero_outros INTEGER; ",
 	           " alter table imovel add column quantidade_economias_outros  INTEGER;"};
+	
+	private static final String ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL = " alter table imovel add column percentual_abastecimento TEXT; ";
 
     private static final String DATABASE_CLIENTE_QUERY =
     	"CREATE TABLE cliente (id INTEGER PRIMARY KEY autoincrement, matricula_usuario INTEGER, matricula_responsavel INTEGER, matricula_proprietario INTEGER, matricula TEXT not null, gerencia TEXT, tipo_endereco_proprietario TEXT, tipo_endereco_responsavel TEXT, usuario_proprietario TEXT, tipo_responsavel TEXT, " +
@@ -150,6 +152,10 @@ public class DbHelper extends SQLiteOpenHelper {
 	    	db.execSQL(DATABASE_CLASSE_SOCIAL_QUERY);
 	     	db.execSQL(DATABASE_TIPO_USO_QUERY);
 	     	db.execSQL(DATABASE_ACESSO_HIDROMETRO_QUERY);
+		}
+		
+		if(newVersion==3 && oldVersion==2){
+			db.execSQL(ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL);
 		}
     }
 }

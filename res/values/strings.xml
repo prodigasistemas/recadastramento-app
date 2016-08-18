@@ -39,6 +39,7 @@
 	    <item>Matrícula</item>
         <item>CPF</item>
         <item>CNPJ</item>
+        <item>Número da residência</item>
 	</string-array>
 
 	<string-array name="filtro">

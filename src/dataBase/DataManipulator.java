@@ -240,14 +240,19 @@ public List<String> selectEnderecoImoveis(String condition){
     	
     	ArrayList<String> list = new ArrayList<String>();
     	Cursor cursor;
- 
+    	String table = Constantes.TABLE_CLIENTE;
+    	
+    	if(condition.substring(1,7).equals("imovel")){
+    		table += " INNER JOIN "+ Constantes.TABLE_IMOVEL +" ON cliente.id=imovel.codigo_cliente ";
+		}
+    	
     	if (condition == Constantes.NULO_STRING  || condition == null){
 
-    		cursor = db.query(Constantes.TABLE_CLIENTE, new String[] { "id"}, null, null, null, null,  "id asc");
+    		cursor = db.query(table, new String[] { "cliente.id"}, null, null, null, null, "cliente.id asc");
 
     	}else{
     		
-    		cursor = db.query(Constantes.TABLE_CLIENTE, new String[] { "id"}, condition, null, null, null,  "id asc");
+    		cursor = db.query(table, new String[] { "cliente.id"}, condition, null, null, null, "cliente.id asc");
     	}
     	
         if (cursor.moveToFirst()) {

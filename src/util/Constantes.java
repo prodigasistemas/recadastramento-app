@@ -84,6 +84,7 @@ public class Constantes {
     public static final int METODO_BUSCA_MATRICULA = 1;
     public static final int METODO_BUSCA_CPF = 2;
     public static final int METODO_BUSCA_CNPJ = 3;
+    public static final int METODO_BUSCA_NUMERO_RESIDENCIA = 4;
     
     public static final int FILTRO_BUSCA_TODOS = 0;
     public static final int FILTRO_BUSCA_VISITADOS_SUCESSO = 1;

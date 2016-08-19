@@ -27,7 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
 	           " alter table imovel add column numero_outros INTEGER; ",
 	           " alter table imovel add column quantidade_economias_outros  INTEGER;"};
 	
-	private static final String ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL = " alter table imovel add column percentual_abastecimento TEXT; ";
+	private static final String ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL = " alter table imovel add column percentual_abastecimento INTEGER; ";
 
     private static final String DATABASE_CLIENTE_QUERY =
     	"CREATE TABLE cliente (id INTEGER PRIMARY KEY autoincrement, matricula_usuario INTEGER, matricula_responsavel INTEGER, matricula_proprietario INTEGER, matricula TEXT not null, gerencia TEXT, tipo_endereco_proprietario TEXT, tipo_endereco_responsavel TEXT, usuario_proprietario TEXT, tipo_responsavel TEXT, " +
@@ -138,6 +138,7 @@ public class DbHelper extends SQLiteOpenHelper {
      	db.execSQL(DATABASE_CLASSE_SOCIAL_QUERY);
      	db.execSQL(DATABASE_TIPO_USO_QUERY);
      	db.execSQL(DATABASE_ACESSO_HIDROMETRO_QUERY);
+     	db.execSQL(ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL);
     }
 
 	// Method is called during an upgrade of the database, e.g. if you increase the database version

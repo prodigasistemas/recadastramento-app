@@ -58,6 +58,8 @@ public class Imovel {
     private int quantidadeEconomiasSocial;
     private int quantidadeEconomiasOutros;
     
+    private int percentualAbastecimento;
+    
     public Imovel() {
     	operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
     	imovelId = 0;
@@ -450,6 +452,14 @@ public class Imovel {
 
 	public void setAreaConstruida(String areaConstruida) {
 		this.areaConstruida = areaConstruida;
+	}
+	
+	public int getPercentualAbastecimento() {
+		return percentualAbastecimento;
+	}
+
+	public void setPercentualAbastecimento(String percentualAbastecimento) {
+		this.percentualAbastecimento = Util.verificarNuloInt(percentualAbastecimento);
 	}
 
 	// Verifica se o imovel possui uma economia ou mais da categoria desejada

@@ -539,7 +539,8 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"numero_empregados",
 														        		"numero_outros",
 														        		"quantidade_economias_social",
-														        		"quantidade_economias_outros"}, "id = " + id, null, null, null,  "inscricao asc");
+														        		"quantidade_economias_outros",
+														        		"percentual_abastecimento"}, "id = " + id, null, null, null,  "inscricao asc");
  
         if (cursor.moveToFirst()) {
         	getImovelSelecionado().setImovelId(id);
@@ -610,6 +611,8 @@ public List<String> selectEnderecoImoveis(String condition){
         	
         	getImovelSelecionado().setQuantidadeEconomiasSocial(cursor.getString(cursor.getColumnIndex("quantidade_economias_social")));
         	getImovelSelecionado().setQuantidadeEconomiasOutros(cursor.getString(cursor.getColumnIndex("quantidade_economias_outros")));
+        	
+        	getImovelSelecionado().setPercentualAbastecimento(cursor.getString(cursor.getColumnIndex("percentual_abastecimento")));
         }
 
         if (cursor != null && !cursor.isClosed()) {
@@ -1094,6 +1097,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
 	   initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
 	   
+	   initialValues.put("percentual_abastecimento", parser.obterDadoParser(3));
+	   
 	   initialValues.put("imovel_status", String.valueOf(Constantes.IMOVEL_A_SALVAR));
 	   initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
 	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
@@ -1479,6 +1484,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   
 	   initialValues.put("quantidade_economias_social", getImovelSelecionado().getQuantidadeEconomiasSocial());
 	   initialValues.put("quantidade_economias_outros", getImovelSelecionado().getQuantidadeEconomiasOutros());
+	   
+	   initialValues.put("percentual_abastecimento", getImovelSelecionado().getPercentualAbastecimento());
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
 	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){

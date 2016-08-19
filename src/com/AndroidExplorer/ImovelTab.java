@@ -50,6 +50,7 @@ public class ImovelTab extends Fragment implements LocationListener {
 	private ArrayList<String> ramosAtividadeImovel;
 	private List<String> listRamosAtividade;
 	private List<String> listFonteAbastecimento;
+	private List<String> listPercentualAbastecimento;
 	private List<String> listClasseSocial;
 	private List<String> listTipo;
 	private List<String> listAcessoHidrometro;
@@ -299,6 +300,34 @@ public class ImovelTab extends Fragment implements LocationListener {
 		if (descricaoFonteAbastecimento != null){
 			for (int i = 0; i < listFonteAbastecimento.size(); i++){
 	        	if (listFonteAbastecimento.get(i).equalsIgnoreCase(descricaoFonteAbastecimento)){
+	        		spinnerFonteAbastecimento.setSelection(i);
+	        		break;
+	        	}else{
+	        		spinnerFonteAbastecimento.setSelection(0);	        		
+	        	}
+	        }
+		}
+		
+		
+		// Percentual de Abastecimento
+        Spinner spinnerPercentualAbastecimento = (Spinner) view.findViewById(R.id.spinnerPercentualAbastecimento);
+
+        listPercentualAbastecimento = new ArrayList<String>();
+        listPercentualAbastecimento.add(0, "");
+        listPercentualAbastecimento.add(1,"25");
+        listPercentualAbastecimento.add(2,"50");
+        listPercentualAbastecimento.add(3,"75");
+        listPercentualAbastecimento.add(4,"100");
+
+        adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listPercentualAbastecimento);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPercentualAbastecimento.setAdapter(adapter);
+		
+        // populate Percentual de Abastecimento
+		String descricaoPercentualAbastecimento = String.valueOf(getImovel().getPercentualAbastecimento());
+		if (descricaoPercentualAbastecimento != null){
+			for (int i = 0; i < listPercentualAbastecimento.size(); i++){
+	        	if (listPercentualAbastecimento.get(i).equalsIgnoreCase(descricaoPercentualAbastecimento)){
 	        		spinnerFonteAbastecimento.setSelection(i);
 	        		break;
 	        	}else{
@@ -911,6 +940,8 @@ public class ImovelTab extends Fragment implements LocationListener {
     	
     	getImovel().setQuantidadeEconomiasSocial(((EditText)view.findViewById(R.id.quantidadeEconomiasSocial)).getText().toString());
     	getImovel().setQuantidadeEconomiasOutros(((EditText)view.findViewById(R.id.quantidadeEconomiasOutros)).getText().toString());
+    	
+    	getImovel().setPercentualAbastecimento(String.valueOf(((Spinner)view.findViewById(R.id.spinnerPercentualAbastecimento)).getSelectedItem()));
 	}
 	
 	public static void enableEconominasResidencial(boolean enable){

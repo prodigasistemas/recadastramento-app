@@ -1,15 +1,12 @@
 package com.AndroidExplorer;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import model.Imovel;
-import business.Controlador;
 import util.Constantes;
 import util.Util;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.location.Criteria;
@@ -17,26 +14,28 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.telephony.CellLocation;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import business.Controlador;
  
 public class ImovelTab extends Fragment implements LocationListener {
 
@@ -328,10 +327,10 @@ public class ImovelTab extends Fragment implements LocationListener {
 		if (descricaoPercentualAbastecimento != null){
 			for (int i = 0; i < listPercentualAbastecimento.size(); i++){
 	        	if (listPercentualAbastecimento.get(i).equalsIgnoreCase(descricaoPercentualAbastecimento)){
-	        		spinnerFonteAbastecimento.setSelection(i);
+	        		spinnerPercentualAbastecimento.setSelection(i);
 	        		break;
 	        	}else{
-	        		spinnerFonteAbastecimento.setSelection(0);	        		
+	        		spinnerPercentualAbastecimento.setSelection(0);	        		
 	        	}
 	        }
 		}

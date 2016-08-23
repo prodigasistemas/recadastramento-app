@@ -1,5 +1,17 @@
 package dataBase;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.AnormalidadeImovel;
+import model.Cliente;
+import model.DadosGerais;
+import model.Imovel;
+import model.Medidor;
+import model.Registro;
+import model.Servicos;
+import util.Constantes;
+import util.ParserUtil;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,23 +20,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import business.Controlador;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import util.Constantes;
-import util.ParserUtil;
-import util.Util;
-
-import model.AnormalidadeImovel;
-import model.Registro;
-import model.Cliente;
-import model.DadosGerais;
-import model.Imovel;
-import model.Medidor;
-import model.Servicos;
 
 public class DataManipulator
 {
@@ -1097,7 +1092,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
 	   initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
 	   
-	   initialValues.put("percentual_abastecimento", parser.obterDadoParser(3));
+	   initialValues.put("percentual_abastecimento", parser.obterDadoParser(3) != null ? parser.getConteudo() : "000");
 	   
 	   initialValues.put("imovel_status", String.valueOf(Constantes.IMOVEL_A_SALVAR));
 	   initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));

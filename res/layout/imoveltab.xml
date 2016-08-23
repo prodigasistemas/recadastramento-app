@@ -1,624 +1,1554 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="fill_parent"
-android:background="@drawable/fundocadastro" 
-android:orientation="vertical">
-
-<LinearLayout 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
-		<TextView android:text="Cod. Cliente:" android:id="@+id/txtCodCliente" android:minWidth="170dp" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="Matrícula:" android:id="@+id/txtMatricula" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-
- 	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
-		<EditText android:id="@+id/codCliente" android:focusable="false" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
-		<EditText android:id="@+id/matricula" android:focusable="false" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
-	</LinearLayout>
-	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3">
-		<TextView android:text="Localidade:" android:id="@+id/txtLocalidade" android:textSize="15dp" android:minWidth="150dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-		<TextView android:text="Setor:" android:id="@+id/txtSetor" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout4">
-		<EditText android:id="@+id/localidade" android:focusable="false" android:minWidth="150dp" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-		<EditText android:id="@+id/setor" android:focusable="false" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout5">
-		<TextView android:text="Quadra:" android:id="@+id/txtQuadra" android:textSize="15dp" android:minWidth="90dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-		<TextView android:text="Lote:" android:id="@+id/txtLote" android:textSize="15dp" android:minWidth="90dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-		<TextView android:text="SubLote:" android:id="@+id/txtSublote" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout6">
-		<EditText android:id="@+id/quadra" android:focusable="false" android:minWidth="90dp" android:maxLength="4" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-		<EditText android:id="@+id/lote" android:focusable="false" android:minWidth="90dp" android:maxLength="4" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-		<EditText android:id="@+id/subLote" android:focusable="false" android:maxLength="3" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="numberDecimal">  <requestFocus></requestFocus> </EditText>
-	</LinearLayout>
-	    	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout7">
-		<TextView android:text="Rota:" android:id="@+id/txtRota" android:minWidth="170dp" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="Face:" android:id="@+id/txtFace" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout8">
-		<EditText android:id="@+id/rota" android:focusable="false" android:minWidth="170dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number"></EditText>
-		<EditText android:id="@+id/face" android:focusable="false" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number"></EditText>
-	</LinearLayout>
-
-	<TextView android:text="Tipo Logradouro:" android:id="@+id/txtTipoLogradouroImovel" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<Spinner android:id="@+id/spinnerTipoLogradouroImovel" android:drawSelectorOnTop="true" android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
-	
-	<TextView android:text="Logradouro:" android:id="@+id/txtLogradouro" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/logradouro" android:maxLength="40" android:layout_width="fill_parent" android:background="@drawable/edittext_rounded_corners" android:layout_height="wrap_content" android:inputType="textCapCharacters"></EditText>
-	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout9">
-		<TextView android:text="Nº:" android:id="@+id/txtNumero" android:maxLength="5" android:minWidth="140dp"  android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="Cod. Logradouro:" android:id="@+id/txtCodLogradouro" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout10">
-		<EditText android:id="@+id/numero" android:minWidth="80dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="5"></EditText>
-		<EditText android:id="@+id/codLogradouro" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="8"></EditText>
-	</LinearLayout>
-	
-	<TextView android:text="Complemento:" android:id="@+id/txtComplemento" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/complemento" android:maxLength="25" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="textCapCharacters"></EditText>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout11">
-		<TextView android:text="Bairro:" android:id="@+id/txtBairro" android:minWidth="170dp" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="CEP:" android:id="@+id/txtCepImovel" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout12">
-		<EditText android:id="@+id/bairro" android:background="@drawable/edittext_rounded_corners" android:minWidth="170dp" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="20"></EditText>
-		<EditText android:id="@+id/cepImovel" android:minWidth="100dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
-	</LinearLayout>
-	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout13">
-		<TextView android:text="Município:" android:id="@+id/txtMunicipio" android:minWidth="170dp" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="Cod. Município:" android:id="@+id/txtCodMunicipio" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout14">
-		<EditText android:id="@+id/municipio" android:focusable="false" android:minWidth="170dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="15"></EditText>
-		<EditText android:id="@+id/codMunicipio" android:focusable="false" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="8"></EditText>
-	</LinearLayout>
-	
-	<TextView android:text="Classe Social:" android:id="@+id/txtClasseSocial" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerClasseSocial" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
-	
-	<LinearLayout
-	    android:id="@+id/linearLayout77"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
-
-		<TextView android:text="Área Construída:" android:id="@+id/txtAreaConstruida" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-
-		<EditText
-		    android:id="@+id/areaConstruida"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:ems="10"
-		    android:inputType="number" />
-
-	</LinearLayout>
-	
-	<TextView android:text="Tipo:" android:id="@+id/txtTipo" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerTipo" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
-
-	<TextView android:text="Acesso ao hidrômetro:" android:id="@+id/txtAcessoHidrometro" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerAcessoHidrometro" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
-	
-	<TextView android:text="IPTU:" android:id="@+id/txtIptu" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-   	<EditText android:id="@+id/iptu" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="31"></EditText>
-	
-	<TextView android:text="Nº UC Celpa:" android:id="@+id/txtNumeroCelpa" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/numeroCelpa" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="5"></EditText>
-
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:orientation="vertical" >
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-	    	<TextView
-	    	    android:text="Nº Pontos Úteis:"
-	    	    android:id="@+id/txtNumeroPontosUteis"
-	    	    android:textSize="15dp"
-	    	    android:textColor="@color/textColor"
-	    	    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"/>
-	    	
-			<TextView
-			    android:text="Nº Moradores:"
-			    android:id="@+id/txtNumeroOcupantes"
-			    android:textSize="15dp" 
-			    android:textColor="@color/textColor" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"/>
-			
-			<TextView 
-			    android:text="Nº Animais Domésticos" 
-			    android:id="@+id/txtNumeroAnimais" 
-			    android:textSize="15dp" 
-			    android:textColor="@color/textColor" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"/>
-		
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" >
-
-			<EditText 
-			    android:id="@+id/numeroPontosUteis"
-			    android:background="@drawable/edittext_rounded_corners" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-			    android:inputType="number" 
-			    android:maxLength="5"/>
-			
-			<EditText 
-			    android:id="@+id/numeroOcupantes" 
-			    android:background="@drawable/edittext_rounded_corners" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-			    android:inputType="number" 
-			    android:maxLength="5"/>
-			
-			<EditText 
-			    android:id="@+id/numeroAnimais" 
-			    android:background="@drawable/edittext_rounded_corners" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-			    android:inputType="number" 
-			    android:maxLength="5"/>
-		</LinearLayout>
-
-	</LinearLayout>
-
-		<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout15" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
-		<CheckBox android:text="Residencial" android:id="@+id/checkBoxResidencial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasResidencial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
-		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout16"> 
-			<TextView android:text="R1:" android:id="@+id/txtR1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasR1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" R2:" android:id="@+id/txtR2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasR2" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" R3:" android:id="@+id/txtR3" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasR3" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" R4:" android:id="@+id/txtR4" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasR4" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-		</LinearLayout>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout17" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
-		<CheckBox android:text="Comercial" android:id="@+id/checkBoxComercial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasComercial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
-		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout18"> 
-			<TextView android:text="C1:" android:id="@+id/txtC1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasC1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" C2:" android:id="@+id/txtC2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasC2" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" C3:" android:id="@+id/txtC3" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasC3" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" C4:" android:id="@+id/txtC4" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasC4" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-		</LinearLayout>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout19" android:layout_marginTop="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
-		<CheckBox android:text="Pública" android:id="@+id/checkBoxPublica" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasPublica" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
-		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout20"> 
-			<TextView android:text="P1:" android:id="@+id/txtP1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasP1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" P2:" android:id="@+id/txtP2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasP2" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" P3:" android:id="@+id/txtP3" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasP3" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" P4:" android:id="@+id/txtP4" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasP4" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-		</LinearLayout>
-	</LinearLayout>
-
-	<LinearLayout     android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout21" android:layout_marginTop="3dp" android:layout_marginBottom="3dp" android:layout_marginRight="2dp" android:layout_marginLeft="2dp"> 
-		<CheckBox android:text="Industrial" android:id="@+id/checkBoxIndustrial" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
-		<TextView android:text="Nº de Economias:" android:id="@+id/txtNumeroEconomiasIndustrial" android:textSize="15dp" android:gravity="center_horizontal" android:textColor="@color/textColorYellowBackground" android:layout_width="fill_parent" android:layout_height="wrap_content" > </TextView>
-		
-		<LinearLayout     android:orientation="horizontal" android:gravity="center_horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout22"> 
-			<TextView android:text="I1:" android:id="@+id/txtI1" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasI1" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" I2:" android:id="@+id/txtI2" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasI2" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" I3:" android:id="@+id/txtI3" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasI3" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-			<TextView android:text=" I4:" android:id="@+id/txtI4" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" > </TextView>
-			<EditText android:id="@+id/economiasI4" android:minWidth="50dp" android:maxLength="2" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number">  </EditText>
-		</LinearLayout>
-	</LinearLayout>
-	
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:orientation="vertical" >
-
-		<TextView
-		    android:id="@+id/txtVolumes"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="Volumes:"
-		    android:textColor="@color/white"
-		    android:textSize="15dp" />
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-	    	<TextView
-	    	    android:text="Cisterna:"
-	    	    android:id="@+id/txtVolumeCisterna"
-	    	    android:textSize="15dp"
-	    	    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"/>
-	    	
-			<TextView
-			    android:text="Piscina:"
-			    android:id="@+id/txtVolumePiscina"
-			    android:textSize="15dp" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"/>
-			
-			<TextView 
-			    android:text="Caixa D'água:"
-			    android:id="@+id/txtVolumeCaixaDagua"
-			    android:textSize="15dp" 
-			    android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"/>
-		
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" >
-
-			<EditText
-			    android:id="@+id/volumeCisterna"
-			    android:layout_width="0dp"
-			    android:layout_height="wrap_content"
-			    android:layout_weight="1"
-			    android:background="@drawable/edittext_rounded_corners"
-			    android:ems="10"
-			    android:inputType="number"
-			    android:maxLength="8" />
-			
-			<EditText
-			    android:id="@+id/volumePiscina"
-			    android:layout_width="0dp"
-			    android:layout_height="wrap_content"
-			    android:layout_weight="1"
-			    android:background="@drawable/edittext_rounded_corners"
-			    android:ems="10"
-			    android:inputType="number"
-			    android:maxLength="8" />
-			
-			<EditText
-			    android:id="@+id/volumeCaixaDagua"
-			    android:layout_width="0dp"
-			    android:layout_height="wrap_content"
-			    android:layout_weight="1"
-			    android:background="@drawable/edittext_rounded_corners"
-			    android:ems="10"
-			    android:inputType="number"
-			    android:maxLength="8" />
-
-		</LinearLayout>
-
-	</LinearLayout>
-	
-	<LinearLayout android:orientation="vertical" android:background="@drawable/linearlayout_rounded_corners" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutPrincipalListaPeriodos" android:layout_marginTop="3dp" android:layout_marginRight="1dp" android:layout_marginLeft="1dp"> 
-		<TextView android:text="Ramo de Atividade:" android:id="@+id/txtRamoAtividade" android:textColor="@color/textColorYellowBackground" android:textSize="15dp" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	
-	   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout23">
-			<EditText android:id="@+id/codigoRamoAtividade" android:minWidth="65dp" android:background="@drawable/edittext_rounded_corners" android:layout_weight="1" android:ellipsize="end" android:layout_width="65dp" android:layout_height="wrap_content" android:inputType="numberDecimal" android:maxLength="3"></EditText>
-			<Spinner android:id="@+id/spinnerDescricaoRamoAtividade" android:minWidth="150dp" android:layout_weight="2" android:ellipsize="end" android:layout_height="wrap_content" android:layout_width="wrap_content" android:drawSelectorOnTop="true"></Spinner>
-			<Button android:id="@+id/buttonAddRamoAtividade" android:background="@drawable/btn_add_custom" android:layout_weight="0" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-		</LinearLayout>
-	
-		<LinearLayout     android:orientation="vertical" android:background="@android:color/white" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/linearLayoutRamosAtividadeAdicionados">
-			<ListView android:id="@+id/listRamosAtividade" android:layout_width="fill_parent" android:layout_height="fill_parent" > </ListView>
-			<TextView android:id="@+id/txtEmpty" android:layout_width="fill_parent" android:layout_height="fill_parent" android:text="Nenhum Ramo de Atividade adicionado."/>	
-		</LinearLayout>
-	</LinearLayout>
-
-	<TextView android:text="Fonte de Abastecimento:" android:id="@+id/txtFonteAbastecimento" android:textSize="15dp" android:textColor="@color/textColor" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerFonteAbastecimento" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
-
-	<TextView
-	    android:id="@+id/textView3"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:text="Percentual Abastecimento:"
-	    android:textColor="@color/white"
-	    android:textSize="15dp" />
-
-	<Spinner
-	    android:id="@+id/spinnerPercentualAbastecimento"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" />
-
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:orientation="vertical" >
-
-		<TextView
-		    android:id="@+id/txtOcupacaoImovel"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:text="Ocupação do Imóvel:"
-		    android:textColor="@color/white"
-		    android:textSize="15dp" />
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-		    <TextView
-		        android:id="@+id/txtCriancas"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:text="Crianças" />
-
-		    <TextView
-		        android:id="@+id/txtAdultos"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:text="Adultos" />
-
-		    <TextView
-		        android:id="@+id/txtAlunos"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:text="Alunos" />
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" >
-
-		    <EditText
-		        android:id="@+id/numCriancas"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		    <EditText
-		        android:id="@+id/numAdultos"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		    <EditText
-		        android:id="@+id/numAlunos"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-		    <TextView
-		        android:id="@+id/txtIdosos"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:text="Idosos" />
-
-		    <TextView
-		        android:id="@+id/txtCaes"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:text="Cães" />
-
-		    <TextView
-		        android:id="@+id/txtEmpregados"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:text="Empregados" />
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-		    <EditText
-		        android:id="@+id/numIdosos"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		    <EditText
-		        android:id="@+id/numCaes"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		    <EditText
-		        android:id="@+id/numEmpregados"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-			<TextView
-			    android:id="@+id/txtOutros"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:text="Outros" />
-
-		</LinearLayout>
-
-		<LinearLayout
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" >
-
-		    <EditText
-		        android:id="@+id/numOutros"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1"
-		        android:ems="10"
-		        android:inputType="number"
-		        android:maxLength="4" />
-
-		    <TextView
-		        android:id="@+id/textView1"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1" />
-
-		    <TextView
-		        android:id="@+id/textView2"
-		        android:layout_width="0dp"
-		        android:layout_height="wrap_content"
-		        android:layout_weight="1" />
-
-		</LinearLayout>
-
-	</LinearLayout>
-
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_weight="1"
-	    android:orientation="vertical" >
-
-	    <TextView
-	        android:id="@+id/txtQtdEconomias"
-	        android:layout_width="wrap_content"
-	        android:layout_height="0dp"
-	        android:layout_weight="1"
-	        android:text="Economias (quantidade):"
-	        android:textColor="@color/textColor"
-	        android:textSize="15dp" />
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="0dp"
-	        android:layout_weight="1" >
-
-	        <TextView
-	            android:id="@+id/txtEconomiasSocial"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:text="Social"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-	        <TextView
-	            android:id="@+id/txtEconomiasOutros"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:text="Outros"
-	            android:textAppearance="?android:attr/textAppearanceSmall" />
-	    </LinearLayout>
-
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="0dp"
-	        android:layout_weight="1" >
-
-	        <EditText
-	            android:id="@+id/quantidadeEconomiasSocial"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:ems="10"
-	            android:inputType="number" />
-
-	        <EditText
-	            android:id="@+id/quantidadeEconomiasOutros"
-	            android:layout_width="0dp"
-	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:ems="10"
-	            android:inputType="number" />
-	    </LinearLayout>
-	</LinearLayout>
-	
-	<LinearLayout     android:orientation="horizontal" android:paddingTop="5dp" android:paddingRight="5dp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayoutPeriodo">
-
-		<TextView android:id="@+id/list_item_text" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:ellipsize="end" />
-
-		<Button android:id="@+id/buttonSave" android:text="  OK  " android:textColor="@color/white" android:textSize="20dp" android:background="@drawable/button_rounded_corners" android:gravity="right" android:layout_weight="0" android:layout_width="wrap_content" android:layout_height="wrap_content" />
-
-	</LinearLayout>
-	    	    
-</LinearLayout>
+    android:background="@drawable/fundocadastro"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtCodCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="170dp"
+                android:text="Cod. Cliente:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtMatricula"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Matrícula:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/codCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="number"
+                android:maxLength="9"
+                android:minWidth="170dp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/matricula"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="number"
+                android:maxLength="9" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtLocalidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="150dp"
+                android:text="Localidade:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtSetor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setor:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/localidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="numberDecimal"
+                android:maxLength="3"
+                android:minWidth="150dp" >
+
+                <requestFocus>
+                </requestFocus>
+            </EditText>
+
+            <EditText
+                android:id="@+id/setor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="numberDecimal"
+                android:maxLength="3" >
+
+                <requestFocus>
+                </requestFocus>
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtQuadra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="90dp"
+                android:text="Quadra:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtLote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="90dp"
+                android:text="Lote:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtSublote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SubLote:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/quadra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="numberDecimal"
+                android:maxLength="4"
+                android:minWidth="90dp" >
+
+                <requestFocus>
+                </requestFocus>
+            </EditText>
+
+            <EditText
+                android:id="@+id/lote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="numberDecimal"
+                android:maxLength="4"
+                android:minWidth="90dp" >
+
+                <requestFocus>
+                </requestFocus>
+            </EditText>
+
+            <EditText
+                android:id="@+id/subLote"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="numberDecimal"
+                android:maxLength="3" >
+
+                <requestFocus>
+                </requestFocus>
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtRota"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="170dp"
+                android:text="Rota:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtFace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Face:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout8"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/rota"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="number"
+                android:maxLength="2"
+                android:minWidth="170dp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/face"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="number"
+                android:maxLength="2" >
+            </EditText>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtTipoLogradouroImovel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo Logradouro:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerTipoLogradouroImovel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" >
+        </Spinner>
+
+        <TextView
+            android:id="@+id/txtLogradouro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Logradouro:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/logradouro"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="textCapCharacters"
+            android:maxLength="40" >
+        </EditText>
+
+        <LinearLayout
+            android:id="@+id/linearLayout9"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtNumero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="5"
+                android:minWidth="140dp"
+                android:text="Nº:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtCodLogradouro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cod. Logradouro:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout10"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/numero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:inputType="textCapCharacters"
+                android:maxLength="5"
+                android:minWidth="80dp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/codLogradouro"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:inputType="number"
+                android:maxLength="8" >
+            </EditText>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtComplemento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Complemento:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/complemento"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="textCapCharacters"
+            android:maxLength="25" >
+        </EditText>
+
+        <LinearLayout
+            android:id="@+id/linearLayout11"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtBairro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="170dp"
+                android:text="Bairro:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtCepImovel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CEP:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout12"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/bairro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:inputType="textCapCharacters"
+                android:maxLength="20"
+                android:minWidth="170dp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/cepImovel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:inputType="number"
+                android:maxLength="9"
+                android:minWidth="100dp" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout13"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/txtMunicipio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="170dp"
+                android:text="Município:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/txtCodMunicipio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cod. Município:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout14"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/municipio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="textCapCharacters"
+                android:maxLength="15"
+                android:minWidth="170dp" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/codMunicipio"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_rounded_corners"
+                android:focusable="false"
+                android:inputType="number"
+                android:maxLength="8" >
+            </EditText>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtClasseSocial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Classe Social:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerClasseSocial"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" >
+        </Spinner>
+
+        <LinearLayout
+            android:id="@+id/linearLayout77"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtAreaConstruida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Área Construída:"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" >
+            </TextView>
+
+            <EditText
+                android:id="@+id/areaConstruida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtTipo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerTipo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" >
+        </Spinner>
+
+        <TextView
+            android:id="@+id/txtAcessoHidrometro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Acesso ao hidrômetro:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerAcessoHidrometro"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" >
+        </Spinner>
+
+        <TextView
+            android:id="@+id/txtIptu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IPTU:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/iptu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="number"
+            android:maxLength="31" >
+        </EditText>
+
+        <TextView
+            android:id="@+id/txtNumeroCelpa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nº UC Celpa:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/numeroCelpa"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="number"
+            android:maxLength="5" >
+        </EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/txtNumeroPontosUteis"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nº Pontos Úteis:"
+                    android:textColor="@color/textColor"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/txtNumeroOcupantes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nº Moradores:"
+                    android:textColor="@color/textColor"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/txtNumeroAnimais"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Nº Animais Domésticos"
+                    android:textColor="@color/textColor"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/numeroPontosUteis"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="5" />
+
+                <EditText
+                    android:id="@+id/numeroOcupantes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="5" />
+
+                <EditText
+                    android:id="@+id/numeroAnimais"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="5" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout15"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/linearlayout_rounded_corners"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/checkBoxResidencial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Residencial"
+                android:textColor="@color/textColorYellowBackground" >
+            </CheckBox>
+
+            <TextView
+                android:id="@+id/txtNumeroEconomiasResidencial"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Nº de Economias:"
+                android:textColor="@color/textColorYellowBackground"
+                android:textSize="15dp" >
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout16"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtR1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R1:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasR1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtR2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" R2:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasR2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtR3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" R3:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasR3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtR4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" R4:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasR4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout17"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/linearlayout_rounded_corners"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/checkBoxComercial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comercial"
+                android:textColor="@color/textColorYellowBackground" >
+            </CheckBox>
+
+            <TextView
+                android:id="@+id/txtNumeroEconomiasComercial"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Nº de Economias:"
+                android:textColor="@color/textColorYellowBackground"
+                android:textSize="15dp" >
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout18"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtC1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="C1:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasC1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtC2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" C2:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasC2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtC3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" C3:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasC3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtC4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" C4:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasC4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout19"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/linearlayout_rounded_corners"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/checkBoxPublica"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pública"
+                android:textColor="@color/textColorYellowBackground" >
+            </CheckBox>
+
+            <TextView
+                android:id="@+id/txtNumeroEconomiasPublica"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Nº de Economias:"
+                android:textColor="@color/textColorYellowBackground"
+                android:textSize="15dp" >
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout20"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtP1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="P1:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasP1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtP2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" P2:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasP2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtP3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" P3:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasP3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtP4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" P4:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasP4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout21"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/linearlayout_rounded_corners"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/checkBoxIndustrial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Industrial"
+                android:textColor="@color/textColorYellowBackground" >
+            </CheckBox>
+
+            <TextView
+                android:id="@+id/txtNumeroEconomiasIndustrial"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Nº de Economias:"
+                android:textColor="@color/textColorYellowBackground"
+                android:textSize="15dp" >
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout22"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/txtI1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I1:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasI1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtI2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" I2:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasI2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtI3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" I3:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasI3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+
+                <TextView
+                    android:id="@+id/txtI4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" I4:"
+                    android:textColor="@color/textColorYellowBackground"
+                    android:textSize="15dp" >
+                </TextView>
+
+                <EditText
+                    android:id="@+id/economiasI4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:minWidth="50dp" >
+                </EditText>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtVolumes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Volumes:"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/txtVolumeCisterna"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cisterna:"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/txtVolumePiscina"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Piscina:"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:id="@+id/txtVolumeCaixaDagua"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Caixa D&apos;água:"
+                    android:textSize="15dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/volumeCisterna"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="8" />
+
+                <EditText
+                    android:id="@+id/volumePiscina"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="8" />
+
+                <EditText
+                    android:id="@+id/volumeCaixaDagua"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="8" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutPrincipalListaPeriodos"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/linearlayout_rounded_corners"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtRamoAtividade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ramo de Atividade:"
+                android:textColor="@color/textColorYellowBackground"
+                android:textSize="15dp" >
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout23"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/codigoRamoAtividade"
+                    android:layout_width="65dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/edittext_rounded_corners"
+                    android:ellipsize="end"
+                    android:inputType="numberDecimal"
+                    android:maxLength="3"
+                    android:minWidth="65dp" >
+                </EditText>
+
+                <Spinner
+                    android:id="@+id/spinnerDescricaoRamoAtividade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:drawSelectorOnTop="true"
+                    android:ellipsize="end"
+                    android:minWidth="150dp" >
+                </Spinner>
+
+                <Button
+                    android:id="@+id/buttonAddRamoAtividade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@drawable/btn_add_custom" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayoutRamosAtividadeAdicionados"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@android:color/white"
+                android:orientation="vertical" >
+
+                <ListView
+                    android:id="@+id/listRamosAtividade"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+                </ListView>
+
+                <TextView
+                    android:id="@+id/txtEmpty"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="Nenhum Ramo de Atividade adicionado." />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtFonteAbastecimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fonte de Abastecimento:"
+            android:textColor="@color/textColor"
+            android:textSize="15dp" >
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerFonteAbastecimento"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true" >
+        </Spinner>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Percentual Abastecimento:"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <Spinner
+            android:id="@+id/spinnerPercentualAbastecimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtOcupacaoImovel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ocupação do Imóvel:"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/txtCriancas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Crianças" />
+
+                <TextView
+                    android:id="@+id/txtAdultos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Adultos" />
+
+                <TextView
+                    android:id="@+id/txtAlunos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Alunos" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/numCriancas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <EditText
+                    android:id="@+id/numAdultos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <EditText
+                    android:id="@+id/numAlunos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/txtIdosos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Idosos" />
+
+                <TextView
+                    android:id="@+id/txtCaes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cães" />
+
+                <TextView
+                    android:id="@+id/txtEmpregados"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Empregados" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <EditText
+                    android:id="@+id/numIdosos"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <EditText
+                    android:id="@+id/numCaes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <EditText
+                    android:id="@+id/numEmpregados"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/txtOutros"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Outros" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <EditText
+                    android:id="@+id/numOutros"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtQtdEconomias"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Economias (quantidade):"
+                android:textColor="@color/textColor"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/txtEconomiasSocial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Social"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <TextView
+                    android:id="@+id/txtEconomiasOutros"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Outros"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+
+                <EditText
+                    android:id="@+id/quantidadeEconomiasSocial"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+
+                <EditText
+                    android:id="@+id/quantidadeEconomiasOutros"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:inputType="number" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutPeriodo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp" >
+
+            <TextView
+                android:id="@+id/list_item_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end" />
+
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@drawable/button_rounded_corners"
+                android:gravity="right"
+                android:text="  OK  "
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+        </LinearLayout>
+    </LinearLayout>
+
 </ScrollView>

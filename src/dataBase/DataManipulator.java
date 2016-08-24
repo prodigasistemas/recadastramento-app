@@ -18,7 +18,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import business.Controlador;
 
 public class DataManipulator
@@ -618,7 +617,6 @@ public List<String> selectEnderecoImoveis(String condition){
    }
    
 	public void selectServico(long id){
-
 		Cursor cursor = db.query(Constantes.TABLE_SERVICO, new String[] {"tipo_ligacao_agua",
     														        	"tipo_ligacao_esgoto",
     														        	"local_instalacao_ramal",
@@ -642,7 +640,6 @@ public List<String> selectEnderecoImoveis(String condition){
 	}
             
 	public void selectMedidor(long id){
-            	
 		Cursor cursor = db.query(Constantes.TABLE_MEDIDOR, new String[] {"possui_medidor",
         														        "numero_hidrometro",
         														        "marca",
@@ -669,8 +666,6 @@ public List<String> selectEnderecoImoveis(String condition){
 	}
                 
 	public void selectAnormalidadeImovel(long id){
-    	
-		ArrayList<String> list = new ArrayList<String>();
 		Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] {"latitude", 
 				 																	 "longitude", 
 				 																	 "codigo_anormalidade", 
@@ -706,7 +701,6 @@ public List<String> selectEnderecoImoveis(String condition){
 
         AnormalidadeImovel anormalidadeImovel = new AnormalidadeImovel();
 
-        ArrayList<String> list = new ArrayList<String>();
         Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] {"latitude",
                 "longitude",
                 "codigo_anormalidade",
@@ -1569,7 +1563,6 @@ public List<String> selectEnderecoImoveis(String condition){
 	}
 	
 	public void salvarConfiguracaoElement(String parametroName, int value){
-		   
 		ContentValues initialValues = new ContentValues();
 		initialValues.put("rota_carregada", value);
 
@@ -1592,5 +1585,4 @@ public List<String> selectEnderecoImoveis(String condition){
 
 		db.update(Constantes.TABLE_GERAL, initialValues, "id=?", new String []{String.valueOf(1)});
 	}
-
 }

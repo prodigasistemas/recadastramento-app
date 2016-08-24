@@ -11,8 +11,8 @@ public class Servicos {
 	private double longitude;
 	private String data;
 	private boolean tabSaved;
-	
-	public Servicos(){
+
+	public Servicos() {
 		tipoLigacaoAgua = 0;
 		tipoLigacaoEsgoto = 0;
 		localInstalacaoRamal = 0;
@@ -20,7 +20,7 @@ public class Servicos {
 		longitude = 0;
 		data = "";
 	}
-	
+
 	public void setTipoLigacaoAgua(String tipoLigacaoAgua) {
 		this.tipoLigacaoAgua = Util.verificarNuloInt(tipoLigacaoAgua);
 	}
@@ -28,10 +28,10 @@ public class Servicos {
 	public void setTipoLigacaoEsgoto(String tipoLigacaoEsgoto) {
 		this.tipoLigacaoEsgoto = Util.verificarNuloInt(tipoLigacaoEsgoto);
 	}
-	
+
 	public void setLocalInstalacaoRamal(String localInstalacaoRamal) {
 		this.localInstalacaoRamal = Util.verificarNuloInt(localInstalacaoRamal);
-	}	
+	}
 
 	public void setLatitude(String latitude) {
 		this.latitude = Util.verificarNuloDouble(latitude);
@@ -47,8 +47,8 @@ public class Servicos {
 
 	public void setTabSaved(boolean tabSaved) {
 		this.tabSaved = tabSaved;
-    }
-	
+	}
+
 	public int getTipoLigacaoAgua() {
 		return this.tipoLigacaoAgua;
 	}
@@ -73,7 +73,7 @@ public class Servicos {
 		return this.data;
 	}
 
-	public boolean isTabSaved(){
+	public boolean isTabSaved() {
 		return tabSaved;
 	}
 }

@@ -14,8 +14,8 @@ public class Medidor {
 	private double latitude;
 	private double longitude;
 	private String data;
-	
-	public Medidor(){
+
+	public Medidor() {
 		possuiMedidor = Constantes.NAO;
 		numeroHidrometro = "";
 		marca = 0;
@@ -25,7 +25,7 @@ public class Medidor {
 		longitude = 0;
 		data = "";
 	}
-	
+
 	public void setPossuiMedidor(String possuiMedidor) {
 		this.possuiMedidor = Util.verificarNuloInt(possuiMedidor);
 	}
@@ -60,8 +60,8 @@ public class Medidor {
 
 	public void setTabSaved(boolean tabSaved) {
 		this.tabSaved = tabSaved;
-    }
-	
+	}
+
 	public int getPossuiMedidor() {
 		return this.possuiMedidor;
 	}
@@ -94,7 +94,7 @@ public class Medidor {
 		return this.data;
 	}
 
-	public boolean isTabSaved(){
+	public boolean isTabSaved() {
 		return tabSaved;
 	}
 

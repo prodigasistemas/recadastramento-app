@@ -5,28 +5,25 @@ import util.Util;
 public class Endereco {
 
 	private int tipoLogradouro;
-    private String logradouro;
-    private String numero;
-    private String complemento;
-    private String bairro;
-    private String cep;
-    private String municipio;
-    
-    public Endereco() {
+	private String logradouro;
+	private String numero;
+	private String complemento;
+	private String bairro;
+	private String cep;
+	private String municipio;
 
-    	logradouro = "";
-    	numero = "";
-    	complemento = "";
-    	bairro = "";
-    	cep = "";
-    	municipio = "";
-    }
-    
+	public Endereco() {
+		logradouro = "";
+		numero = "";
+		complemento = "";
+		bairro = "";
+		cep = "";
+		municipio = "";
+	}
 
 	public void setTipoLogradouro(String tipoLogradouro) {
 		this.tipoLogradouro = Util.verificarNuloInt(tipoLogradouro);
 	}
-
 
 	public void setLogradouro(String logradouro) {
 		this.logradouro = Util.verificarNuloString(logradouro);
@@ -52,7 +49,6 @@ public class Endereco {
 		this.municipio = Util.verificarNuloString(municipio);
 	}
 
-	
 	public String getLogradouro() {
 		return this.logradouro;
 	}
@@ -76,7 +72,7 @@ public class Endereco {
 	public String getMunicipio() {
 		return this.municipio;
 	}
-	
+
 	public int getTipoLogradouro() {
 		return tipoLogradouro;
 	}

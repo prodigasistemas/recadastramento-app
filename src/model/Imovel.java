@@ -2,10 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import android.widget.EditText;
-
-import com.AndroidExplorer.R;
-
 import util.Constantes;
 import util.Util;
 
@@ -20,24 +16,24 @@ public class Imovel {
 	private Ocupacao ocupacaoImovel;
 
 	private int codigoCliente;
-    private int matricula;
-    private String localidade;
-    private String setor;
-    private String quadra;
-    private String lote;
-    private String subLote;
-    private String rota;
-    private String face;
-    private String inscricao;
-    private int codigoMunicipio;
-    private int codigoLogradouro;
-    private String iptu;
-    private String numeroCelpa;
-    private int numeroPontosUteis;
-    private int numeroOcupantes;
-    private int tipoFonteAbastecimento;
-    private int imovelStatus;
-    private int imovelEnviado;
+	private int matricula;
+	private String localidade;
+	private String setor;
+	private String quadra;
+	private String lote;
+	private String subLote;
+	private String rota;
+	private String face;
+	private String inscricao;
+	private int codigoMunicipio;
+	private int codigoLogradouro;
+	private String iptu;
+	private String numeroCelpa;
+	private int numeroPontosUteis;
+	private int numeroOcupantes;
+	private int tipoFonteAbastecimento;
+	private int imovelStatus;
+	private int imovelEnviado;
 	private boolean tabSaved;
 	private ArrayList<String> listaRamoAtividade;
 	private double latitude;
@@ -45,77 +41,77 @@ public class Imovel {
 	private String data;
 	private int operacaoTipo;
 	private String entrevistado;
-	
+
 	private String areaConstruida;
 	private int classeSocial;
 	private int numeroAnimais;
-    private String volumeCisterna;
-    private String volumePiscina;
-    private String volumeCaixaDagua;
-    private int tipoUso;
-    private int acessoHidrometro;
-    
-    private int quantidadeEconomiasSocial;
-    private int quantidadeEconomiasOutros;
-    
-    private int percentualAbastecimento;
-    
-    public Imovel() {
-    	operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
-    	imovelId = 0;
-    	codigoCliente = 0;
-        matricula = 0;
-        localidade = "";
-        setor = "";
-        quadra = "";
-        lote = "";
-        subLote = "";
-        rota = "";
-        face = "";
-        inscricao = "";
-        codigoMunicipio = 0;
-        codigoLogradouro = 0;
-        iptu = "";
-        numeroCelpa = "";
-        numeroPontosUteis = 0;
-        numeroOcupantes = 0;
-        tipoFonteAbastecimento = 0;
-        imovelStatus = 0;
-        imovelEnviado = 0;
-        listaRamoAtividade = new ArrayList<String>();
+	private String volumeCisterna;
+	private String volumePiscina;
+	private String volumeCaixaDagua;
+	private int tipoUso;
+	private int acessoHidrometro;
 
-    	enderecoImovel = new Endereco();
-    	categoriaResidencial = new Categoria();
-    	categoriaComercial = new Categoria();
-    	categoriaPublica = new Categoria();
-    	categoriaIndustrial = new Categoria();
-    	ocupacaoImovel = new Ocupacao();
+	private int quantidadeEconomiasSocial;
+	private int quantidadeEconomiasOutros;
+
+	private int percentualAbastecimento;
+
+	public Imovel() {
+		operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
+		imovelId = 0;
+		codigoCliente = 0;
+		matricula = 0;
+		localidade = "";
+		setor = "";
+		quadra = "";
+		lote = "";
+		subLote = "";
+		rota = "";
+		face = "";
+		inscricao = "";
+		codigoMunicipio = 0;
+		codigoLogradouro = 0;
+		iptu = "";
+		numeroCelpa = "";
+		numeroPontosUteis = 0;
+		numeroOcupantes = 0;
+		tipoFonteAbastecimento = 0;
+		imovelStatus = 0;
+		imovelEnviado = 0;
+		listaRamoAtividade = new ArrayList<String>();
+
+		enderecoImovel = new Endereco();
+		categoriaResidencial = new Categoria();
+		categoriaComercial = new Categoria();
+		categoriaPublica = new Categoria();
+		categoriaIndustrial = new Categoria();
+		ocupacaoImovel = new Ocupacao();
 
 		latitude = 0;
 		longitude = 0;
 		data = "";
 		entrevistado = "";
-		
+
 		areaConstruida = "0000000000";
-		
+
 		classeSocial = 0;
 		numeroAnimais = 0;
-		volumePiscina =  "0000000";
+		volumePiscina = "0000000";
 		volumeCisterna = "0000000";
-		volumeCaixaDagua="0000000";
-		
+		volumeCaixaDagua = "0000000";
+
 		quantidadeEconomiasSocial = 0;
-	    quantidadeEconomiasOutros = 0;
-    }
-    
-    public void setOperacoTipo(int operacaoTipo){
-    	this.operacaoTipo = operacaoTipo;
-    }
-    
-    public void setEntrevistado(String entrevistado){
-    	this.entrevistado = entrevistado;
-    }    
-    
+		quantidadeEconomiasOutros = 0;
+	}
+
+	public void setOperacoTipo(int operacaoTipo) {
+		this.operacaoTipo = operacaoTipo;
+	}
+
+	public void setEntrevistado(String entrevistado) {
+		this.entrevistado = entrevistado;
+	}
+
 	public void setImovelId(long id) {
 		this.imovelId = id;
 	}
@@ -130,15 +126,13 @@ public class Imovel {
 
 	public void setInscricao(String inscricao) {
 		this.inscricao = Util.verificarNuloString(inscricao);
-		
+
 		String inscricaoToBeParsed = this.inscricao.trim();
 
 		if (inscricaoToBeParsed.length() == 16) {
 			setLocalidade(inscricaoToBeParsed.substring(0, 3));
 			setSetor(inscricaoToBeParsed.substring(3, 6));
 			setQuadra(inscricaoToBeParsed.substring(6, 9));
-//			setRota(inscricaoToBeParsed.substring(6, 8));
-//			setFace(inscricaoToBeParsed.substring(8, 9));
 			setLote(inscricaoToBeParsed.substring(9, 13));
 			setSubLote(inscricaoToBeParsed.substring(13, 16));
 
@@ -146,8 +140,6 @@ public class Imovel {
 			setLocalidade(inscricaoToBeParsed.substring(0, 3));
 			setSetor(inscricaoToBeParsed.substring(3, 6));
 			setQuadra(inscricaoToBeParsed.substring(6, 10));
-//			setRota(inscricaoToBeParsed.substring(6, 8));
-//			setFace(inscricaoToBeParsed.substring(8, 10));
 			setLote(inscricaoToBeParsed.substring(10, 14));
 			setSubLote(inscricaoToBeParsed.substring(14, 17));
 		}
@@ -200,7 +192,7 @@ public class Imovel {
 	public void setNumeroPontosUteis(String numeroPontosUteis) {
 		this.numeroPontosUteis = Util.verificarNuloInt(numeroPontosUteis);
 	}
-	
+
 	public void setNumeroOcupantes(String numeroOcupantes) {
 		this.numeroOcupantes = Util.verificarNuloInt(numeroOcupantes);
 	}
@@ -208,15 +200,15 @@ public class Imovel {
 	public void setTipoFonteAbastecimento(String tipoFonteAbastecimento) {
 		this.tipoFonteAbastecimento = Util.verificarNuloInt(tipoFonteAbastecimento);
 	}
-	
+
 	public void setImovelStatus(String imovelStatus) {
 		this.imovelStatus = Util.verificarNuloInt(imovelStatus);
 	}
-	
+
 	public void setImovelEnviado(String imovelEnviado) {
 		this.imovelEnviado = Util.verificarNuloInt(imovelEnviado);
 	}
-	
+
 	public void setLatitude(String latitude) {
 		this.latitude = Util.verificarNuloDouble(latitude);
 	}
@@ -231,17 +223,17 @@ public class Imovel {
 
 	public void setTabSaved(boolean tabSaved) {
 		this.tabSaved = tabSaved;
-    }
-	
+	}
+
 	public void setListaRamoAtividade(ArrayList<String> listaRamoAtividade) {
 		this.listaRamoAtividade = listaRamoAtividade;
-    }
-	
-	public int getOperacaoTipo(){
+	}
+
+	public int getOperacaoTipo() {
 		return this.operacaoTipo;
 	}
-	
-	public String getEntrevistado(){
+
+	public String getEntrevistado() {
 		return this.entrevistado;
 	}
 
@@ -258,11 +250,7 @@ public class Imovel {
 	}
 
 	public String getInscricao() {
-		inscricao = String.valueOf(getLocalidade()) + 
-					String.valueOf(getSetor()) + 
-					String.valueOf(getQuadra()) + 
-					String.valueOf(getLote()) + 
-					String.valueOf(getSubLote());
+		inscricao = String.valueOf(getLocalidade()) + String.valueOf(getSetor()) + String.valueOf(getQuadra()) + String.valueOf(getLote()) + String.valueOf(getSubLote());
 		return inscricao;
 	}
 
@@ -301,11 +289,11 @@ public class Imovel {
 	public int getCodigoLogradouro() {
 		return this.codigoLogradouro;
 	}
-	
+
 	public ArrayList<String> getListaRamoAtividade() {
 		return this.listaRamoAtividade;
 	}
-	
+
 	public String getIptu() {
 		return this.iptu;
 	}
@@ -321,7 +309,7 @@ public class Imovel {
 	public int getNumeroOcupantes() {
 		return this.numeroOcupantes;
 	}
-	
+
 	public int getTipoFonteAbastecimento() {
 		return this.tipoFonteAbastecimento;
 	}
@@ -366,11 +354,11 @@ public class Imovel {
 		return this.data;
 	}
 
-	public boolean isTabSaved(){
+	public boolean isTabSaved() {
 		return tabSaved;
 	}
-	
-	public Ocupacao getOcupacaoImovel(){
+
+	public Ocupacao getOcupacaoImovel() {
 		return this.ocupacaoImovel;
 	}
 
@@ -453,7 +441,7 @@ public class Imovel {
 	public void setAreaConstruida(String areaConstruida) {
 		this.areaConstruida = areaConstruida;
 	}
-	
+
 	public int getPercentualAbastecimento() {
 		return percentualAbastecimento;
 	}
@@ -462,17 +450,16 @@ public class Imovel {
 		this.percentualAbastecimento = Util.verificarNuloInt(percentualAbastecimento);
 	}
 
-	// Verifica se o imovel possui uma economia ou mais da categoria desejada
-	public boolean hasCategoria(Categoria categoria){
+	public boolean hasCategoria(Categoria categoria) {
 		boolean result = false;
-		if ((categoria.getEconomiasSubCategoria1() != Constantes.NULO_INT  && categoria.getEconomiasSubCategoria1() > 0) ||
-			(categoria.getEconomiasSubCategoria2() != Constantes.NULO_INT  && categoria.getEconomiasSubCategoria2() > 0) ||
-			(categoria.getEconomiasSubCategoria3() != Constantes.NULO_INT  && categoria.getEconomiasSubCategoria3() > 0) ||
-			(categoria.getEconomiasSubCategoria4() != Constantes.NULO_INT  && categoria.getEconomiasSubCategoria4() > 0)){
-			
-			result =  true;
+		if ((categoria.getEconomiasSubCategoria1() != Constantes.NULO_INT && categoria.getEconomiasSubCategoria1() > 0)
+				|| (categoria.getEconomiasSubCategoria2() != Constantes.NULO_INT && categoria.getEconomiasSubCategoria2() > 0)
+				|| (categoria.getEconomiasSubCategoria3() != Constantes.NULO_INT && categoria.getEconomiasSubCategoria3() > 0)
+				|| (categoria.getEconomiasSubCategoria4() != Constantes.NULO_INT && categoria.getEconomiasSubCategoria4() > 0)) {
+
+			result = true;
 		}
-		
+
 		return result;
 	}
 }

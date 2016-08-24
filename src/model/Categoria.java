@@ -4,13 +4,13 @@ import util.Util;
 
 public class Categoria {
 
-    private int economiasSubCategoria1;
-    private int economiasSubCategoria2;
-    private int economiasSubCategoria3;
-    private int economiasSubCategoria4;
+	private int economiasSubCategoria1;
+	private int economiasSubCategoria2;
+	private int economiasSubCategoria3;
+	private int economiasSubCategoria4;
 
-    public Categoria() {
-    }
+	public Categoria() {
+	}
 
 	public void setEconomiasSubCategoria1(String economiasSubCategoria1) {
 		this.economiasSubCategoria1 = Util.verificarNuloInt(economiasSubCategoria1);
@@ -28,7 +28,6 @@ public class Categoria {
 		this.economiasSubCategoria4 = Util.verificarNuloInt(economiasSubCategoria4);
 	}
 
-	
 	public int getEconomiasSubCategoria1() {
 		return this.economiasSubCategoria1;
 	}
@@ -44,5 +43,4 @@ public class Categoria {
 	public int getEconomiasSubCategoria4() {
 		return this.economiasSubCategoria4;
 	}
-
 }

@@ -3,7 +3,7 @@ package model;
 import util.Util;
 
 public class Ocupacao {
-	
+
 	private int criancas;
 	private int adultos;
 	private int alunos;
@@ -11,7 +11,7 @@ public class Ocupacao {
 	private int idosos;
 	private int empregados;
 	private int outros;
-	
+
 	public Ocupacao() {
 		criancas = 0;
 		adultos = 0;

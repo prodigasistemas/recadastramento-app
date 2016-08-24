@@ -5,29 +5,29 @@ import util.Util;
 public class Pessoa {
 
 	private int matricula;
-    private String nome;
-    private int tipoPessoa;
+	private String nome;
+	private int tipoPessoa;
 
-    private String CpfCnpj;
-    private String rg;
-    private String uf;
-    private String tipoSexo;
-    private String telefone;
-    private String celular;
-    private String eMail;
-    
-    public Pessoa() {
-    	nome = "";
-    	tipoPessoa = 0;
-    	CpfCnpj = "";
-    	rg = "";
-    	uf = "";
-    	tipoSexo = "";
-    	telefone = "";
-    	celular = "";
-    	eMail = "";
-    }
-    
+	private String CpfCnpj;
+	private String rg;
+	private String uf;
+	private String tipoSexo;
+	private String telefone;
+	private String celular;
+	private String eMail;
+
+	public Pessoa() {
+		nome = "";
+		tipoPessoa = 0;
+		CpfCnpj = "";
+		rg = "";
+		uf = "";
+		tipoSexo = "";
+		telefone = "";
+		celular = "";
+		eMail = "";
+	}
+
 	public int getMatricula() {
 		return matricula;
 	}
@@ -72,7 +72,6 @@ public class Pessoa {
 		this.eMail = Util.verificarNuloString(eMail);
 	}
 
-	
 	public String getNome() {
 		return this.nome;
 	}

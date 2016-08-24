@@ -5,434 +5,377 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import background.CarregarRotaThread;
-
-import com.AndroidExplorer.Fachada;
-
-import dataBase.DataManipulator;
-
 import model.AnormalidadeImovel;
-import model.Registro;
 import model.Cliente;
 import model.DadosGerais;
 import model.Imovel;
 import model.Medidor;
+import model.Registro;
 import model.Servicos;
-
-import ui.ArquivoRetorno;
-import ui.MessageDispatcher;
 import util.Constantes;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import dataBase.DataManipulator;
 
 public class Controlador {
 
-    public static Controlador instancia;
-    private boolean permissionGranted = false;
-    private int qtdRegistros = 0;
-    private static int linhasLidas = 0;
-    
-    private static Cliente clienteSelecionado = new Cliente();
-    private static Imovel imovelSelecionado = new Imovel();
-    private static Medidor medidorSelecionado = new Medidor();
-    private static Servicos servicosSelecionado = new Servicos();
-    private static DadosGerais dadosGerais = new DadosGerais();
-    private static Registro anormalidades = new Registro();
-    private static AnormalidadeImovel anormalidadeImovelSelecionado = new AnormalidadeImovel();
-    private static Registro ramosAtividade = new Registro();
-    
-    
-    private static long idCadastroSelecionado = 0;
-    private static int cadastroListPosition = -1;
+	public static Controlador instancia;
+	private boolean permissionGranted = false;
+	private int qtdRegistros = 0;
+	private static int linhasLidas = 0;
 
-    private static int isRotaCarregadaOk = Constantes.NAO;
-    
-	DataManipulator dmCadastro;
-    
-    public static Controlador getInstancia() {
+	private static Cliente clienteSelecionado = new Cliente();
+	private static Imovel imovelSelecionado = new Imovel();
+	private static Medidor medidorSelecionado = new Medidor();
+	private static Servicos servicosSelecionado = new Servicos();
+	private static DadosGerais dadosGerais = new DadosGerais();
+	private static Registro anormalidades = new Registro();
+	private static AnormalidadeImovel anormalidadeImovelSelecionado = new AnormalidadeImovel();
+	private static Registro ramosAtividade = new Registro();
 
-    	if (Controlador.instancia == null) {
+	private static long idCadastroSelecionado = 0;
+	private static int cadastroListPosition = -1;
+
+	private static int isRotaCarregadaOk = Constantes.NAO;
+
+	DataManipulator manipulator;
+
+	public static Controlador getInstancia() {
+		if (Controlador.instancia == null) {
 			Controlador.instancia = new Controlador();
-
 		}
-		return Controlador.instancia;
-    }
-
-    public Cliente getClienteSelecionado(){
-    	return Controlador.clienteSelecionado;
-    }
-    
-    public Imovel getImovelSelecionado(){
-    	return Controlador.imovelSelecionado;
-    }
-    
-    public Medidor getMedidorSelecionado(){
-    	return Controlador.medidorSelecionado;
-    }
-    
-    public Servicos getServicosSelecionado(){
-    	return Controlador.servicosSelecionado;
-    }
-    
-    public DadosGerais getDadosGerais(){
-    	return Controlador.dadosGerais;
-    }
-    
-    public Registro getAnormalidades(){
-    	return Controlador.anormalidades;
-    }
-    
-    public AnormalidadeImovel getAnormalidadeImovelSelecionado(){
-    	return Controlador.anormalidadeImovelSelecionado;
-    }
-    
-    public Registro getRamosAtividade(){
-    	return Controlador.ramosAtividade;
-    }
-    
-    public void setClienteSelecionado(Cliente clienteSelecionado){
-    	Controlador.clienteSelecionado = clienteSelecionado;
-    }
-    
-    public void setImovelSelecionado(Imovel imovelSelecionado){
-    	Controlador.imovelSelecionado = imovelSelecionado;
-    }
-    
-    public void setMedidorSelecionado(Medidor medidorSelecionado){
-    	Controlador.medidorSelecionado = medidorSelecionado;
-    }
-    
-    public void setServicosSelecionado(Servicos servicosSelecionado){
-    	Controlador.servicosSelecionado = servicosSelecionado;
-    }
-    
-    public void setAnormalidadeImovelSelecionado(AnormalidadeImovel anormalidadeImovelSelecionado){
-    	Controlador.anormalidadeImovelSelecionado = anormalidadeImovelSelecionado;
-    }
-    
-    public void setDadosGerais(DadosGerais dadosGerais){
-    	Controlador.dadosGerais = dadosGerais;
-    }
-    
-    public void setAnormalidades(Registro anormalidades){
-    	Controlador.anormalidades = anormalidades;
-    }
-    
-    public void setRamosAtividade(Registro ramosAtividade){
-    	Controlador.ramosAtividade = ramosAtividade;
-    }
-     
-    public void setCadastroSelecionadoByListPosition(int listPosition){
-    	initCadastroTabs();
-    	setCadastroListPosition(listPosition);
-    	idCadastroSelecionado = getIdCadastroSelecionado(listPosition, null);
-    	dmCadastro.selectCliente(idCadastroSelecionado);
-    	dmCadastro.selectImovel(idCadastroSelecionado);
-    	dmCadastro.selectServico(idCadastroSelecionado);
-    	dmCadastro.selectMedidor(idCadastroSelecionado);
-    	dmCadastro.selectAnormalidadeImovel(idCadastroSelecionado);
-    }
-    
-    public void setCadastroSelecionadoByListPositionInConsulta(int listPositionInConsulta, String condition){
-    	initCadastroTabs();
-    	idCadastroSelecionado = getIdCadastroSelecionado(listPositionInConsulta, condition);
-    	setCadastroListPosition(getCadastroListPositionById(idCadastroSelecionado));
-
-    	dmCadastro.selectCliente(idCadastroSelecionado);
-    	dmCadastro.selectImovel(idCadastroSelecionado);
-    	dmCadastro.selectServico(idCadastroSelecionado);
-    	dmCadastro.selectMedidor(idCadastroSelecionado);
-    	dmCadastro.selectAnormalidadeImovel(idCadastroSelecionado);
-    }
-    
-    public void setCadastroSelecionado(long id){
-    	initCadastroTabs();
-    	idCadastroSelecionado = id;
-    	dmCadastro.selectCliente(idCadastroSelecionado);
-    	dmCadastro.selectImovel(idCadastroSelecionado);
-    	dmCadastro.selectServico(idCadastroSelecionado);
-    	dmCadastro.selectMedidor(idCadastroSelecionado);
-    	dmCadastro.selectAnormalidadeImovel(idCadastroSelecionado);
-    }
-    
-    public void setCadastroSelecionadoNovoImovel() {
-    	initCadastroTabs();
-    	idCadastroSelecionado = -1;
-    }
-    
-    public void initCadastroTabs(){
-        clienteSelecionado = new Cliente();
-        imovelSelecionado = new Imovel();
-        medidorSelecionado = new Medidor();
-        servicosSelecionado = new Servicos();
-        anormalidadeImovelSelecionado = new AnormalidadeImovel();
-    }
-    
-    
-    public int getIdCadastroSelecionado(int listPosition, String condition){
-    	// se for cadastro novo
-    	if (listPosition == -1){
-    		return 0;
- 
-    	}else{
-        	return Integer.parseInt(Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(condition).get(listPosition));
-     	}
-    }
-    
-    public int getCadastroListPositionById(long id){
-    	int position = 0;
-    	ArrayList<String> listIds = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
-    	
-    	for(int i = 0; i < listIds.size(); i++){
-    		if (id == Long.parseLong(listIds.get(i))){
-    			position = i;
-    			break;
-    		}
-      	}
-    	return position;
-    }
-    
-    public boolean isCadastroAlterado(){
-    	boolean result = false;
-    	
-    	// guarda instancia de cliente, imovel, medidor e servico 
-    	Cliente clienteEditado = clienteSelecionado;
-    	Imovel imovelEditado = imovelSelecionado;
-    	Servicos servicoEditado = servicosSelecionado;
-    	Medidor medidorEditado = medidorSelecionado;
-    	AnormalidadeImovel anormalidadeImovelEditado = anormalidadeImovelSelecionado;
-    	
-    	// atualiza as instancias clienteSelecionado, imovelSelecionado, servicoSelecionado e medidorSelecionado com os valores do banco de dados.
-    	dmCadastro.selectCliente(idCadastroSelecionado);
-    	dmCadastro.selectImovel(idCadastroSelecionado);
-    	dmCadastro.selectServico(idCadastroSelecionado);
-    	dmCadastro.selectMedidor(idCadastroSelecionado);
-    	dmCadastro.selectAnormalidadeImovel(idCadastroSelecionado);
-    	
-    	if (clienteEditado != clienteSelecionado){
-    		result = true;
-    	
-    	}else if (imovelEditado != imovelSelecionado){
-    		result = true;
-    		
-    	}else if (servicoEditado != servicosSelecionado){
-    		result = true;
-    		
-    	}else if (medidorEditado != medidorSelecionado){
-    		result = true;
-    		
-    	}else if (anormalidadeImovelEditado != anormalidadeImovelSelecionado){
-    		result = true;
-    		
-    	}
-    	
-    	// Restaura os valores editados nas instancias selecionadas
-    	if(result){
-        	clienteSelecionado = clienteEditado;
-        	imovelSelecionado = imovelEditado;
-        	servicosSelecionado = servicoEditado;
-        	medidorSelecionado  = medidorEditado;
-        	anormalidadeImovelSelecionado  = anormalidadeImovelEditado;
-    	}
-    	return result;
-    }
-    
-    /**
-     * Carrega o vetor de imóveis e salva cada registro no SQlite database.
-     * 
-     * @param input
-     *            Vetor onde cada elemento uma linha do arquivo de entrada.
-     */
-    public void carregarDadosParaRecordStore(BufferedReader input, Handler mHandler, Context context) {
-		String line = "";
-	    linhasLidas = 0;
 		
-		if (input != null){
-			
+		return Controlador.instancia;
+	}
+
+	public Cliente getClienteSelecionado() {
+		return Controlador.clienteSelecionado;
+	}
+
+	public Imovel getImovelSelecionado() {
+		return Controlador.imovelSelecionado;
+	}
+
+	public Medidor getMedidorSelecionado() {
+		return Controlador.medidorSelecionado;
+	}
+
+	public Servicos getServicosSelecionado() {
+		return Controlador.servicosSelecionado;
+	}
+
+	public DadosGerais getDadosGerais() {
+		return Controlador.dadosGerais;
+	}
+
+	public Registro getAnormalidades() {
+		return Controlador.anormalidades;
+	}
+
+	public AnormalidadeImovel getAnormalidadeImovelSelecionado() {
+		return Controlador.anormalidadeImovelSelecionado;
+	}
+
+	public Registro getRamosAtividade() {
+		return Controlador.ramosAtividade;
+	}
+
+	public void setClienteSelecionado(Cliente clienteSelecionado) {
+		Controlador.clienteSelecionado = clienteSelecionado;
+	}
+
+	public void setImovelSelecionado(Imovel imovelSelecionado) {
+		Controlador.imovelSelecionado = imovelSelecionado;
+	}
+
+	public void setMedidorSelecionado(Medidor medidorSelecionado) {
+		Controlador.medidorSelecionado = medidorSelecionado;
+	}
+
+	public void setServicosSelecionado(Servicos servicosSelecionado) {
+		Controlador.servicosSelecionado = servicosSelecionado;
+	}
+
+	public void setAnormalidadeImovelSelecionado(AnormalidadeImovel anormalidadeImovelSelecionado) {
+		Controlador.anormalidadeImovelSelecionado = anormalidadeImovelSelecionado;
+	}
+
+	public void setDadosGerais(DadosGerais dadosGerais) {
+		Controlador.dadosGerais = dadosGerais;
+	}
+
+	public void setAnormalidades(Registro anormalidades) {
+		Controlador.anormalidades = anormalidades;
+	}
+
+	public void setRamosAtividade(Registro ramosAtividade) {
+		Controlador.ramosAtividade = ramosAtividade;
+	}
+
+	public void setCadastroSelecionadoByListPosition(int listPosition) {
+		initCadastroTabs();
+		setCadastroListPosition(listPosition);
+		idCadastroSelecionado = getIdCadastroSelecionado(listPosition, null);
+		manipulator.selectCliente(idCadastroSelecionado);
+		manipulator.selectImovel(idCadastroSelecionado);
+		manipulator.selectServico(idCadastroSelecionado);
+		manipulator.selectMedidor(idCadastroSelecionado);
+		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+	}
+
+	public void setCadastroSelecionadoByListPositionInConsulta(int listPositionInConsulta, String condition) {
+		initCadastroTabs();
+		idCadastroSelecionado = getIdCadastroSelecionado(listPositionInConsulta, condition);
+		setCadastroListPosition(getCadastroListPositionById(idCadastroSelecionado));
+
+		manipulator.selectCliente(idCadastroSelecionado);
+		manipulator.selectImovel(idCadastroSelecionado);
+		manipulator.selectServico(idCadastroSelecionado);
+		manipulator.selectMedidor(idCadastroSelecionado);
+		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+	}
+
+	public void setCadastroSelecionado(long id) {
+		initCadastroTabs();
+		idCadastroSelecionado = id;
+		manipulator.selectCliente(idCadastroSelecionado);
+		manipulator.selectImovel(idCadastroSelecionado);
+		manipulator.selectServico(idCadastroSelecionado);
+		manipulator.selectMedidor(idCadastroSelecionado);
+		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+	}
+
+	public void setCadastroSelecionadoNovoImovel() {
+		initCadastroTabs();
+		idCadastroSelecionado = -1;
+	}
+
+	public void initCadastroTabs() {
+		clienteSelecionado = new Cliente();
+		imovelSelecionado = new Imovel();
+		medidorSelecionado = new Medidor();
+		servicosSelecionado = new Servicos();
+		anormalidadeImovelSelecionado = new AnormalidadeImovel();
+	}
+
+	public int getIdCadastroSelecionado(int listPosition, String condition) {
+		if (listPosition == -1) {
+			return 0;
+
+		} else {
+			return Integer.parseInt(Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(condition).get(listPosition));
+		}
+	}
+
+	public int getCadastroListPositionById(long id) {
+		int position = 0;
+		ArrayList<String> listIds = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
+
+		for (int i = 0; i < listIds.size(); i++) {
+			if (id == Long.parseLong(listIds.get(i))) {
+				position = i;
+				break;
+			}
+		}
+		
+		return position;
+	}
+
+	public boolean isCadastroAlterado() {
+		boolean result = false;
+
+		Cliente clienteEditado = clienteSelecionado;
+		Imovel imovelEditado = imovelSelecionado;
+		Servicos servicoEditado = servicosSelecionado;
+		Medidor medidorEditado = medidorSelecionado;
+		AnormalidadeImovel anormalidadeImovelEditado = anormalidadeImovelSelecionado;
+
+		manipulator.selectCliente(idCadastroSelecionado);
+		manipulator.selectImovel(idCadastroSelecionado);
+		manipulator.selectServico(idCadastroSelecionado);
+		manipulator.selectMedidor(idCadastroSelecionado);
+		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+
+		if (clienteEditado != clienteSelecionado) {
+			result = true;
+		} else if (imovelEditado != imovelSelecionado) {
+			result = true;
+		} else if (servicoEditado != servicosSelecionado) {
+			result = true;
+		} else if (medidorEditado != medidorSelecionado) {
+			result = true;
+		} else if (anormalidadeImovelEditado != anormalidadeImovelSelecionado) {
+			result = true;
+		}
+
+		// Restaura os valores editados nas instancias selecionadas
+		if (result) {
+			clienteSelecionado = clienteEditado;
+			imovelSelecionado = imovelEditado;
+			servicosSelecionado = servicoEditado;
+			medidorSelecionado = medidorEditado;
+			anormalidadeImovelSelecionado = anormalidadeImovelEditado;
+		}
+		
+		return result;
+	}
+
+	public void carregarDadosParaRecordStore(BufferedReader input, Handler handler, Context context) {
+		String line = "";
+		linhasLidas = 0;
+
+		if (input != null) {
 			try {
+				Bundle bundle = new Bundle();
 
-			    Bundle b = new Bundle();
+				while ((line = input.readLine()) != null) {
 
-			    while((line = input.readLine()) != null) {                         
-				    					
-				    if (linhasLidas == 0) {
+					if (linhasLidas == 0) {
 						qtdRegistros = Integer.parseInt(line);
 						linhasLidas++;
 						continue;
-				    }
-				    
+					}
+
 					linhasLidas++;
 
 					Log.i("Linha", "Linha :" + line);
 
-				    int tipoRegistro = Integer.parseInt(line.substring(0, 2));
-				    
-				    if (tipoRegistro == Constantes.REGISTRO_TIPO_CLIENTE) {
-				    	dmCadastro.insertCliente(line);
-				    	
-//				    	// tb adiciona elemento na tabela anormalidade_imovel
-//				    	dmCadastro.insertAnormalidadeImovel();
-//
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_IMOVEL) {
-				    	dmCadastro.insertImovel(line);
+					int tipoRegistro = Integer.parseInt(line.substring(0, 2));
 
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMOS_ATIVIDADE_IMOVEL) {
-				    	dmCadastro.insertRamosAtividadeImovel(line);
+					if (tipoRegistro == Constantes.REGISTRO_TIPO_CLIENTE) {
+						manipulator.insertCliente(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_IMOVEL) {
+						manipulator.insertImovel(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMOS_ATIVIDADE_IMOVEL) {
+						manipulator.insertRamosAtividadeImovel(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SERVICO) {
+						manipulator.insertServico(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_HIDROMETRO) {
+						manipulator.insertMedidor(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE_IMOVEL) {
+						manipulator.insertAnormalidadeImovel(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
+						manipulator.insertDadosGerais(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
+						manipulator.insertAnormalidade(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMO_ATIVIDADE) {
+						manipulator.insertRamoAtividade(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_AGUA) {
+						manipulator.insertSituacaoLigacaoAgua(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_ESGOTO) {
+						manipulator.insertSituacaoLigacaoEsgoto(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_PROTECAO_HIDROMETRO) {
+						manipulator.insertProtecaoHidrometro(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_FONTE_ABASTECIMENTO) {
+						manipulator.insertFonteAbastecimento(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_MARCA_HIDROMETRO) {
+						manipulator.insertMarcaHidrometro(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOCAl_INSTALACAO_RAMAL) {
+						manipulator.insertLocalInstalacaoRamal(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_CAPACIDADE_HIDROMETRO) {
+						manipulator.insertCapacidadeHidrometro(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOGRADOURO) {
+						manipulator.insertLogradouro(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_CLASSE_SOCIAL) {
+						manipulator.insertClasseSocial(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_USO) {
+						manipulator.insertTipoUso(line);
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_HIDROMETRO) {
+						manipulator.insertAcessoHidrometro(line);
+					}
 
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_SERVICO) {
-				    	dmCadastro.insertServico(line);
-
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_HIDROMETRO) {
-				    	dmCadastro.insertMedidor(line);
-
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE_IMOVEL) {
-				    	dmCadastro.insertAnormalidadeImovel(line);
-
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
-				    	dmCadastro.insertDadosGerais(line);
-
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
-				    	dmCadastro.insertAnormalidade(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMO_ATIVIDADE) {
-				    	dmCadastro.insertRamoAtividade(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_AGUA) {
-				    	dmCadastro.insertSituacaoLigacaoAgua(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_ESGOTO) {
-				    	dmCadastro.insertSituacaoLigacaoEsgoto(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_PROTECAO_HIDROMETRO) {
-				    	dmCadastro.insertProtecaoHidrometro(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_FONTE_ABASTECIMENTO) {
-				    	dmCadastro.insertFonteAbastecimento(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_MARCA_HIDROMETRO) {
-				    	dmCadastro.insertMarcaHidrometro(line);
-
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOCAl_INSTALACAO_RAMAL) {
-				    	dmCadastro.insertLocalInstalacaoRamal(line);
-				    	
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_CAPACIDADE_HIDROMETRO) {
-				    	dmCadastro.insertCapacidadeHidrometro(line);
-				    	
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOGRADOURO) {
-				    	dmCadastro.insertLogradouro(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_CLASSE_SOCIAL) {
-				    	dmCadastro.insertClasseSocial(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_USO) {
-				    	dmCadastro.insertTipoUso(line);
-				    
-				    }else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_HIDROMETRO) {
-				    	dmCadastro.insertAcessoHidrometro(line);
-				    }
-				    
-				    if (linhasLidas < qtdRegistros){
-				        // Send message (with current value of total as data) to Handler on UI thread
-				        // so that it can update the progress bar.
-				        Message msg = mHandler.obtainMessage();
-				        b.putInt("total", linhasLidas);
-				        msg.setData(b);
-				        mHandler.sendMessage(msg);
-			        }
+					if (linhasLidas < qtdRegistros) {
+						Message msg = handler.obtainMessage();
+						bundle.putInt("total", linhasLidas);
+						msg.setData(bundle);
+						handler.sendMessage(msg);
+					}
 				}
 
-			    // Define Rota Carregada com sucesso.
-		    	setRotaCarregamentoOk(Constantes.SIM);
-		    	
-		        // Send message (with current value of total as data) to Handler on UI thread
-		        // so that it can update the progress bar.
-		        Message msg = mHandler.obtainMessage();
-		        b.putInt("total", linhasLidas);
-		        msg.setData(b);
-		        mHandler.sendMessage(msg);
+				setRotaCarregamentoOk(Constantes.SIM);
 
-				
+				Message msg = handler.obtainMessage();
+				bundle.putInt("total", linhasLidas);
+				msg.setData(bundle);
+				handler.sendMessage(msg);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-    }
-    
+	}
+
 	public int getQtdRegistros() {
-    	return qtdRegistros;
+		return qtdRegistros;
 	}
 
-    public void setPermissionGranted(boolean state){
-    	this.permissionGranted = state;
-    }
-
-    public boolean isPermissionGranted(){
-    	return this.permissionGranted;
-    }
-
-    public void initiateDataManipulator(Context context){
-
-    	if (dmCadastro == null){
-	    	dmCadastro = new DataManipulator(context);
-			dmCadastro.open();
-    	}
-    }    
-    public void finalizeDataManipulator(){
-    	if (dmCadastro != null){
-	    	dmCadastro.close();
-	    	dmCadastro = null;
-    	}
-    }
-    
-    public DataManipulator getCadastroDataManipulator(){
-    	return dmCadastro;
-    }
-    
-    // Retorna o Id do cadastro selecionado
-    public long getIdCadastroSelecionado(){
-    	return idCadastroSelecionado;
-    }
-    
-    // Retorna a posição do cadastro selecionado na lista de cadastros ordenada por inscrição
-    public int getCadastroListPosition(){
-    	return cadastroListPosition;
-    }
-    
-    // Guarda a posição do cadastro selecionado na lista de cadastros ordenada por inscrição
-    public void setCadastroListPosition(int position){
-    	this.cadastroListPosition = position;
-    	dmCadastro.updateConfiguracao("posicao_cadastro_selecionado", position);
-    }
-    
-    public boolean databaseExists(Context context){
-    	File dbFile = new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME);
-
-    	initiateDataManipulator(context);
-    	
-     	return (dbFile.exists() && dmCadastro.selectAnormalidades().size() > 0);
+	public void setPermissionGranted(boolean state) {
+		this.permissionGranted = state;
 	}
-    
-    public int isDatabaseRotaCarregadaOk(){
 
-    	if (dmCadastro.selectConfiguracaoElement("rota_carregada") == Constantes.SIM){
-    		this.isRotaCarregadaOk = Constantes.SIM;
-    	}
-
-     	return this.isRotaCarregadaOk;
+	public boolean isPermissionGranted() {
+		return this.permissionGranted;
 	}
-    
-    public void setRotaCarregamentoOk(int isRotaCarregadaOk){
-    	dmCadastro.updateConfiguracao("rota_carregada", Constantes.SIM);
-    }
-    
-    public void deleteDatabase(){
-        String strDBFilePath= Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
-        File file = new   File(strDBFilePath);
-        file.delete();
-	}    
+
+	public void initiateDataManipulator(Context context) {
+		if (manipulator == null) {
+			manipulator = new DataManipulator(context);
+			manipulator.open();
+		}
+	}
+
+	public void finalizeDataManipulator() {
+		if (manipulator != null) {
+			manipulator.close();
+			manipulator = null;
+		}
+	}
+
+	public DataManipulator getCadastroDataManipulator() {
+		return manipulator;
+	}
+
+	public long getIdCadastroSelecionado() {
+		return idCadastroSelecionado;
+	}
+
+	public int getCadastroListPosition() {
+		return cadastroListPosition;
+	}
+
+	@SuppressWarnings("static-access")
+	public void setCadastroListPosition(int position) {
+		this.cadastroListPosition = position;
+		manipulator.updateConfiguracao("posicao_cadastro_selecionado", position);
+	}
+
+	public boolean databaseExists(Context context) {
+		File dbFile = new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME);
+
+		initiateDataManipulator(context);
+
+		return (dbFile.exists() && manipulator.selectAnormalidades().size() > 0);
+	}
+
+	@SuppressWarnings("static-access")
+	public int isDatabaseRotaCarregadaOk() {
+
+		if (manipulator.selectConfiguracaoElement("rota_carregada") == Constantes.SIM) {
+			this.isRotaCarregadaOk = Constantes.SIM;
+		}
+
+		return this.isRotaCarregadaOk;
+	}
+
+	public void setRotaCarregamentoOk(int isRotaCarregadaOk) {
+		manipulator.updateConfiguracao("rota_carregada", Constantes.SIM);
+	}
+
+	public void deleteDatabase() {
+		String strDBFilePath = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
+		File file = new File(strDBFilePath);
+		file.delete();
+	}
 }

@@ -114,7 +114,6 @@ public class DbHelper extends SQLiteOpenHelper {
 		super(context, Constantes.DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
-	// Method is called during creation of the database
     @Override
     public void onCreate(SQLiteDatabase db) {
     	db.execSQL(DATABASE_CLIENTE_QUERY);
@@ -141,7 +140,6 @@ public class DbHelper extends SQLiteOpenHelper {
      	db.execSQL(ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL);
     }
 
-	// Method is called during an upgrade of the database, e.g. if you increase the database version
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {

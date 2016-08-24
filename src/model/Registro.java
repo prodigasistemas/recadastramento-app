@@ -6,13 +6,12 @@ public class Registro {
 
 	private int codigo;
 	private int descricao;
-	
-	public Registro(){
+
+	public Registro() {
 		codigo = 0;
 		descricao = 0;
-		
 	}
-	
+
 	public void setCodigo(String codigo) {
 		this.codigo = Util.verificarNuloInt(codigo);
 	}
@@ -28,7 +27,4 @@ public class Registro {
 	public int getDescricao() {
 		return this.descricao;
 	}
-
-
-
 }

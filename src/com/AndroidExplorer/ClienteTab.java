@@ -291,10 +291,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 		
 		// CPF ou CNPJ do usuario
 		if (isUsuarioCpfSelected){
-			
 			if( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
-				(!Util.getCpfUsuarioOk() || !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ){
-				
+				!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
+				//(!Util.getCpfUsuarioOk() || )
+					
 				dialogMessage = "CPF do usuário inválido.";
                 showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 				return false;
@@ -302,8 +302,9 @@ public class ClienteTab extends Fragment implements LocationListener {
 		}else{
 			
 			if( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
-				(!Util.getCnpjUsuarioOk() || !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())) ){
-				
+				!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())){
+				//(!Util.getCnpjUsuarioOk() || )
+					
 				dialogMessage = "CNPJ do usuário inválido.";
                 showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 				return false;

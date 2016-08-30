@@ -575,13 +575,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 		}
 
 		// Sexo do Usuario
-		String[] lista = getResources().getStringArray(R.array.sexo);
-		for (int i = 0; i < lista.length; i++) {
-			if (lista[i].equalsIgnoreCase(getCliente().getUsuario().getTipoSexo())) {
-				((Spinner) (view.findViewById(R.id.spinnerSexoUsuario))).setSelection(i);
-				break;
-			}
-		}
+		if(getCliente().getUsuario().getTipoSexo() != Constantes.NULO_STRING)
+		((Spinner) (view.findViewById(R.id.spinnerSexoUsuario))).setSelection(Integer.parseInt(getCliente().getUsuario().getTipoSexo()) - 1);
 
 		// CPF / CNPJ do Usuario
 		if (getCliente().getUsuario().getCpfCnpj() != Constantes.NULO_STRING) {

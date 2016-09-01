@@ -265,6 +265,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
             	}else if(getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
             		verificarImovelStatus();
 					Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
+					Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
 					((MainTab)getActivity()).setTabColor();
         			getAnormalidadeImovelSelecionado().setTabSaved(true);
         			

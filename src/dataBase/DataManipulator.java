@@ -864,7 +864,12 @@ public List<String> selectEnderecoImoveis(String condition){
 	public List<String> selectDescricoesFromTable(String table){
     	
 		ArrayList<String> list = new ArrayList<String>();
-		Cursor cursor = db.query(table, new String[] {"codigo", "descricao"}, null, null, null, null,  "descricao asc");
+		String asc = null;
+		if(!table.equals(Constantes.TABLE_TIPO_USO) && 
+				!table.equals(Constantes.TABLE_CLASSE_SOCIAL) &&
+				!table.equals(Constantes.TABLE_ACESSO_HIDROMETRO)) asc = "descricao asc";
+		
+		Cursor cursor = db.query(table, new String[] {"codigo", "descricao"}, null, null, null, null, asc);
 		int x=0;
 		if (cursor.moveToFirst()) {
 			do {
@@ -879,7 +884,7 @@ public List<String> selectEnderecoImoveis(String condition){
         cursor.close();
         return list;
 	}
-
+	
     public String selectCodigoByDescricaoFromTable(String table, String descricao){
     	
     	String codigo = new String();

@@ -2,7 +2,7 @@ package model;
 
 import util.Util;
 
-public class Servicos {
+public class Servicos extends Model{
 
 	private int tipoLigacaoAgua;
 	private int tipoLigacaoEsgoto;

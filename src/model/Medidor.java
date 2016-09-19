@@ -3,7 +3,7 @@ package model;
 import util.Constantes;
 import util.Util;
 
-public class Medidor {
+public class Medidor extends Model{
 
 	private int possuiMedidor;
 	private String numeroHidrometro;

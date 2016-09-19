@@ -3,7 +3,7 @@ package model;
 import util.Constantes;
 import util.Util;
 
-public class Cliente {
+public class Cliente extends Model{
 
 	private Pessoa proprietario;
 	private Pessoa usuario;

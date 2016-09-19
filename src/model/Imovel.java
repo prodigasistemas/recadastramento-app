@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import util.Constantes;
 import util.Util;
 
-public class Imovel {
+public class Imovel extends Model {
 
 	private long imovelId;
 	private Categoria categoriaResidencial;

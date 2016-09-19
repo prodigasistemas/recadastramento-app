@@ -2,7 +2,7 @@ package model;
 
 import util.Util;
 
-public class AnormalidadeImovel {
+public class AnormalidadeImovel extends Model{
 
 	private int codigoAnormalidade;
 	private int matricula;

@@ -455,8 +455,13 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		imovel.setQuadra(imovelReferencia.getQuadra());
 		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
 		imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
+		imovel.setNovoRegistro(true);
 		
 		Controlador.getInstancia().setImovelSelecionado(imovel);
+		Controlador.getInstancia().getClienteSelecionado().setNovoRegistro(true);
+		Controlador.getInstancia().getServicosSelecionado().setNovoRegistro(true);
+		Controlador.getInstancia().getMedidorSelecionado().setNovoRegistro(true);
+		Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(true);
 		
 		if (numeroLoteInsuficiente) {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(this);

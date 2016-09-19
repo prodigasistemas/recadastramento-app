@@ -1395,11 +1395,11 @@ public List<String> selectEnderecoImoveis(String condition){
    	   initialValues.put("data", getClienteSelecionado().getData());
 
 	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
-		   db.update(Constantes.TABLE_CLIENTE, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-   		   
-	   }else{
+	   if (Controlador.getInstancia().getClienteSelecionado().isNovoRegistro()){
 		   db.insert(Constantes.TABLE_CLIENTE, null, initialValues);
+		   Controlador.getInstancia().getClienteSelecionado().setNovoRegistro(false);
+	   }else{
+		   db.update(Constantes.TABLE_CLIENTE, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
 	   }
 	}
 
@@ -1482,8 +1482,10 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("percentual_abastecimento", getImovelSelecionado().getPercentualAbastecimento());
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
-		   
+	   if (Controlador.getInstancia().getImovelSelecionado().isNovoRegistro()){
+		   db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
+		   Controlador.getInstancia().getImovelSelecionado().setNovoRegistro(false);
+	   }else{
 		   db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
    		   
    		// deve-se agora substituir os ramos de atividade so imovel. 
@@ -1497,8 +1499,6 @@ public List<String> selectEnderecoImoveis(String condition){
    			}
    		}
 
-	   }else{
-		   db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
 	   }
 	}
 
@@ -1514,11 +1514,11 @@ public List<String> selectEnderecoImoveis(String condition){
    	   initialValues.put("data", getServicosSelecionado().getData());
 
 	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
-		   db.update(Constantes.TABLE_SERVICO, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-   		   
-	   }else{
+	   if (Controlador.getInstancia().getServicosSelecionado().isNovoRegistro()){
 		   db.insert(Constantes.TABLE_SERVICO, null, initialValues);
+		   Controlador.getInstancia().getServicosSelecionado().setNovoRegistro(false);
+	   }else{
+		   db.update(Constantes.TABLE_SERVICO, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
 	   }
 	}
 
@@ -1536,11 +1536,11 @@ public List<String> selectEnderecoImoveis(String condition){
    	   initialValues.put("data", getMedidorSelecionado().getData());
 
 	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getIdCadastroSelecionado() > 0){
-		   db.update(Constantes.TABLE_MEDIDOR, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-   		   
-	   }else{
+	   if (Controlador.getInstancia().getMedidorSelecionado().isNovoRegistro()){
 		   db.insert(Constantes.TABLE_MEDIDOR, null, initialValues);
+		   Controlador.getInstancia().getMedidorSelecionado().setNovoRegistro(false);
+	   }else{
+		   db.update(Constantes.TABLE_MEDIDOR, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
 	   }
 	}
 
@@ -1559,11 +1559,21 @@ public List<String> selectEnderecoImoveis(String condition){
    	   AnormalidadeImovel anormalidadeImovel = selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
 
 	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
+//   	if (Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()){
+//		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String []{String.valueOf(anormalidadeImovel.getMatricula())});
+//		   
+//	   }else{
+//		   db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues);
+//	   }
+   	   
 	   if (anormalidadeImovel.getMatricula() == getImovelSelecionado().getMatricula()){
 		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String []{String.valueOf(anormalidadeImovel.getMatricula())});
 		   
 	   }else{
-		   Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
+		   if(Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()){
+			   Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
+			   Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(false);
+		   }
 	   }
 	}
 	

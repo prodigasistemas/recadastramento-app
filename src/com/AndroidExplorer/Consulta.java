@@ -198,36 +198,14 @@ public class Consulta extends ListActivity {
 	        	    	}    	    				
 	    			}
     			}else if(metodoBusca == Constantes.METODO_BUSCA_NUMERO_RESIDENCIA){
-    				filterPreCondition = "(imovel.numero_imovel = " + valorBusca + ")" ;
-        	    		
-        	    	ArrayList<String> idList = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectIdClientes(filterPreCondition);
-        	    		 
-	    			if (searchCondition.length() > 0){
-	        			filterCondition = searchCondition + " AND ";
-
-	        	    	if (idList != null && idList.size() > 0){
-            	    		
-	        	    		filterCondition += " (id = " + idList.get(0);
-	            	    		
-	            	    	for (int i = 1; i < idList.size(); i++){
-	            	    		filterCondition += " OR id = " + idList.get(i);
-	            	    	}
-	            	    	
-	            	    	filterCondition += ")";
-	        	    	}    	    				
-
+    				String complemento = "(numero_imovel = \"" + Util.adicionarCharDireita(5, valorBusca.replaceAll("\"", ""), ' ') + "\")" ;
+    				
+    				if (searchCondition.length() > 0){
+	    				filterCondition = searchCondition + " AND ";	    			
+	    				filterCondition += complemento;
 	    			}else{
-	        	    	if (idList != null && idList.size() > 0){
-            	    		
-	        	    		filterCondition = " (id = " + idList.get(0);
-	            	    		
-	            	    	for (int i = 1; i < idList.size(); i++){
-	            	    		filterCondition += " OR id = " + idList.get(i);
-	            	    	}
-	            	    	
-	            	    	filterCondition += ")";
-	        	    	}    	    				
-	    			}
+	    				filterCondition = complemento;		
+	    			}	
     			}
     	    	
     			// Aplica condicoes de filtro

@@ -4,21 +4,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
-import business.Controlador;
-
-import com.AndroidExplorer.ClienteTab;
-
 import android.os.Build;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
+import business.Controlador;
+
+import com.AndroidExplorer.ClienteTab;
 
 public class Util {
 
@@ -1253,5 +1252,10 @@ public class Util {
 	
 	public static String removeDecimalChar(String value){
 		return value.replace(".","");
+	}
+	
+	public static String removerCaractereEspecial(String valor) {
+		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
+		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
 }

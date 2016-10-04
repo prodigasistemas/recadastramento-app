@@ -247,7 +247,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(26, getClienteSelecionado().getData(), ' '));
 		registrosTipoCLiente.append("\n");
 
-		arquivo.append(registrosTipoCLiente);
+		arquivo.append(Util.removerCaractereEspecial(registrosTipoCLiente.toString()));
 	}
 
 	private static void gerarRegistroTipoImovel() {
@@ -324,7 +324,7 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));
 		registrosTipoImovel.append("\n");
 
-		arquivo.append(registrosTipoImovel);
+		arquivo.append(Util.removerCaractereEspecial(registrosTipoImovel.toString()));
 	}
 
 	private static void gerarRegistrosTipoRamosAtividadeImovel() {
@@ -337,7 +337,7 @@ public class ArquivoRetorno {
 			registrosTipoRamoAtividadeImovel.append(Util.adicionarCharDireita(3, getImovelSelecionado().getListaRamoAtividade().get(i), ' '));
 			registrosTipoRamoAtividadeImovel.append("\n");
 
-			arquivo.append(registrosTipoRamoAtividadeImovel);
+			arquivo.append(Util.removerCaractereEspecial(registrosTipoRamoAtividadeImovel.toString()));
 		}
 	}
 
@@ -356,7 +356,7 @@ public class ArquivoRetorno {
 		registroTipoServico.append(Util.adicionarCharEsquerda(26, getServicosSelecionado().getData(), ' '));
 		registroTipoServico.append("\n");
 
-		arquivo.append(registroTipoServico);
+		arquivo.append(Util.removerCaractereEspecial(registroTipoServico.toString()));
 	}
 
 	private static void gerarRegistroTipoMedidor() {
@@ -374,7 +374,7 @@ public class ArquivoRetorno {
 		registroTipoMedidor.append(Util.adicionarCharEsquerda(26, getMedidorSelecionado().getData(), ' '));
 		registroTipoMedidor.append("\n");
 
-		arquivo.append(registroTipoMedidor);
+		arquivo.append(Util.removerCaractereEspecial(registroTipoMedidor.toString()));
 	}
 
 	@SuppressLint("DefaultLocale")
@@ -393,7 +393,7 @@ public class ArquivoRetorno {
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, getImovelSelecionado().getEntrevistado().toUpperCase(), ' '));
 		registroTipoAnormalidadeImovel.append("\n");
 
-		arquivo.append(registroTipoAnormalidadeImovel);
+		arquivo.append(Util.removerCaractereEspecial(registroTipoAnormalidadeImovel.toString()));
 	}
 
 	public static Cliente getClienteSelecionado() {

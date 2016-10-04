@@ -13,11 +13,11 @@ import model.Medidor;
 import model.Registro;
 import model.Servicos;
 import util.Constantes;
+import util.Util;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import dataBase.DataManipulator;
 
 public class Controlador {
@@ -211,7 +211,6 @@ public class Controlador {
 			result = true;
 		}
 
-		// Restaura os valores editados nas instancias selecionadas
 		if (result) {
 			clienteSelecionado = clienteEditado;
 			imovelSelecionado = imovelEditado;
@@ -224,67 +223,86 @@ public class Controlador {
 	}
 
 	public void carregarDadosParaRecordStore(BufferedReader input, Handler handler, Context context) {
-		String line = "";
+		String linha = "";
 		linhasLidas = 0;
 
 		if (input != null) {
 			try {
 				Bundle bundle = new Bundle();
 
-				while ((line = input.readLine()) != null) {
+				while ((linha = input.readLine()) != null) {
 
 					if (linhasLidas == 0) {
-						qtdRegistros = Integer.parseInt(line);
+						qtdRegistros = Integer.parseInt(linha);
 						linhasLidas++;
 						continue;
 					}
 
 					linhasLidas++;
 
-					Log.i("Linha", "Linha :" + line);
+					linha = Util.removerCaractereEspecial(linha);
 
-					int tipoRegistro = Integer.parseInt(line.substring(0, 2));
+					int tipoRegistro = Integer.parseInt(linha.substring(0, 2));
 
 					if (tipoRegistro == Constantes.REGISTRO_TIPO_CLIENTE) {
-						manipulator.insertCliente(line);
+						manipulator.insertCliente(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_IMOVEL) {
-						manipulator.insertImovel(line);
+						manipulator.insertImovel(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMOS_ATIVIDADE_IMOVEL) {
-						manipulator.insertRamosAtividadeImovel(line);
+						manipulator.insertRamosAtividadeImovel(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SERVICO) {
-						manipulator.insertServico(line);
+						manipulator.insertServico(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_HIDROMETRO) {
-						manipulator.insertMedidor(line);
+						manipulator.insertMedidor(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE_IMOVEL) {
-						manipulator.insertAnormalidadeImovel(line);
+						manipulator.insertAnormalidadeImovel(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
-						manipulator.insertDadosGerais(line);
+						manipulator.insertDadosGerais(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
-						manipulator.insertAnormalidade(line);
+						manipulator.insertAnormalidade(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMO_ATIVIDADE) {
-						manipulator.insertRamoAtividade(line);
+						manipulator.insertRamoAtividade(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_AGUA) {
-						manipulator.insertSituacaoLigacaoAgua(line);
+						manipulator.insertSituacaoLigacaoAgua(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_ESGOTO) {
-						manipulator.insertSituacaoLigacaoEsgoto(line);
+						manipulator.insertSituacaoLigacaoEsgoto(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_PROTECAO_HIDROMETRO) {
-						manipulator.insertProtecaoHidrometro(line);
+						manipulator.insertProtecaoHidrometro(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_FONTE_ABASTECIMENTO) {
-						manipulator.insertFonteAbastecimento(line);
+						manipulator.insertFonteAbastecimento(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_MARCA_HIDROMETRO) {
-						manipulator.insertMarcaHidrometro(line);
+						manipulator.insertMarcaHidrometro(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOCAl_INSTALACAO_RAMAL) {
-						manipulator.insertLocalInstalacaoRamal(line);
+						manipulator.insertLocalInstalacaoRamal(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_CAPACIDADE_HIDROMETRO) {
-						manipulator.insertCapacidadeHidrometro(line);
+						manipulator.insertCapacidadeHidrometro(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOGRADOURO) {
-						manipulator.insertLogradouro(line);
+						manipulator.insertLogradouro(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_CLASSE_SOCIAL) {
-						manipulator.insertClasseSocial(line);
+						manipulator.insertClasseSocial(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_USO) {
-						manipulator.insertTipoUso(line);
+						manipulator.insertTipoUso(linha);
+						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_HIDROMETRO) {
-						manipulator.insertAcessoHidrometro(line);
+						manipulator.insertAcessoHidrometro(linha);
 					}
 
 					if (linhasLidas < qtdRegistros) {

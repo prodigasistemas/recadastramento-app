@@ -25,6 +25,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -220,8 +222,37 @@ public class ClienteTab extends Fragment implements LocationListener {
             	}
         	}
         });
+        
+        checkedNovoUsuario();
 	}
 
+	private void checkedNovoUsuario() {
+		final CheckBox novoUsuario = (CheckBox) view.findViewById(R.id.novoUsuario);
+		
+		novoUsuario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+			public void onCheckedChanged(CompoundButton button, boolean checked) {
+				if (checked) {
+					limparDadosUsuario();
+				} else {
+					populateUsuario();
+				}
+			}
+		});
+	}
+	
+	private void limparDadosUsuario() {
+		((EditText) (view.findViewById(R.id.nomeUsuario))).setText("");
+		((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(0);
+		((EditText) (view.findViewById(R.id.ufUsuario))).setText("");
+		((Spinner) (view.findViewById(R.id.spinnerSexoUsuario))).setSelection(0);
+		((EditText) (view.findViewById(R.id.cpfCnpjUsuario))).setText("");
+		((EditText) (view.findViewById(R.id.rgUsuario))).setText("");
+		((EditText) (view.findViewById(R.id.foneUsuario))).setText("");
+		((EditText) (view.findViewById(R.id.celularUsuario))).setText("");
+		((EditText) (view.findViewById(R.id.emailUsuario))).setText("");
+		((RadioButton) (view.findViewById(R.id.radioResidencial))).setChecked(true);
+	}
 	
 	public boolean areUFsValidos(){
 		boolean result = true;

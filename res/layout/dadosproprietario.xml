@@ -1,88 +1,442 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/linearLayoutDadosProprietario"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-	android:background="@drawable/linearlayout_rounded_corners" 
-	android:id="@+id/linearLayoutDadosProprietario">
+    android:background="@drawable/linearlayout_rounded_corners"
+    android:orientation="vertical" >
 
-	<TextView android:text="Nome do Proprietário:" android:id="@+id/txtProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/nomeProprietario" android:inputType="textCapCharacters" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" > <requestFocus></requestFocus> </EditText>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-	<TextView android:text="Tipo de Pessoa:" android:id="@+id/txtTipoPessoaProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	<Spinner android:layout_height="wrap_content" android:id="@+id/spinnerTipoPessoaProprietario" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Novo cliente proprietário: "
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="18dp" />
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout1">
-		<TextView android:text="CPF:" android:id="@+id/txtCpfCnpjProprietario" android:minWidth="180dp" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-		<TextView android:text="RG:" android:id="@+id/txtRgProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
+        <CheckBox
+            android:id="@+id/novoProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout2">
-		<EditText android:id="@+id/cpfCnpjProprietario" android:minWidth="160dp" android:maxWidth="185dp" android:maxLength="18" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number"></EditText>
-		<EditText android:id="@+id/rgProprietario" android:maxLength="10" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number"></EditText>
-	</LinearLayout>
+    <TextView
+        android:id="@+id/txtProprietario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nome do Proprietário:"
+        android:textColor="@color/textColorYellowBackground"
+        android:textSize="15dp" >
+    </TextView>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3">
-		<TextView android:text="UF:" android:id="@+id/txtUfProprietario" android:minWidth="110dp"  android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-		<TextView android:text="Sexo:" android:id="@+id/txtSexoProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
+    <EditText
+        android:id="@+id/nomeProprietario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_rounded_corners"
+        android:inputType="textCapCharacters" >
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout4">
-		<EditText android:id="@+id/ufProprietario" android:minWidth="50dp" android:background="@drawable/edittext_rounded_corners" android:layout_height="wrap_content" android:drawSelectorOnTop="true" android:layout_width="wrap_content" android:maxLength="2" android:inputType="textCapCharacters"></EditText>		<Spinner android:id="@+id/spinnerSexoProprietario" android:minWidth="200dp" android:layout_height="wrap_content" android:drawSelectorOnTop="true" android:layout_width="fill_parent"></Spinner>
-	</LinearLayout>
+        <requestFocus>
+        </requestFocus>
+    </EditText>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout5">
-		<TextView android:text="Telefone:" android:id="@+id/txtTelefoneProprietario" android:minWidth="150dp" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="Celular:" android:id="@+id/txtCelularProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	</LinearLayout>
+    <TextView
+        android:id="@+id/txtTipoPessoaProprietario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo de Pessoa:"
+        android:textColor="@color/textColorYellowBackground"
+        android:textSize="15dp" >
+    </TextView>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout6">
-		<EditText android:id="@+id/foneProprietario" android:minWidth="150dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLength="13" android:inputType="phone"></EditText>
-		<EditText android:id="@+id/celularProprietario" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLength="13" android:inputType="phone"></EditText>
-	</LinearLayout>
-	
-	<TextView android:text="E-mail:" android:id="@+id/txtEmailProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content" ></TextView>
-	<EditText android:id="@+id/emailProprietario" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="textEmailAddress"></EditText>
-	
-	<TextView android:text="Tipo Logradouro:" android:id="@+id/txtTipoLogradouroProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<Spinner android:id="@+id/spinnerTipoLogradouroProprietario" android:drawSelectorOnTop="true" android:layout_width="fill_parent" android:layout_height="wrap_content"></Spinner>
+    <Spinner
+        android:id="@+id/spinnerTipoPessoaProprietario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true" >
+    </Spinner>
 
-	<TextView android:text="Logradouro:" android:id="@+id/txtLogradouroProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/logradouroProprietario" android:maxLength="40" android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="@drawable/edittext_rounded_corners" android:inputType="textCapCharacters"></EditText>
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout7">
-    	<TextView android:text="Nº:" android:id="@+id/txtNumero" android:maxLength="5" android:minWidth="140dp"  android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-  	 	<TextView android:text="Município:" android:id="@+id/txtMunicipio" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-	    
-   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout8">
-   	    <EditText android:id="@+id/numeroProprietario" android:minWidth="80dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters" android:maxLength="5"></EditText>
-		<EditText android:id="@+id/municipioProprietario" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="" android:maxLength="15"></EditText>
-	</LinearLayout>
-	    
-	<TextView android:text="Complemento:" android:id="@+id/txtComplemento" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	<EditText android:id="@+id/complementoProprietario" android:maxLength="25" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="text"></EditText>
+        <TextView
+            android:id="@+id/txtCpfCnpjProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="180dp"
+            android:text="CPF:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
 
-   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout9">
-		<TextView android:text="Bairro:" android:id="@+id/txtBairroProprietario" android:minWidth="160dp" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-		<TextView android:text="CEP:" android:id="@+id/txtCepProprietario" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
+        <TextView
+            android:id="@+id/txtRgProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RG:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+    </LinearLayout>
 
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout10">
-		<EditText android:id="@+id/bairroProprietario" android:maxLength="20" android:minWidth="160dp" android:maxWidth="185dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="textCapCharacters"></EditText>
-		<EditText android:id="@+id/cepProprietario" android:minWidth="135dp" android:background="@drawable/edittext_rounded_corners" android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="number" android:maxLength="9"></EditText>
-	
-	</LinearLayout>
-	   	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout11">
-		<TextView android:text="Tipo de Endereço:" android:id="@+id/tipoendereco" android:textSize="15dp" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-	</LinearLayout>
-	
-	<LinearLayout     android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout12">
-		<RadioGroup android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:id="@+id/radioGroupTipoEnderecoProprietario">
-			<RadioButton android:text="Residencial" android:id="@+id/radioResidencialProprietario" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-			<RadioButton android:text="Comercial" android:id="@+id/radioComercialProprietario" android:textColor="@color/textColorYellowBackground" android:layout_width="wrap_content" android:layout_height="wrap_content"></RadioButton>
-		</RadioGroup>
-	</LinearLayout>
-	    
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/cpfCnpjProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="number"
+            android:maxLength="18"
+            android:maxWidth="185dp"
+            android:minWidth="160dp" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/rgProprietario"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="number"
+            android:maxLength="10" >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtUfProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="110dp"
+            android:text="UF:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/txtSexoProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sexo:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/ufProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:drawSelectorOnTop="true"
+            android:inputType="textCapCharacters"
+            android:maxLength="2"
+            android:minWidth="50dp" >
+        </EditText>
+
+        <Spinner
+            android:id="@+id/spinnerSexoProprietario"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            android:minWidth="200dp" >
+        </Spinner>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtTelefoneProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="150dp"
+            android:text="Telefone:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/txtCelularProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Celular:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/foneProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="phone"
+            android:maxLength="13"
+            android:minWidth="150dp" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/celularProprietario"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="phone"
+            android:maxLength="13" >
+        </EditText>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtEmailProprietario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="E-mail:"
+        android:textColor="@color/textColorYellowBackground"
+        android:textSize="15dp" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/emailProprietario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_rounded_corners"
+        android:inputType="textEmailAddress" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/txtTipoLogradouroProprietario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo Logradouro:"
+        android:textColor="@color/textColorYellowBackground"
+        android:textSize="15dp" >
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinnerTipoLogradouroProprietario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true" >
+    </Spinner>
+
+    <TextView
+        android:id="@+id/txtLogradouroProprietario"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logradouro:"
+        android:textColor="@color/textColorYellowBackground"
+        android:textSize="15dp" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/logradouroProprietario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_rounded_corners"
+        android:inputType="textCapCharacters"
+        android:maxLength="40" >
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtNumero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLength="5"
+            android:minWidth="140dp"
+            android:text="Nº:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/txtMunicipio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Município:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/numeroProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="textCapCharacters"
+            android:maxLength="5"
+            android:minWidth="80dp" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/municipioProprietario"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType=""
+            android:maxLength="15" >
+        </EditText>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtComplemento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Complemento:"
+        android:textColor="@color/textColorYellowBackground"
+        android:textSize="15dp" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/complementoProprietario"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_rounded_corners"
+        android:inputType="text"
+        android:maxLength="25" >
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/linearLayout9"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtBairroProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="160dp"
+            android:text="Bairro:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/txtCepProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CEP:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout10"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/bairroProprietario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="textCapCharacters"
+            android:maxLength="20"
+            android:maxWidth="185dp"
+            android:minWidth="160dp" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/cepProprietario"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_rounded_corners"
+            android:inputType="number"
+            android:maxLength="9"
+            android:minWidth="135dp" >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout11"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/tipoendereco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipo de Endereço:"
+            android:textColor="@color/textColorYellowBackground"
+            android:textSize="15dp" >
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout12"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioGroup
+            android:id="@+id/radioGroupTipoEnderecoProprietario"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radioResidencialProprietario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Residencial"
+                android:textColor="@color/textColorYellowBackground" >
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioComercialProprietario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comercial"
+                android:textColor="@color/textColorYellowBackground" >
+            </RadioButton>
+        </RadioGroup>
+    </LinearLayout>
+
 </LinearLayout>
-    

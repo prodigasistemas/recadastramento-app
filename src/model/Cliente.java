@@ -24,6 +24,8 @@ public class Cliente extends Model{
 	private double latitude;
 	private double longitude;
 	private String data;
+	
+	private boolean novoCliente;
 
 	public Cliente() {
 		tabSaved = false;
@@ -42,6 +44,8 @@ public class Cliente extends Model{
 		latitude = 0;
 		longitude = 0;
 		data = "";
+		
+		novoCliente = false;
 	}
 
 	public void setMatricula(String matricula) {
@@ -143,4 +147,14 @@ public class Cliente extends Model{
 	public boolean isTabSaved() {
 		return tabSaved;
 	}
+
+	public boolean isNovoCliente() {
+		return novoCliente;
+	}
+
+	public void setNovoCliente(boolean novoCliente) {
+		this.novoCliente = novoCliente;
+	}
+	
+	
 }

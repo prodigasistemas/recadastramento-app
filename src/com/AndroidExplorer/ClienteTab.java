@@ -224,6 +224,7 @@ public class ClienteTab extends Fragment implements LocationListener {
         });
         
         checkedNovoUsuario();
+        checkedNovoProprietario();
 	}
 
 	private void checkedNovoUsuario() {
@@ -252,6 +253,40 @@ public class ClienteTab extends Fragment implements LocationListener {
 		((EditText) (view.findViewById(R.id.celularUsuario))).setText("");
 		((EditText) (view.findViewById(R.id.emailUsuario))).setText("");
 		((RadioButton) (view.findViewById(R.id.radioResidencial))).setChecked(true);
+	}
+	
+	private void checkedNovoProprietario() {
+		final CheckBox novoProprietario = (CheckBox) view.findViewById(R.id.novoProprietario);
+		
+		novoProprietario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+			public void onCheckedChanged(CompoundButton button, boolean checked) {
+				if (checked) {
+					limparDadosProprietario();
+				} else {
+					populateProprietario();
+				}
+			}
+		});
+	}
+	
+	private void limparDadosProprietario() {
+		((EditText) (view.findViewById(R.id.nomeProprietario))).setText("");
+		((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setSelection(0);
+		((EditText) (view.findViewById(R.id.ufProprietario))).setText("");
+		((Spinner) (view.findViewById(R.id.spinnerSexoProprietario))).setSelection(0);
+		((EditText) (view.findViewById(R.id.cpfCnpjProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.rgProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.foneProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.celularProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.emailProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.logradouroProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.numeroProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.municipioProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.complementoProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.bairroProprietario))).setText("");
+		((EditText) (view.findViewById(R.id.cepProprietario))).setText("");
+		((RadioButton) (view.findViewById(R.id.radioResidencialProprietario))).setChecked(true);
 	}
 	
 	public boolean areUFsValidos(){

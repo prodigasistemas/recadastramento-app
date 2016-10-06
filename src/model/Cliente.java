@@ -25,7 +25,9 @@ public class Cliente extends Model{
 	private double longitude;
 	private String data;
 	
-	private boolean novoCliente;
+	private boolean novoUsuario;
+	private boolean novoProprietario;
+	private boolean novoResponsavel;
 
 	public Cliente() {
 		tabSaved = false;
@@ -45,7 +47,9 @@ public class Cliente extends Model{
 		longitude = 0;
 		data = "";
 		
-		novoCliente = false;
+		novoUsuario = false;
+		novoProprietario = false;
+		novoResponsavel = false;
 	}
 
 	public void setMatricula(String matricula) {
@@ -148,13 +152,28 @@ public class Cliente extends Model{
 		return tabSaved;
 	}
 
-	public boolean isNovoCliente() {
-		return novoCliente;
+	public boolean isNovoUsuario() {
+		return novoUsuario;
 	}
 
-	public void setNovoCliente(boolean novoCliente) {
-		this.novoCliente = novoCliente;
+	public void setNovoUsuario(boolean novoUsuario) {
+		this.novoUsuario = novoUsuario;
 	}
-	
+
+	public boolean isNovoProprietario() {
+		return novoProprietario;
+	}
+
+	public void setNovoProprietario(boolean novoProprietario) {
+		this.novoProprietario = novoProprietario;
+	}
+
+	public boolean isNovoResponsavel() {
+		return novoResponsavel;
+	}
+
+	public void setNovoResponsavel(boolean novoResponsavel) {
+		this.novoResponsavel = novoResponsavel;
+	}
 	
 }

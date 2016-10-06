@@ -234,8 +234,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 		novoUsuario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
 			public void onCheckedChanged(CompoundButton button, boolean checked) {
+				getCliente().setNovoUsuario(checked);
+				
 				if (checked) {
 					limparDadosUsuario();
+					
 				} else {
 					populateUsuario();
 				}
@@ -262,6 +265,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		novoProprietario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
 			public void onCheckedChanged(CompoundButton button, boolean checked) {
+				getCliente().setNovoProprietario(checked);
 				if (checked) {
 					limparDadosProprietario();
 				} else {
@@ -296,6 +300,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		novoResponsavel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 
 			public void onCheckedChanged(CompoundButton button, boolean checked) {
+				getCliente().setNovoResponsavel(checked);
 				if (checked) {
 					limparDadosResponsavel();
 				} else {
@@ -570,6 +575,10 @@ public class ClienteTab extends Fragment implements LocationListener {
     		getCliente().setLongitude(String.valueOf(lastKnownLocation.getLongitude()));
         }
 		getCliente().setData(Util.formatarData(Calendar.getInstance().getTime()));
+		
+		if(getCliente().isNovoUsuario()) getCliente().getUsuario().setMatricula("0");
+		if(getCliente().isNovoProprietario()) getCliente().getProprietario().setMatricula("0");
+		if(getCliente().isNovoResponsavel()) getCliente().getResponsavel().setMatricula("0");
 	}
 	
 	public void populateProprietario() {

@@ -224,8 +224,6 @@ public class ClienteTab extends Fragment implements LocationListener {
         });
         
         checkedNovoUsuario();
-        checkedNovoProprietario();
-        checkedNovoResponsavel();
 	}
 
 	private void checkedNovoUsuario() {
@@ -814,7 +812,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		mRadioGroup.setOnCheckedChangeListener(new OnCheckedChangeListener(){
             public void onCheckedChanged(RadioGroup group, int checkedId) {
  		        LinearLayout submitAdditionalLayout = (LinearLayout)view.findViewById(R.id.linearLayoutUsuarioEProprietario);
-	            
+ 		       
 		        if (submitAdditionalLayout != null){
 	            	submitAdditionalLayout.removeAllViews();
 	            }
@@ -914,7 +912,14 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
         submitScoreLayout.addView(inflater.inflate(R.layout.dadosproprietario, null));
-    
+       
+        if (getCliente().getProprietario().getMatricula() <= 0) {
+			((CheckBox)(view.findViewById(R.id.novoProprietario))).setChecked(true);
+		}
+        
+        
+        checkedNovoProprietario();
+        
     	Util.addTextChangedListenerCepMask((EditText)view.findViewById(R.id.cepProprietario));
     	Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.foneProprietario));
     	Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularProprietario));
@@ -999,6 +1004,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
 	    submitScoreLayout.addView(inflater.inflate(R.layout.dadosresponsavel, null));
 
+	    checkedNovoResponsavel();
+	    
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.foneResponsavel));
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularResponsavel));
 		Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjResponsavel), Constantes.PESSOA_RESPONSAVEL);

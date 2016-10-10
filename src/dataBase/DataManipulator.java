@@ -1346,6 +1346,9 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("usuario_proprietario", String.valueOf(getClienteSelecionado().isUsuarioProprietario()));
 	   initialValues.put("tipo_responsavel", String.valueOf(getClienteSelecionado().getTipoResponsavel()));
 
+	   if (getClienteSelecionado().isNovoUsuario())
+		   initialValues.put("matricula_usuario", "0");
+	   
 	   initialValues.put("nome_usuario", getClienteSelecionado().getUsuario().getNome());
 	   initialValues.put("tipo_pessoa_usuario", String.valueOf(getClienteSelecionado().getUsuario().getTipoPessoa()));
 	   initialValues.put("cpf_cnpj_usuario", getClienteSelecionado().getUsuario().getCpfCnpj());
@@ -1355,6 +1358,9 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("telefone_usuario", getClienteSelecionado().getUsuario().getTelefone());
 	   initialValues.put("celular_usuario", getClienteSelecionado().getUsuario().getCelular()); 
 	   initialValues.put("email_usuario", getClienteSelecionado().getUsuario().getEmail());
+	   
+	   if (getClienteSelecionado().isNovoProprietario())
+		   initialValues.put("matricula_proprietario", "0");
 	   
 	   initialValues.put("nome_proprietario", getClienteSelecionado().getProprietario().getNome());
 	   initialValues.put("tipo_pessoa_proprietario", String.valueOf(getClienteSelecionado().getProprietario().getTipoPessoa()));
@@ -1372,6 +1378,9 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("bairro_proprietario", getClienteSelecionado().getEnderecoProprietario().getBairro());
 	   initialValues.put("cep_proprietario", getClienteSelecionado().getEnderecoProprietario().getCep());
 	   initialValues.put("municipio_proprietario", getClienteSelecionado().getEnderecoProprietario().getMunicipio());
+	   
+	   if (getClienteSelecionado().isNovoResponsavel())
+		   initialValues.put("matricula_responsavel", "0");
 	   
 	   initialValues.put("nome_responsavel", getClienteSelecionado().getResponsavel().getNome());
 	   initialValues.put("tipo_pessoa_responsavel", String.valueOf(getClienteSelecionado().getResponsavel().getTipoPessoa()));

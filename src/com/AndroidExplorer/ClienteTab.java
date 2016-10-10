@@ -204,20 +204,14 @@ public class ClienteTab extends Fragment implements LocationListener {
             	updateClienteSelecionado();
             	
             	if (areUFsValidos()){
-	             	// Verificar os campos obrigatórios
 	            	if (areCamposObrigatoriosOk()){
 	
-	                	// Verificar se pode salvar!!!!!!
-	                	
 	            		getCliente().setTabSaved(true);
 	            		Toast.makeText(getActivity(), "Dados do Cliente atualizados com sucesso.", 5).show();
 	            		
 	            		if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
         					Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
         				}
-	            		
-//	        			dialogMessage = "Dados do Cliente atualizados com sucesso.";
-//	        	    	getActivity().showDialog(Constantes.DIALOG_ID_SUCESSO);
 	            	}
             	}
         	}
@@ -236,10 +230,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 				
 				if (checked) {
 					limparDadosUsuario();
-					
 				} else {
 					populateUsuario();
 				}
+				
+				getCliente().setNovoUsuario(checked);
 			}
 		});
 	}
@@ -269,6 +264,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 				} else {
 					populateProprietario();
 				}
+				
+				getCliente().setNovoProprietario(checked);
 			}
 		});
 	}
@@ -304,6 +301,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 				} else {
 					populateResponsavel();
 				}
+				
+				getCliente().setNovoResponsavel(checked);
 			}
 		});
 	}
@@ -917,7 +916,6 @@ public class ClienteTab extends Fragment implements LocationListener {
 			((CheckBox)(view.findViewById(R.id.novoProprietario))).setChecked(true);
 		}
         
-        
         checkedNovoProprietario();
         
     	Util.addTextChangedListenerCepMask((EditText)view.findViewById(R.id.cepProprietario));
@@ -998,12 +996,13 @@ public class ClienteTab extends Fragment implements LocationListener {
         	submitScoreLayout.removeAllViews();
         }
         
-		// Display a messagebox.
-//	    Toast.makeText(getBaseContext(),"Preencha os dados do responsável pelo pagamento.",Toast.LENGTH_SHORT).show();
-
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
 	    submitScoreLayout.addView(inflater.inflate(R.layout.dadosresponsavel, null));
 
+	    if (getCliente().getResponsavel().getMatricula() <= 0) {
+			((CheckBox)(view.findViewById(R.id.novoResponsavel))).setChecked(true);
+		}
+	    
 	    checkedNovoResponsavel();
 	    
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.foneResponsavel));

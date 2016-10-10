@@ -1005,6 +1005,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 	    
 	    checkedNovoResponsavel();
 	    
+	    Util.addTextChangedListenerCepMask((EditText)view.findViewById(R.id.cepResponsavel));
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.foneResponsavel));
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularResponsavel));
 		Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjResponsavel), Constantes.PESSOA_RESPONSAVEL);

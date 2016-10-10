@@ -317,7 +317,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
-            android:inputType=""
+            android:inputType="textCapCharacters"
             android:maxLength="15" >
         </EditText>
     </LinearLayout>
@@ -336,7 +336,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_rounded_corners"
-        android:inputType="text"
+        android:inputType="textCapCharacters"
         android:maxLength="25" >
     </EditText>
 

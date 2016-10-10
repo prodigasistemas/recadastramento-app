@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+    
     <TextView
         android:id="@+id/txtResponsavel"
         android:layout_width="wrap_content"
@@ -38,7 +39,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_rounded_corners"
-        android:inputType="" >
+        android:inputType="textCapCharacters" >
 
         <requestFocus>
         </requestFocus>
@@ -254,7 +255,7 @@
         android:id="@+id/txtLogradouroResponsavel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logradouro do responsavel:"
+        android:text="Logradouro do Responsável:"
         android:textColor="@color/textColorYellowBackground"
         android:textSize="15dp" >
     </TextView>
@@ -264,7 +265,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_rounded_corners"
-        android:inputType=""
+        android:inputType="textCapCharacters"
         android:maxLength="40" >
     </EditText>
 
@@ -316,7 +317,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
-            android:inputType=""
+            android:inputType="textCapCharacters"
             android:maxLength="15" >
         </EditText>
     </LinearLayout>
@@ -335,7 +336,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_rounded_corners"
-        android:inputType="text"
+        android:inputType="textCapCharacters"
         android:maxLength="25" >
     </EditText>
 
@@ -376,7 +377,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
-            android:inputType=""
+            android:inputType="textCapCharacters"
             android:maxLength="20"
             android:maxWidth="185dp"
             android:minWidth="160dp" >

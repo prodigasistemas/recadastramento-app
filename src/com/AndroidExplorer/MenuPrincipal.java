@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import util.Constantes;
 import background.CarregarRotaThread;
 import background.GerarArquivoCompletoThread;
+import background.GerarArquivoParcialThread;
 import business.Controlador;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -43,6 +44,7 @@ public class MenuPrincipal extends FragmentActivity {
 
 	private ProgressDialog progDialog;
 	private GerarArquivoCompletoThread progThread;
+	private GerarArquivoParcialThread parcialThread;
 	private String dialogMessage = null;
 	private static int increment= 0;
 	private int numeroImoveis;
@@ -108,19 +110,7 @@ public class MenuPrincipal extends FragmentActivity {
 	        		startActivity(myIntent);            		
 					
             	}else if (position == MENU_ARQUIVO_COMPLETO){
-                    boolean statusOk = false;
-        	    	
-                    // 	Verifica se todos os imoveis já foram visitados.
-        	    	ArrayList<String> listStatusImoveis = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(null);
-        	    	
-        	    	for (int i=0; i < listStatusImoveis.size(); i++){
-        	    		if (Integer.parseInt(listStatusImoveis.get(i)) != Constantes.IMOVEL_A_SALVAR ){
-        	    			statusOk = true;
-        	    			numeroImoveis++;
-        				}
-        	    	}
-        	    	
-        	    	if (statusOk){
+                    if (statusOk()){
                 		showDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
         	    	
         	    	}else{
@@ -132,7 +122,14 @@ public class MenuPrincipal extends FragmentActivity {
             	}else if (position == MENU_CADASTROS_CONCLUIDOS){
 					
             	}else if (position == MENU_FINALIZAR){
-					
+            		if (statusOk()){
+                		showDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_PARCIAL + increment);
+        	    	
+        	    	}else{
+            		
+        	    		dialogMessage = "Roteiro ainda não concluído. Não foi possível gerar arquivo de retorno parcial.";
+            	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO);
+        	    	}
             	}else if (position == MENU_RELATORIO){
 					Intent myIntent = new Intent(getApplicationContext(),TelaRelatorio.class);
 	        		startActivity(myIntent);
@@ -141,22 +138,55 @@ public class MenuPrincipal extends FragmentActivity {
         	    	showDialog(Constantes.DIALOG_ID_CLEAN_DB);
 				}
             }
+
+			private boolean statusOk() {
+				boolean statusOk = false;
+    	    	
+                // 	Verifica se todos os imoveis já foram visitados.
+    	    	ArrayList<String> listStatusImoveis = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(null);
+    	    	
+    	    	for (int i=0; i < listStatusImoveis.size(); i++){
+    	    		if (Integer.parseInt(listStatusImoveis.get(i)) != Constantes.IMOVEL_A_SALVAR ){
+    	    			statusOk = true;
+    	    			numeroImoveis++;
+    				}
+    	    	}
+				return statusOk;
+			}
         });        
 	}
 	
     // Handler on the main (UI) thread that will receive messages from the second thread and update the progress.
-    final Handler handler = new Handler() {
+	final Handler handlerArquivoComleto = new Handler() {
+		public void handleMessage(Message msg) {
+			
+			// Get the current value of the variable total from the message data and update the progress bar.
+			int totalArquivoCompleto = msg.getData().getInt("arquivoCompleto" + String.valueOf(increment));
+			progDialog.setProgress(totalArquivoCompleto);
+			
+			if (totalArquivoCompleto >= numeroImoveis || progThread.getCustomizedState() == CarregarRotaThread.DONE) {
+				
+				dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
+				
+				dialogMessage = "Arquivo de retorno COMPLETO gerado com sucesso!";
+				showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_SUCESSO);
+				increment = increment + 5;
+			}
+		}
+	};
+	
+	final Handler handlerArquivoParcial = new Handler() {
         public void handleMessage(Message msg) {
             
         	// Get the current value of the variable total from the message data and update the progress bar.
-        	int totalArquivoCompleto = msg.getData().getInt("arquivoCompleto" + String.valueOf(increment));
-            progDialog.setProgress(totalArquivoCompleto);
+        	int totalArquivoParcial = msg.getData().getInt("arquivoParcial" + String.valueOf(increment));
+            progDialog.setProgress(totalArquivoParcial);
             
-			if (totalArquivoCompleto >= numeroImoveis || progThread.getCustomizedState() == CarregarRotaThread.DONE) {
+			if (totalArquivoParcial >= numeroImoveis || parcialThread.getCustomizedState() == CarregarRotaThread.DONE) {
 
-				dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_COMPLETO + increment);
+				dismissDialog(Constantes.DIALOG_ID_GERAR_ARQUIVO_PARCIAL + increment);
 
-				dialogMessage = "Arquivo de retorno Completo gerado com sucesso!";
+				dialogMessage = "Arquivo de retorno PARCIAL gerado com sucesso!";
 				showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_SUCESSO);
 				increment = increment + 5;
 			}
@@ -226,8 +256,23 @@ public class MenuPrincipal extends FragmentActivity {
 	            progDialog.setCancelable(false);
 	            progDialog.setMessage("Por favor, espere enquanto o Arquivo de Retorno Completo está sendo gerado...");
 	            progDialog.setMax(numeroImoveis);
-	            progThread = new GerarArquivoCompletoThread(handler, this, increment);
+	            progThread = new GerarArquivoCompletoThread(handlerArquivoComleto, this, increment);
 	            progThread.start();
+	            return progDialog;
+
+            }else{
+                Toast.makeText(getBaseContext(), "Cartão de memória não está disponível!", Toast.LENGTH_SHORT).show();
+            }
+	    }else if (id == Constantes.DIALOG_ID_GERAR_ARQUIVO_PARCIAL + increment) {
+            if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+
+		    	progDialog = new ProgressDialog(this);
+	            progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+	            progDialog.setCancelable(false);
+	            progDialog.setMessage("Por favor, espere enquanto o Arquivo de Retorno Parcial está sendo gerado...");
+	            progDialog.setMax(numeroImoveis);
+	            parcialThread = new GerarArquivoParcialThread(handlerArquivoParcial, this, increment);
+	            parcialThread.start();
 	            return progDialog;
 
             }else{

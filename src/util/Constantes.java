@@ -11,6 +11,7 @@ public class Constantes {
     public static final int DIALOG_ID_CARREGAR_ROTA = 1;
     public static final int DIALOG_ID_CLEAN_DB = 2;
     public static final int DIALOG_ID_GERAR_ARQUIVO_COMPLETO = 3;
+    public static final int DIALOG_ID_GERAR_ARQUIVO_PARCIAL = 18;
     public static final int DIALOG_ID_SUCESSO = 4;
     public static final int DIALOG_ID_AVISO = 5;
     public static final int DIALOG_ID_ERRO = 6;

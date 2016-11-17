@@ -121,6 +121,70 @@ public class ArquivoRetorno {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void gerarArquivoParcial(Handler mHandler, Context context, int increment) {
+
+		try {
+
+			File diretorioRetorno = new File(Util.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
+			if (!diretorioRetorno.exists()) {
+				diretorioRetorno.mkdirs();
+			}
+
+			File fileArquivoCompleto = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName());
+
+			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+				Toast.makeText(context, "Erro ao salvar no cartão de memória!", Toast.LENGTH_SHORT).show();
+				return;
+			}
+
+			FileOutputStream os = new FileOutputStream(fileArquivoCompleto);
+			OutputStreamWriter out = new OutputStreamWriter(os);
+
+			arquivo = new StringBuffer();
+
+			ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
+
+			gerarLinhaZero();
+
+			for (int i = 0; i < listIdImoveis.size(); i++) {
+				try{
+					Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
+					Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
+					
+					if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR)
+						continue;
+					
+					Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
+					Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
+					Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
+					
+				}catch(Exception e){
+					continue;
+				}
+
+				gerarRegistroTipoCliente();
+				gerarRegistroTipoImovel();
+				gerarRegistrosTipoRamosAtividadeImovel();
+				gerarRegistroTipoServico();
+				gerarRegistroTipoMedidor();
+				gerarRegistroTipoAnormalidadeImovel();
+
+				Bundle b = new Bundle();
+				Message msg = mHandler.obtainMessage();
+				b.putInt("arquivoParcial" + String.valueOf(increment), (i + 1));
+				msg.setData(b);
+				mHandler.sendMessage(msg);
+			}
+
+			out.write(arquivo.toString());
+			out.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static StringBuffer gerarDadosFinalizacaoRotaOnline(Handler mHandler, Context context, int increment) {
 		arquivo = new StringBuffer();

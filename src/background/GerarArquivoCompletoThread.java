@@ -30,7 +30,7 @@ public class GerarArquivoCompletoThread extends Thread {
 	public void run() {
 		state = RUNNING;
 		FileManager.getInstancia();
-
+		
 		ArquivoRetorno.gerarArquivoCompleto(handler, context, increment);
 
 		try {

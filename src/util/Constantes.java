@@ -11,7 +11,6 @@ public class Constantes {
     public static final int DIALOG_ID_CARREGAR_ROTA = 1;
     public static final int DIALOG_ID_CLEAN_DB = 2;
     public static final int DIALOG_ID_GERAR_ARQUIVO_COMPLETO = 3;
-    public static final int DIALOG_ID_GERAR_ARQUIVO_PARCIAL = 18;
     public static final int DIALOG_ID_SUCESSO = 4;
     public static final int DIALOG_ID_AVISO = 5;
     public static final int DIALOG_ID_ERRO = 6;
@@ -26,6 +25,8 @@ public class Constantes {
     public static final int DIALOG_ID_CONFIRMA_EXCLUSAO = 15;
     public static final int DIALOG_ID_CONFIRMA_IMOVEL_SALVO = 16;
     public static final int DIALOG_ID_IMOVEL_EXCLUIDO = 17;
+    public static final int DIALOG_ID_GERAR_ARQUIVO_PARCIAL = 18;
+    public static final int DIALOG_ID_EXPORTAR_BANCO = 19;
     
     public static final int FRAGMENT_ID_CLIENTE = 0;
     public static final int FRAGMENT_ID_IMOVEL = 1;
@@ -35,6 +36,8 @@ public class Constantes {
 
     public static final String DIRETORIO_ROTAS = "/external_sd/Cadastro/Roteiros";
     public static final String DIRETORIO_RETORNO = "/external_sd/Cadastro/Retorno";
+    public static final String DIRETORIO_LOGS = "/external_sd/Cadastro/Logs";
+    public static final String DIRETORIO_EXPORTACAO_BANCO = "/external_sd/Cadastro/Banco";
     
     public static final int REGISTRO_TIPO_CLIENTE = 1;
     public static final int REGISTRO_TIPO_IMOVEL = 2;

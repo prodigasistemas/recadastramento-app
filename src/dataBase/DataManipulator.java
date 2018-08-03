@@ -408,7 +408,7 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"matricula_proprietario"}, "id = " + id, null, null, null,  "id asc");
         
         if (cursor.moveToFirst()) {
- 
+        	
         	getClienteSelecionado().setMatricula(cursor.getString(0));
         	getClienteSelecionado().setNomeGerenciaRegional(cursor.getString(1));
         	getClienteSelecionado().setTipoEnderecoProprietario(cursor.getString(2));
@@ -455,6 +455,7 @@ public List<String> selectEnderecoImoveis(String condition){
         	getClienteSelecionado().getResponsavel().setTelefone(cursor.getString(40));
         	getClienteSelecionado().getResponsavel().setCelular(cursor.getString(41));
         	getClienteSelecionado().getResponsavel().setEmail(cursor.getString(42));
+        	
         	getClienteSelecionado().getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
         	getClienteSelecionado().getEnderecoResponsavel().setLogradouro(cursor.getString(44));
         	getClienteSelecionado().getEnderecoResponsavel().setNumero(cursor.getString(45));

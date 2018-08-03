@@ -2,8 +2,12 @@ package business;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.AnormalidadeImovel;
 import model.Cliente;
@@ -16,8 +20,10 @@ import util.Constantes;
 import util.Util;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 import dataBase.DataManipulator;
 
 public class Controlador {
@@ -395,5 +401,68 @@ public class Controlador {
 		String strDBFilePath = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
 		File file = new File(strDBFilePath);
 		file.delete();
+	}
+	
+	@SuppressWarnings("resource")
+	public void exportDB(Context context) {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+            	String  caminho = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
+	            
+	            File original = new File(caminho);
+	            File diretorio = new File(sd + Constantes.DIRETORIO_EXPORTACAO_BANCO);
+	            
+	            if(!diretorio.exists()) {
+	            	diretorio.mkdirs();
+	            }
+	            
+	            File backup = getBackup(diretorio);
+	            
+	            FileChannel origem = new FileInputStream(original).getChannel();
+	            FileChannel destino = new FileOutputStream(backup).getChannel();
+	            
+	            destino.transferFrom(origem, 0, origem.size());
+	            
+	            origem.close();
+	            destino.close();
+	            
+	            Toast.makeText(context, "Banco de Dados exportado para "+Constantes.DIRETORIO_EXPORTACAO_BANCO, Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+	
+	@SuppressWarnings("resource")
+	public void importDB(Context context) {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+
+            if (sd.canWrite()) {
+            	File diretorio = new File(sd + Constantes.DIRETORIO_EXPORTACAO_BANCO);
+	            File original = new File(diretorio, "cadastro.db");
+	            
+	            FileChannel origem = new FileInputStream(original).getChannel();
+	            FileChannel destino = new FileOutputStream(new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME)).getChannel();
+	            
+	            destino.transferFrom(origem, 0, origem.size());
+	            
+	            origem.close();
+	            destino.close();
+	            
+	            Toast.makeText(context, "Banco de Dados importado com sucesso!", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+	
+	private File getBackup(File diretorio) {
+		List<String> info = getCadastroDataManipulator().selectInformacoesRota();
+		String nome = "cadastro_" + info.get(1) + "_" + info.get(2) + "_" + info.get(3) + "_" + info.get(4) + ".db";
+		
+		return new File(diretorio, nome);
 	}
 }

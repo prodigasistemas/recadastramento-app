@@ -91,7 +91,7 @@ public class ArquivoRetorno {
 
 				Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
-
+				
 				if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR)
 					continue;
 
@@ -118,6 +118,8 @@ public class ArquivoRetorno {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -256,7 +256,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
-            android:inputType="textEmailAddress" >
+            android:inputType="textEmailAddress"
+            android:maxLength="40" >
         </EditText>
 
         <LinearLayout

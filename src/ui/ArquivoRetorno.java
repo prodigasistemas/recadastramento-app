@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.Toast;
 import business.Controlador;
 
@@ -83,18 +82,13 @@ public class ArquivoRetorno {
 
 			arquivo = new StringBuffer();
 
-			ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
+			ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis("imovel_status != " + Constantes.IMOVEL_A_SALVAR);
 
 			gerarLinhaZero();
 
 			for (int i = 0; i < listIdImoveis.size(); i++) {
-
 				Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
-				
-				if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR)
-					continue;
-
 				Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
@@ -238,9 +232,6 @@ public class ArquivoRetorno {
 	}
 
 	private static void gerarRegistroTipoCliente() {
-
-		Log.i("EMAIL>>>>", getClienteSelecionado().getUsuario().getEmail());
-
 		registrosTipoCLiente = new StringBuffer();
 
 		registrosTipoCLiente.append("01");

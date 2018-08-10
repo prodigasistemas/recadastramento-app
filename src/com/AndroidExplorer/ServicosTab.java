@@ -48,9 +48,6 @@ public class ServicosTab extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-		ligacaoAguaOk = false;
-
 		view = inflater.inflate(R.layout.servicotab, container, false);
 
 		// Define a imagem de fundo de acordo com a orientacao do dispositivo
@@ -152,7 +149,8 @@ public class ServicosTab extends Fragment {
 		final Button buttonSave = (Button) view.findViewById(R.id.buttonSave);
 		buttonSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-
+				ligacaoAguaOk = false;
+				
 				if (((Spinner) view.findViewById(R.id.spinnerLigacaoAgua)).getSelectedItemPosition() == 0) {
 					dialogMessage = "Por favor, informe tipo de ligação de água.";
 					showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
@@ -160,20 +158,16 @@ public class ServicosTab extends Fragment {
 				} else {
 
 					if (!Util.allowPopulateDados()) {
-
-						if (!checkChangeLigacaoAgua()) {
+						if (!checkChangeLigacaoAgua())
 							ligacaoAguaOk = true;
-						}
 
 						if (!ligacaoAguaOk) {
 							dialogMessage = "Houve alteração nos dados de ligação de água. Por favor informe novamente para confirmação.";
 							showCompleteDialog(R.drawable.aviso, "Confirmação:", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_MUDANCA);
 						}
-
 					} else {
 						ligacaoAguaOk = true;
 					}
-
 				}
 
 				if (((Spinner) view.findViewById(R.id.spinnerLocalizacaoPontoServico)).getSelectedItemPosition() == 0) {
@@ -185,7 +179,7 @@ public class ServicosTab extends Fragment {
                 if (ligacaoAguaOk){
                     updateServicoSelecionado();
                     getServicos().setTabSaved(true);
-                    Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso.", 5).show();
+                    Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso.", Toast.LENGTH_LONG).show();
                     
                     if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
     					Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
@@ -209,6 +203,8 @@ public class ServicosTab extends Fragment {
 	public void updateServicoSelecionado() {
 		String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(
 				Constantes.TABLE_SITUACAO_LIGACAO_AGUA, ((Spinner) view.findViewById(R.id.spinnerLigacaoAgua)).getSelectedItem().toString());
+		
+//		if (codigo != null && !codigo.trim().equals("0") && !codigo.trim().equals("") && !codigo.equals(String.valueOf(Constantes.NULO_INT)))
 		getServicos().setTipoLigacaoAgua(codigo);
 
 		codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(

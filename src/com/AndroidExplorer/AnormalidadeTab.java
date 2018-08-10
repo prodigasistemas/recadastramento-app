@@ -545,24 +545,20 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		return Controlador.getInstancia().getAnormalidadeImovelSelecionado();
 	}
 	
-	public boolean areOtherTabsOk(){
+	public boolean areOtherTabsOk() {
 		boolean result = true;
-    	
-    	// Somente verifica as outras tabs se não houver nenhuma anormalidade.
-		if (((Spinner)(view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() == 0) {
-    	
-//			if ( getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR ||
-//				 getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
-				
-				if ( !Controlador.getInstancia().getClienteSelecionado().isTabSaved() ||
-		        	 !getImovelSelecionado().isTabSaved()  ||
-		        	 !Controlador.getInstancia().getServicosSelecionado().isTabSaved() ||
-		        	 !Controlador.getInstancia().getMedidorSelecionado().isTabSaved() ){
-		    	
-		    		result = false;
-		    	}
-//			}
-    	}
+
+		// Somente verifica as outras tabs se não houver nenhuma anormalidade.
+		if (((Spinner) (view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition() == 0) {
+
+			if (!Controlador.getInstancia().getClienteSelecionado().isTabSaved() 
+					|| !getImovelSelecionado().isTabSaved() 
+					|| !Controlador.getInstancia().getServicosSelecionado().isTabSaved()
+					|| !Controlador.getInstancia().getMedidorSelecionado().isTabSaved()) {
+
+				result = false;
+			}
+		}
 		return result;
 	}
 	

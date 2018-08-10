@@ -92,7 +92,7 @@ public class ArquivoRetorno {
 				Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
-
+				
 				gerarRegistroTipoCliente();
 				gerarRegistroTipoImovel();
 				gerarRegistrosTipoRamosAtividadeImovel();
@@ -385,7 +385,6 @@ public class ArquivoRetorno {
 	}
 
 	private static void gerarRegistrosTipoRamosAtividadeImovel() {
-
 		for (int i = 0; i < getImovelSelecionado().getListaRamoAtividade().size(); i++) {
 			registrosTipoRamoAtividadeImovel = new StringBuffer();
 
@@ -399,11 +398,8 @@ public class ArquivoRetorno {
 	}
 
 	private static void gerarRegistroTipoServico() {
-
 		registroTipoServico = new StringBuffer();
-
 		registroTipoServico.append("04");
-
 		registroTipoServico.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
 		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(getServicosSelecionado().getTipoLigacaoAgua()), ' '));
 		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(getServicosSelecionado().getTipoLigacaoEsgoto()), ' '));
@@ -412,7 +408,6 @@ public class ArquivoRetorno {
 		registroTipoServico.append(Util.adicionarCharDireita(20, String.valueOf(getServicosSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getServicosSelecionado().getLongitude() : " "), ' '));
 		registroTipoServico.append(Util.adicionarCharEsquerda(26, getServicosSelecionado().getData(), ' '));
 		registroTipoServico.append("\n");
-
 		arquivo.append(Util.removerCaractereEspecial(registroTipoServico.toString()));
 	}
 

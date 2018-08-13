@@ -1258,4 +1258,8 @@ public class Util {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
+	
+	public static String substringNome(String nome) {
+		return nome.length() > 50 ? nome.substring(0, 50) : nome;
+	}
 }

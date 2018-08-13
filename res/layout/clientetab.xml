@@ -61,7 +61,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
-            android:inputType="textCapCharacters" >
+            android:inputType="textCapCharacters" 
+            android:maxLength="50" >
 
             <requestFocus>
             </requestFocus>

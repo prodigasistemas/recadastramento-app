@@ -244,7 +244,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(getClienteSelecionado().getTipoResponsavel());
 
 		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getUsuario().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(50, getClienteSelecionado().getUsuario().getNome(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getUsuario().getNome()), ' '));
 		registrosTipoCLiente.append((getClienteSelecionado().getUsuario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getUsuario().getTipoPessoa() : " "));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getUsuario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
@@ -255,7 +255,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getUsuario().getEmail(), ' '));
 
 		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getProprietario().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(50, getClienteSelecionado().getProprietario().getNome(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getProprietario().getNome()), ' '));
 		registrosTipoCLiente.append((getClienteSelecionado().getProprietario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getProprietario().getTipoPessoa() : " "));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getProprietario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
@@ -282,7 +282,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharDireita(15, getClienteSelecionado().getEnderecoProprietario().getMunicipio(), ' '));
 
 		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getResponsavel().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(50, getClienteSelecionado().getResponsavel().getNome(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getResponsavel().getNome()), ' '));
 		registrosTipoCLiente.append((getClienteSelecionado().getResponsavel().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getResponsavel().getTipoPessoa() : " "));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getResponsavel().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));

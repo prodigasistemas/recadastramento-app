@@ -675,7 +675,7 @@ public class Util {
         d1 = d2 = 0;  
         digito1 = digito2 = resto = 0;  
 
-        if (cpf.length() != 11){
+        if (cpf.length() != 11 || cpf.contentEquals("0000000000")){
         	return false;
         }
         
@@ -728,7 +728,7 @@ public class Util {
                 str_cnpj=str_cnpj.replace('-',' ');
                 str_cnpj=str_cnpj.replaceAll(" ","");
             	
-                if(str_cnpj.length() != 14){
+                if(str_cnpj.length() != 14 || str_cnpj.contentEquals("00000000000000")){
             		return false;
             	}
             	

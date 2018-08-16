@@ -61,36 +61,35 @@ public class ArquivoRetorno {
 		return arquivo;
 	}
 
-	public static void gerarArquivoCompleto(Handler mHandler, Context context, int increment) {
-
+	public static void gerar(Handler handler, Context context, int increment) {
 		try {
-
-			File diretorioRetorno = new File(Util.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
-			if (!diretorioRetorno.exists()) {
-				diretorioRetorno.mkdirs();
+			File diretorio = new File(Util.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
+			if (!diretorio.exists()) {
+				diretorio.mkdirs();
 			}
-
-			File fileArquivoCompleto = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName());
 
 			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				Toast.makeText(context, "Erro ao salvar no cartão de memória!", Toast.LENGTH_SHORT).show();
 				return;
 			}
 
-			FileOutputStream os = new FileOutputStream(fileArquivoCompleto);
-			OutputStreamWriter out = new OutputStreamWriter(os);
+			File file = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName());
+			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file));
 
 			arquivo = new StringBuffer();
-
-			ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis("imovel_status != " + Constantes.IMOVEL_A_SALVAR);
+			ArrayList<String> ids = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis("imovel_status != " + Constantes.IMOVEL_A_SALVAR);
 
 			gerarLinhaZero();
 
-			for (int i = 0; i < listIdImoveis.size(); i++) {
-				Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
-				Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
-				Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
-				Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
+			for (int i = 0; i < ids.size(); i++) {
+				Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(ids.get(i)));
+				Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(ids.get(i)));
+
+				if (isCadastroInvalido())
+					continue;
+				
+				Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(ids.get(i)));
+				Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(ids.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
 				
 				gerarRegistroTipoCliente();
@@ -100,13 +99,11 @@ public class ArquivoRetorno {
 				gerarRegistroTipoMedidor();
 				gerarRegistroTipoAnormalidadeImovel();
 
-				Bundle b = new Bundle();
-				Message msg = mHandler.obtainMessage();
-				b.putInt("arquivoCompleto" + String.valueOf(increment), (i + 1));
-				msg.setData(b);
-				mHandler.sendMessage(msg);
+				atualizarProcessamento(handler, increment, i + 1);
 			}
 
+			atualizarProcessamento(handler, increment, ids.size());
+			
 			out.write(arquivo.toString());
 			out.close();
 		} catch (FileNotFoundException e) {
@@ -116,6 +113,21 @@ public class ArquivoRetorno {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void atualizarProcessamento(Handler handler, int increment, int size) {
+		Bundle bundle = new Bundle();
+		Message msg = handler.obtainMessage();
+		bundle.putInt("arquivoCompleto" + increment, size);
+		msg.setData(bundle);
+		handler.sendMessage(msg);
+	}
+	
+	private static boolean isCadastroInvalido() {
+		return (getClienteSelecionado().getUsuario().getMatricula() == Constantes.NULO_INT || getClienteSelecionado().getUsuario().getMatricula() == 0) 
+				&& getClienteSelecionado().getUsuario().getNome().trim().equals("") 
+				&& getImovelSelecionado().getEnderecoImovel().getTipoLogradouro() == 0 
+				&& getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO_COM_ANORMALIDADE;
 	}
 	
 	public static void gerarArquivoParcial(Handler mHandler, Context context, int increment) {

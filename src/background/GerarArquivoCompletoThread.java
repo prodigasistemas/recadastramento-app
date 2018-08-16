@@ -31,7 +31,7 @@ public class GerarArquivoCompletoThread extends Thread {
 		state = RUNNING;
 		FileManager.getInstancia();
 		
-		ArquivoRetorno.gerarArquivoCompleto(handler, context, increment);
+		ArquivoRetorno.gerar(handler, context, increment);
 
 		try {
 			Util.zipArquivoCompleto();

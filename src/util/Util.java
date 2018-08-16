@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,8 +19,9 @@ import android.widget.EditText;
 import business.Controlador;
 
 import com.AndroidExplorer.ClienteTab;
+import com.AndroidExplorer.R;
 
-public class Util {
+@SuppressLint("SdCardPath") public class Util {
 
 	static boolean isUpdatingCep;
 	static boolean isUpdatingIptu;
@@ -1176,26 +1178,9 @@ public class Util {
     	return novaString;
     }
 
-    public static File getExternalStorageDirectory(){
-    	if(Build.PRODUCT.equals(Constantes.SAMSUNG_TAB_CODENAME))
+    @SuppressLint("SdCardPath") public static File getExternalStorageDirectory(){
     		return new File("/mnt/sdcard/");
     	
-    	File path = null;
-    	
-    	if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-    		path = new File("/mnt/sdcard/");
-    		Log.i("first External Path", "ExternalStorage :" + path.getAbsolutePath());
-    	}else{
-   	     	path = new File("/mnt/extSdCard/");
-   	     	
-   	     	if(!path.exists() || !path.isDirectory()) {
-   	    		path = new File("/mnt/sdcard/");
-   	     	}
-   	     	
-            Log.i("first External Path", "ExternalStorage :" + path.getAbsolutePath());
-    	}
-    	
-    	return path;
     }
     
 	public static boolean allowPopulateDados(){

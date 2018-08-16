@@ -307,61 +307,28 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        // Foto 1
 	        if (getAnormalidadeImovelSelecionado().getFoto1().trim().compareTo("") != 0  && getAnormalidadeImovelSelecionado().getFoto1().trim().length() > 0){
 	        	
-	   		
-	        	try {
-		    		bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovelSelecionado().getFoto1())) );
-		    	} catch (FileNotFoundException e) {
-		    		e.printStackTrace();
-		    	} catch (IOException e) {
-		    		e.printStackTrace();
-		    	}  
-	
-	//    		((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(Bitmap.createScaledBitmap(bPicture1, 80, 80, false));
-	        	((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
+	        	((ImageView)view.findViewById(R.id.checked)).invalidate();
 	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
 	        
 	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
-	    		
-	        	try {
-	    			bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg")) );
-	    		} catch (FileNotFoundException e) {
-	    			e.printStackTrace();
-	    		} catch (IOException e) {
-	    			e.printStackTrace();
-	    		}  
+	    		  
 	
-	//    		((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(Bitmap.createScaledBitmap(bPicture1, 80, 80, false));
-	        	((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
-	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
+	        	((ImageView)view.findViewById(R.id.imageView2)).postInvalidate(); 
+	        	
 	        	
 	        }
 	        
 	        // Foto 2
 	        if (getAnormalidadeImovelSelecionado().getFoto2().trim().compareTo("") != 0 && getAnormalidadeImovelSelecionado().getFoto2().trim().length() > 0 ){
 	
-	    		try {
-	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory() + "/" + getAnormalidadeImovelSelecionado().getFoto2())) );
-	    		} catch (FileNotFoundException e) {
-	    			e.printStackTrace();
-	    		} catch (IOException e) {
-	    			e.printStackTrace();
-	    		}  
-	
-	        	((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
-	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
+	    		  
+	        	((ImageView)view.findViewById(R.id.checked)).postInvalidate();
 	        
 	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
 	        	
-	    		try {
-	    			bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg")) );
-	    		} catch (FileNotFoundException e) {
-	    			e.printStackTrace();
-	    		} catch (IOException e) {
-	    			e.printStackTrace();
-	    		}  
+	    		  
 	
-	        	((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
-	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
+	        	((ImageView)view.findViewById(R.id.imageView2)).postInvalidate(); 
 	        }
         
         }else {

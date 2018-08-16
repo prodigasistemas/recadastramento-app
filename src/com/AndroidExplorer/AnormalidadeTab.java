@@ -307,28 +307,22 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        // Foto 1
 	        if (getAnormalidadeImovelSelecionado().getFoto1().trim().compareTo("") != 0  && getAnormalidadeImovelSelecionado().getFoto1().trim().length() > 0){
 	        	
-	        	((ImageView)view.findViewById(R.id.checked)).invalidate();
-	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
 	        
 	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
 	    		  
 	
-	        	((ImageView)view.findViewById(R.id.imageView2)).postInvalidate(); 
-	        	
+	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate();
 	        	
 	        }
 	        
 	        // Foto 2
 	        if (getAnormalidadeImovelSelecionado().getFoto2().trim().compareTo("") != 0 && getAnormalidadeImovelSelecionado().getFoto2().trim().length() > 0 ){
 	
-	    		  
-	        	((ImageView)view.findViewById(R.id.checked)).postInvalidate();
-	        
+	    		  	        
 	        }else if (getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
 	        	
-	    		  
 	
-	        	((ImageView)view.findViewById(R.id.imageView2)).postInvalidate(); 
+	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
 	        }
         
         }else {

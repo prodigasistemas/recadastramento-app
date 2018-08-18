@@ -259,7 +259,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getUsuario().getNome()), ' '));
 		registrosTipoCLiente.append((getClienteSelecionado().getUsuario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getUsuario().getTipoPessoa() : " "));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getUsuario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getUsuario().getUf(), ' '));
 		registrosTipoCLiente.append(!getClienteSelecionado().getUsuario().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getUsuario().getTipoSexo() : " ");
 		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
@@ -270,7 +270,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getProprietario().getNome()), ' '));
 		registrosTipoCLiente.append((getClienteSelecionado().getProprietario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getProprietario().getTipoPessoa() : " "));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getProprietario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getProprietario().getUf(), ' '));
 
 		String tipoSexo = "";
@@ -297,7 +297,7 @@ public class ArquivoRetorno {
 		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getResponsavel().getNome()), ' '));
 		registrosTipoCLiente.append((getClienteSelecionado().getResponsavel().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getResponsavel().getTipoPessoa() : " "));
 		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getResponsavel().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(9, getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
 		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getResponsavel().getUf(), ' '));
 		registrosTipoCLiente.append(!getClienteSelecionado().getResponsavel().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getResponsavel().getTipoSexo() : " ");
 		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getResponsavel().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));

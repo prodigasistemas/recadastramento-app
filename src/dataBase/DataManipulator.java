@@ -975,7 +975,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("nome_usuario", parser.obterDadoParser(50));
 	   initialValues.put("tipo_pessoa_usuario", parser.obterDadoParser(1));
 	   initialValues.put("cpf_cnpj_usuario", parser.obterDadoParser(14).trim());
-	   initialValues.put("rg_usuario", parser.obterDadoParser(9).trim());
+	   initialValues.put("rg_usuario", parser.obterDadoParser(13).trim());
 	   initialValues.put("uf_usuario", parser.obterDadoParser(2));
 	   initialValues.put("tipo_sexo_usuario", parser.obterDadoParser(1));
 	   initialValues.put("telefone_usuario", parser.obterDadoParser(10));
@@ -986,7 +986,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("nome_proprietario", parser.obterDadoParser(50));
 	   initialValues.put("tipo_pessoa_proprietario", parser.obterDadoParser(1));
 	   initialValues.put("cpf_cnpj_proprietario", parser.obterDadoParser(14).trim());
-	   initialValues.put("rg_proprietario", parser.obterDadoParser(9).trim());
+	   initialValues.put("rg_proprietario", parser.obterDadoParser(13).trim());
 	   initialValues.put("uf_proprietario", parser.obterDadoParser(2));
 	   initialValues.put("tipo_sexo_proprietario", parser.obterDadoParser(1));
 	   initialValues.put("telefone_proprietario", parser.obterDadoParser(10));
@@ -1004,7 +1004,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("nome_responsavel", parser.obterDadoParser(50));
 	   initialValues.put("tipo_pessoa_responsavel", parser.obterDadoParser(1));
 	   initialValues.put("cpf_cnpj_responsavel", parser.obterDadoParser(14).trim());
-	   initialValues.put("rg_responsavel", parser.obterDadoParser(9).trim());
+	   initialValues.put("rg_responsavel", parser.obterDadoParser(13).trim());
 	   initialValues.put("uf_responsavel", parser.obterDadoParser(2));
 	   initialValues.put("tipo_sexo_responsavel", parser.obterDadoParser(1));
 	   initialValues.put("telefone_responsavel", parser.obterDadoParser(10));

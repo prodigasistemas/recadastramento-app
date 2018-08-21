@@ -458,6 +458,12 @@ public class ClienteTab extends Fragment implements LocationListener {
 			
 			// CPF ou CNPJ do Proprietario
 			if (isProprietarioCpfSelected){
+				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0) ){
+						
+						dialogMessage = "Informe CPF do responsável!";
+	                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+						return false;
+					}
 				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
 					(!Util.getCpfProprietarioOk() || !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ){
 					

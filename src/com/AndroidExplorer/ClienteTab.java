@@ -472,6 +472,14 @@ public class ClienteTab extends Fragment implements LocationListener {
 					return false;
 				}
 			
+		// CEP do Proprietario
+					if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
+						
+						dialogMessage = "CEP do Proprietário deve ser informado.";
+		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+						return false;
+					}
+			
 			}else{
 				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) &&
 					(!Util.getCnpjProprietarioOk() || !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString())) ){

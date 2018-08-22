@@ -449,7 +449,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		if ( ((RadioGroup)view.findViewById(R.id.groupUsuarioEProprietario)).getCheckedRadioButtonId() == R.id.radioNao){
 			
 			// Nome do Proprietario
-			if (  Util.isValidText( ((EditText)view.findViewById(R.id.nomeProprietario)).getText().toString() ) ){
+			if (Util.isValidText( ((EditText)view.findViewById(R.id.nomeProprietario)).getText().toString() ) ){
 				
 				dialogMessage = "Nome do proprietário inválido. Não é permitido abreviações nem caracteres especiais";
                 showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
@@ -460,10 +460,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 			if (isProprietarioCpfSelected){
 				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0) ){
 						
-						dialogMessage = "Informe CPF do responsável!";
+						dialogMessage = "Informe o CPF do proprietário.";
 	                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 						return false;
-					}
+				}
+				
 				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
 					(!Util.getCpfProprietarioOk() || !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ){
 					
@@ -472,20 +473,34 @@ public class ClienteTab extends Fragment implements LocationListener {
 					return false;
 				}
 			
-		// CEP do Proprietario
-					if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
-						
-						dialogMessage = "CEP do Proprietário deve ser informado.";
-		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-					}
+				// CEP do Proprietario
+				if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
+					
+					dialogMessage = "CEP do Proprietário deve ser informado.";
+	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
+				}
 			
 			}else{
+				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0) ){
+					dialogMessage = "Informe o CNPJ do proprietário.";
+                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
+				}
+				
 				if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) &&
 					(!Util.getCnpjProprietarioOk() || !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString())) ){
 					
 					dialogMessage = "CNPJ do proprietário inválido.";
                     showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
+				}
+				
+				// CEP do Proprietario
+				if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
+					
+					dialogMessage = "CEP do Proprietário deve ser informado.";
+	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 					return false;
 				}
 			}

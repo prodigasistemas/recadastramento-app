@@ -347,17 +347,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 	
     public void startCamera(int fotoNumber) {
-        Log.d("CAMERA", "Starting camera on the phone...");
-//        String fileName = "testphoto.jpg";
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.TITLE, fileName);
-//        values.put(MediaStore.Images.Media.DESCRIPTION, "Image capture by camera");
-//        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-//        imageUri = getContentResolver().insert( MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-        
+        Log.d("CAMERA", "Starting camera on the phone...");        
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
 
@@ -397,55 +387,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
     	return fotoFile;  
 	}  
 
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        
-//    	if (data != null){
-//    		Log.i("DATA NOT NULL", "DATA NOT NULL!!!");
-//    	}
-//    	
-//    	if (resultCode == RESULT_OK) {  
-//
-//	    	switch(requestCode) {
-//
-//	    	case TAKE_PICTURE_1: 
-//
-//	             try {  
-//	             
-//	            	 bPicture1 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() +"_1.jpg")) );  
-//	                 foto1Taken = true;
-//	            	 
-//	             } catch (FileNotFoundException e) {  
-//	               e.printStackTrace();  
-//	             } catch (IOException e) {  
-//	               e.printStackTrace();  
-//	             }  
-//
-//	             ((ImageView)view.findViewById(R.id.imageView1)).setImageBitmap(bPicture1);
-//	        	((ImageView)view.findViewById(R.id.imageView1)).invalidate(); 
-//	    		break;
-//
-//	    	case TAKE_PICTURE_2:
-//
-//	             try {  
-//	             
-//	            	 bPicture2 = Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg")) );  
-//	                 foto2Taken = true;
-//
-//	             } catch (FileNotFoundException e) {  
-//	               e.printStackTrace();  
-//	             } catch (IOException e) {  
-//	               e.printStackTrace();  
-//	             }  
-//
-//	    		((ImageView)view.findViewById(R.id.imageView2)).setImageBitmap(bPicture2);
-//	        	((ImageView)view.findViewById(R.id.imageView2)).invalidate(); 
-//	    		break;
-//	    	}
-//    	}
-//    	
-//    	removeImage(getLastImageId());
-//    }
-    
     private int getLastImageId(){
         final String[] imageColumns = { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
         final String imageOrderBy = MediaStore.Images.Media._ID+" DESC";
@@ -453,8 +394,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
         if(imageCursor.moveToFirst()){
             int id = imageCursor.getInt(imageCursor.getColumnIndex(MediaStore.Images.Media._ID));
             String fullPath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-//            Log.d(TAG, "getLastImageId::id " + id);
-//            Log.d(TAG, "getLastImageId::path " + fullPath);
             imageCursor.close();
             return id;
         }else{
@@ -532,18 +471,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
 	        result = false;
         }	    
-		
-		// Descartar validacao para Emulador Android.
-//		if (!Build.BRAND.startsWith("generic") || !Build.DEVICE.startsWith("generic")){
-//		
-//	    	if (  ((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")
-//	    		|| ((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
-//				
-//	    		dialogMessage = "Por favor, atualize a Localização Geográfica antes de salvar.";
-//		        showNotifyDialog(R.drawable.aviso, "Mensagem:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-//		    	result = false;
-//	    	}
-//		}
+        
 		return result;
 	}
 	

@@ -228,7 +228,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         listRamosAtividade = new ArrayList<String>();
         listRamosAtividade = Controlador.getInstancia().getCadastroDataManipulator().selectDescricoesFromTable(Constantes.TABLE_RAMO_ATIVIDADE);
         listRamosAtividade.add(0, "");
-
+        
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, listRamosAtividade);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDescricaoRamoAtividade.setAdapter(adapter);
@@ -245,17 +245,19 @@ public class ImovelTab extends Fragment implements LocationListener {
  					((EditText)view.findViewById(R.id.codigoRamoAtividade)).setText(codigo);
  					
 	        	}else if (((Spinner)(view.findViewById(R.id.spinnerDescricaoRamoAtividade))).getSelectedItemPosition() == 0){
-	        		((EditText)view.findViewById(R.id.codigoRamoAtividade)).setText("");
+	        		((EditText)view.findViewById(R.id.codigoRamoAtividade)).setText("0");
 	        	}
+ 				
 			}
 			
 			public void onNothingSelected(AdapterView<?> arg0) {}
 		});
-
+        
+        
 		// Codigo do Ramo de Atividade
         EditText codigoRamoAtividade = (EditText)view.findViewById(R.id.codigoRamoAtividade);
         codigoRamoAtividade.addTextChangedListener(new TextWatcher() {
-
+        	
     		
     		public void beforeTextChanged(CharSequence s, int start, int count, int after) {}  
     		
@@ -420,16 +422,20 @@ public class ImovelTab extends Fragment implements LocationListener {
         		// Verifica se Ramo de Atividade já foi adicionado neste Imovel.
         		if (ramosAtividadeImovel != null){
 	        		for (int i=0; i< ramosAtividadeImovel.size(); i++){
-	        			if ((ramosAtividadeImovel.get(i)).equalsIgnoreCase(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString())){
+	        			if ((ramosAtividadeImovel.get(i)).equalsIgnoreCase(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString())) {
 	        				
 	        				isRamoAtividadeJaAdicionado = true;
 	        			}
 	        		}
-        		}
-        		
+        		}  
         		if (!isRamoAtividadeJaAdicionado){
-	        	    
         			if (((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString().length() > 0){
+        				if (((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString().equals("0")){
+                			
+     
+        					((Button)(view.findViewById(R.id.buttonAddRamoAtividade))).setClickable(false);
+            				ramoAtividadeList.clear();
+            				} 
 
         				ramosAtividadeImovel.add(((EditText)(view.findViewById(R.id.codigoRamoAtividade))).getText().toString());
         				ListView listRamosAtividade = (ListView)view.findViewById(R.id.listRamosAtividade);
@@ -444,7 +450,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         				}
         				
         				ViewGroup.LayoutParams params = listRamosAtividade.getLayoutParams();
-        				params.height = (int) (33*(ramosAtividadeImovel.size())*(getResources().getDisplayMetrics().density));
+        				params.height = (int) ((33*(ramosAtividadeImovel.size()))*(getResources().getDisplayMetrics().density));
         				listRamosAtividade.setLayoutParams(params);
         				listRamosAtividade.requestLayout();
 
@@ -456,7 +462,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         			dialogMessage = " Ramo de Atividade já existente! ";
                     showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
         		}
-            }
+        	}
         });
 
         // Button Save 
@@ -826,10 +832,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 	public void updateImovelSelecionado(){
 		
 		if (getImovel().getImovelStatus() == Constantes.IMOVEL_NOVO) {
-//			ArrayList<Integer> listStatus = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
-//	        int qtdImoveisNovos = listStatus.get(Constantes.IMOVEL_NOVO);
-//			getImovel().setMatricula(""+(qtdImoveisNovos == 0 ? 1 : qtdImoveisNovos+1));
-			getImovel().setMatricula("-1");
 		} else {
 			getImovel().setMatricula(((EditText)view.findViewById(R.id.matricula)).getText().toString());
 		}
@@ -1386,6 +1388,7 @@ public class ImovelTab extends Fragment implements LocationListener {
 	        buttonRemoveRamoAtividade.setOnClickListener(new OnClickListener() {
 
 	        	public void onClick(View v) {
+					((Button)(view.findViewById(R.id.buttonAddRamoAtividade))).setClickable(true);
 	        	    ramosAtividadeImovel.remove(position);
 	        	    
 	        	    // Hide txtEmpty se lista de ramos de atividade for maior que ZERO.

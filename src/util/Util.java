@@ -11,15 +11,12 @@ import java.util.Date;
 import java.util.Vector;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.EditText;
 import business.Controlador;
 
 import com.AndroidExplorer.ClienteTab;
-import com.AndroidExplorer.R;
 
 @SuppressLint("SdCardPath") public class Util {
 
@@ -673,6 +670,8 @@ import com.AndroidExplorer.R;
         int     digito1, digito2, resto;  
         int     digitoCPF;  
         String  nDigResult;  
+        
+        cpf = cpf.replaceAll("[-]", "").replaceAll("[.]", "");
 
         d1 = d2 = 0;  
         digito1 = digito2 = resto = 0;  

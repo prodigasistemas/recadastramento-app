@@ -30,10 +30,10 @@ public class CarregarRotaThread extends Thread {
 		FileManager.getInstancia();
 
 		if (fileName.endsWith(".txt")) {
-			Controlador.getInstancia().carregarDadosParaRecordStore(FileManager.readFile(fileName), handler, context);
+			Controlador.getInstancia().carregarDadosParaRecordStore(fileName, FileManager.readFile(fileName), handler, context);
 
 		} else {
-			Controlador.getInstancia().carregarDadosParaRecordStore(FileManager.readCompressedFile(fileName), handler, context);
+			Controlador.getInstancia().carregarDadosParaRecordStore(fileName, FileManager.readCompressedFile(fileName), handler, context);
 
 		}
 		state = DONE;

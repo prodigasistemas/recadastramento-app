@@ -63,7 +63,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_GERAL_QUERY =
     	"CREATE TABLE geral (id INTEGER PRIMARY KEY autoincrement, ano_mes_faturamento TEXT, codigo_febraban TEXT, telefone0800 TEXT, cnpj_empresa TEXT, " +
     	"inscricao_estadual_empresa TEXT, login TEXT, senha TEXT, indicador_transmissao_offline TEXT, versao_celular TEXT, id_rota TEXT, data_inicio TEXT, data_fim TEXT, " +
-    	"localidade TEXT, setor TEXT, rota TEXT, grupo_faturamento TEXT, qtd_imoveis_novos INTEGER)";
+    	"localidade TEXT, setor TEXT, rota TEXT, grupo_faturamento TEXT, qtd_imoveis_novos INTEGER, nome_arquivo TEXT)";
 
     private static final String DATABASE_ANORMALIDADE_QUERY =
     	"CREATE TABLE anormalidade (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT, data DATE)";

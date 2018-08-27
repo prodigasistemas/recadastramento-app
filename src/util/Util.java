@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.Normalizer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1061,35 +1062,21 @@ import com.AndroidExplorer.ClienteTab;
     	.replaceAll("[;]", "").replaceAll("[(]", "").replaceAll("[)]", "");
     }
 
-    public static String getRetornoRotaDirectory(){
-    	String diretorioRetornoRota = null;
-    	
+    public static String getRetornoRotaDirectory() {
     	Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
+    	String nomeArquivo = Controlador.getInstancia().getDadosGerais().getNomeArquivo() + "_" + getData();
 
-    	diretorioRetornoRota =  Controlador.getInstancia().getDadosGerais().getLocalidade() + "_";
-    	diretorioRetornoRota += Controlador.getInstancia().getDadosGerais().getSetor() + "_";
-    	diretorioRetornoRota += Controlador.getInstancia().getDadosGerais().getRota() + "_";
-    	diretorioRetornoRota += Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento();
-    	
-        File fileRotaDiretorio = new File(getExternalStorageDirectory() + Constantes.DIRETORIO_RETORNO, diretorioRetornoRota);
-        if(!fileRotaDiretorio.exists()) {
-        	fileRotaDiretorio.mkdirs();
+        File diretorio = new File(getExternalStorageDirectory() + Constantes.DIRETORIO_RETORNO, nomeArquivo);
+        if(!diretorio.exists()) {
+        	diretorio.mkdirs();
         }
 
-    	return fileRotaDiretorio.getAbsolutePath();
+    	return diretorio.getAbsolutePath();
     }
  
     public static String getRotaFileName(){
-    	String rotaFileName = null;
-    	
     	Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
-    	
-    	rotaFileName =  Controlador.getInstancia().getDadosGerais().getLocalidade() + "_";
-    	rotaFileName += Controlador.getInstancia().getDadosGerais().getSetor() + "_";
-    	rotaFileName += Controlador.getInstancia().getDadosGerais().getRota() + "_";
-    	rotaFileName += Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento() + ".txt";
-    	
-    	return rotaFileName;
+    	return Controlador.getInstancia().getDadosGerais().getNomeArquivo() + "_" + getData();
     }
     
     /**
@@ -1196,18 +1183,11 @@ import com.AndroidExplorer.ClienteTab;
 
 	public static void zipArquivoCompleto() throws IOException {
 		ArrayList<String> filesToZip = new ArrayList<String>();
-		String zipFilename;
-    	Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
-    	File diretorioRetornoRota = new File(getRetornoRotaDirectory());
+    	File diretorio = new File(getRetornoRotaDirectory());
 
-    	zipFilename = diretorioRetornoRota.getPath() + "/";
-    	zipFilename +=  Controlador.getInstancia().getDadosGerais().getLocalidade() + "_";
-    	zipFilename += Controlador.getInstancia().getDadosGerais().getSetor() + "_";
-    	zipFilename += Controlador.getInstancia().getDadosGerais().getRota() + "_";
-    	zipFilename += Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento();
-    	zipFilename += ".zip";
+    	String nome = diretorio.getPath() + "/" + getRotaFileName() + ".zip";
 
-    	File[] files = diretorioRetornoRota.listFiles();
+    	File[] files = diretorio.listFiles();
     	
     	if(files != null){
 
@@ -1222,7 +1202,7 @@ import com.AndroidExplorer.ClienteTab;
 	    	}
     	}
 
-        Compress zipRetornoCompleto = new Compress(filesToZip, zipFilename);
+        Compress zipRetornoCompleto = new Compress(filesToZip, nome);
         zipRetornoCompleto.zip();
 	}
 	
@@ -1245,5 +1225,10 @@ import com.AndroidExplorer.ClienteTab;
 	
 	public static String substringNome(String nome) {
 		return nome.length() > 50 ? nome.substring(0, 50) : nome;
+	}
+	
+	public static String getData() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmm");
+		return sdf.format(new Date());
 	}
 }

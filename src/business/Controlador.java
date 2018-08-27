@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.List;
 
 import model.AnormalidadeImovel;
 import model.Cliente;
@@ -228,7 +227,7 @@ public class Controlador {
 		return result;
 	}
 
-	public void carregarDadosParaRecordStore(BufferedReader input, Handler handler, Context context) {
+	public void carregarDadosParaRecordStore(String fileName, BufferedReader input, Handler handler, Context context) {
 		String linha = "";
 		linhasLidas = 0;
 
@@ -269,7 +268,7 @@ public class Controlador {
 						manipulator.insertAnormalidadeImovel(linha);
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
-						manipulator.insertDadosGerais(linha);
+						manipulator.insertDadosGerais(linha, fileName);
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
 						manipulator.insertAnormalidade(linha);
@@ -460,9 +459,6 @@ public class Controlador {
     }
 	
 	private File getBackup(File diretorio) {
-		List<String> info = getCadastroDataManipulator().selectInformacoesRota();
-		String nome = "cadastro_" + info.get(1) + "_" + info.get(2) + "_" + info.get(3) + "_" + info.get(4) + ".db";
-		
-		return new File(diretorio, nome);
+		return new File(diretorio, "cadastro_" + Util.getRotaFileName() + ".db");
 	}
 }

@@ -753,7 +753,9 @@ public List<String> selectEnderecoImoveis(String condition){
             														    "localidade",
             														    "setor",
             														    "rota",
-            														    "grupo_faturamento"}, null, null, null, null,  "id asc");
+            														    "grupo_faturamento",
+            														    "nome_arquivo"}, 
+            														    null, null, null, null,  "id asc");
 
         if (cursor.moveToFirst()) {
        	 
@@ -773,6 +775,7 @@ public List<String> selectEnderecoImoveis(String condition){
     	   getDadosGerais().setSetor(cursor.getString(13));
     	   getDadosGerais().setRota(cursor.getString(14));
     	   getDadosGerais().setGrupoFaturamento(cursor.getString(15));
+    	   getDadosGerais().setNomeArquivo(cursor.getString(16));
 
         }
         if (cursor != null && !cursor.isClosed()) {
@@ -919,7 +922,7 @@ public List<String> selectEnderecoImoveis(String condition){
         }
    }
 
-	public long insertDadosGerais(String linhaArquivo){
+	public long insertDadosGerais(String linhaArquivo, String nomeArquivo) {
 	   
 		ParserUtil parser = new ParserUtil(linhaArquivo);
 		parser.obterDadoParser(2);
@@ -941,6 +944,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		initialValues.put("setor", parser.obterDadoParser(3));
 		initialValues.put("rota", parser.obterDadoParser(2));
 		initialValues.put("grupo_faturamento", parser.obterDadoParser(3));
+		initialValues.put("nome_arquivo", nomeArquivo.replace(".txt", "").replace(".zip", ""));
 
 		return db.insert(Constantes.TABLE_GERAL, null, initialValues);
 	}

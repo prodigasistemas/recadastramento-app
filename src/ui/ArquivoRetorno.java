@@ -73,7 +73,7 @@ public class ArquivoRetorno {
 				return;
 			}
 
-			File file = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName());
+			File file = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName() + ".txt");
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file));
 
 			arquivo = new StringBuffer();
@@ -139,7 +139,7 @@ public class ArquivoRetorno {
 				diretorioRetorno.mkdirs();
 			}
 
-			File fileArquivoCompleto = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName());
+			File fileArquivoCompleto = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName() + ".txt");
 
 			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				Toast.makeText(context, "Erro ao salvar no cartão de memória!", Toast.LENGTH_SHORT).show();

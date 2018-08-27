@@ -22,6 +22,7 @@ public class DadosGerais {
 	private String setor;
 	private String rota;
 	private String grupoFaturamento;
+	private String nomeArquivo;
 
 	private static DadosGerais instancia;
 
@@ -172,5 +173,13 @@ public class DadosGerais {
 
 	public void setDataFim(String dataFim) {
 		this.dataFim = Util.getData(Util.verificarNuloString(dataFim));
+	}
+
+	public String getNomeArquivo() {
+		return nomeArquivo;
+	}
+
+	public void setNomeArquivo(String nomeArquivo) {
+		this.nomeArquivo = nomeArquivo;
 	}
 }

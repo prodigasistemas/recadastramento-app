@@ -1228,7 +1228,7 @@ import com.AndroidExplorer.ClienteTab;
 	}
 	
 	public static String getData() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		return sdf.format(new Date());
 	}
 }

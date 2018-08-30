@@ -237,6 +237,7 @@ public class ArquivoRetorno {
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(6, Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(4, "" + Controlador.getInstancia().getDadosGerais().getIdRota()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, Controlador.getInstancia().getDadosGerais().getVersaoCelular()));
+		registrosTipoZero.append(Util.adicionarCharDireita(1, Controlador.getInstancia().getDadosGerais().getTipoArquivo(), ' '));
 
 		registrosTipoZero.append("\n");
 

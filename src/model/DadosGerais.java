@@ -23,6 +23,7 @@ public class DadosGerais {
 	private String rota;
 	private String grupoFaturamento;
 	private String nomeArquivo;
+	private String tipoArquivo;
 
 	private static DadosGerais instancia;
 
@@ -181,5 +182,13 @@ public class DadosGerais {
 
 	public void setNomeArquivo(String nomeArquivo) {
 		this.nomeArquivo = nomeArquivo;
+	}
+
+	public String getTipoArquivo() {
+		return tipoArquivo;
+	}
+
+	public void setTipoArquivo(String tipoArquivo) {
+		this.tipoArquivo = tipoArquivo;
 	}
 }

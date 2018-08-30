@@ -754,11 +754,11 @@ public List<String> selectEnderecoImoveis(String condition){
             														    "setor",
             														    "rota",
             														    "grupo_faturamento",
-            														    "nome_arquivo"}, 
+            														    "nome_arquivo",
+            														    "tipo_arquivo"}, 
             														    null, null, null, null,  "id asc");
 
         if (cursor.moveToFirst()) {
-       	 
      	   getDadosGerais().setCodigoEmpresaFebraban(cursor.getString(0));
      	   getDadosGerais().setAnoMesFaturamento(cursor.getString(1));
     	   getDadosGerais().setTelefone0800(cursor.getString(2));
@@ -776,11 +776,13 @@ public List<String> selectEnderecoImoveis(String condition){
     	   getDadosGerais().setRota(cursor.getString(14));
     	   getDadosGerais().setGrupoFaturamento(cursor.getString(15));
     	   getDadosGerais().setNomeArquivo(cursor.getString(16));
-
+    	   getDadosGerais().setTipoArquivo(cursor.getString(17));
         }
+        
         if (cursor != null && !cursor.isClosed()) {
            cursor.close();
         }
+        
         cursor.close();
 	}
 	
@@ -811,7 +813,10 @@ public List<String> selectEnderecoImoveis(String condition){
 																	   "setor",
 																	   "rota",
 																	   "ano_mes_faturamento",
-																	   "login"}, null, null, null, null,  "grupo_faturamento asc");
+																	   "login",
+																	   "nome_arquivo",
+																	   "tipo_arquivo"},
+																	   null, null, null, null,  "grupo_faturamento asc");
 		
 		if (cursor.moveToFirst()) {
 	           list.add(cursor.getString(0));
@@ -820,6 +825,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	           list.add(cursor.getString(3));
 	           list.add(cursor.getString(4));
 	           list.add(cursor.getString(5));
+	           list.add(cursor.getString(6));
+	           list.add(cursor.getString(7));
         }
         if (cursor != null && !cursor.isClosed()) {
            cursor.close();
@@ -945,6 +952,9 @@ public List<String> selectEnderecoImoveis(String condition){
 		initialValues.put("rota", parser.obterDadoParser(2));
 		initialValues.put("grupo_faturamento", parser.obterDadoParser(3));
 		initialValues.put("nome_arquivo", nomeArquivo.replace(".txt", "").replace(".zip", ""));
+		
+		if (linhaArquivo.length() > 151)
+			initialValues.put("tipo_arquivo", parser.obterDadoParser(1));
 
 		return db.insert(Constantes.TABLE_GERAL, null, initialValues);
 	}

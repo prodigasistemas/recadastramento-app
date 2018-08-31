@@ -205,7 +205,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
             android:inputType="phone"
-            android:maxLength="13"
+            android:maxLength="14"
             android:minWidth="150dp" >
         </EditText>
 
@@ -215,7 +215,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
             android:inputType="phone"
-            android:maxLength="13" >
+            android:maxLength="14" >
         </EditText>
     </LinearLayout>
 

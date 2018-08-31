@@ -1165,7 +1165,7 @@
                     android:background="@drawable/edittext_rounded_corners"
                     android:ems="10"
                     android:inputType="number"
-                    android:maxLength="8" />
+                    android:maxLength="7" />
 
                 <EditText
                     android:id="@+id/volumePiscina"
@@ -1175,7 +1175,7 @@
                     android:background="@drawable/edittext_rounded_corners"
                     android:ems="10"
                     android:inputType="number"
-                    android:maxLength="8" />
+                    android:maxLength="7" />
 
                 <EditText
                     android:id="@+id/volumeCaixaDagua"
@@ -1185,7 +1185,7 @@
                     android:background="@drawable/edittext_rounded_corners"
                     android:ems="10"
                     android:inputType="number"
-                    android:maxLength="8" />
+                    android:maxLength="7" />
             </LinearLayout>
         </LinearLayout>
 

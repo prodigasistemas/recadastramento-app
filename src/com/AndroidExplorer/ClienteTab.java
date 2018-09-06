@@ -450,6 +450,14 @@ public class ClienteTab extends Fragment implements LocationListener {
 			
 			String cpfCnpjProprietario = ((EditText) view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim();
 			
+			// CEP do Proprietario
+			if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
+				
+				dialogMessage = "CEP do Proprietário deve ser informado.";
+				showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+				return false;
+			}
+			
 			if (getCliente().isNovoProprietario()) {
 				
 				// Nome do Proprietario
@@ -472,14 +480,6 @@ public class ClienteTab extends Fragment implements LocationListener {
 					if(cpfCnpjProprietario.compareTo("") != 0 && (!Util.getCpfProprietarioOk() || !Util.validateCpf(cpfCnpjProprietario))) {
 						
 						dialogMessage = "CPF do proprietário inválido.";
-						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-					}
-					
-					// CEP do Proprietario
-					if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
-						
-						dialogMessage = "CEP do Proprietário deve ser informado.";
 						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 						return false;
 					}

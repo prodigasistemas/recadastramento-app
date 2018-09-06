@@ -1220,7 +1220,7 @@ import com.AndroidExplorer.ClienteTab;
 	
 	public static String removerCaractereEspecial(String valor) {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
-		return temp.replaceAll("[^\\p{ASCII}]", "");
+		return temp.replaceAll("[^\\p{ASCII}]", " ");
 	}
 	
 	public static String substringNome(String nome) {

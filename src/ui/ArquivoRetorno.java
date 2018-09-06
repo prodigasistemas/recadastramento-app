@@ -339,7 +339,7 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, "" + getImovelSelecionado().getEnderecoImovel().getTipoLogradouro()));
 		registrosTipoImovel.append(Util.adicionarCharDireita(40, getImovelSelecionado().getEnderecoImovel().getLogradouro(), ' '));
 		registrosTipoImovel.append(Util.adicionarCharDireita(5, getImovelSelecionado().getEnderecoImovel().getNumero(), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(25, getImovelSelecionado().getEnderecoImovel().getComplemento(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(25, Util.removerCaractereEspecial(getImovelSelecionado().getEnderecoImovel().getComplemento()), ' '));
 		registrosTipoImovel.append(Util.adicionarCharDireita(20, getImovelSelecionado().getEnderecoImovel().getBairro(), ' '));
 		registrosTipoImovel.append(Util.adicionarCharDireita(8, getImovelSelecionado().getEnderecoImovel().getCep().replaceAll("[-]", ""), ' '));
 		registrosTipoImovel.append(Util.adicionarCharDireita(15, getImovelSelecionado().getEnderecoImovel().getMunicipio(), ' '));

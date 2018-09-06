@@ -857,7 +857,7 @@ public class ImovelTab extends Fragment implements LocationListener {
     	getImovel().getEnderecoImovel().setTipoLogradouro(codigo);
 		getImovel().getEnderecoImovel().setLogradouro(((EditText)view.findViewById(R.id.logradouro)).getText().toString());
 		getImovel().getEnderecoImovel().setNumero(((EditText)view.findViewById(R.id.numero)).getText().toString());
-		getImovel().getEnderecoImovel().setComplemento(((EditText)view.findViewById(R.id.complemento)).getText().toString());
+		getImovel().getEnderecoImovel().setComplemento(Util.removerCaractereEspecial(((EditText)view.findViewById(R.id.complemento)).getText().toString()));
 		getImovel().getEnderecoImovel().setBairro(((EditText)view.findViewById(R.id.bairro)).getText().toString());
 		getImovel().getEnderecoImovel().setCep(((EditText)view.findViewById(R.id.cepImovel)).getText().toString());
 		getImovel().getEnderecoImovel().setMunicipio(((EditText)view.findViewById(R.id.municipio)).getText().toString());

@@ -271,9 +271,9 @@ public class MedidorTab extends Fragment {
 	public void populateDadosHidrometro(){
 
 		// Número do Hidrometro
-//        if ( String.valueOf(getMedidor().getNumeroHidrometro()) != Constantes.NULO_STRING){
-//            ((EditText)(view.findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
-//        }
+        if ( String.valueOf(getMedidor().getNumeroHidrometro()) != Constantes.NULO_STRING){
+            ((EditText)(view.findViewById(R.id.numeroHidrometro))).setText(String.valueOf(getMedidor().getNumeroHidrometro()));
+        }
 	}
 
 	public Medidor getMedidor(){

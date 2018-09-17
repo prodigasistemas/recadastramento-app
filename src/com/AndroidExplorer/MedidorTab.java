@@ -172,6 +172,11 @@ public class MedidorTab extends Fragment {
 		
 		if ( ((RadioGroup)view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioNao){
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.NAO));
+        	getMedidor().setNumeroHidrometro("");
+        	getMedidor().setCapacidade(String.valueOf("00"));
+        	getMedidor().setMarca(String.valueOf("00"));
+        	getMedidor().setTipoCaixaProtecao(String.valueOf("00"));
+        	
 		}else{
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.SIM));
 			getMedidor().setNumeroHidrometro(((EditText)view.findViewById(R.id.numeroHidrometro)).getText().toString());
@@ -202,6 +207,7 @@ public class MedidorTab extends Fragment {
 	            
 		        if (submitAdditionalLayout != null){
 	            	submitAdditionalLayout.removeAllViews();
+	    			
 	            }
 	            
             	if (checkedId == R.id.tipoMedicaoRadioSim){

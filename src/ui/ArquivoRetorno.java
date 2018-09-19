@@ -449,7 +449,7 @@ public class ArquivoRetorno {
 		registroTipoAnormalidadeImovel.append("06");
 		registroTipoAnormalidadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, (Util.removerCaractereEspecial(getAnormalidadeImovelSelecionado().getComentario().toUpperCase())).replaceAll("\n",	" "), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, (Util.removerCaractereEspecialNovo(getAnormalidadeImovelSelecionado().getComentario().toUpperCase())).replaceAll("\n",	" "), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto1(), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto2(), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, (Util.removerCaractereEspecial(String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "))), ' '));

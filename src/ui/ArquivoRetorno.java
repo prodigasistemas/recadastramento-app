@@ -452,9 +452,9 @@ public class ArquivoRetorno {
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, (Util.removerCaractereEspecialNovo(getAnormalidadeImovelSelecionado().getComentario().toUpperCase())).replaceAll("\n",	" "), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto1(), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto2(), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, (Util.removerCaractereEspecial(String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "))), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, (Util.removerCaractereEspecial(String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "))), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, (Util.removerCaractereEspecial(getAnormalidadeImovelSelecionado().getData())), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getAnormalidadeImovelSelecionado().getData(), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getEntrevistado().toUpperCase())), ' '));
 		registroTipoAnormalidadeImovel.append("\n");
 

@@ -10,7 +10,7 @@
     <color name="white">#FFFFFF</color>
     
     <string name="app_name">Cadastro</string>
-    <string name="app_versao">1.4.2</string>
+    <string name="app_versao">1.4.3</string>
     <string name="user">Usuário</string>
     <string name="password">Senha</string>
     <string name="auth_problem">Dados Incorretos</string>

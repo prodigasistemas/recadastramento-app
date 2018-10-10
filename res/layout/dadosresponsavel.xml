@@ -320,7 +320,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_rounded_corners"
             android:inputType="textCapCharacters"
-            android:maxLength="15" >
+            android:maxLength="15" 
+            android:digits="abcdefghijklmnopqrstuvw xyzABCDEFGHIJKLMNOPQRSTUVXZWY">
         </EditText>
     </LinearLayout>
 
@@ -382,7 +383,8 @@
             android:inputType="textCapCharacters"
             android:maxLength="20"
             android:maxWidth="185dp"
-            android:minWidth="160dp" >
+            android:minWidth="160dp"
+            android:digits="abcdefghijklmnopqrstuvw xyzABCDEFGHIJKLMNOPQRSTUVXZWY1234567890" >
         </EditText>
 
         <EditText

@@ -25,6 +25,7 @@ public class Imovel extends Model {
 	private String rota;
 	private String face;
 	private String inscricao;
+	private String observacao;
 	private int codigoMunicipio;
 	private int codigoLogradouro;
 	private String iptu;
@@ -102,6 +103,8 @@ public class Imovel extends Model {
 
 		quantidadeEconomiasSocial = 0;
 		quantidadeEconomiasOutros = 0;
+		
+		observacao="";
 	}
 
 	public void setOperacoTipo(int operacaoTipo) {
@@ -461,5 +464,13 @@ public class Imovel extends Model {
 		}
 
 		return result;
+	}
+	
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
+	
+	public String getObservacao(){
+		return this.observacao;
 	}
 }

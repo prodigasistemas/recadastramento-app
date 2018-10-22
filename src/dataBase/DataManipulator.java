@@ -535,6 +535,7 @@ public List<String> selectEnderecoImoveis(String condition){
 														        		"numero_outros",
 														        		"quantidade_economias_social",
 														        		"quantidade_economias_outros",
+														        		"observacao",
 														        		"percentual_abastecimento"}, "id = " + id, null, null, null,  "inscricao asc");
  
         if (cursor.moveToFirst()) {
@@ -606,6 +607,9 @@ public List<String> selectEnderecoImoveis(String condition){
         	
         	getImovelSelecionado().setQuantidadeEconomiasSocial(cursor.getString(cursor.getColumnIndex("quantidade_economias_social")));
         	getImovelSelecionado().setQuantidadeEconomiasOutros(cursor.getString(cursor.getColumnIndex("quantidade_economias_outros")));
+        	
+        	getImovelSelecionado().setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
+
         	
         	getImovelSelecionado().setPercentualAbastecimento(cursor.getString(cursor.getColumnIndex("percentual_abastecimento")));
         }
@@ -1106,6 +1110,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
 	   initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
 	   
+	   initialValues.put("observacao", parser.obterDadoParser(100));
+
 	   initialValues.put("percentual_abastecimento", parser.obterDadoParser(3) != null ? parser.getConteudo() : "000");
 	   
 	   initialValues.put("imovel_status", String.valueOf(Constantes.IMOVEL_A_SALVAR));
@@ -1503,6 +1509,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("quantidade_economias_social", getImovelSelecionado().getQuantidadeEconomiasSocial());
 	   initialValues.put("quantidade_economias_outros", getImovelSelecionado().getQuantidadeEconomiasOutros());
 	   
+	   initialValues.put("observacao", getImovelSelecionado().getObservacao());
+	   
 	   initialValues.put("percentual_abastecimento", getImovelSelecionado().getPercentualAbastecimento());
 
    	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
@@ -1581,14 +1589,6 @@ public List<String> selectEnderecoImoveis(String condition){
    	   initialValues.put("data", getAnormalidadeImovelSelecionado().getData());
 
    	   AnormalidadeImovel anormalidadeImovel = selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
-
-	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-//   	if (Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()){
-//		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String []{String.valueOf(anormalidadeImovel.getMatricula())});
-//		   
-//	   }else{
-//		   db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues);
-//	   }
    	   
 	   if (anormalidadeImovel.getMatricula() == getImovelSelecionado().getMatricula()){
 		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String []{String.valueOf(anormalidadeImovel.getMatricula())});

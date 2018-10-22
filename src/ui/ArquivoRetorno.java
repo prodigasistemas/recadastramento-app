@@ -383,6 +383,8 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getAlunos())));
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCaes())));
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getOutros())));
+		
+		registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
 
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasSocial())));
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasOutros())));

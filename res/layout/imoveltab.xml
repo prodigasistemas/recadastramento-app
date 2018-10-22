@@ -1523,6 +1523,31 @@
                     android:inputType="number" />
             </LinearLayout>
         </LinearLayout>
+        
+        <TextView 
+		    android:text="Observação:" 
+		    android:id="@+id/txtComentario" 
+		    android:textSize="15dp" 
+		    android:textColor="@color/textColor" 
+		    android:layout_width="wrap_content" 
+		    android:layout_height="wrap_content" >
+		</TextView>
+		<ScrollView 
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent" 
+		    android:orientation="vertical">
+			<EditText 
+			    android:id="@+id/editObservação" 
+			    android:singleLine="false" 
+			    android:lines="3" 
+			    android:layout_width="fill_parent"  
+			    android:layout_height="wrap_content" 
+			    android:inputType="textMultiLine" 
+			    android:maxLength="100" 
+				android:digits="abcdefghijklmnopqrstuvw xyzABCDEFGHIJKLMNOPQRSTUVXZWY1234567890-/" >
+			    >
+			</EditText>
+		</ScrollView>
 
         <LinearLayout
             android:id="@+id/linearLayoutPeriodo"

@@ -943,7 +943,12 @@ public class ImovelTab extends Fragment implements LocationListener {
     	getImovel().setQuantidadeEconomiasOutros(((EditText)view.findViewById(R.id.quantidadeEconomiasOutros)).getText().toString());
     	
     	getImovel().setPercentualAbastecimento(String.valueOf(((Spinner)view.findViewById(R.id.spinnerPercentualAbastecimento)).getSelectedItem()));
-    	getImovel().setObservacao(((EditText)view.findViewById(R.id.editObservação)).getText().toString());
+    	
+    	if(((EditText)view.findViewById(R.id.editObservação) != null)){
+    		getImovel().setObservacao(((EditText)view.findViewById(R.id.editObservação)).getText().toString());
+    	} else {
+    		((EditText)view.findViewById(R.id.editObservação)).setText("sem informacoes");
+    	}
 	}
 	
 	public static void enableEconominasResidencial(boolean enable){

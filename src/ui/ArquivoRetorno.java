@@ -384,8 +384,6 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCaes())));
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getOutros())));
 		
-		registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
-
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasSocial())));
 		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasOutros())));
 
@@ -394,6 +392,8 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLatitude() : " "), ' '));
 		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLongitude() : " "), ' '));
 		registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
+
 		registrosTipoImovel.append("\n");
 
 		arquivo.append(Util.removerCaractereEspecial(registrosTipoImovel.toString()));

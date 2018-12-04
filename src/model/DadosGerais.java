@@ -2,6 +2,10 @@ package model;
 
 import java.util.Date;
 
+import android.widget.TextView;
+
+import com.AndroidExplorer.R;
+
 import util.Util;
 
 public class DadosGerais {
@@ -190,5 +194,10 @@ public class DadosGerais {
 
 	public void setTipoArquivo(String tipoArquivo) {
 		this.tipoArquivo = tipoArquivo;
+	}
+	
+	public String getVersaoApp(){
+		return String.valueOf((R.string.app_versao));
+
 	}
 }

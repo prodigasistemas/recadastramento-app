@@ -392,8 +392,10 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLatitude() : " "), ' '));
 		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLongitude() : " "), ' '));
 		registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));
+		
+		if(getImovelSelecionado().getObservacao() != null){
 		registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
-
+		}
 		registrosTipoImovel.append("\n");
 
 		arquivo.append(Util.removerCaractereEspecial(registrosTipoImovel.toString()));

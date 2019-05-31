@@ -128,8 +128,10 @@ public class ClienteTab extends Fragment implements LocationListener {
     			}
     		}
     	});
-
-    	// Spinner Entrevistado
+    	
+    	
+    	
+      	// Spinner Entrevistado
         Spinner spinnerEntrevistado = (Spinner) view.findViewById(R.id.spinnerEntrevistado);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.listaEntrevistado, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,10 +149,12 @@ public class ClienteTab extends Fragment implements LocationListener {
     	
 		// Usuario
 		// Spinner Usuario tipo de pessoa
-        Spinner spinnerTipoPessoaUsuario = (Spinner) view.findViewById(R.id.spinnerTipoPessoaUsuario);
+		Spinner spinnerTipoPessoaUsuario = (Spinner) view.findViewById(R.id.spinnerTipoPessoaUsuario);
         adapter = ArrayAdapter.createFromResource(getActivity(), R.array.tipoPessoa, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoPessoaUsuario.setAdapter(adapter);
+        spinnerTipoPessoaUsuario.setClickable(false);
+        
         // Populate Tipo de Pessoa do Proprietario
         spinnerTipoPessoaUsuario.setSelection(getCliente().getUsuario().getTipoPessoa() - 1);
         tipoPessoaUsuarioOnItemSelectedListener(spinnerTipoPessoaUsuario);
@@ -178,7 +182,7 @@ public class ClienteTab extends Fragment implements LocationListener {
         }
 
         populateUsuario();
-
+                
         //Responsavel
         // Spinner Define Responsavel
         Spinner spinnerDefineResponsavel = (Spinner) view.findViewById(R.id.spinnerDefineResponsavel);
@@ -223,21 +227,27 @@ public class ClienteTab extends Fragment implements LocationListener {
 	private void checkedNovoUsuario() {
 		final CheckBox novoUsuario = (CheckBox) view.findViewById(R.id.novoUsuario);
 		
+			
 		novoUsuario.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-
+		
+			
 			public void onCheckedChanged(CompoundButton button, boolean checked) {
 				getCliente().setNovoUsuario(checked);
 				
 				if (checked) {
 					limparDadosUsuario();
+					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(true);
+					
 				} else {
 					populateUsuario();
+					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(false);
 				}
 				
 				getCliente().setNovoUsuario(checked);
 			}
 		});
 	}
+	
 	
 	private void limparDadosUsuario() {
 		((EditText) (view.findViewById(R.id.nomeUsuario))).setText("");
@@ -704,6 +714,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		// Tipo de Pessoa do Usuario
 		((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(getCliente().getUsuario().getTipoPessoa() - 1);
+		//((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(false);
+		
 
 		// UF do Usuario
 		if (getCliente().getUsuario().getUf() != Constantes.NULO_STRING) {

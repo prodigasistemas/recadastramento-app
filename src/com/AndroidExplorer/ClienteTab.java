@@ -237,7 +237,6 @@ public class ClienteTab extends Fragment implements LocationListener {
 				if (checked) {
 					limparDadosUsuario();
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(true);
-					
 				} else {
 					populateUsuario();
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(false);
@@ -271,8 +270,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 				getCliente().setNovoProprietario(checked);
 				if (checked) {
 					limparDadosProprietario();
+					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setClickable(true);
 				} else {
 					populateProprietario();
+					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setClickable(false);
 				}
 				
 				getCliente().setNovoProprietario(checked);
@@ -308,8 +309,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 				getCliente().setNovoResponsavel(checked);
 				if (checked) {
 					limparDadosResponsavel();
+					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaResponsavel))).setClickable(true);
 				} else {
 					populateResponsavel();
+					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaResponsavel))).setClickable(false);
 				}
 				
 				getCliente().setNovoResponsavel(checked);
@@ -1001,6 +1004,7 @@ public class ClienteTab extends Fragment implements LocationListener {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.tipoPessoa, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoPessoaProprietario.setAdapter(adapter);
+        spinnerTipoPessoaProprietario.setClickable(false);
         // Populate Tipo de Pessoa do Proprietario
         if (getCliente().getProprietario().getTipoPessoa() != Constantes.NULO_INT){
             spinnerTipoPessoaProprietario.setSelection(getCliente().getProprietario().getTipoPessoa() - 1);
@@ -1087,6 +1091,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.tipoPessoa, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    spinnerTipoPessoaResponsavel.setAdapter(adapter);
+	    spinnerTipoPessoaResponsavel.setClickable(false);
         // Populate Tipo de Pessoa do Responsavel
         if (getCliente().getResponsavel().getTipoPessoa() != Constantes.NULO_INT){
         	spinnerTipoPessoaResponsavel.setSelection(getCliente().getResponsavel().getTipoPessoa() - 1);

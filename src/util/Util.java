@@ -1218,12 +1218,12 @@ import com.AndroidExplorer.ClienteTab;
 		return value.replace(".","");
 	}
 	
-	public static String removerCaractereEspecial(String valor) {
+	@SuppressLint("NewApi") public static String removerCaractereEspecial(String valor) {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", " ");
 	}
 	
-	public static String removerCaractereEspecialNovo(String valor) {
+	@SuppressLint("NewApi") public static String removerCaractereEspecialNovo(String valor) {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}

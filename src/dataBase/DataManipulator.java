@@ -996,8 +996,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("rg_usuario", parser.obterDadoParser(13).trim());
 	   initialValues.put("uf_usuario", parser.obterDadoParser(2));
 	   initialValues.put("tipo_sexo_usuario", parser.obterDadoParser(1));
-	   initialValues.put("telefone_usuario", parser.obterDadoParser(10));
-	   initialValues.put("celular_usuario", parser.obterDadoParser(10));
+	   initialValues.put("telefone_usuario", parser.obterDadoParser(11));
+	   initialValues.put("celular_usuario", parser.obterDadoParser(11));
 	   initialValues.put("email_usuario", parser.obterDadoParser(30));
 		
 	   initialValues.put("matricula_proprietario", parser.obterDadoParser(9));
@@ -1007,8 +1007,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("rg_proprietario", parser.obterDadoParser(13).trim());
 	   initialValues.put("uf_proprietario", parser.obterDadoParser(2));
 	   initialValues.put("tipo_sexo_proprietario", parser.obterDadoParser(1));
-	   initialValues.put("telefone_proprietario", parser.obterDadoParser(10));
-	   initialValues.put("celular_proprietario", parser.obterDadoParser(10));
+	   initialValues.put("telefone_proprietario", parser.obterDadoParser(11));
+	   initialValues.put("celular_proprietario", parser.obterDadoParser(11));
 	   initialValues.put("email_proprietario", parser.obterDadoParser(30));
 	   initialValues.put("tipo_logradouro_proprietario", parser.obterDadoParser(2));
 	   initialValues.put("logradouro_proprietario", parser.obterDadoParser(40));
@@ -1025,8 +1025,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("rg_responsavel", parser.obterDadoParser(13).trim());
 	   initialValues.put("uf_responsavel", parser.obterDadoParser(2));
 	   initialValues.put("tipo_sexo_responsavel", parser.obterDadoParser(1));
-	   initialValues.put("telefone_responsavel", parser.obterDadoParser(10));
-	   initialValues.put("celular_responsavel", parser.obterDadoParser(10));
+	   initialValues.put("telefone_responsavel", parser.obterDadoParser(11));
+	   initialValues.put("celular_responsavel", parser.obterDadoParser(11));
 	   initialValues.put("email_responsavel", parser.obterDadoParser(30));
 	   initialValues.put("tipo_logradouro_responsavel", parser.obterDadoParser(2));
 	   initialValues.put("logradouro_responsavel", parser.obterDadoParser(40));

@@ -706,7 +706,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -725,7 +725,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -744,7 +744,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -763,7 +763,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
             </LinearLayout>
@@ -819,7 +819,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -838,7 +838,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -857,7 +857,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -876,7 +876,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
             </LinearLayout>
@@ -932,7 +932,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -951,7 +951,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -970,7 +970,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -989,7 +989,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
             </LinearLayout>
@@ -1046,7 +1046,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -1065,7 +1065,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -1084,7 +1084,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
 
@@ -1103,7 +1103,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_rounded_corners"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:minWidth="50dp" >
                 </EditText>
             </LinearLayout>

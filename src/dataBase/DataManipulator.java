@@ -976,88 +976,88 @@ public List<String> selectEnderecoImoveis(String condition){
 		}
 	}
    
-	public long insertCliente(String linhaArquivo){
+	public long insertCliente(String linhaArquivo) {
 		int tamanhoLinha = linhaArquivo.length();
-		
-	   ParserUtil parser = new ParserUtil(linhaArquivo);
-	   parser.obterDadoParser(2);
-	   ContentValues initialValues = new ContentValues();
-	   
-	   initialValues.put("matricula", parser.obterDadoParser(9));
-	   initialValues.put("gerencia", parser.obterDadoParser(25));
-	   initialValues.put("tipo_endereco_proprietario", parser.obterDadoParser(1));
-	   initialValues.put("tipo_endereco_responsavel", parser.obterDadoParser(1));
-	   initialValues.put("usuario_proprietario", parser.obterDadoParser(1));
-	   initialValues.put("tipo_responsavel", parser.obterDadoParser(1));
 
-	   int tamanhoTelefoneUsuario = getTamanhoTelefone(tamanhoLinha);
-	   int tamanhoCelularUsuario = getTamanhoCelularUsuario(tamanhoLinha);
-	   
-	   initialValues.put("matricula_usuario", parser.obterDadoParser(9));
-	   initialValues.put("nome_usuario", parser.obterDadoParser(50));
-	   initialValues.put("tipo_pessoa_usuario", parser.obterDadoParser(1));
-	   initialValues.put("cpf_cnpj_usuario", parser.obterDadoParser(14).trim());
-	   initialValues.put("rg_usuario", parser.obterDadoParser(13).trim());
-	   initialValues.put("uf_usuario", parser.obterDadoParser(2));
-	   initialValues.put("tipo_sexo_usuario", parser.obterDadoParser(1));
-	   initialValues.put("telefone_usuario", parser.obterDadoParser(tamanhoTelefoneUsuario));
-	   initialValues.put("celular_usuario", parser.obterDadoParser(tamanhoCelularUsuario));
-	   initialValues.put("email_usuario", parser.obterDadoParser(30));
+		ParserUtil parser = new ParserUtil(linhaArquivo);
+		parser.obterDadoParser(2);
+		ContentValues initialValues = new ContentValues();
 
-	   String matriculaProprietario = parser.obterDadoParser(9);
-	   
-	   int tamanhoTelefoneProprietario = getTamanhoTelefone(tamanhoLinha);
-	   int tamanhoCelularProprietario = getTamanhoCelularProprietarioOuResponsavel(tamanhoLinha, matriculaProprietario);
-	   
-	   initialValues.put("matricula_proprietario", matriculaProprietario);
-	   initialValues.put("nome_proprietario", parser.obterDadoParser(50));
-	   initialValues.put("tipo_pessoa_proprietario", parser.obterDadoParser(1));
-	   initialValues.put("cpf_cnpj_proprietario", parser.obterDadoParser(14).trim());
-	   initialValues.put("rg_proprietario", parser.obterDadoParser(13).trim());
-	   initialValues.put("uf_proprietario", parser.obterDadoParser(2));
-	   initialValues.put("tipo_sexo_proprietario", parser.obterDadoParser(1));
-	   initialValues.put("telefone_proprietario", parser.obterDadoParser(tamanhoTelefoneProprietario));
-	   initialValues.put("celular_proprietario", parser.obterDadoParser(tamanhoCelularProprietario));
-	   initialValues.put("email_proprietario", parser.obterDadoParser(30));
-	   initialValues.put("tipo_logradouro_proprietario", parser.obterDadoParser(2));
-	   initialValues.put("logradouro_proprietario", parser.obterDadoParser(40));
-	   initialValues.put("numero_proprietario", parser.obterDadoParser(5));
-	   initialValues.put("complemento_proprietario", parser.obterDadoParser(25));
-	   initialValues.put("bairro_proprietario", parser.obterDadoParser(20));
-	   initialValues.put("cep_proprietario", parser.obterDadoParser(8));
-	   initialValues.put("municipio_proprietario", parser.obterDadoParser(15));
-	
-	   String matriculaResponsavel = parser.obterDadoParser(9);
-	   
-	   int tamanhoTelefoneResponsavel = getTamanhoTelefone(tamanhoLinha);
-	   int tamanhoCelularResponsavel = getTamanhoCelularProprietarioOuResponsavel(tamanhoLinha, matriculaResponsavel);
-	   
-	   initialValues.put("matricula_responsavel", matriculaResponsavel);
-	   initialValues.put("nome_responsavel", parser.obterDadoParser(50));
-	   initialValues.put("tipo_pessoa_responsavel", parser.obterDadoParser(1));
-	   initialValues.put("cpf_cnpj_responsavel", parser.obterDadoParser(14).trim());
-	   initialValues.put("rg_responsavel", parser.obterDadoParser(13).trim());
-	   initialValues.put("uf_responsavel", parser.obterDadoParser(2));
-	   initialValues.put("tipo_sexo_responsavel", parser.obterDadoParser(1));
-	   initialValues.put("telefone_responsavel", parser.obterDadoParser(tamanhoTelefoneResponsavel));
-	   initialValues.put("celular_responsavel", parser.obterDadoParser(tamanhoCelularResponsavel));
-	   initialValues.put("email_responsavel", parser.obterDadoParser(30));
-	   initialValues.put("tipo_logradouro_responsavel", parser.obterDadoParser(2));
-	   initialValues.put("logradouro_responsavel", parser.obterDadoParser(40));
-	   initialValues.put("numero_responsavel", parser.obterDadoParser(5));
-	   initialValues.put("complemento_responsavel", parser.obterDadoParser(25));
-	   initialValues.put("bairro_responsavel", parser.obterDadoParser(20));
-	   initialValues.put("cep_responsavel", parser.obterDadoParser(8));
-	   initialValues.put("municipio_responsavel", parser.obterDadoParser(15));
-	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
-	   initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
-   	   initialValues.put("data", "");
-	   
-	   return db.insert(Constantes.TABLE_CLIENTE, null, initialValues);
+		initialValues.put("matricula", parser.obterDadoParser(9));
+		initialValues.put("gerencia", parser.obterDadoParser(25));
+		initialValues.put("tipo_endereco_proprietario", parser.obterDadoParser(1));
+		initialValues.put("tipo_endereco_responsavel", parser.obterDadoParser(1));
+		initialValues.put("usuario_proprietario", parser.obterDadoParser(1));
+		initialValues.put("tipo_responsavel", parser.obterDadoParser(1));
+
+		int tamanhoTelefoneUsuario = getTamanhoTelefone(tamanhoLinha);
+		int tamanhoCelularUsuario = getTamanhoCelularUsuario(tamanhoLinha);
+
+		initialValues.put("matricula_usuario", parser.obterDadoParser(9));
+		initialValues.put("nome_usuario", parser.obterDadoParser(50));
+		initialValues.put("tipo_pessoa_usuario", parser.obterDadoParser(1));
+		initialValues.put("cpf_cnpj_usuario", parser.obterDadoParser(14).trim());
+		initialValues.put("rg_usuario", parser.obterDadoParser(13).trim());
+		initialValues.put("uf_usuario", parser.obterDadoParser(2));
+		initialValues.put("tipo_sexo_usuario", parser.obterDadoParser(1));
+		initialValues.put("telefone_usuario", parser.obterDadoParser(tamanhoTelefoneUsuario));
+		initialValues.put("celular_usuario", parser.obterDadoParser(tamanhoCelularUsuario));
+		initialValues.put("email_usuario", parser.obterDadoParser(30));
+
+		String matriculaProprietario = parser.obterDadoParser(9);
+
+		int tamanhoTelefoneProprietario = getTamanhoTelefone(tamanhoLinha);
+		int tamanhoCelularProprietario = getTamanhoCelularProprietarioOuResponsavel(tamanhoLinha, matriculaProprietario);
+
+		initialValues.put("matricula_proprietario", matriculaProprietario);
+		initialValues.put("nome_proprietario", parser.obterDadoParser(50));
+		initialValues.put("tipo_pessoa_proprietario", parser.obterDadoParser(1));
+		initialValues.put("cpf_cnpj_proprietario", parser.obterDadoParser(14).trim());
+		initialValues.put("rg_proprietario", parser.obterDadoParser(13).trim());
+		initialValues.put("uf_proprietario", parser.obterDadoParser(2));
+		initialValues.put("tipo_sexo_proprietario", parser.obterDadoParser(1));
+		initialValues.put("telefone_proprietario", parser.obterDadoParser(tamanhoTelefoneProprietario));
+		initialValues.put("celular_proprietario", parser.obterDadoParser(tamanhoCelularProprietario));
+		initialValues.put("email_proprietario", parser.obterDadoParser(30));
+		initialValues.put("tipo_logradouro_proprietario", parser.obterDadoParser(2));
+		initialValues.put("logradouro_proprietario", parser.obterDadoParser(40));
+		initialValues.put("numero_proprietario", parser.obterDadoParser(5));
+		initialValues.put("complemento_proprietario", parser.obterDadoParser(25));
+		initialValues.put("bairro_proprietario", parser.obterDadoParser(20));
+		initialValues.put("cep_proprietario", parser.obterDadoParser(8));
+		initialValues.put("municipio_proprietario", parser.obterDadoParser(15));
+
+		String matriculaResponsavel = parser.obterDadoParser(9);
+
+		int tamanhoTelefoneResponsavel = getTamanhoTelefone(tamanhoLinha);
+		int tamanhoCelularResponsavel = getTamanhoCelularProprietarioOuResponsavel(tamanhoLinha, matriculaResponsavel);
+
+		initialValues.put("matricula_responsavel", matriculaResponsavel);
+		initialValues.put("nome_responsavel", parser.obterDadoParser(50));
+		initialValues.put("tipo_pessoa_responsavel", parser.obterDadoParser(1));
+		initialValues.put("cpf_cnpj_responsavel", parser.obterDadoParser(14).trim());
+		initialValues.put("rg_responsavel", parser.obterDadoParser(13).trim());
+		initialValues.put("uf_responsavel", parser.obterDadoParser(2));
+		initialValues.put("tipo_sexo_responsavel", parser.obterDadoParser(1));
+		initialValues.put("telefone_responsavel", parser.obterDadoParser(tamanhoTelefoneResponsavel));
+		initialValues.put("celular_responsavel", parser.obterDadoParser(tamanhoCelularResponsavel));
+		initialValues.put("email_responsavel", parser.obterDadoParser(30));
+		initialValues.put("tipo_logradouro_responsavel", parser.obterDadoParser(2));
+		initialValues.put("logradouro_responsavel", parser.obterDadoParser(40));
+		initialValues.put("numero_responsavel", parser.obterDadoParser(5));
+		initialValues.put("complemento_responsavel", parser.obterDadoParser(25));
+		initialValues.put("bairro_responsavel", parser.obterDadoParser(20));
+		initialValues.put("cep_responsavel", parser.obterDadoParser(8));
+		initialValues.put("municipio_responsavel", parser.obterDadoParser(15));
+		initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
+		initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
+		initialValues.put("data", "");
+
+		return db.insert(Constantes.TABLE_CLIENTE, null, initialValues);
 	}
-
+	
 	private int getTamanhoTelefone(int tamanhoLinha) {
-		if (tamanhoLinha == 696) {
+		if (tamanhoLinha == 696 || tamanhoLinha == 695) {
 			return 11;
 		} else {
 			return 10;
@@ -1077,6 +1077,8 @@ public List<String> selectEnderecoImoveis(String condition){
 		
 		if (tamanhoLinha == 690) {
 			tamanho = 10;
+		} else if (tamanhoLinha == 696) {
+			return 11;
 		} else {
 			if (matricula.trim().length() == 0) {
 				tamanho = 10;

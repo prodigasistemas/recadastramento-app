@@ -1544,8 +1544,7 @@
 			    android:layout_height="wrap_content" 
 			    android:inputType="textMultiLine" 
 			    android:maxLength="100" 
-				android:digits="abcdefghijklmnopqrstuvw xyzABCDEFGHIJKLMNOPQRSTUVXZWY1234567890-/" >
-			    >
+				>
 			</EditText>
 		</ScrollView>
 

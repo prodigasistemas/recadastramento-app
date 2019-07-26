@@ -1,1 +1,4 @@
 /bin
+app.properties
+/gen/*
+.DS_Store

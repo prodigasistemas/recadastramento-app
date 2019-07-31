@@ -15,6 +15,7 @@ import model.Imovel;
 import model.Medidor;
 import model.Registro;
 import model.Servicos;
+import model.Usuario;
 import util.Constantes;
 import util.Util;
 import android.content.Context;
@@ -23,6 +24,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
+
+import com.AndroidExplorer.R;
+
 import dataBase.DataManipulator;
 
 public class Controlador {
@@ -40,6 +44,7 @@ public class Controlador {
 	private static Registro anormalidades = new Registro();
 	private static AnormalidadeImovel anormalidadeImovelSelecionado = new AnormalidadeImovel();
 	private static Registro ramosAtividade = new Registro();
+	private static Usuario usuario = new Usuario();
 
 	private static long idCadastroSelecionado = 0;
 	private static int cadastroListPosition = -1;
@@ -87,6 +92,10 @@ public class Controlador {
 	public Registro getRamosAtividade() {
 		return Controlador.ramosAtividade;
 	}
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
 
 	public void setClienteSelecionado(Cliente clienteSelecionado) {
 		Controlador.clienteSelecionado = clienteSelecionado;
@@ -118,6 +127,9 @@ public class Controlador {
 
 	public void setRamosAtividade(Registro ramosAtividade) {
 		Controlador.ramosAtividade = ramosAtividade;
+	}
+	public void setUsuario(Usuario usuario) {
+		Controlador.usuario = usuario;
 	}
 
 	public void setCadastroSelecionadoByListPosition(int listPosition) {
@@ -268,7 +280,7 @@ public class Controlador {
 						manipulator.insertAnormalidadeImovel(linha);
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
-						manipulator.insertDadosGerais(linha, fileName);
+						manipulator.insertDadosGerais(linha, fileName, context.getString(R.string.app_versao));
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
 						manipulator.insertAnormalidade(linha);
@@ -308,6 +320,9 @@ public class Controlador {
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_HIDROMETRO) {
 						manipulator.insertAcessoHidrometro(linha);
+					
+					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_USUARIO) {
+						manipulator.insertUsuario(linha);
 					}
 
 					if (linhasLidas < qtdRegistros) {
@@ -461,4 +476,6 @@ public class Controlador {
 	private File getBackup(File diretorio) {
 		return new File(diretorio, "cadastro_" + Util.getRotaFileName() + ".db");
 	}
+
+	
 }

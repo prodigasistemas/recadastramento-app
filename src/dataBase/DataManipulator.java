@@ -10,6 +10,7 @@ import model.Imovel;
 import model.Medidor;
 import model.Registro;
 import model.Servicos;
+import model.Usuario;
 import util.Constantes;
 import util.ParserUtil;
 import android.content.ContentValues;
@@ -74,6 +75,9 @@ public class DataManipulator
     
     public Registro getRamosAtividade(){
     	return Controlador.getInstancia().getRamosAtividade();
+    }
+    public Usuario getUsuario(){
+    	return Controlador.getInstancia().getUsuario();
     }
     
     public void deleteTable(String tableName) {
@@ -702,92 +706,75 @@ public List<String> selectEnderecoImoveis(String condition){
         }
 	}
 	
-	public AnormalidadeImovel selectAnormalidadeImovel(String matricula){
+	public AnormalidadeImovel selectAnormalidadeImovel(String matricula) {
 
-        AnormalidadeImovel anormalidadeImovel = new AnormalidadeImovel();
+		AnormalidadeImovel anormalidadeImovel = new AnormalidadeImovel();
 
-        Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] {"latitude",
-                "longitude",
-                "codigo_anormalidade",
-                "comentario",
-                "path_image_1",
-                "path_image_2",
-                "data",
-                "matricula"}, "matricula=?", new String[] {matricula}, null, null,  "codigo_anormalidade asc");
+		Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] { 
+				"latitude", 
+				"longitude", 
+				"codigo_anormalidade", 
+				"comentario",
+				"path_image_1", 
+				"path_image_2", 
+				"data", 
+				"matricula", 
+				"login_usuario"}, 
+				"matricula=?", new String[] { matricula }, null, null, "codigo_anormalidade asc");
 
-        if (cursor != null){
+		if (cursor != null) {
 
-            if (cursor.moveToFirst()) {
-                anormalidadeImovel.setLatitude(cursor.getString(0));
-                anormalidadeImovel.setLongitude(cursor.getString(1));
-                anormalidadeImovel.setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
-                anormalidadeImovel.setComentario(cursor.getString(3));
-                anormalidadeImovel.setFoto1(cursor.getString(4));
-                anormalidadeImovel.setFoto2(cursor.getString(5));
-                anormalidadeImovel.setData(cursor.getString(6));
-                anormalidadeImovel.setMatricula(Integer.parseInt(cursor.getString(7)));
+			if (cursor.moveToFirst()) {
+				anormalidadeImovel.setLatitude(cursor.getString(0));
+				anormalidadeImovel.setLongitude(cursor.getString(1));
+				anormalidadeImovel.setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
+				anormalidadeImovel.setComentario(cursor.getString(3));
+				anormalidadeImovel.setFoto1(cursor.getString(4));
+				anormalidadeImovel.setFoto2(cursor.getString(5));
+				anormalidadeImovel.setData(cursor.getString(6));
+				anormalidadeImovel.setMatricula(Integer.parseInt(cursor.getString(7)));
+				anormalidadeImovel.setLoginUsuario(cursor.getString(8));
 
-                Controlador.getInstancia().setAnormalidadeImovelSelecionado(anormalidadeImovel);
-            }
+				Controlador.getInstancia().setAnormalidadeImovelSelecionado(anormalidadeImovel);
+			}
 
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
-            cursor.close();
+			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+			
+			cursor.close();
+		}
 
-        }
-
-        return anormalidadeImovel;
-    }
+		return anormalidadeImovel;
+	}
                 
-	public void selectGeral(){
-                	
-		Cursor cursor = db.query(Constantes.TABLE_GERAL, new String[] {"codigo_febraban",
-            														    "ano_mes_faturamento",
-            														    "telefone0800",
-            														    "cnpj_empresa",
-            														    "inscricao_estadual_empresa",
-            														    "login",
-            														    "senha",
-            														    "indicador_transmissao_offline",
-            														    "versao_celular",
-            														    "data_inicio",
-            														    "data_fim",
-            														    "id_rota",
-            														    "localidade",
-            														    "setor",
-            														    "rota",
-            														    "grupo_faturamento",
-            														    "nome_arquivo",
-            														    "tipo_arquivo"}, 
-            														    null, null, null, null,  "id asc");
+	public void selectGeral() {
 
-        if (cursor.moveToFirst()) {
-     	   getDadosGerais().setCodigoEmpresaFebraban(cursor.getString(0));
-     	   getDadosGerais().setAnoMesFaturamento(cursor.getString(1));
-    	   getDadosGerais().setTelefone0800(cursor.getString(2));
-    	   getDadosGerais().setCnpjEmpresa(cursor.getString(3));
-    	   getDadosGerais().setInscricaoEstadualEmpresa(cursor.getString(4));
-    	   getDadosGerais().setLogin(cursor.getString(5));
-    	   getDadosGerais().setSenha(cursor.getString(6));
-    	   getDadosGerais().setIndicadorTransmissaoOffline(cursor.getString(7));
-    	   getDadosGerais().setVersaoCelular(cursor.getString(8));
-    	   getDadosGerais().setDataInicio(cursor.getString(9));
-    	   getDadosGerais().setDataFim(cursor.getString(10));
-    	   getDadosGerais().setIdRota(cursor.getString(11));
-    	   getDadosGerais().setLocalidade(cursor.getString(12));
-    	   getDadosGerais().setSetor(cursor.getString(13));
-    	   getDadosGerais().setRota(cursor.getString(14));
-    	   getDadosGerais().setGrupoFaturamento(cursor.getString(15));
-    	   getDadosGerais().setNomeArquivo(cursor.getString(16));
-    	   getDadosGerais().setTipoArquivo(cursor.getString(17));
-        }
-        
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        
-        cursor.close();
+		Cursor cursor = db.query(Constantes.TABLE_GERAL, new String[] { 
+				"id_rota",
+				"localidade", 
+				"setor", 
+				"rota", 
+				"nome_arquivo", 
+				"tipo_arquivo",
+				"versao_aplicativo"}, 
+				null, null, null, null, "id asc");
+
+		if (cursor.moveToFirst()) {
+			getDadosGerais().setIdRota(cursor.getString(0));
+			getDadosGerais().setLocalidade(cursor.getString(1));
+			getDadosGerais().setSetor(cursor.getString(2));
+			getDadosGerais().setRota(cursor.getString(3));
+			getDadosGerais().setNomeArquivo(cursor.getString(4));
+			getDadosGerais().setTipoArquivo(cursor.getString(5));
+			getDadosGerais().setVersaoAplicativo(cursor.getString(6));
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		cursor.close();
 	}
 	
 	public int selectConfiguracaoElement(String element){
@@ -809,34 +796,27 @@ public List<String> selectEnderecoImoveis(String condition){
 	}
    
 
-	public List<String> selectInformacoesRota(){
-		
-		ArrayList<String> list = new ArrayList<String>();
-		Cursor cursor = db.query(Constantes.TABLE_GERAL, new String[] {"grupo_faturamento",
-																	   "localidade", 
-																	   "setor",
-																	   "rota",
-																	   "ano_mes_faturamento",
-																	   "login",
-																	   "nome_arquivo",
-																	   "tipo_arquivo"},
-																	   null, null, null, null,  "grupo_faturamento asc");
-		
+	public List<String> selectInformacoesRota() {
+		ArrayList<String> lista = new ArrayList<String>();
+		Cursor cursor = db.query(Constantes.TABLE_GERAL, new String[] { 
+				"localidade", 
+				"setor", 
+				"rota", 
+				"nome_arquivo", 
+				"tipo_arquivo" },
+				null, null, null, null, "localidade asc");
+
 		if (cursor.moveToFirst()) {
-	           list.add(cursor.getString(0));
-	           list.add(cursor.getString(1));
-	           list.add(cursor.getString(2));
-	           list.add(cursor.getString(3));
-	           list.add(cursor.getString(4));
-	           list.add(cursor.getString(5));
-	           list.add(cursor.getString(6));
-	           list.add(cursor.getString(7));
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        return list;
+			lista.add(cursor.getString(0));
+			lista.add(cursor.getString(1));
+			lista.add(cursor.getString(2));
+			lista.add(cursor.getString(3));
+			lista.add(cursor.getString(4));
+		}
+		
+		cursor.close();
+
+		return lista;
 	}
 
 	public List<String> selectAnormalidades(){
@@ -932,34 +912,53 @@ public List<String> selectEnderecoImoveis(String condition){
         	return null;
         }
    }
+	
+	public void selectUsuario(String login) {
+		Cursor cursor = db.query(Constantes.TABLE_USUARIO, new String[] { "nome", "login", "senha" }, "login = '" + login + "'", null, null, null, "nome ASC");
 
-	public long insertDadosGerais(String linhaArquivo, String nomeArquivo) {
-	   
+		if (cursor.moveToFirst()) {
+			getUsuario().setNome(cursor.getString(0));
+			getUsuario().setLogin(cursor.getString(1));
+			getUsuario().setSenha(cursor.getString(2));
+		} else {
+			Controlador.getInstancia().setUsuario(null);
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		cursor.close();
+	}
+
+	public long insertDadosGerais(String linhaArquivo, String nomeArquivo, String versaoAplicativo) {
 		ParserUtil parser = new ParserUtil(linhaArquivo);
-		parser.obterDadoParser(2);
 		ContentValues initialValues = new ContentValues();
-	   
-		initialValues.put("codigo_febraban", parser.obterDadoParser(4));
-		initialValues.put("ano_mes_faturamento", parser.obterDadoParser(6));
-		initialValues.put("telefone0800", parser.obterDadoParser(12));
-		initialValues.put("cnpj_empresa", parser.obterDadoParser(14));
-		initialValues.put("inscricao_estadual_empresa", parser.obterDadoParser(20));
-		initialValues.put("login", parser.obterDadoParser(11));
-		initialValues.put("senha", parser.obterDadoParser(40));
-		initialValues.put("indicador_transmissao_offline", parser.obterDadoParser(1));
-		initialValues.put("versao_celular", parser.obterDadoParser(10));
-		initialValues.put("data_inicio", parser.obterDadoParser(8));
-		initialValues.put("data_fim", parser.obterDadoParser(8));
+
+		parser.obterDadoParser(2);
+		parser.obterDadoParser(4);
+		parser.obterDadoParser(6);
+		parser.obterDadoParser(12);
+		parser.obterDadoParser(14);
+		parser.obterDadoParser(20);
+		parser.obterDadoParser(11);
+		parser.obterDadoParser(40);
+		parser.obterDadoParser(1);
+		parser.obterDadoParser(10);
+		parser.obterDadoParser(8);
+		parser.obterDadoParser(8);
 		initialValues.put("id_rota", parser.obterDadoParser(4));
 		initialValues.put("localidade", parser.obterDadoParser(3));
 		initialValues.put("setor", parser.obterDadoParser(3));
 		initialValues.put("rota", parser.obterDadoParser(2));
-		initialValues.put("grupo_faturamento", parser.obterDadoParser(3));
+		parser.obterDadoParser(3);
 		initialValues.put("nome_arquivo", nomeArquivo.replace(".txt", "").replace(".zip", ""));
-		
+
 		if (linhaArquivo.length() > 151)
 			initialValues.put("tipo_arquivo", parser.obterDadoParser(1));
 
+		initialValues.put("versao_aplicativo", versaoAplicativo);
+		
 		return db.insert(Constantes.TABLE_GERAL, null, initialValues);
 	}
    
@@ -975,7 +974,7 @@ public List<String> selectEnderecoImoveis(String condition){
 			db.insert(Constantes.TABLE_CONFIGURACAO, null, initialValues);
 		}
 	}
-   
+
 	public long insertCliente(String linhaArquivo) {
 		int tamanhoLinha = linhaArquivo.length();
 
@@ -1055,7 +1054,7 @@ public List<String> selectEnderecoImoveis(String condition){
 
 		return db.insert(Constantes.TABLE_CLIENTE, null, initialValues);
 	}
-	
+
 	private int getTamanhoTelefone(int tamanhoLinha) {
 		if (tamanhoLinha == 696 || tamanhoLinha == 695) {
 			return 11;
@@ -1063,7 +1062,7 @@ public List<String> selectEnderecoImoveis(String condition){
 			return 10;
 		}
 	}
-	
+
 	private int getTamanhoCelularUsuario(int tamanhoLinha) {
 		if (tamanhoLinha == 690) {
 			return 10;
@@ -1071,10 +1070,10 @@ public List<String> selectEnderecoImoveis(String condition){
 			return 11;
 		}
 	}
-	
+
 	private int getTamanhoCelularProprietarioOuResponsavel(int tamanhoLinha, String matricula) {
 		int tamanho = 0;
-		
+
 		if (tamanhoLinha == 690) {
 			tamanho = 10;
 		} else if (tamanhoLinha == 696) {
@@ -1086,7 +1085,7 @@ public List<String> selectEnderecoImoveis(String condition){
 				tamanho = 11;
 			}
 		}
-		
+
 		return tamanho;
 	}
 
@@ -1405,6 +1404,18 @@ public List<String> selectEnderecoImoveis(String condition){
 		   return db.insert(Constantes.TABLE_ACESSO_HIDROMETRO, null, initialValues);
 	}
 	
+	public long insertUsuario(String linhaArquivo) {
+		ParserUtil parser = new ParserUtil(linhaArquivo);
+		ContentValues initialValues = new ContentValues();
+
+		parser.obterDadoParser(2);
+		initialValues.put("nome", parser.obterDadoParser(50).trim());
+		initialValues.put("login", parser.obterDadoParser(11).trim());
+		initialValues.put("senha", parser.obterDadoParser(40).trim());
+
+		return db.insert(Constantes.TABLE_USUARIO, null, initialValues);
+	}
+	
 	public void salvarCliente(){
 
 	   ContentValues initialValues = new ContentValues();
@@ -1624,29 +1635,30 @@ public List<String> selectEnderecoImoveis(String condition){
 	   }
 	}
 
-	public void salvarAnormalidadeImovel(){
+	public void salvarAnormalidadeImovel() {
+		ContentValues initialValues = new ContentValues();
+		
+		initialValues.put("matricula", getImovelSelecionado().getMatricula());
+		initialValues.put("codigo_anormalidade", String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()));
+		initialValues.put("comentario", getAnormalidadeImovelSelecionado().getComentario());
+		initialValues.put("path_image_1", getAnormalidadeImovelSelecionado().getFoto1());
+		initialValues.put("path_image_2", getAnormalidadeImovelSelecionado().getFoto2());
+		initialValues.put("latitude", getAnormalidadeImovelSelecionado().getLatitude());
+		initialValues.put("longitude", getAnormalidadeImovelSelecionado().getLongitude());
+		initialValues.put("data", getAnormalidadeImovelSelecionado().getData());
+		initialValues.put("login_usuario", getAnormalidadeImovelSelecionado().getLoginUsuario());
 
-	   ContentValues initialValues = new ContentValues();
-	   initialValues.put("matricula", getImovelSelecionado().getMatricula());
-	   initialValues.put("codigo_anormalidade", String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()));
-	   initialValues.put("comentario", getAnormalidadeImovelSelecionado().getComentario());
-	   initialValues.put("path_image_1", getAnormalidadeImovelSelecionado().getFoto1());
-	   initialValues.put("path_image_2", getAnormalidadeImovelSelecionado().getFoto2());
-	   initialValues.put("latitude", getAnormalidadeImovelSelecionado().getLatitude());
-	   initialValues.put("longitude", getAnormalidadeImovelSelecionado().getLongitude());
-   	   initialValues.put("data", getAnormalidadeImovelSelecionado().getData());
+		AnormalidadeImovel anormalidadeImovel = selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
 
-   	   AnormalidadeImovel anormalidadeImovel = selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
-   	   
-	   if (anormalidadeImovel.getMatricula() == getImovelSelecionado().getMatricula()){
-		   db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String []{String.valueOf(anormalidadeImovel.getMatricula())});
-		   
-	   }else{
-		   if(Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()){
-			   Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
-			   Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(false);
-		   }
-	   }
+		if (anormalidadeImovel.getMatricula() == getImovelSelecionado().getMatricula()) {
+			db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String[] { String.valueOf(anormalidadeImovel.getMatricula()) });
+
+		} else {
+			if (Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()) {
+				Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
+				Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(false);
+			}
+		}
 	}
 	
 	public void salvarConfiguracaoElement(String parametroName, int value){

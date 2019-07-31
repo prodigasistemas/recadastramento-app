@@ -230,15 +230,13 @@ public class ArquivoRetorno {
 		registrosTipoZero = new StringBuffer();
 
 		registrosTipoZero.append("00");
-		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getGrupoFaturamento()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getLocalidade()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getSetor()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(2, Controlador.getInstancia().getDadosGerais().getRota()));
-		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(6, Controlador.getInstancia().getDadosGerais().getAnoMesFaturamento()));
-		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(4, "" + Controlador.getInstancia().getDadosGerais().getIdRota()));
-		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, Controlador.getInstancia().getDadosGerais().getVersaoCelular()));
+		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(4, Controlador.getInstancia().getDadosGerais().getIdRota()));
+		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, Controlador.getInstancia().getDadosGerais().getVersaoAplicativo()));
 		registrosTipoZero.append(Util.adicionarCharDireita(1, Controlador.getInstancia().getDadosGerais().getTipoArquivo(), ' '));
-
+		
 		registrosTipoZero.append("\n");
 
 		arquivo.append(registrosTipoZero);
@@ -320,6 +318,7 @@ public class ArquivoRetorno {
 		arquivo.append(Util.removerCaractereEspecial(registrosTipoCLiente.toString()));
 	}
 
+	@SuppressLint("DefaultLocale")
 	private static void gerarRegistroTipoImovel() {
 
 		registrosTipoImovel = new StringBuffer();
@@ -394,7 +393,7 @@ public class ArquivoRetorno {
 		registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));
 		
 		if(getImovelSelecionado().getObservacao() != null){
-		registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
+			registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
 		}
 		registrosTipoImovel.append("\n");
 
@@ -460,6 +459,7 @@ public class ArquivoRetorno {
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getAnormalidadeImovelSelecionado().getData(), ' '));
 		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getEntrevistado().toUpperCase())), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(11, getAnormalidadeImovelSelecionado().getLoginUsuario(), ' '));
 		registroTipoAnormalidadeImovel.append("\n");
 
 		arquivo.append(registroTipoAnormalidadeImovel.toString());

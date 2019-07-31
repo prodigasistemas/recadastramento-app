@@ -19,7 +19,7 @@ import business.Controlador;
 
 import com.AndroidExplorer.ClienteTab;
 
-@SuppressLint("SdCardPath") public class Util {
+@SuppressLint({ "SdCardPath", "SimpleDateFormat", "DefaultLocale" }) public class Util {
 
 	static boolean isUpdatingCep;
 	static boolean isUpdatingIptu;
@@ -734,7 +734,7 @@ import com.AndroidExplorer.ClienteTab;
             		return false;
             	}
             	
-                int soma = 0, aux, dig;  
+                int soma = 0, dig;  
                 String cnpj_calc = str_cnpj.substring(0,12);  
                   
                 if ( str_cnpj.length() != 14 )  
@@ -1087,7 +1087,8 @@ import com.AndroidExplorer.ClienteTab;
      *            Vetor de parâmetros.
      * @return O array de bytes com os parâmetros empacotados.
      */
-    public static byte[] empacotarParametros(Vector parametros) {
+    @SuppressWarnings("rawtypes")
+	public static byte[] empacotarParametros(Vector parametros) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(baos);

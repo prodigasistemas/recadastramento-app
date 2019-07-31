@@ -29,34 +29,6 @@
             android:textSize="25dp" />
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/txtGrupo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="Grupo: "
-                android:textColor="@color/textColor"
-                android:textSize="20dp" >
-            </TextView>
-
-            <TextView
-                android:id="@+id/valorGrupo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:layout_marginLeft="5dp"
-                android:text="Indefinido"
-                android:textColor="@color/adicionalColor"
-                android:textSize="20dp" >
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -130,34 +102,6 @@
 
             <TextView
                 android:id="@+id/valorRota"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="7dp"
-                android:layout_marginLeft="5dp"
-                android:text="Indefinido"
-                android:textColor="@color/adicionalColor"
-                android:textSize="20dp" >
-            </TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:id="@+id/txtAnoMes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="Mês Referência: "
-                android:textColor="@color/textColor"
-                android:textSize="20dp" >
-            </TextView>
-
-            <TextView
-                android:id="@+id/valorAnoMesReferencia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"

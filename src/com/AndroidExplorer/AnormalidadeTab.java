@@ -1,8 +1,6 @@
 package com.AndroidExplorer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -11,11 +9,9 @@ import model.AnormalidadeImovel;
 import model.Imovel;
 import util.Constantes;
 import util.Util;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
@@ -25,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Images.Media;
 import android.support.v4.app.Fragment;
 import android.telephony.CellLocation;
 import android.text.Editable;
@@ -44,7 +39,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import background.EnviarCadastroOnlineThread;
 import business.Controlador;
  
 public class AnormalidadeTab extends Fragment implements LocationListener {
@@ -64,9 +58,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
 	private String provider;
-
-	private static EnviarCadastroOnlineThread progThread;
-	private static int increment= 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -88,6 +79,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
         return view;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void instanciate(){
         
 		foto1Taken = false;
@@ -378,68 +370,41 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
     	return new File(fotoPath, fileName);  
 	}  
 
-    private File getFotoFile(String filePath){  
-
-    	final File fotoFile = new File(filePath);  
-    	if(!fotoFile.exists()){  
-    		return null;  
-    	}  
-    	return fotoFile;  
-	}  
-
-    private int getLastImageId(){
-        final String[] imageColumns = { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA };
-        final String imageOrderBy = MediaStore.Images.Media._ID+" DESC";
-        Cursor imageCursor = getActivity().managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageColumns, null, null, imageOrderBy);
-        if(imageCursor.moveToFirst()){
-            int id = imageCursor.getInt(imageCursor.getColumnIndex(MediaStore.Images.Media._ID));
-            String fullPath = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            imageCursor.close();
-            return id;
-        }else{
-            return 0;
-        }
-    }
-    
-    private void removeImage(int id) {
-    	   ContentResolver cr = getActivity().getContentResolver();
-    	   cr.delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media._ID + "=?", new String[]{ Long.toString(id) } );
-    	}
-    
     public Imovel getImovelSelecionado() {
     	return Controlador.getInstancia().getImovelSelecionado();
     }
 
-    public void updateAnormalidadeSelecionada(){
+	public void updateAnormalidadeSelecionada() {
 
-    	getAnormalidadeImovelSelecionado().setMatricula(getImovelSelecionado().getMatricula());
-    	
-		if (codigoAnormalidade.getText().toString().length() > 0){
+		getAnormalidadeImovelSelecionado().setMatricula(getImovelSelecionado().getMatricula());
+
+		if (codigoAnormalidade.getText().toString().length() > 0) {
 			getAnormalidadeImovelSelecionado().setCodigoAnormalidade(Integer.parseInt(codigoAnormalidade.getText().toString()));
-		}else{
-			getAnormalidadeImovelSelecionado().setCodigoAnormalidade(0);			
+		} else {
+			getAnormalidadeImovelSelecionado().setCodigoAnormalidade(0);
 		}
-		
-		getAnormalidadeImovelSelecionado().setComentario(((EditText)view.findViewById(R.id.editComentario)).getText().toString());
-		
-		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()){
+
+		getAnormalidadeImovelSelecionado().setComentario(((EditText) view.findViewById(R.id.editComentario)).getText().toString());
+
+		if (foto1Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_1.jpg").exists()) {
 			getAnormalidadeImovelSelecionado().setFoto1(getImovelSelecionado().getMatricula() + "_1.jpg");
 		}
-		
-		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()){
-			getAnormalidadeImovelSelecionado().setFoto2(getImovelSelecionado().getMatricula() + "_2.jpg");	
+
+		if (foto2Taken && getFotoFile(Util.getRetornoRotaDirectory(), getImovelSelecionado().getMatricula() + "_2.jpg").exists()) {
+			getAnormalidadeImovelSelecionado().setFoto2(getImovelSelecionado().getMatricula() + "_2.jpg");
 		}
 
-		if (!((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")){
-			getAnormalidadeImovelSelecionado().setLatitude(((TextView)view.findViewById(R.id.txtValorLatitude)).getText().toString());
+		if (!((TextView) view.findViewById(R.id.txtValorLatitude)).getText().toString().equalsIgnoreCase("----")) {
+			getAnormalidadeImovelSelecionado().setLatitude(((TextView) view.findViewById(R.id.txtValorLatitude)).getText().toString());
 		}
 
-		if (!((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")){
-			getAnormalidadeImovelSelecionado().setLongitude(((TextView)view.findViewById(R.id.txtValorLongitude)).getText().toString());
+		if (!((TextView) view.findViewById(R.id.txtValorLongitude)).getText().toString().equalsIgnoreCase("----")) {
+			getAnormalidadeImovelSelecionado().setLongitude(((TextView) view.findViewById(R.id.txtValorLongitude)).getText().toString());
 		}
 
 		getAnormalidadeImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
-    }
+		getAnormalidadeImovelSelecionado().setLoginUsuario(Controlador.getInstancia().getCadastroDataManipulator().getUsuario().getLogin());
+	}
 	
 	public AnormalidadeImovel getAnormalidadeImovelSelecionado() {
 		return Controlador.getInstancia().getAnormalidadeImovelSelecionado();

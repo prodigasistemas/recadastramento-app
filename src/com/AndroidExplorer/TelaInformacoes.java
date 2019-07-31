@@ -14,18 +14,14 @@ public class TelaInformacoes extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.roteiroinfo);
 
-		List<String> infoList = Controlador.getInstancia().getCadastroDataManipulator().selectInformacoesRota();
-		String anoMesReferencia = infoList.get(4).substring(4, 6) + "/" + infoList.get(4).substring(0, 4);
-
-		((TextView) findViewById(R.id.valorGrupo)).setText(infoList.get(0));
-		((TextView) findViewById(R.id.valorLocalidade)).setText(infoList.get(1));
-		((TextView) findViewById(R.id.valorSetor)).setText(infoList.get(2));
-		((TextView) findViewById(R.id.valorRota)).setText(infoList.get(3));
-		((TextView) findViewById(R.id.valorAnoMesReferencia)).setText(anoMesReferencia);
+		List<String> informacoes = Controlador.getInstancia().getCadastroDataManipulator().selectInformacoesRota();
+		((TextView) findViewById(R.id.valorLocalidade)).setText(informacoes.get(0));
+		((TextView) findViewById(R.id.valorSetor)).setText(informacoes.get(1));
+		((TextView) findViewById(R.id.valorRota)).setText(informacoes.get(2));
 		((TextView) findViewById(R.id.valorTotalImoveis)).setText(String.valueOf(Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()));
-		((TextView) findViewById(R.id.valorUsuario)).setText(infoList.get(5));
-		((TextView) findViewById(R.id.valorNomeArquivo)).setText(getNomeArquivo(infoList.get(6)));
-		((TextView) findViewById(R.id.valorTipoArquivo)).setText(getTipoArquivo(infoList.get(7).trim()));
+		((TextView) findViewById(R.id.valorUsuario)).setText(Controlador.getInstancia().getCadastroDataManipulator().getUsuario().getNome());
+		((TextView) findViewById(R.id.valorNomeArquivo)).setText(getNomeArquivo(informacoes.get(3).trim()));
+		((TextView) findViewById(R.id.valorTipoArquivo)).setText(getTipoArquivo(informacoes.get(4).trim()));
 	}
 
 	private String getNomeArquivo(String nome) {

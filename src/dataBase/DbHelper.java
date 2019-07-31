@@ -62,15 +62,13 @@ public class DbHelper extends SQLiteOpenHelper {
     	"CREATE TABLE medidor (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, possui_medidor TEXT, numero_hidrometro TEXT, marca TEXT, capacidade TEXT, tipo_caixa_protecao TEXT, latitude TEXT, longitude TEXT, data TEXT)";
 
     private static final String DATABASE_GERAL_QUERY =
-    	"CREATE TABLE geral (id INTEGER PRIMARY KEY autoincrement, ano_mes_faturamento TEXT, codigo_febraban TEXT, telefone0800 TEXT, cnpj_empresa TEXT, " +
-    	"inscricao_estadual_empresa TEXT, login TEXT, senha TEXT, indicador_transmissao_offline TEXT, versao_celular TEXT, id_rota TEXT, data_inicio TEXT, data_fim TEXT, " +
-    	"localidade TEXT, setor TEXT, rota TEXT, grupo_faturamento TEXT, qtd_imoveis_novos INTEGER, nome_arquivo TEXT, tipo_arquivo TEXT)";
+    	"CREATE TABLE geral (id INTEGER PRIMARY KEY autoincrement, versao_aplicativo TEXT, id_rota TEXT, localidade TEXT, setor TEXT, rota TEXT, qtd_imoveis_novos INTEGER, nome_arquivo TEXT, tipo_arquivo TEXT)";
 
     private static final String DATABASE_ANORMALIDADE_QUERY =
     	"CREATE TABLE anormalidade (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT, data DATE)";
 
     private static final String DATABASE_ANORMALIDADE_IMOVEL_QUERY =
-    	"CREATE TABLE anormalidade_imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT, latitude TEXT, longitude TEXT, codigo_anormalidade TEXT, comentario TEXT, path_image_1 TEXT, path_image_2 TEXT, data TEXT)";
+    	"CREATE TABLE anormalidade_imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT, latitude TEXT, longitude TEXT, codigo_anormalidade TEXT, comentario TEXT, path_image_1 TEXT, path_image_2 TEXT, data TEXT, login_usuario TEXT)";
 
     private static final String DATABASE_RAMO_ATIVIDADE_QUERY =
     	"CREATE TABLE ramo_atividade (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
@@ -111,6 +109,9 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_ACESSO_HIDROMETRO_QUERY =
             "CREATE TABLE "+Constantes.TABLE_ACESSO_HIDROMETRO+" (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT)";
     
+    private static final String DATABASE_USUARIO_QUERY =
+            "CREATE TABLE "+Constantes.TABLE_USUARIO+" (id INTEGER PRIMARY KEY autoincrement, nome TEXT, login TEXT, senha TEXT)";
+    
     public DbHelper(Context context) {
 		super(context, Constantes.DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -138,6 +139,8 @@ public class DbHelper extends SQLiteOpenHelper {
      	db.execSQL(DATABASE_CLASSE_SOCIAL_QUERY);
      	db.execSQL(DATABASE_TIPO_USO_QUERY);
      	db.execSQL(DATABASE_ACESSO_HIDROMETRO_QUERY);
+     	db.execSQL(DATABASE_USUARIO_QUERY);
+     	
      	db.execSQL(ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL);
     }
 

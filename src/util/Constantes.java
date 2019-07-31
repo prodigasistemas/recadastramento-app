@@ -59,6 +59,7 @@ public class Constantes {
     public static final int REGISTRO_TIPO_CLASSE_SOCIAL = 18;
     public static final int REGISTRO_TIPO_USO = 19;
     public static final int REGISTRO_TIPO_ACESSO_HIDROMETRO = 20;
+    public static final int REGISTRO_TIPO_ACESSO_USUARIO = 21;
     
     public static final int SIM = 1;
     public static final int NAO = 2;
@@ -124,6 +125,7 @@ public class Constantes {
     public static final String TABLE_CLASSE_SOCIAL = "classe_social";
     public static final String TABLE_TIPO_USO = "tipo_uso";
     public static final String TABLE_ACESSO_HIDROMETRO = "acesso_hidrometro";
+    public static final String TABLE_USUARIO = "usuario";
     
     public static final String DATABASE_NAME = "cadastro.db";
 	public static final String DATABASE_PATH = "/data/data/com.AndroidExplorer/databases/";

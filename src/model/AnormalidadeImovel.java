@@ -2,7 +2,7 @@ package model;
 
 import util.Util;
 
-public class AnormalidadeImovel extends Model{
+public class AnormalidadeImovel extends Model {
 
 	private int codigoAnormalidade;
 	private int matricula;
@@ -14,6 +14,7 @@ public class AnormalidadeImovel extends Model{
 	private double latitude;
 	private double longitude;
 	private String data;
+	private String loginUsuario;
 
 	public AnormalidadeImovel() {
 		this.descricaoAnormalidade = "";
@@ -24,6 +25,7 @@ public class AnormalidadeImovel extends Model{
 		this.latitude = 0;
 		this.longitude = 0;
 		this.data = "";
+		this.loginUsuario = "";
 	}
 
 	public int getCodigoAnormalidade() {
@@ -104,5 +106,13 @@ public class AnormalidadeImovel extends Model{
 
 	public void setMatricula(int matricula) {
 		this.matricula = matricula;
+	}
+
+	public String getLoginUsuario() {
+		return loginUsuario;
+	}
+
+	public void setLoginUsuario(String loginUsuario) {
+		this.loginUsuario = loginUsuario;
 	}
 }

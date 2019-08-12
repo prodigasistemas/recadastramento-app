@@ -54,6 +54,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 	private String provider;
 	List<String> listTiposLogradouroProprietario;
 	List<String> listTiposLogradouroResponsavel;
+	private String cpfCnpjOriginal;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.foneUsuario));
     	Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularUsuario));
     	Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjUsuario), Constantes.PESSOA_USUARIO);
-        
+    	cpfCnpjOriginal = getCliente().getUsuario().getCpfCnpj();
+    	
     	// Verifica após preencher o campo se está válido
     	((EditText)view.findViewById(R.id.cpfCnpjUsuario)).setOnFocusChangeListener(new OnFocusChangeListener() {          
     		public void onFocusChange(View v, boolean hasFocus) {
@@ -112,8 +114,14 @@ public class ClienteTab extends Fragment implements LocationListener {
     					if ( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
 							( !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "")))){
 
-    						dialogMessage = "CPF do usuário inválido.";
+    						dialogMessage = "CPF do campo usuário inválido.";
                             showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+                            
+    					}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
+
+    						dialogMessage = "Valide campo CPF do usuário.";
+                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+    						
     					}
     				
     				}else{
@@ -121,16 +129,22 @@ public class ClienteTab extends Fragment implements LocationListener {
     					if ( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
     						( !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())) ){
     						
-    						dialogMessage = "CNPJ do usuário inválido.";
+    						dialogMessage = "CNPJ do campo usuário inválido.";
                             showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+                            
+    					}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
+
+    						dialogMessage = "Valide campo CNJP da empresa.";
+                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+    						
     					}
+    					
     				}
     			}
     		}
     	});
     	
-    	
-    	
+   	
       	// Spinner Entrevistado
         Spinner spinnerEntrevistado = (Spinner) view.findViewById(R.id.spinnerEntrevistado);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.listaEntrevistado, android.R.layout.simple_spinner_item);
@@ -414,6 +428,13 @@ public class ClienteTab extends Fragment implements LocationListener {
 				dialogMessage = "CPF do usuário inválido.";
                 showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 				return false;
+				
+			}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
+				
+				dialogMessage = "Valide CPF do usuário.";
+                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+                return false;
+				
 			}
 		}else{
 			
@@ -424,6 +445,13 @@ public class ClienteTab extends Fragment implements LocationListener {
 				dialogMessage = "CNPJ do usuário inválido.";
                 showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 				return false;
+				
+			}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
+				
+				dialogMessage = "Valide CNPJ do usuário.";
+                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+                return false;
+				
 			}
 		}
 		
@@ -440,12 +468,20 @@ public class ClienteTab extends Fragment implements LocationListener {
 			
 			// CPF ou CNPJ do Responsavel
 			if (isResponsavelCpfSelected){
-				if( (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) && 
+						
+				if( (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) &&
 					(!Util.getCpfResponsavelOk() || !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ){
 					
 					dialogMessage = "CPF do responsável inválido.";
                     showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 					return false;
+					
+				}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") == 0)){
+					
+					dialogMessage = "Valide CPF do responsável.";
+	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+	                return false;
+					
 				}
 			
 			}else{
@@ -455,6 +491,13 @@ public class ClienteTab extends Fragment implements LocationListener {
 					dialogMessage = "CNPJ do responsável inválido.";
                     showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 					return false;
+					
+				}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") == 0)){
+					
+					dialogMessage = "Valide CNPJ do responsável.";
+	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+	                return false;
+					
 				}
 			}
 		}
@@ -471,8 +514,6 @@ public class ClienteTab extends Fragment implements LocationListener {
 				return false;
 			}
 			
-			if (getCliente().isNovoProprietario()) {
-				
 				// Nome do Proprietario
 				if (Util.isValidText( ((EditText)view.findViewById(R.id.nomeProprietario)).getText().toString() ) ){
 					
@@ -483,32 +524,37 @@ public class ClienteTab extends Fragment implements LocationListener {
 				
 				// CPF ou CNPJ do Proprietario
 				if (isProprietarioCpfSelected){
-					if(cpfCnpjProprietario.compareTo("") == 0){
-						
-						dialogMessage = "Informe o CPF do proprietário.";
-						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-					}
-					
-					if(cpfCnpjProprietario.compareTo("") != 0 && (!Util.getCpfProprietarioOk() || !Util.validateCpf(cpfCnpjProprietario))) {
+									
+					if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
+							!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
 						
 						dialogMessage = "CPF do proprietário inválido.";
 						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 						return false;
+						
+					}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0)){
+						
+						dialogMessage = "Valide CPF do proprietário.";
+		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+		                return false;
+						
 					}
 					
 				}else{
-					if(cpfCnpjProprietario.compareTo("") == 0) {
-						dialogMessage = "Informe o CNPJ do proprietário.";
-						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-					}
-					
-					if( (cpfCnpjProprietario.compareTo("") != 0 && (!Util.getCnpjProprietarioOk() || !Util.validateCnpj(cpfCnpjProprietario))) ) {
+									
+					if( ( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
+							!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ) {
 						
 						dialogMessage = "CNPJ do proprietário inválido.";
 						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 						return false;
+						
+					}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0)){
+						
+						dialogMessage = "Valide CNPJ do proprietário.";
+		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+		                return false;
+						
 					}
 					
 					// CEP do Proprietario
@@ -519,7 +565,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 						return false;
 					}
 				}
-			}
+			
 			
 		} else {
 			RadioGroup radio = ((RadioGroup)view.findViewById(R.id.groupTipoEnderecoUsuario));
@@ -648,7 +694,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		// CPF / CNPJ do Proprietario
 		if (getCliente().getProprietario().getCpfCnpj() != Constantes.NULO_STRING) {
-			((EditText) (view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj()));
+			((EditText) (view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
 		}
 
 		// RG do Proprietario
@@ -734,7 +780,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		// CPF / CNPJ do Usuario
 		if (getCliente().getUsuario().getCpfCnpj() != Constantes.NULO_STRING) {
-			((EditText) (view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj()));
+			((EditText) (view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
 		}
 
 		// RG do Usuario
@@ -791,7 +837,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 			// CPF / CNPJ do Responsavel
 			if (getCliente().getResponsavel().getCpfCnpj() != Constantes.NULO_STRING) {
-				((EditText) (view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj()));
+				((EditText) (view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
 			}
 
 			// RG do Responsavel
@@ -1142,8 +1188,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 	            }
 			}
 
-			if (position == getCliente().getProprietario().getTipoPessoa()){
-                ((EditText)(view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj()));
+			if (position == getCliente().getProprietario().getTipoPessoa() && !getCliente().getUsuario().getCpfCnpj().equals("")){
+                ((EditText)(view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
     		}else{
             	((EditText)view.findViewById(R.id.cpfCnpjProprietario)).setText("");
     		}
@@ -1170,8 +1216,9 @@ public class ClienteTab extends Fragment implements LocationListener {
 	            }
 			}
 
-			if (position == getCliente().getUsuario().getTipoPessoa()){
-                ((EditText)(view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj()));
+			if (position == getCliente().getUsuario().getTipoPessoa() && !getCliente().getUsuario().getCpfCnpj().equals("")){
+                ((EditText)(view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
+                String CpfCnpjOriginal = getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ);
     		}else{
             	((EditText)view.findViewById(R.id.cpfCnpjUsuario)).setText("");
     		}
@@ -1199,8 +1246,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 	            }
 			}
 			
-    		if (position == getCliente().getResponsavel().getTipoPessoa()){
-                ((EditText)(view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj()));
+    		if (position == getCliente().getResponsavel().getTipoPessoa() && !getCliente().getUsuario().getCpfCnpj().equals("")){
+                ((EditText)(view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
     		}else{
             	((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).setText("");
     		}

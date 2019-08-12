@@ -266,87 +266,95 @@ public List<String> selectEnderecoImoveis(String condition){
         return list;
 	}
     
-    public List<String> selectStatusImoveis(String condition){
-    	
-    	ArrayList<String> list = new ArrayList<String>();
-    	Cursor cursor;
-        
-    	if (condition == Constantes.NULO_STRING  || condition == null){
+	public List<Imovel> selectStatusImoveis(String condicao) {
 
-        	cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status"}, null, null, null, null,  "inscricao asc");
+		List<Imovel> imoveis = new ArrayList<Imovel>();
 
-    	}else{
-    		
-        	cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status"}, condition, null, null, null,  "inscricao asc");
-    	}
+		Cursor cursor;
+		if (condicao == null) {
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status, imovel_enviado" }, null, null, null, null, "inscricao asc");
+		} else {
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado" }, condicao, null, null, null, "inscricao asc");
+		}
 
-        int x=0;
-        if (cursor.moveToFirst()) {
-           do {
-                list.add(cursor.getString(0));
-                x=x+1;
-           } while (cursor.moveToNext());
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        return list;
+		if (cursor.moveToFirst()) {
+			do {
+				Imovel imovel = new Imovel();
+				imovel.setImovelStatus(cursor.getString(0));
+				imovel.setImovelEnviado(cursor.getString(1));
+				imoveis.add(imovel);
+			} while (cursor.moveToNext());
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		return imoveis;
 	}
 
-    public List<Integer> selectNumeroTodosStatusImoveis(){
-    	
-    	ArrayList<Integer> list = new ArrayList<Integer>();
-    	int visitados = 0;
-    	int naoVisitados = 0;
-    	int visitadosAnormalidade = 0;
-    	int novos = 0;
-    	int transmitidos = 0;
-    	int naoTransmitidos = 0;
-    	
-        Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado", "matricula"}, null, null, null, null,  "inscricao asc");
-        if (cursor.moveToFirst()) {
-           do {
-        	   
-        	   // Contabiliza imoveis novos
-        	   if( Integer.parseInt(cursor.getString(0)) == Constantes.IMOVEL_NOVO || Integer.parseInt(cursor.getString(0)) == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE ){
-        		   novos++;
-        	   }
-        	   
-        	   // Verifica imovel_status
-        	   if ( Integer.parseInt(cursor.getString(0)) == Constantes.IMOVEL_A_SALVAR ){
-        		   naoVisitados++;
-				
-        	   } else if ( Integer.parseInt(cursor.getString(0)) == Constantes.IMOVEL_SALVO){
-        		   visitados++;
-				
-        	   } else if ( Integer.parseInt(cursor.getString(0)) == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
-        		   visitadosAnormalidade++;
-        	   }
-        	   
-        	   // Verifica imovel_enviado
-        	   if ( Integer.parseInt(cursor.getString(1)) == Constantes.SIM ){
-        		   transmitidos++;
-        	   
-        	   } else if ( Integer.parseInt(cursor.getString(1)) == Constantes.NAO ){
-        		   naoTransmitidos++;
-        	   }
-           
-           } while (cursor.moveToNext());
-           
-           list.add(visitados);
-           list.add(naoVisitados);
-           list.add(visitadosAnormalidade);
-           list.add(novos);
-           list.add(transmitidos);
-           list.add(naoTransmitidos);
+	public List<Integer> selectNumeroTodosStatusImoveis() {
 
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        return list;
+		ArrayList<Integer> lista = new ArrayList<Integer>();
+
+		int visitados = 0;
+		int naoVisitados = 0;
+		int visitadosAnormalidade = 0;
+		int novos = 0;
+		int transmitidos = 0;
+		int naoTransmitidos = 0;
+		int inconsistencias = 0;
+
+		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado" }, null, null, null, null, "inscricao asc");
+		
+		if (cursor.moveToFirst()) {
+			do {
+				int imovelStatus = Integer.parseInt(cursor.getString(0));
+
+				if (imovelStatus == Constantes.IMOVEL_SALVO) {
+					visitados++;
+					
+				} else if (imovelStatus == Constantes.IMOVEL_A_SALVAR) {
+					naoVisitados++;
+					
+				} else if (imovelStatus == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) {
+					visitadosAnormalidade++;
+				}
+
+				if (imovelStatus == Constantes.IMOVEL_NOVO || imovelStatus == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE) {
+					novos++;
+				}
+				
+				int imovelEnviado = Integer.parseInt(cursor.getString(1));
+				
+				if (imovelEnviado == Constantes.SIM) {
+					transmitidos++;
+				} else if (imovelEnviado == Constantes.NAO) {
+					if (imovelStatus == Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA) {
+						inconsistencias++;
+					} else {
+						naoTransmitidos++;
+					}
+				}
+
+			} while (cursor.moveToNext());
+
+			lista.add(visitados);
+			lista.add(naoVisitados);
+			lista.add(visitadosAnormalidade);
+			lista.add(novos);
+			lista.add(transmitidos);
+			lista.add(inconsistencias);
+			lista.add(naoTransmitidos);
+		}
+		
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		
+		cursor.close();
+		
+		return lista;
 	}
 
     public void selectCliente(long id){
@@ -476,6 +484,140 @@ public List<String> selectEnderecoImoveis(String condition){
            cursor.close();
         }
         cursor.close();
+   }
+    
+    public Cliente selectClientePorId(long id) {
+    	
+        Cursor cursor = db.query(Constantes.TABLE_CLIENTE, new String[] {"matricula",
+														        		"gerencia", 
+														        		"tipo_endereco_proprietario", 
+														        		"tipo_endereco_responsavel", 
+														        		"usuario_proprietario", 
+														        		"tipo_responsavel", 
+
+														        		"matricula_usuario", 
+														        		"nome_usuario", 
+														        		"tipo_pessoa_usuario", 
+														        		"cpf_cnpj_usuario", 
+														        		"rg_usuario", 
+														        		"uf_usuario", 
+														        		"tipo_sexo_usuario", 
+														        		"telefone_usuario",
+														        		"celular_usuario", 
+														        		"email_usuario",
+														        		
+														        		"matricula_proprietario",
+														        		"nome_proprietario",
+														        		"tipo_pessoa_proprietario", 
+														        		"cpf_cnpj_proprietario", 
+														        		"rg_proprietario", 
+														        		"uf_proprietario", 
+														        		"tipo_sexo_proprietario", 
+														        		"telefone_proprietario",
+														        		"celular_proprietario",
+														        		"email_proprietario",
+														        		"tipo_logradouro_proprietario",
+														        		"logradouro_proprietario",
+														        		"numero_proprietario",
+														        		"complemento_proprietario", 
+														        		"bairro_proprietario", 
+														        		"cep_proprietario", 
+														        		"municipio_proprietario",
+														
+														        		"matricula_responsavel", 
+														        		"nome_responsavel", 
+														        		"tipo_pessoa_responsavel", 
+														        		"cpf_cnpj_responsavel", 
+														        		"rg_responsavel", 
+														        		"uf_responsavel", 
+														        		"tipo_sexo_responsavel", 
+														        		"telefone_responsavel", 
+														        		"celular_responsavel", 
+														        		"email_responsavel",
+														        		"tipo_logradouro_responsavel",
+														        		"logradouro_responsavel",
+														        		"numero_responsavel",
+														        		"complemento_responsavel", 
+														        		"bairro_responsavel", 
+														        		"cep_responsavel", 
+														        		"municipio_responsavel",
+														        		"latitude",
+														        		"longitude",
+														        		"data",
+														        		"matricula_usuario",
+														        		"matricula_responsavel",
+														        		"matricula_proprietario"}, "id = " + id, null, null, null,  "id asc");
+        
+        Cliente cliente = null;
+        
+        if (cursor.moveToFirst()) {
+        	cliente = new Cliente();
+        	
+        	cliente.setMatricula(cursor.getString(0));
+        	cliente.setNomeGerenciaRegional(cursor.getString(1));
+        	cliente.setTipoEnderecoProprietario(cursor.getString(2));
+        	cliente.setTipoEnderecoResponsavel(cursor.getString(3));
+        	cliente.setUsuarioEProprietario(cursor.getString(4));
+        	cliente.setTipoResponsavel(cursor.getString(5));
+        	
+        	cliente.getUsuario().setMatricula(cursor.getString(6));
+        	cliente.getUsuario().setNome(cursor.getString(7));
+        	cliente.getUsuario().setTipoPessoa(cursor.getString(8));
+        	cliente.getUsuario().setCpfCnpj(cursor.getString(9));
+        	cliente.getUsuario().setRg(cursor.getString(10));
+        	cliente.getUsuario().setUf(cursor.getString(11));
+        	cliente.getUsuario().setTipoSexo(cursor.getString(12));
+        	cliente.getUsuario().setTelefone(cursor.getString(13));
+        	cliente.getUsuario().setCelular(cursor.getString(14));
+        	cliente.getUsuario().setEmail(cursor.getString(15));
+        	
+        	cliente.getProprietario().setMatricula(cursor.getString(16));
+        	cliente.getProprietario().setNome(cursor.getString(17));
+        	cliente.getProprietario().setTipoPessoa(cursor.getString(18));
+        	cliente.getProprietario().setCpfCnpj(cursor.getString(19));
+        	cliente.getProprietario().setRg(cursor.getString(20));
+        	cliente.getProprietario().setUf(cursor.getString(21));
+        	cliente.getProprietario().setTipoSexo(cursor.getString(22));
+        	cliente.getProprietario().setTelefone(cursor.getString(23));
+        	cliente.getProprietario().setCelular(cursor.getString(24));
+        	cliente.getProprietario().setEmail(cursor.getString(25));
+        	cliente.getEnderecoProprietario().setTipoLogradouro(cursor.getString(26));
+        	cliente.getEnderecoProprietario().setLogradouro(cursor.getString(27));
+        	cliente.getEnderecoProprietario().setNumero(cursor.getString(28));
+        	cliente.getEnderecoProprietario().setComplemento(cursor.getString(29));
+        	cliente.getEnderecoProprietario().setBairro(cursor.getString(30));
+        	cliente.getEnderecoProprietario().setCep(cursor.getString(31));
+        	cliente.getEnderecoProprietario().setMunicipio(cursor.getString(32));
+
+        	cliente.getResponsavel().setMatricula(cursor.getString(33));
+        	cliente.getResponsavel().setNome(cursor.getString(34));
+        	cliente.getResponsavel().setTipoPessoa(cursor.getString(35));
+        	cliente.getResponsavel().setCpfCnpj(cursor.getString(36));
+        	cliente.getResponsavel().setRg(cursor.getString(37));
+        	cliente.getResponsavel().setUf(cursor.getString(38));
+        	cliente.getResponsavel().setTipoSexo(cursor.getString(39));
+        	cliente.getResponsavel().setTelefone(cursor.getString(40));
+        	cliente.getResponsavel().setCelular(cursor.getString(41));
+        	cliente.getResponsavel().setEmail(cursor.getString(42));
+        	
+        	cliente.getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
+        	cliente.getEnderecoResponsavel().setLogradouro(cursor.getString(44));
+        	cliente.getEnderecoResponsavel().setNumero(cursor.getString(45));
+        	cliente.getEnderecoResponsavel().setComplemento(cursor.getString(46));
+        	cliente.getEnderecoResponsavel().setBairro(cursor.getString(47));
+        	cliente.getEnderecoResponsavel().setCep(cursor.getString(48));
+        	cliente.getEnderecoResponsavel().setMunicipio(cursor.getString(49));
+
+        	cliente.setLatitude(cursor.getString(50));
+        	cliente.setLongitude(cursor.getString(51));
+        	cliente.setData(cursor.getString(52));
+        }
+        if (cursor != null && !cursor.isClosed()) {
+           cursor.close();
+        }
+        cursor.close();
+        
+        return cliente;
    }
     
    public void selectImovel(long id){
@@ -613,7 +755,6 @@ public List<String> selectEnderecoImoveis(String condition){
         	getImovelSelecionado().setQuantidadeEconomiasOutros(cursor.getString(cursor.getColumnIndex("quantidade_economias_outros")));
         	
         	getImovelSelecionado().setObservacao(cursor.getString(cursor.getColumnIndex("observacao")));
-
         	
         	getImovelSelecionado().setPercentualAbastecimento(cursor.getString(cursor.getColumnIndex("percentual_abastecimento")));
         }
@@ -647,6 +788,33 @@ public List<String> selectEnderecoImoveis(String condition){
         cursor.close();
 
 	}
+	
+	public Servicos selectServicos(long id){
+		Cursor cursor = db.query(Constantes.TABLE_SERVICO, new String[] {"tipo_ligacao_agua",
+    														        	"tipo_ligacao_esgoto",
+    														        	"local_instalacao_ramal",
+    														        	"latitude",
+    														        	"longitude",
+    														        	"data"}, "id = " + id, null, null, null,  "id asc");
+		Servicos servico = null;
+		
+        if (cursor.moveToFirst()) {
+        	servico = new Servicos();
+        	servico.setTipoLigacaoAgua(cursor.getString(0));
+        	servico.setTipoLigacaoEsgoto(cursor.getString(1));
+        	servico.setLocalInstalacaoRamal(cursor.getString(2));
+        	servico.setLatitude(cursor.getString(3));
+        	servico.setLongitude(cursor.getString(4));
+        	servico.setData(cursor.getString(5));
+        }
+
+        if (cursor != null && !cursor.isClosed()) {
+           cursor.close();
+        }
+        cursor.close();
+
+        return servico;
+	}
             
 	public void selectMedidor(long id){
 		Cursor cursor = db.query(Constantes.TABLE_MEDIDOR, new String[] {"possui_medidor",
@@ -672,6 +840,37 @@ public List<String> selectEnderecoImoveis(String condition){
            cursor.close();
         }
         cursor.close();
+	}
+	
+	public Medidor selectMedidorPorId(long id) {
+		Cursor cursor = db.query(Constantes.TABLE_MEDIDOR, new String[] {"possui_medidor",
+        														        "numero_hidrometro",
+        														        "marca",
+        														        "capacidade",
+        														        "tipo_caixa_protecao",
+        														        "latitude",
+														        		"longitude",
+														        		"data"}, "id = " + id, null, null, null,  "id asc");
+		
+		Medidor medidor = null;
+        if (cursor.moveToFirst()) {
+        	medidor = new Medidor();
+    		medidor.setPossuiMedidor(cursor.getString(0));
+    		medidor.setNumeroHidrometro(cursor.getString(1));
+    		medidor.setMarca(cursor.getString(2));
+    		medidor.setCapacidade(cursor.getString(3));
+    		medidor.setTipoCaixaProtecao(cursor.getString(4)); 
+    		medidor.setLatitude(cursor.getString(5));
+    		medidor.setLongitude(cursor.getString(6));
+    		medidor.setData(cursor.getString(7));
+        }
+
+        if (cursor != null && !cursor.isClosed()) {
+           cursor.close();
+        }
+        cursor.close();
+        
+        return medidor;
 	}
                 
 	public void selectAnormalidadeImovel(long id){
@@ -1539,7 +1738,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	   initialValues.put("sub_categoria_industrial_4", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4()));
 	   initialValues.put("tipo_fonte_abastecimento", String.valueOf(getImovelSelecionado().getTipoFonteAbastecimento()));
 	   initialValues.put("imovel_status", String.valueOf(getImovelSelecionado().getImovelStatus()));
-	   initialValues.put("imovel_enviado", String.valueOf(getImovelSelecionado().isImovelEnviado()));
+	   initialValues.put("imovel_enviado", String.valueOf(getImovelSelecionado().getImovelEnviado()));
 	   
 	   initialValues.put("latitude", getImovelSelecionado().getLatitude());
 	   initialValues.put("longitude", getImovelSelecionado().getLongitude());
@@ -1591,6 +1790,14 @@ public List<String> selectEnderecoImoveis(String condition){
    		}
 
 	   }
+	}
+	
+	public void salvarStatusImovel(Imovel imovel) {
+		ContentValues initialValues = new ContentValues();
+		initialValues.put("imovel_status", imovel.getImovelStatus());
+		initialValues.put("imovel_enviado", imovel.getImovelEnviado());
+
+		db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String[] { String.valueOf(imovel.getImovelId()) });
 	}
 
 	public void salvarServico(){
@@ -1683,5 +1890,33 @@ public List<String> selectEnderecoImoveis(String condition){
 		initialValues.put("qtd_imoveis_novos", qtsImoveisNovos);
 
 		db.update(Constantes.TABLE_GERAL, initialValues, "id=?", new String []{String.valueOf(1)});
+	}
+	
+	public void inserirInconsistenciaImovel(int matricula, String inconsistencia) {
+		ContentValues valores = new ContentValues();
+		valores.put("matricula", matricula);
+		valores.put("inconsistencia", inconsistencia);
+		
+		db.insert(Constantes.TABLE_INCONSISTENCIA_IMOVEL, null, valores);
+	}
+	
+	public String[] pesquisarInconsistencias(int matricula) {
+		Cursor cursor = db.query(Constantes.TABLE_INCONSISTENCIA_IMOVEL, new String[] { "inconsistencia" }, "matricula = " + matricula, null, null, null, "id asc");
+
+		String[] inconsistencias = new String[cursor.getCount()];
+
+		int count = 0;
+		if (cursor.moveToFirst()) {
+			do {
+				inconsistencias[count] = cursor.getString(0);
+				count++;
+			} while (cursor.moveToNext());
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		
+		return inconsistencias;
 	}
 }

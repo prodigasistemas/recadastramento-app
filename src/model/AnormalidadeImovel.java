@@ -1,5 +1,6 @@
 package model;
 
+import util.Constantes;
 import util.Util;
 
 public class AnormalidadeImovel extends Model {
@@ -114,5 +115,25 @@ public class AnormalidadeImovel extends Model {
 
 	public void setLoginUsuario(String loginUsuario) {
 		this.loginUsuario = loginUsuario;
+	}
+	
+	public boolean latitudeValida() {
+		return latitude != Constantes.NULO_DOUBLE && latitude != 0;
+	}
+	
+	public boolean longitudeValida() {
+		return longitude != Constantes.NULO_DOUBLE && longitude != 0;
+	}
+	
+	public boolean coordenadasValida() {
+		return latitudeValida() && longitudeValida();
+	}
+	
+	public boolean foto1Vazia() {
+		return foto1.trim().equals("") && foto1.trim().length() == 0;
+	}
+	
+	public boolean foto2Vazia() {
+		return foto2.trim().equals("") && foto2.trim().length() == 0;
 	}
 }

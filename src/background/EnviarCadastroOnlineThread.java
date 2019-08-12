@@ -2,67 +2,56 @@ package background;
 
 import java.io.IOException;
 
-import business.ControladorAcessoOnline;
+import model.Imovel;
 import ui.ArquivoRetorno;
-import ui.FileManager;
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import ui.MessageDispatcher;
+import util.Constantes;
+import android.util.Log;
+import business.Controlador;
+import business.ControladorAcessoOnline;
 
 public class EnviarCadastroOnlineThread extends Thread {
 
-	public final static int DONE_OK = 2;
-	public final static int DONE_ERROR = 3;
-	public final static int RUNNING = 1;
+	private Imovel imovel;
 
-	Handler handler;
-	int state;
-	int total;
-	int increment;
-
-	public EnviarCadastroOnlineThread(Handler h, Context context, int increment) {
-		this.handler = h;
-		this.total = 0;
-		this.increment = increment;
+	public EnviarCadastroOnlineThread(Imovel imovel) {
+		this.imovel = imovel;
 	}
 
 	@Override
 	public void run() {
-		state = RUNNING;
-		FileManager.getInstancia();
-
-		StringBuffer mensagem = ArquivoRetorno.gerarDadosImovelSelecionado();
-
 		try {
+			StringBuffer arquivo = ArquivoRetorno.gerarDadosImovel(imovel);
 
-			ControladorAcessoOnline.getInstancia().enviarCadastro(mensagem.toString().getBytes());
+			ControladorAcessoOnline.getInstancia().atualizarCadastro(arquivo.toString().getBytes());
 
-			if (ControladorAcessoOnline.getInstancia().isRequestOK()) {
-				state = DONE_OK;
-
-			} else {
-				state = DONE_ERROR;
-			}
+			verificarStatus();
+			
+			Controlador.getInstancia().getCadastroDataManipulator().salvarStatusImovel(imovel);
 
 		} catch (IOException e) {
-			state = DONE_ERROR;
+			Log.e("[EnviarCadastroOnlineThread]", "Erro ao enviar cadastro online para o imóvel " + imovel.getMatricula());
 		}
-		total = 100;
-
-		Bundle bundle = new Bundle();
-		Message msg = handler.obtainMessage();
-		bundle.putInt("envioCadastroOnline" + String.valueOf(increment), 100);
-		msg.setData(bundle);
-		handler.sendMessage(msg);
-
 	}
 
-	public void setState(int state) {
-		this.state = state;
-	}
+	private void verificarStatus() {
+		if (ControladorAcessoOnline.getInstancia().isRequestOK()) {
+			imovel.setImovelEnviado(String.valueOf(Constantes.SIM));
+		} else {
+			imovel.setImovelEnviado(String.valueOf(Constantes.NAO));
 
-	public int getCustomizedState() {
-		return state;
+			if (MessageDispatcher.isRespostaInconsistencia()) {
+				imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA));
+				inserirInconsistencias();
+			}
+		}
+	}
+	
+	private void inserirInconsistencias() {
+		String[] inconsistencias = MessageDispatcher.getInconsistencias().replace("[", "").replace("]", "").split(",");
+		
+		for (String inconsistencia : inconsistencias) {
+			Controlador.getInstancia().getCadastroDataManipulator().inserirInconsistenciaImovel(imovel.getMatricula(), inconsistencia);
+		}
 	}
 }

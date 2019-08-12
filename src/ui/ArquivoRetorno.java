@@ -47,16 +47,21 @@ public class ArquivoRetorno {
 		return instancia;
 	}
 
-	public static StringBuffer gerarDadosImovelSelecionado() {
-
+	public static StringBuffer gerarDadosImovel(Imovel imovel) {
 		arquivo = new StringBuffer();
+		
+		Cliente cliente = Controlador.getInstancia().getCadastroDataManipulator().selectClientePorId(imovel.getImovelId());
+		Servicos servicos = Controlador.getInstancia().getCadastroDataManipulator().selectServicos(imovel.getImovelId());
+		Medidor medidor = Controlador.getInstancia().getCadastroDataManipulator().selectMedidorPorId(imovel.getImovelId());
+		AnormalidadeImovel anormalidade = Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(imovel.getMatricula()));
 
-		gerarRegistroTipoCliente();
-		gerarRegistroTipoImovel();
-		gerarRegistrosTipoRamosAtividadeImovel();
-		gerarRegistroTipoServico();
-		gerarRegistroTipoMedidor();
-		gerarRegistroTipoAnormalidadeImovel();
+		gerarLinhaZero();
+		gerarRegistroTipoCliente(cliente);
+		gerarRegistroTipoImovel(imovel);
+		gerarRegistrosTipoRamosAtividadeImovel(imovel);
+		gerarRegistroTipoServico(imovel, servicos);
+		gerarRegistroTipoMedidor(imovel, medidor);
+		gerarRegistroTipoAnormalidadeImovel(imovel, anormalidade);
 
 		return arquivo;
 	}
@@ -77,7 +82,8 @@ public class ArquivoRetorno {
 			OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file));
 
 			arquivo = new StringBuffer();
-			ArrayList<String> ids = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis("imovel_status != " + Constantes.IMOVEL_A_SALVAR);
+			ArrayList<String> ids = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(
+					"imovel_status != " + Constantes.IMOVEL_A_SALVAR);
 
 			gerarLinhaZero();
 
@@ -92,12 +98,12 @@ public class ArquivoRetorno {
 				Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(ids.get(i)));
 				Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
 				
-				gerarRegistroTipoCliente();
-				gerarRegistroTipoImovel();
-				gerarRegistrosTipoRamosAtividadeImovel();
-				gerarRegistroTipoServico();
-				gerarRegistroTipoMedidor();
-				gerarRegistroTipoAnormalidadeImovel();
+				gerarRegistroTipoCliente(getClienteSelecionado());
+				gerarRegistroTipoImovel(getImovelSelecionado());
+				gerarRegistrosTipoRamosAtividadeImovel(getImovelSelecionado());
+				gerarRegistroTipoServico(getImovelSelecionado(), getServicosSelecionado());
+				gerarRegistroTipoMedidor(getImovelSelecionado(), getMedidorSelecionado());
+				gerarRegistroTipoAnormalidadeImovel(getImovelSelecionado(), getAnormalidadeImovelSelecionado());
 
 				atualizarProcessamento(handler, increment, i + 1);
 			}
@@ -171,12 +177,12 @@ public class ArquivoRetorno {
 					continue;
 				}
 
-				gerarRegistroTipoCliente();
-				gerarRegistroTipoImovel();
-				gerarRegistrosTipoRamosAtividadeImovel();
-				gerarRegistroTipoServico();
-				gerarRegistroTipoMedidor();
-				gerarRegistroTipoAnormalidadeImovel();
+				gerarRegistroTipoCliente(getClienteSelecionado());
+				gerarRegistroTipoImovel(getImovelSelecionado());
+				gerarRegistrosTipoRamosAtividadeImovel(getImovelSelecionado());
+				gerarRegistroTipoServico(getImovelSelecionado(), getServicosSelecionado());
+				gerarRegistroTipoMedidor(getImovelSelecionado(), getMedidorSelecionado());
+				gerarRegistroTipoAnormalidadeImovel(getImovelSelecionado(), getAnormalidadeImovelSelecionado());
 
 				Bundle b = new Bundle();
 				Message msg = mHandler.obtainMessage();
@@ -209,12 +215,12 @@ public class ArquivoRetorno {
 			Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
 			Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(Long.parseLong(listIdImoveis.get(i)));
 
-			gerarRegistroTipoCliente();
-			gerarRegistroTipoImovel();
-			gerarRegistrosTipoRamosAtividadeImovel();
-			gerarRegistroTipoServico();
-			gerarRegistroTipoMedidor();
-			gerarRegistroTipoAnormalidadeImovel();
+			gerarRegistroTipoCliente(getClienteSelecionado());
+			gerarRegistroTipoImovel(getImovelSelecionado());
+			gerarRegistrosTipoRamosAtividadeImovel(getImovelSelecionado());
+			gerarRegistroTipoServico(getImovelSelecionado(), getServicosSelecionado());
+			gerarRegistroTipoMedidor(getImovelSelecionado(), getMedidorSelecionado());
+			gerarRegistroTipoAnormalidadeImovel(getImovelSelecionado(), getAnormalidadeImovelSelecionado());
 
 			Bundle b = new Bundle();
 			Message msg = mHandler.obtainMessage();
@@ -242,224 +248,225 @@ public class ArquivoRetorno {
 		arquivo.append(registrosTipoZero);
 	}
 
-	private static void gerarRegistroTipoCliente() {
+	private static void gerarRegistroTipoCliente(Cliente cliente) {
 		registrosTipoCLiente = new StringBuffer();
 
 		registrosTipoCLiente.append("01");
-		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(25, getClienteSelecionado().getNomeGerenciaRegional(), ' '));
+		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(cliente.getMatricula())));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(25, cliente.getNomeGerenciaRegional(), ' '));
 
-		registrosTipoCLiente.append((getClienteSelecionado().getTipoEnderecoProprietario() != Constantes.NULO_INT ? getClienteSelecionado().getTipoEnderecoProprietario() : " "));
-		registrosTipoCLiente.append((getClienteSelecionado().getTipoEnderecoResponsavel() != Constantes.NULO_INT ? getClienteSelecionado().getTipoEnderecoResponsavel() : " "));
-		registrosTipoCLiente.append(getClienteSelecionado().isUsuarioProprietario());
-		registrosTipoCLiente.append(getClienteSelecionado().getTipoResponsavel());
+		registrosTipoCLiente.append((cliente.getTipoEnderecoProprietario() != Constantes.NULO_INT ? cliente.getTipoEnderecoProprietario() : " "));
+		registrosTipoCLiente.append((cliente.getTipoEnderecoResponsavel() != Constantes.NULO_INT ? cliente.getTipoEnderecoResponsavel() : " "));
+		registrosTipoCLiente.append(cliente.isUsuarioProprietario());
+		registrosTipoCLiente.append(cliente.getTipoResponsavel());
 
-		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getUsuario().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getUsuario().getNome()), ' '));
-		registrosTipoCLiente.append((getClienteSelecionado().getUsuario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getUsuario().getTipoPessoa() : " "));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getUsuario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, getClienteSelecionado().getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getUsuario().getUf(), ' '));
-		registrosTipoCLiente.append(!getClienteSelecionado().getUsuario().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getUsuario().getTipoSexo() : " ");
-		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getUsuario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getUsuario().getEmail(), ' '));
+		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(cliente.getUsuario().getMatricula())));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(cliente.getUsuario().getNome()), ' '));
+		registrosTipoCLiente.append((cliente.getUsuario().getTipoPessoa() != Constantes.NULO_INT ? cliente.getUsuario().getTipoPessoa() : " "));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(14, cliente.getUsuario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, cliente.getUsuario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, cliente.getUsuario().getUf(), ' '));
+		registrosTipoCLiente.append(!cliente.getUsuario().getTipoSexo().equals(Constantes.NULO_STRING) ? cliente.getUsuario().getTipoSexo() : " ");
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, cliente.getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, cliente.getUsuario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(30, cliente.getUsuario().getEmail(), ' '));
 
-		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getProprietario().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getProprietario().getNome()), ' '));
-		registrosTipoCLiente.append((getClienteSelecionado().getProprietario().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getProprietario().getTipoPessoa() : " "));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getProprietario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, getClienteSelecionado().getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getProprietario().getUf(), ' '));
+		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(cliente.getProprietario().getMatricula())));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(cliente.getProprietario().getNome()), ' '));
+		registrosTipoCLiente.append((cliente.getProprietario().getTipoPessoa() != Constantes.NULO_INT ? cliente.getProprietario().getTipoPessoa() : " "));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(14, cliente.getProprietario().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, cliente.getProprietario().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, cliente.getProprietario().getUf(), ' '));
 
 		String tipoSexo = "";
-		if (getClienteSelecionado().isUsuarioProprietario() == Constantes.SIM) {
-			tipoSexo = getClienteSelecionado().getUsuario().getTipoSexo();
+		if (cliente.isUsuarioProprietario() == Constantes.SIM) {
+			tipoSexo = cliente.getUsuario().getTipoSexo();
 		} else {
-			tipoSexo = getClienteSelecionado().getProprietario().getTipoSexo();
+			tipoSexo = cliente.getProprietario().getTipoSexo();
 		}
 		
 		registrosTipoCLiente.append(Util.adicionarCharDireita(1, tipoSexo, ' '));
 
-		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getProprietario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getProprietario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getProprietario().getEmail(), ' '));
-		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, "" + getClienteSelecionado().getEnderecoProprietario().getTipoLogradouro()));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getEnderecoProprietario().getLogradouro(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(5, getClienteSelecionado().getEnderecoProprietario().getNumero(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(25, getClienteSelecionado().getEnderecoProprietario().getComplemento(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(20, getClienteSelecionado().getEnderecoProprietario().getBairro(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(8, getClienteSelecionado().getEnderecoProprietario().getCep().replaceAll("[-]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(15, getClienteSelecionado().getEnderecoProprietario().getMunicipio(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, cliente.getProprietario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, cliente.getProprietario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(30, cliente.getProprietario().getEmail(), ' '));
+		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, "" + cliente.getEnderecoProprietario().getTipoLogradouro()));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(40, cliente.getEnderecoProprietario().getLogradouro(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(5, cliente.getEnderecoProprietario().getNumero(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(25, cliente.getEnderecoProprietario().getComplemento(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(20, cliente.getEnderecoProprietario().getBairro(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(8, cliente.getEnderecoProprietario().getCep().replaceAll("[-]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(15, cliente.getEnderecoProprietario().getMunicipio(), ' '));
 
-		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getClienteSelecionado().getResponsavel().getMatricula())));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(getClienteSelecionado().getResponsavel().getNome()), ' '));
-		registrosTipoCLiente.append((getClienteSelecionado().getResponsavel().getTipoPessoa() != Constantes.NULO_INT ? getClienteSelecionado().getResponsavel().getTipoPessoa() : " "));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(14, getClienteSelecionado().getResponsavel().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, getClienteSelecionado().getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, getClienteSelecionado().getResponsavel().getUf(), ' '));
-		registrosTipoCLiente.append(!getClienteSelecionado().getResponsavel().getTipoSexo().equals(Constantes.NULO_STRING) ? getClienteSelecionado().getResponsavel().getTipoSexo() : " ");
-		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getResponsavel().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(11, getClienteSelecionado().getResponsavel().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(30, getClienteSelecionado().getResponsavel().getEmail(), ' '));
-		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, "" + getClienteSelecionado().getEnderecoResponsavel().getTipoLogradouro()));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(40, getClienteSelecionado().getEnderecoResponsavel().getLogradouro(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(5, getClienteSelecionado().getEnderecoResponsavel().getNumero(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(25, getClienteSelecionado().getEnderecoResponsavel().getComplemento(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(20, getClienteSelecionado().getEnderecoResponsavel().getBairro(), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(8, getClienteSelecionado().getEnderecoResponsavel().getCep().replaceAll("[-]", ""), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(15, getClienteSelecionado().getEnderecoResponsavel().getMunicipio(), ' '));
+		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(cliente.getResponsavel().getMatricula())));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(50, Util.substringNome(cliente.getResponsavel().getNome()), ' '));
+		registrosTipoCLiente.append((cliente.getResponsavel().getTipoPessoa() != Constantes.NULO_INT ? cliente.getResponsavel().getTipoPessoa() : " "));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(14, cliente.getResponsavel().getCpfCnpj().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(13, cliente.getResponsavel().getRg().replaceAll("[-]", "").replaceAll("[.]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(2, cliente.getResponsavel().getUf(), ' '));
+		registrosTipoCLiente.append(!cliente.getResponsavel().getTipoSexo().equals(Constantes.NULO_STRING) ? cliente.getResponsavel().getTipoSexo() : " ");
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, cliente.getResponsavel().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(11, cliente.getResponsavel().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(30, cliente.getResponsavel().getEmail(), ' '));
+		registrosTipoCLiente.append(Util.adicionarZerosEsquerdaNumero(2, "" + cliente.getEnderecoResponsavel().getTipoLogradouro()));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(40, cliente.getEnderecoResponsavel().getLogradouro(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(5, cliente.getEnderecoResponsavel().getNumero(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(25, cliente.getEnderecoResponsavel().getComplemento(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(20, cliente.getEnderecoResponsavel().getBairro(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(8, cliente.getEnderecoResponsavel().getCep().replaceAll("[-]", ""), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(15, cliente.getEnderecoResponsavel().getMunicipio(), ' '));
 
-		registrosTipoCLiente.append(Util.adicionarCharDireita(20, String.valueOf(getClienteSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getClienteSelecionado().getLatitude() : " "), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharDireita(20, String.valueOf(getClienteSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getClienteSelecionado().getLongitude() : " "), ' '));
-		registrosTipoCLiente.append(Util.adicionarCharEsquerda(26, getClienteSelecionado().getData(), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(20, String.valueOf(cliente.getLatitude() != Constantes.NULO_DOUBLE ? cliente.getLatitude() : " "), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharDireita(20, String.valueOf(cliente.getLongitude() != Constantes.NULO_DOUBLE ? cliente.getLongitude() : " "), ' '));
+		registrosTipoCLiente.append(Util.adicionarCharEsquerda(26, cliente.getData(), ' '));
 		registrosTipoCLiente.append("\n");
 
 		arquivo.append(Util.removerCaractereEspecial(registrosTipoCLiente.toString()));
 	}
 
 	@SuppressLint("DefaultLocale")
-	private static void gerarRegistroTipoImovel() {
+	private static void gerarRegistroTipoImovel(Imovel imovel) {
 
 		registrosTipoImovel = new StringBuffer();
 
 		registrosTipoImovel.append("02");
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
-		registrosTipoImovel.append(String.valueOf(getImovelSelecionado().getOperacaoTipo()));
-		registrosTipoImovel.append(Util.adicionarCharDireita(30, String.valueOf(getImovelSelecionado().getCodigoCliente()), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(17, getImovelSelecionado().getInscricao(), ' '));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, getImovelSelecionado().getRota()));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, getImovelSelecionado().getFace()));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(8, String.valueOf(getImovelSelecionado().getCodigoMunicipio())));
-		registrosTipoImovel.append(Util.adicionarCharDireita(31, getImovelSelecionado().getIptu(), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(20, getImovelSelecionado().getNumeroCelpa(), ' '));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(5, String.valueOf(getImovelSelecionado().getNumeroPontosUteis())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(5, String.valueOf(getImovelSelecionado().getNumeroOcupantes())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, "" + getImovelSelecionado().getEnderecoImovel().getTipoLogradouro()));
-		registrosTipoImovel.append(Util.adicionarCharDireita(40, getImovelSelecionado().getEnderecoImovel().getLogradouro(), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(5, getImovelSelecionado().getEnderecoImovel().getNumero(), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(25, Util.removerCaractereEspecial(getImovelSelecionado().getEnderecoImovel().getComplemento()), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(20, getImovelSelecionado().getEnderecoImovel().getBairro(), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(8, getImovelSelecionado().getEnderecoImovel().getCep().replaceAll("[-]", ""), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(15, getImovelSelecionado().getEnderecoImovel().getMunicipio(), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(9, String.valueOf(getImovelSelecionado().getCodigoLogradouro()), ' '));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
+		registrosTipoImovel.append(String.valueOf(imovel.getOperacaoTipo()));
+		registrosTipoImovel.append(Util.adicionarCharDireita(30, String.valueOf(imovel.getCodigoCliente()), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(17, imovel.getInscricao(), ' '));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, imovel.getRota()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, imovel.getFace()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(8, String.valueOf(imovel.getCodigoMunicipio())));
+		registrosTipoImovel.append(Util.adicionarCharDireita(31, imovel.getIptu(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(20, imovel.getNumeroCelpa(), ' '));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(5, String.valueOf(imovel.getNumeroPontosUteis())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(5, String.valueOf(imovel.getNumeroOcupantes())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, "" + imovel.getEnderecoImovel().getTipoLogradouro()));
+		registrosTipoImovel.append(Util.adicionarCharDireita(40, imovel.getEnderecoImovel().getLogradouro(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(5, imovel.getEnderecoImovel().getNumero(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(25, Util.removerCaractereEspecial(imovel.getEnderecoImovel().getComplemento()), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(20, imovel.getEnderecoImovel().getBairro(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(8, imovel.getEnderecoImovel().getCep().replaceAll("[-]", ""), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(15, imovel.getEnderecoImovel().getMunicipio(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(9, String.valueOf(imovel.getCodigoLogradouro()), ' '));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria1())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria2())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria3())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria4())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaResidencial().getEconomiasSubCategoria1())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaResidencial().getEconomiasSubCategoria2())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaResidencial().getEconomiasSubCategoria3())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaResidencial().getEconomiasSubCategoria4())));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria1())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria2())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria3())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria4())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaComercial().getEconomiasSubCategoria1())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaComercial().getEconomiasSubCategoria2())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaComercial().getEconomiasSubCategoria3())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaComercial().getEconomiasSubCategoria4())));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria1())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria2())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria3())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria4())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaPublica().getEconomiasSubCategoria1())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaPublica().getEconomiasSubCategoria2())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaPublica().getEconomiasSubCategoria3())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaPublica().getEconomiasSubCategoria4())));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria1())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria2())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria3())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaIndustrial().getEconomiasSubCategoria1())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaIndustrial().getEconomiasSubCategoria2())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaIndustrial().getEconomiasSubCategoria3())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getCategoriaIndustrial().getEconomiasSubCategoria4())));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, "" + getImovelSelecionado().getTipoFonteAbastecimento()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(2, "" + imovel.getTipoFonteAbastecimento()));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(10, getImovelSelecionado().getAreaConstruida()));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(getImovelSelecionado().getClasseSocial())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getNumeroAnimais())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumeCisterna()));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumePiscina()));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, getImovelSelecionado().getVolumeCaixaDagua()));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(getImovelSelecionado().getTipoUso())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(getImovelSelecionado().getAcessoHidrometro())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(10, imovel.getAreaConstruida()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(imovel.getClasseSocial())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getNumeroAnimais())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, imovel.getVolumeCisterna()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, imovel.getVolumePiscina()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(7, imovel.getVolumeCaixaDagua()));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(imovel.getTipoUso())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(1, String.valueOf(imovel.getAcessoHidrometro())));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCriancas())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getAdultos())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getIdosos())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getEmpregados())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getAlunos())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getCaes())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(getImovelSelecionado().getOcupacaoImovel().getOutros())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getCriancas())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getAdultos())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getIdosos())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getEmpregados())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getAlunos())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getCaes())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(imovel.getOcupacaoImovel().getOutros())));
 		
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasSocial())));
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getQuantidadeEconomiasOutros())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getQuantidadeEconomiasSocial())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getQuantidadeEconomiasOutros())));
 
-		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(getImovelSelecionado().getPercentualAbastecimento())));
+		registrosTipoImovel.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getPercentualAbastecimento())));
 
-		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLatitude() : " "), ' '));
-		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(getImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getImovelSelecionado().getLongitude() : " "), ' '));
-		registrosTipoImovel.append(Util.adicionarCharEsquerda(26, getImovelSelecionado().getData(), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(imovel.getLatitude() != Constantes.NULO_DOUBLE ? imovel.getLatitude() : " "), ' '));
+		registrosTipoImovel.append(Util.adicionarCharDireita(20, String.valueOf(imovel.getLongitude() != Constantes.NULO_DOUBLE ? imovel.getLongitude() : " "), ' '));
+		registrosTipoImovel.append(Util.adicionarCharEsquerda(26, imovel.getData(), ' '));
 		
-		if(getImovelSelecionado().getObservacao() != null){
-			registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getObservacao().toUpperCase())).replaceAll("\n",  	" "), ' '));
+		if (imovel.getObservacao() != null) {
+			registrosTipoImovel.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(imovel.getObservacao().toUpperCase())).replaceAll("\n", " "), ' '));
 		}
+		
 		registrosTipoImovel.append("\n");
 
 		arquivo.append(Util.removerCaractereEspecial(registrosTipoImovel.toString()));
 	}
 
-	private static void gerarRegistrosTipoRamosAtividadeImovel() {
-		for (int i = 0; i < getImovelSelecionado().getListaRamoAtividade().size(); i++) {
+	private static void gerarRegistrosTipoRamosAtividadeImovel(Imovel imovel) {
+		for (int i = 0; i < imovel.getListaRamoAtividade().size(); i++) {
 			registrosTipoRamoAtividadeImovel = new StringBuffer();
 
 			registrosTipoRamoAtividadeImovel.append("03");
-			registrosTipoRamoAtividadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
-			registrosTipoRamoAtividadeImovel.append(Util.adicionarCharDireita(3, getImovelSelecionado().getListaRamoAtividade().get(i), ' '));
+			registrosTipoRamoAtividadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
+			registrosTipoRamoAtividadeImovel.append(Util.adicionarCharDireita(3, imovel.getListaRamoAtividade().get(i), ' '));
 			registrosTipoRamoAtividadeImovel.append("\n");
 
 			arquivo.append(Util.removerCaractereEspecial(registrosTipoRamoAtividadeImovel.toString()));
 		}
 	}
 
-	private static void gerarRegistroTipoServico() {
+	private static void gerarRegistroTipoServico(Imovel imovel, Servicos servicos) {
 		registroTipoServico = new StringBuffer();
 		registroTipoServico.append("04");
-		registroTipoServico.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
-		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(getServicosSelecionado().getTipoLigacaoAgua()), ' '));
-		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(getServicosSelecionado().getTipoLigacaoEsgoto()), ' '));
-		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(getServicosSelecionado().getLocalInstalacaoRamal()), ' '));
-		registroTipoServico.append(Util.adicionarCharDireita(20, String.valueOf(getServicosSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getServicosSelecionado().getLatitude() : " "), ' '));
-		registroTipoServico.append(Util.adicionarCharDireita(20, String.valueOf(getServicosSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getServicosSelecionado().getLongitude() : " "), ' '));
-		registroTipoServico.append(Util.adicionarCharEsquerda(26, getServicosSelecionado().getData(), ' '));
+		registroTipoServico.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
+		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(servicos.getTipoLigacaoAgua()), ' '));
+		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(servicos.getTipoLigacaoEsgoto()), ' '));
+		registroTipoServico.append(Util.adicionarCharDireita(2, String.valueOf(servicos.getLocalInstalacaoRamal()), ' '));
+		registroTipoServico.append(Util.adicionarCharDireita(20, String.valueOf(servicos.getLatitude() != Constantes.NULO_DOUBLE ? servicos.getLatitude() : " "), ' '));
+		registroTipoServico.append(Util.adicionarCharDireita(20, String.valueOf(servicos.getLongitude() != Constantes.NULO_DOUBLE ? servicos.getLongitude() : " "), ' '));
+		registroTipoServico.append(Util.adicionarCharEsquerda(26, servicos.getData(), ' '));
 		registroTipoServico.append("\n");
 		arquivo.append(Util.removerCaractereEspecial(registroTipoServico.toString()));
 	}
 
-	private static void gerarRegistroTipoMedidor() {
+	private static void gerarRegistroTipoMedidor(Imovel imovel, Medidor medidor) {
 		registroTipoMedidor = new StringBuffer();
 		registroTipoMedidor.append("05");
 
-		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
-		registroTipoMedidor.append(Util.adicionarCharEsquerda(1, "" + getMedidorSelecionado().getPossuiMedidor(), ' '));
-		registroTipoMedidor.append(Util.adicionarCharDireita(10, getMedidorSelecionado().getNumeroHidrometro(), ' '));
-		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(getMedidorSelecionado().getMarca())));
-		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(getMedidorSelecionado().getCapacidade() != Constantes.NULO_INT ? getMedidorSelecionado().getCapacidade() : ' ')));
-		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(getMedidorSelecionado().getTipoCaixaProtecao() != Constantes.NULO_INT ? getMedidorSelecionado().getTipoCaixaProtecao() : ' ')));
-		registroTipoMedidor.append(Util.adicionarCharDireita(20, String.valueOf(getMedidorSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getMedidorSelecionado().getLatitude() : " "), ' '));
-		registroTipoMedidor.append(Util.adicionarCharDireita(20, String.valueOf(getMedidorSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getMedidorSelecionado().getLongitude() : " "), ' '));
-		registroTipoMedidor.append(Util.adicionarCharEsquerda(26, getMedidorSelecionado().getData(), ' '));
+		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
+		registroTipoMedidor.append(Util.adicionarCharEsquerda(1, "" + medidor.getPossuiMedidor(), ' '));
+		registroTipoMedidor.append(Util.adicionarCharDireita(10, medidor.getNumeroHidrometro(), ' '));
+		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(medidor.getMarca())));
+		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(medidor.getCapacidade() != Constantes.NULO_INT ? medidor.getCapacidade() : ' ')));
+		registroTipoMedidor.append(Util.adicionarZerosEsquerdaNumero(2, String.valueOf(medidor.getTipoCaixaProtecao() != Constantes.NULO_INT ? medidor.getTipoCaixaProtecao() : ' ')));
+		registroTipoMedidor.append(Util.adicionarCharDireita(20, String.valueOf(medidor.getLatitude() != Constantes.NULO_DOUBLE ? medidor.getLatitude() : " "), ' '));
+		registroTipoMedidor.append(Util.adicionarCharDireita(20, String.valueOf(medidor.getLongitude() != Constantes.NULO_DOUBLE ? medidor.getLongitude() : " "), ' '));
+		registroTipoMedidor.append(Util.adicionarCharEsquerda(26, medidor.getData(), ' '));
 		registroTipoMedidor.append("\n");
 
 		arquivo.append(Util.removerCaractereEspecial(registroTipoMedidor.toString()));
 	}
 
 	@SuppressLint("DefaultLocale")
-	private static void gerarRegistroTipoAnormalidadeImovel() {
+	private static void gerarRegistroTipoAnormalidadeImovel(Imovel imovel, AnormalidadeImovel anormalidade) {
 		registroTipoAnormalidadeImovel = new StringBuffer();
 
 		registroTipoAnormalidadeImovel.append("06");
-		registroTipoAnormalidadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(getImovelSelecionado().getMatricula())));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, (Util.removerCaractereEspecialNovo(getAnormalidadeImovelSelecionado().getComentario().toUpperCase())).replaceAll("\n",	" "), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto1(), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, getAnormalidadeImovelSelecionado().getFoto2(), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLatitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLatitude() : " "), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(getAnormalidadeImovelSelecionado().getLongitude() != Constantes.NULO_DOUBLE ? getAnormalidadeImovelSelecionado().getLongitude() : " "), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, getAnormalidadeImovelSelecionado().getData(), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, (Util.removerCaractereEspecialNovo(getImovelSelecionado().getEntrevistado().toUpperCase())), ' '));
-		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(11, getAnormalidadeImovelSelecionado().getLoginUsuario(), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(3, String.valueOf(anormalidade.getCodigoAnormalidade()), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(200, (Util.removerCaractereEspecialNovo(anormalidade.getComentario().toUpperCase())).replaceAll("\n",	" "), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, anormalidade.getFoto1(), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(30, anormalidade.getFoto2(), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(anormalidade.getLatitude() != Constantes.NULO_DOUBLE ? anormalidade.getLatitude() : " "), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharDireita(20, String.valueOf(anormalidade.getLongitude() != Constantes.NULO_DOUBLE ? anormalidade.getLongitude() : " "), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(26, anormalidade.getData(), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(20, (Util.removerCaractereEspecialNovo(imovel.getEntrevistado().toUpperCase())), ' '));
+		registroTipoAnormalidadeImovel.append(Util.adicionarCharEsquerda(11, anormalidade.getLoginUsuario(), ' '));
 		registroTipoAnormalidadeImovel.append("\n");
 
 		arquivo.append(registroTipoAnormalidadeImovel.toString());

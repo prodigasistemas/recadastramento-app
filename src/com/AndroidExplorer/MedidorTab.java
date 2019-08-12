@@ -3,33 +3,31 @@ package com.AndroidExplorer;
 import java.util.Calendar;
 import java.util.List;
 
-import business.Controlador;
 import model.Medidor;
 import util.Constantes;
 import util.Util;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.telephony.CellLocation;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.RadioGroup.OnCheckedChangeListener;
+import business.Controlador;
  
 public class MedidorTab extends Fragment {
 	
@@ -140,21 +138,18 @@ public class MedidorTab extends Fragment {
         });
 	}
 	
-	public boolean isNumeroMedidorValido(){
-		boolean result = true;
+	public boolean isNumeroMedidorValido() {
+		int codigoAnormalidade = ((MainTab) getActivity()).getCodigoAnormalidade();
 
-		int codigoAnormalidade = ((MainTab)getActivity()).getCodigoAnormalidade();
-		
-		if (((RadioGroup)view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioSim &&
-		   ((EditText)view.findViewById(R.id.numeroHidrometro)).getText().toString().length() == 0 && 
-		   codigoAnormalidade != Constantes.ANORMALIDADE_HIDR_NAO_LOCALIZADO &&
-		   codigoAnormalidade != Constantes.ANORMALIDADE_HIDR_SEM_IDENTIFICACAO){
+		if (((RadioGroup) view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioSim &&
+			((EditText) view.findViewById(R.id.numeroHidrometro)).getText().toString().length() == 0 && 
+			codigoAnormalidade != Constantes.ANORMALIDADE_HIDR_NAO_LOCALIZADO && 
+			codigoAnormalidade != Constantes.ANORMALIDADE_HIDR_SEM_IDENTIFICACAO) {
 
-			Log.i("TESTE", String.valueOf(codigoAnormalidade));
-
-			result = false;
+			return false;
+		} else {
+			return true;
 		}
-		return result;
 	}
 	
 	public boolean checkChangeNumeroMedidor(){

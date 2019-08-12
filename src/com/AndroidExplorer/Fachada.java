@@ -1,6 +1,8 @@
 package com.AndroidExplorer;
 
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 import model.Usuario;
 import util.Constantes;
@@ -12,7 +14,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,9 +36,6 @@ public class Fachada extends FragmentActivity {
 		setContentView(R.layout.welcome);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		// get IMEI
-		ControladorAcessoOnline.getInstancia().setIMEI(((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId());
-
 		final Animation animation = new AlphaAnimation(1, (float) 0.3);
 		animation.setDuration(1000);
 		animation.setInterpolator(new LinearInterpolator());
@@ -50,6 +48,8 @@ public class Fachada extends FragmentActivity {
 		startButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				v.clearAnimation();
+				
+				configurarUrlServidor();
 
 				if (Controlador.getInstancia().databaseExists(getBaseContext()) && Controlador.getInstancia().isDatabaseRotaCarregadaOk() == Constantes.SIM) {
 
@@ -176,6 +176,17 @@ public class Fachada extends FragmentActivity {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	private void configurarUrlServidor() {
+		Properties prop = new Properties();
+		try {
+			InputStream is = Fachada.this.getAssets().open("app.properties");
+			prop.load(is);
+			ControladorAcessoOnline.getInstancia().setURL(prop.getProperty("url"));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

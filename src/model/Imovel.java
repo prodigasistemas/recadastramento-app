@@ -57,6 +57,8 @@ public class Imovel extends Model {
 
 	private int percentualAbastecimento;
 
+	private String inconsistencias;
+	
 	public Imovel() {
 		operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
 		imovelId = 0;
@@ -321,7 +323,7 @@ public class Imovel extends Model {
 		return this.imovelStatus;
 	}
 
-	public int isImovelEnviado() {
+	public int getImovelEnviado() {
 		return this.imovelEnviado;
 	}
 
@@ -472,5 +474,21 @@ public class Imovel extends Model {
 	
 	public String getObservacao(){
 		return this.observacao;
+	}
+	
+	public boolean isEnviado() {
+		return imovelEnviado == Constantes.SIM;
+	}
+	
+	public boolean isImovelNovo() {
+		return imovelStatus == Constantes.IMOVEL_NOVO;
+	}
+
+	public String getInconsistencias() {
+		return inconsistencias;
+	}
+
+	public void setInconsistencias(String inconsistencias) {
+		this.inconsistencias = inconsistencias;
 	}
 }

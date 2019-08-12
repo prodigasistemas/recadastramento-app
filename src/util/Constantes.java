@@ -121,11 +121,11 @@ public class Constantes {
     public static final String TABLE_CAPACIDADE_HIDROMETRO = "capacidade_hidrometro";
     public static final String TABLE_CONFIGURACAO = "configuracao";
     public static final String TABLE_TIPO_LOGRADOURO = "tipo_logradouro";
-    
     public static final String TABLE_CLASSE_SOCIAL = "classe_social";
     public static final String TABLE_TIPO_USO = "tipo_uso";
     public static final String TABLE_ACESSO_HIDROMETRO = "acesso_hidrometro";
     public static final String TABLE_USUARIO = "usuario";
+    public static final String TABLE_INCONSISTENCIA_IMOVEL = "inconsistencia_imovel";
     
     public static final String DATABASE_NAME = "cadastro.db";
 	public static final String DATABASE_PATH = "/data/data/com.AndroidExplorer/databases/";
@@ -133,21 +133,17 @@ public class Constantes {
     public static final int IMOVEL_SALVO = 0;
     public static final int IMOVEL_A_SALVAR = 1;
     public static final int IMOVEL_SALVO_COM_ANORMALIDADE = 2;
-    public static final int IMOVEL_NOVO = 3;
-    public static final int IMOVEL_TRANSMITIDO = 4;
-    public static final int IMOVEL_NAO_TRANSMITIDO = 5;
-    public static final int IMOVEL_NOVO_COM_ANORMALIDADE = 6;
-
+    public static final int IMOVEL_SALVO_COM_INCONSISTENCIA = 3;
+    public static final int IMOVEL_NOVO = 4;
+    public static final int IMOVEL_NOVO_COM_ANORMALIDADE = 5;
     
     public static final int OPERACAO_CADASTRO_ALTERADO = 1;
     public static final int OPERACAO_CADASTRO_NOVO = 2;
     public static final int OPERACAO_CADASTRO_EXCLUIDO = 3;
 
+    public static final int SEM_OCORRENCIA = 1;
     public static final int ANORMALIDADE_HIDR_NAO_LOCALIZADO = 34;
     public static final int ANORMALIDADE_HIDR_SEM_IDENTIFICACAO = 35;
     
-    public static final int PARCIALCPFCNPJ = 7;
-    
-    //Samsung galaxy tab E
-    public static final String SAMSUNG_TAB_CODENAME = "goyavewifixtc";
+    public static final int PARCIAL_CPF_CNPJ = 7;
 }

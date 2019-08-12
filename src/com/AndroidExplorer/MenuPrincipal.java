@@ -1,7 +1,8 @@
 package com.AndroidExplorer;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import model.Imovel;
 import util.Constantes;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -121,15 +122,15 @@ public class MenuPrincipal extends FragmentActivity {
 			private boolean statusOk() {
 				boolean statusOk = false;
 
-				// Verifica se todos os imoveis já foram visitados.
-				ArrayList<String> listStatusImoveis = (ArrayList) Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(null);
-
-				for (int i = 0; i < listStatusImoveis.size(); i++) {
-					if (Integer.parseInt(listStatusImoveis.get(i)) != Constantes.IMOVEL_A_SALVAR) {
+				List<Imovel> imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(null);
+				
+				for (Imovel imovel : imoveis) {
+					if (imovel.getImovelStatus() != Constantes.IMOVEL_A_SALVAR) {
 						statusOk = true;
 						numeroImoveis++;
 					}
 				}
+				
 				return statusOk;
 			}
 		});

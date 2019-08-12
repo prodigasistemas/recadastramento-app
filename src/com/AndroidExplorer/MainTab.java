@@ -3,8 +3,6 @@ package com.AndroidExplorer;
 import java.util.Calendar;
 import java.util.List;
 
-import dataBase.DataManipulator;
-
 import model.Imovel;
 import util.Constantes;
 import util.Util;
@@ -19,8 +17,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -38,15 +34,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TabHost.TabContentFactory;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
+import android.widget.TabHost.TabContentFactory;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
-import background.EnviarCadastroOnlineThread;
 import business.Controlador;
+import dataBase.DataManipulator;
  
 public class MainTab extends FragmentActivity implements TabHost.OnTabChangeListener, OnItemClickListener, LocationListener {
 
@@ -56,8 +53,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	private static final int IMOVEL_ANTERIOR = 0; 
 	private static final int IMOVEL_POSTERIOR = 1; 
 	private String dialogMessage = null;
-	private static EnviarCadastroOnlineThread progThread;
-	private static int increment= 0;
 	Fragment clienteFragment;
 	Fragment imovelFragment;
 	Fragment servicosFragment;
@@ -91,7 +86,8 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
         }
     }
 
-    private void initializeTabs(){
+    @SuppressWarnings("static-access")
+	private void initializeTabs(){
 	    
         /* Use the LocationManager class to obtain GPS locations */
         mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -178,20 +174,27 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	    setTabColor();
 	}
 	
-    public void setTabColor() {
-        for(int i=0;i<tabHost.getTabWidget().getChildCount();i++){
-            
-        	if (getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO){
-        		tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab_custom_green);
-            
-            }else if (getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE){
-            	tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab_custom_red);
-            }
-            else if(getCadastroDataManipulator().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR){
-            	tabHost.getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab_custom_white);            	
-            }
-        }
-    }
+	public void setTabColor() {
+		int status = getCadastroDataManipulator().getImovelSelecionado().getImovelStatus();
+
+		TabWidget tabWidget = tabHost.getTabWidget();
+		for (int i = 0; i < tabWidget.getChildCount(); i++) {
+			View child = tabWidget.getChildAt(i);
+
+			if (status == Constantes.IMOVEL_SALVO || status == Constantes.IMOVEL_NOVO) {
+				child.setBackgroundResource(R.drawable.tab_custom_green);
+
+			} else if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE || status == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE) {
+				child.setBackgroundResource(R.drawable.tab_custom_red);
+
+			} else if (status == Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA) {
+				child.setBackgroundResource(R.drawable.tab_custom_yellow);
+
+			} else if (status == Constantes.IMOVEL_A_SALVAR) {
+				child.setBackgroundResource(R.drawable.tab_custom_white);
+			}
+		}
+	}
     
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    if (indiceNovoImovel == null) {
@@ -643,43 +646,21 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
     
 	public void chamaProximoImovel() {
 		Controlador.getInstancia().isCadastroAlterado();
-		
-		// Thread para obter dados do cadastro finalizado e transmiti-lo ao servidor.        			
-		progThread = new EnviarCadastroOnlineThread(handler,this, increment);
-		progThread.start();
-		
+
 		if (indiceNovoImovel != null) {
 			Controlador.getInstancia().setCadastroSelecionadoByListPosition(indiceNovoImovel);
 			indiceNovoImovel = null;
-		} else if(Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis())-1){
+		} else if (Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) - 1) {
 			Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
-			
-		}else{
-			Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()+1);
+		} else {
+			Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition() + 1);
 		}
+
 		finish();
-		Intent myIntent = new Intent( this, MainTab.class);
+		Intent myIntent = new Intent(this, MainTab.class);
 		startActivity(myIntent);
-    }
+	}
 
-    // Handler on the main (UI) thread that will receive messages.
-    final Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            
-        	// Get the current value of the variable total from the message data and update the progress bar.
-        	int cadastroOnline = msg.getData().getInt("envioCadastroOnline" + String.valueOf(increment));
-
-            if (progThread.getCustomizedState() == EnviarCadastroOnlineThread.DONE_OK){
-
-            	// SETAR CADASTRO PARA TRANSMITIDO
-			    increment++;
-            
-            }else if (progThread.getCustomizedState() == EnviarCadastroOnlineThread.DONE_ERROR){
-			    increment++;
-            }
-         }
-    };
-    
 	public String montarLote(String lote) {
 		return Util.adicionarZerosEsquerdaNumero(4, lote);
 	}
@@ -709,7 +690,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		// TODO Auto-generated method stub
 		
 	}
 

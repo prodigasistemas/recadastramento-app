@@ -9,24 +9,25 @@ public class DbHelper extends SQLiteOpenHelper {
 
 	private static final int DATABASE_VERSION = 3;
 	
-	private static final String[] UPDATE_IMOVEL_DATABASE = {" alter table imovel add column area_construida TEXT; ",
-	           " alter table imovel add column classe_social TEXT; ",
-	           " alter table imovel add column numero_animais INTEGER; ",
-	           " alter table imovel add column volume_piscina TEXT; ",
-	           " alter table imovel add column volume_cisterna TEXT; ",
-	           " alter table imovel add column volume_caixa_dagua TEXT; ",
-	           " alter table imovel add column tipo_uso TEXT; ",
-	           " alter table imovel add column acesso_hidrometro TEXT; ",
-	           " alter table imovel add column quantidade_economias_social INTEGER; ",
-	           " alter table imovel add column numero_criancas INTEGER; ",
-	           " alter table imovel add column numero_adultos INTEGER; ",
-	           " alter table imovel add column numero_alunos INTEGER; ",
-	           " alter table imovel add column numero_caes INTEGER; ",
-	           " alter table imovel add column numero_idosos INTEGER; ",
-	           " alter table imovel add column numero_empregados INTEGER; ",
-	           " alter table imovel add column numero_outros INTEGER; ",
-	           " alter table imovel add column quantidade_economias_outros  INTEGER;",
-	           " alter table imovel add column observacao TEXT;"};
+	private static final String[] UPDATE_IMOVEL_DATABASE = { 
+			" alter table imovel add column area_construida TEXT; ",
+			" alter table imovel add column classe_social TEXT; ", 
+			" alter table imovel add column numero_animais INTEGER; ",
+			" alter table imovel add column volume_piscina TEXT; ", 
+			" alter table imovel add column volume_cisterna TEXT; ",
+			" alter table imovel add column volume_caixa_dagua TEXT; ", 
+			" alter table imovel add column tipo_uso TEXT; ",
+			" alter table imovel add column acesso_hidrometro TEXT; ", 
+			" alter table imovel add column quantidade_economias_social INTEGER; ",
+			" alter table imovel add column numero_criancas INTEGER; ", 
+			" alter table imovel add column numero_adultos INTEGER; ",
+			" alter table imovel add column numero_alunos INTEGER; ", 
+			" alter table imovel add column numero_caes INTEGER; ",
+			" alter table imovel add column numero_idosos INTEGER; ", 
+			" alter table imovel add column numero_empregados INTEGER; ",
+			" alter table imovel add column numero_outros INTEGER; ", 
+			" alter table imovel add column quantidade_economias_outros  INTEGER; ",
+			" alter table imovel add column observacao TEXT;" };
 	
 	private static final String ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL = " alter table imovel add column percentual_abastecimento INTEGER; ";
 
@@ -112,6 +113,9 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_USUARIO_QUERY =
             "CREATE TABLE "+Constantes.TABLE_USUARIO+" (id INTEGER PRIMARY KEY autoincrement, nome TEXT, login TEXT, senha TEXT)";
     
+    private static final String DATABASE_INCONSISTENCIA_IMOVEL_QUERY =
+            "CREATE TABLE "+Constantes.TABLE_INCONSISTENCIA_IMOVEL+" (id INTEGER PRIMARY KEY autoincrement, matricula TEXT, inconsistencia TEXT)";
+    
     public DbHelper(Context context) {
 		super(context, Constantes.DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -140,6 +144,7 @@ public class DbHelper extends SQLiteOpenHelper {
      	db.execSQL(DATABASE_TIPO_USO_QUERY);
      	db.execSQL(DATABASE_ACESSO_HIDROMETRO_QUERY);
      	db.execSQL(DATABASE_USUARIO_QUERY);
+     	db.execSQL(DATABASE_INCONSISTENCIA_IMOVEL_QUERY);
      	
      	db.execSQL(ADD_COLUMN_PERCENTUAL_ABASTECIMENTO_TO_IMOVEL);
     }

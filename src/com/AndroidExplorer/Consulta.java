@@ -1,22 +1,22 @@
 package com.AndroidExplorer;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import model.Imovel;
 import util.Constantes;
 import util.Util;
-
-import business.Controlador;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,296 +24,315 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
+import business.Controlador;
 
 public class Consulta extends ListActivity {
 	
-	MySimpleArrayAdapter enderecoList;
-	ArrayList<String> listStatusImoveis;
-	Spinner spinnerMetodoBusca;
-	Spinner spinnerFiltro;
-	String filterCondition = null;
-	String searchCondition = null;
-	static int metodoBusca = Constantes.METODO_BUSCA_TODOS;
-	static int filtroBusca = Constantes.FILTRO_BUSCA_TODOS;
+	private static int metodoBusca = 0;
+	private static int filtroBusca = 0;
+	
+	private ListaImoveisAdapter adapter;
+	private List<Imovel> imoveis;
+	
+	private String filtroCondicoes = null;
+	private String buscaCondicoes = null;
 
-
-    /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	setContentView(R.layout.consulta);
- 
-    	metodoBusca = 0;
-    	filtroBusca = 0;
-    	
-		// Spinner Metodo Busca
-        spinnerMetodoBusca = (Spinner) findViewById(R.id.spinnerMetodoBusca);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.consulta, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMetodoBusca.setAdapter(adapter);
-        metodoBuscaOnItemSelectedListener(spinnerMetodoBusca);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.consulta);
 
-		// Spinner Filtrar por.
-        spinnerFiltro = (Spinner) findViewById(R.id.spinnerFiltro);
-        adapter = ArrayAdapter.createFromResource(this, R.array.filtro, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFiltro.setAdapter(adapter);
-        filtroBuscaOnItemSelectedListener(spinnerFiltro);
-       
-        // Button Consulta 
-        final Button buttonConsulta = (Button)findViewById(R.id.buttonConsulta);
-        buttonConsulta.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	
-            	loadEnderecoImoveis();
-            }
-        });
-    }
-    
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setIntent(intent);//must store the new intent unless getIntent() will return the old one.
-//		loadEnderecoImoveis();
+		configurarSpinnerMetodoBusca();
+		configurarSpinnerFiltroBusca();
+
+		final Button buttonConsulta = (Button) findViewById(R.id.buttonConsulta);
+		buttonConsulta.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				carregarEnderecos();
+			}
+		});
 	}
 
-    private void loadEnderecoImoveis(){
-    	enderecoList = null;
-    	setListAdapter(enderecoList);
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		carregarEnderecos();
+	}
 
-    	if (Controlador.getInstancia() != null){
-    		if (Controlador.getInstancia().getCadastroDataManipulator() != null){
-    			
-    			filterCondition = null;
-    			String filterPreCondition = null;
-    			searchCondition = null;
+	private void carregarEnderecos() {
+		adapter = null;
+		setListAdapter(adapter);
 
-    			String valorBusca = "\"" + ((EditText)findViewById(R.id.consulta)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", "") + "\"";
-    			
-    			//Verifica filtro de busca
-    			if (filtroBusca == Constantes.FILTRO_BUSCA_TODOS){
-    				searchCondition = "";
-    			
-    			}else if (filtroBusca == Constantes.FILTRO_BUSCA_VISITADOS_SUCESSO){
-    				searchCondition = "(imovel_status = " + Constantes.IMOVEL_SALVO + ")";
-    				
-    			}else if (filtroBusca == Constantes.FILTRO_BUSCA_VISITADOS_ANORMALIDADE){
-    				searchCondition = "(imovel_status = " + Constantes.IMOVEL_SALVO_COM_ANORMALIDADE + ")";
-    				
-    			}else if (filtroBusca == Constantes.FILTRO_BUSCA_NAO_VISITADOS){
-    				searchCondition = "(imovel_status = " + Constantes.IMOVEL_A_SALVAR + ")";
-    				
-    			}else if (filtroBusca == Constantes.FILTRO_BUSCA_NOVOS){
-    				searchCondition = "(imovel_status = " + Constantes.IMOVEL_NOVO + ")";
-    				
-    			}else if (filtroBusca == Constantes.FILTRO_BUSCA_TRANSMITIDOS){
-    				searchCondition = "(imovel_enviado = " + Constantes.SIM + ")";
-    				
-    			}else if (filtroBusca == Constantes.FILTRO_BUSCA_NAO_TRANSMITIDOS){
-    				searchCondition = "(imovel_enviado = " + Constantes.NAO + ")";   				
-    			}
-    			
-    			// Verifica Método de Busca				
-	    		if (metodoBusca == Constantes.METODO_BUSCA_TODOS){
-    				filterCondition = searchCondition;	    				    			
-	    			
-	    		}else if (metodoBusca == Constantes.METODO_BUSCA_MATRICULA){
-	    			
-	    			if (searchCondition.length() > 0){
-	        			
-	    				filterCondition = searchCondition + " AND ";	    			
-	    				filterCondition += "(matricula = " + valorBusca + ")";
+		if (Controlador.getInstancia() != null) {
+			if (Controlador.getInstancia().getCadastroDataManipulator() != null) {
 
-	    			}else{
-	    				filterCondition = "(matricula = " + valorBusca + ")";	    				
-	    			}	    			
+				filtroCondicoes = null;
+				buscaCondicoes = null;
+				String filtroPreCondicao = null;
 
-    			}else if (metodoBusca == Constantes.METODO_BUSCA_CPF){
+				String valorBusca = "\"" + ((EditText) findViewById(R.id.consulta)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[/]", "") + "\"";
 
-	    			filterPreCondition = "((cpf_cnpj_usuario = " + valorBusca + " AND tipo_pessoa_usuario = " + Constantes.TIPO_PESSOA_FISICA + ")";
-	        	    filterPreCondition += " OR (cpf_cnpj_proprietario = " + valorBusca + " AND tipo_pessoa_proprietario = " + Constantes.TIPO_PESSOA_FISICA + ")";
-	        	    filterPreCondition += " OR (cpf_cnpj_responsavel = " + valorBusca + " AND tipo_pessoa_responsavel = " + Constantes.TIPO_PESSOA_FISICA + "))";
-        	    		
-        	    	ArrayList<String> idList = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectIdClientes(filterPreCondition);
-        	    		 
-	    			if (searchCondition.length() > 0){
-	        			filterCondition = searchCondition + " AND ";
+				// Verifica filtro de busca
+				if (filtroBusca == Constantes.FILTRO_BUSCA_TODOS) {
+					buscaCondicoes = "";
+				} else if (filtroBusca == Constantes.FILTRO_BUSCA_VISITADOS_SUCESSO) {
+					buscaCondicoes = "(imovel_status = " + Constantes.IMOVEL_SALVO + ")";
+				} else if (filtroBusca == Constantes.FILTRO_BUSCA_VISITADOS_ANORMALIDADE) {
+					buscaCondicoes = "(imovel_status = " + Constantes.IMOVEL_SALVO_COM_ANORMALIDADE + ")";
+				} else if (filtroBusca == Constantes.FILTRO_BUSCA_NAO_VISITADOS) {
+					buscaCondicoes = "(imovel_status = " + Constantes.IMOVEL_A_SALVAR + ")";
+				} else if (filtroBusca == Constantes.FILTRO_BUSCA_NOVOS) {
+					buscaCondicoes = "(imovel_status = " + Constantes.IMOVEL_NOVO + ")";
+				} else if (filtroBusca == Constantes.FILTRO_BUSCA_TRANSMITIDOS) {
+					buscaCondicoes = "(imovel_enviado = " + Constantes.SIM + ")";
+				} else if (filtroBusca == Constantes.FILTRO_BUSCA_NAO_TRANSMITIDOS) {
+					buscaCondicoes = "(imovel_enviado = " + Constantes.NAO + ")";
+				}
 
-	        	    	if (idList != null && idList.size() > 0){
-            	    		
-	        	    		filterCondition += " (id = " + idList.get(0);
-	            	    		
-	            	    	for (int i = 1; i < idList.size(); i++){
-	            	    		filterCondition += " OR id = " + idList.get(i);
-	            	    	}
-	            	    	
-	            	    	filterCondition += ")";
-	        	    	}    	    				
+				// Verifica Método de Busca
+				if (metodoBusca == Constantes.METODO_BUSCA_TODOS) {
+					filtroCondicoes = buscaCondicoes;
+				} else if (metodoBusca == Constantes.METODO_BUSCA_MATRICULA) {
 
-	    			}else{
-	        	    	if (idList != null && idList.size() > 0){
-            	    		
-	        	    		filterCondition = " (id = " + idList.get(0);
-	            	    		
-	            	    	for (int i = 1; i < idList.size(); i++){
-	            	    		filterCondition += " OR id = " + idList.get(i);
-	            	    	}
-	            	    	
-	            	    	filterCondition += ")";
-	        	    	}    	    				
-	    			}
+					if (buscaCondicoes.length() > 0) {
+						filtroCondicoes = buscaCondicoes + " AND ";
+						filtroCondicoes += "(matricula = " + valorBusca + ")";
 
-    			}else if (metodoBusca == Constantes.METODO_BUSCA_CNPJ){
-        	    	
-	    			filterPreCondition = "((cpf_cnpj_usuario = " + valorBusca + " AND tipo_pessoa_usuario = " + Constantes.TIPO_PESSOA_JURIDICA + ")";
-	        	    filterPreCondition += " OR (cpf_cnpj_proprietario = " + valorBusca + " AND tipo_pessoa_proprietario = " + Constantes.TIPO_PESSOA_JURIDICA + ")";
-	        	    filterPreCondition += " OR (cpf_cnpj_responsavel = " + valorBusca + " AND tipo_pessoa_responsavel = " + Constantes.TIPO_PESSOA_JURIDICA + "))";
+					} else {
+						filtroCondicoes = "(matricula = " + valorBusca + ")";
+					}
 
-        	    	ArrayList<String> idList = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectIdClientes(filterPreCondition);
-        	    		
-	    			if (searchCondition.length() > 0){
-	        			filterCondition = searchCondition + " AND ";
+				} else if (metodoBusca == Constantes.METODO_BUSCA_CPF) {
 
-	        	    	if (idList != null && idList.size() > 0){
-            	    		
-	        	    		filterCondition += " (id = " + idList.get(0);
-	            	    		
-	            	    	for (int i = 1; i < idList.size(); i++){
-	            	    		filterCondition += " OR id = " + idList.get(i);
-	            	    	}
-	            	    	
-	            	    	filterCondition += ")";
-	        	    	}    	    				
+					filtroPreCondicao = "((cpf_cnpj_usuario = " + valorBusca + " AND tipo_pessoa_usuario = " + Constantes.TIPO_PESSOA_FISICA + ")";
+					filtroPreCondicao += " OR (cpf_cnpj_proprietario = " + valorBusca + " AND tipo_pessoa_proprietario = " + Constantes.TIPO_PESSOA_FISICA + ")";
+					filtroPreCondicao += " OR (cpf_cnpj_responsavel = " + valorBusca + " AND tipo_pessoa_responsavel = " + Constantes.TIPO_PESSOA_FISICA + "))";
 
-	    			}else{
-	        	    	if (idList != null && idList.size() > 0){
-            	    		
-	        	    		filterCondition = " (id = " + idList.get(0);
-	            	    		
-	            	    	for (int i = 1; i < idList.size(); i++){
-	            	    		filterCondition += " OR id = " + idList.get(i);
-	            	    	}
-	            	    	
-	            	    	filterCondition += ")";
-	        	    	}    	    				
-	    			}
-    			}else if(metodoBusca == Constantes.METODO_BUSCA_NUMERO_RESIDENCIA){
-    				String complemento = "(numero_imovel = \"" + Util.adicionarCharDireita(5, valorBusca.replaceAll("\"", ""), ' ') + "\")" ;
-    				
-    				if (searchCondition.length() > 0){
-	    				filterCondition = searchCondition + " AND ";	    			
-	    				filterCondition += complemento;
-	    			}else{
-	    				filterCondition = complemento;		
-	    			}	
-    			}
-    	    	
-    			// Aplica condicoes de filtro
-    	    	listStatusImoveis = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(filterCondition);
-    	    	ArrayList<String> listEnderecoImoveis = (ArrayList)Controlador.getInstancia().getCadastroDataManipulator().selectEnderecoImoveis(filterCondition);
+					ArrayList<String> idList = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdClientes(filtroPreCondicao);
 
-    	    	if(listEnderecoImoveis != null && listEnderecoImoveis.size() > 0){
-    	        	enderecoList = new MySimpleArrayAdapter(this, listEnderecoImoveis);
-    	        	setListAdapter(enderecoList);
-    	    	}
-    		}
-    	}
-    }
+					if (buscaCondicoes.length() > 0) {
+						filtroCondicoes = buscaCondicoes + " AND ";
+
+						if (idList != null && idList.size() > 0) {
+							filtroCondicoes += " (id = " + idList.get(0);
+
+							for (int i = 1; i < idList.size(); i++) {
+								filtroCondicoes += " OR id = " + idList.get(i);
+							}
+
+							filtroCondicoes += ")";
+						}
+
+					} else {
+						if (idList != null && idList.size() > 0) {
+							filtroCondicoes = " (id = " + idList.get(0);
+
+							for (int i = 1; i < idList.size(); i++) {
+								filtroCondicoes += " OR id = " + idList.get(i);
+							}
+
+							filtroCondicoes += ")";
+						}
+					}
+
+				} else if (metodoBusca == Constantes.METODO_BUSCA_CNPJ) {
+
+					filtroPreCondicao = "((cpf_cnpj_usuario = " + valorBusca + " AND tipo_pessoa_usuario = " + Constantes.TIPO_PESSOA_JURIDICA + ")";
+					filtroPreCondicao += " OR (cpf_cnpj_proprietario = " + valorBusca + " AND tipo_pessoa_proprietario = " + Constantes.TIPO_PESSOA_JURIDICA + ")";
+					filtroPreCondicao += " OR (cpf_cnpj_responsavel = " + valorBusca + " AND tipo_pessoa_responsavel = " + Constantes.TIPO_PESSOA_JURIDICA + "))";
+
+					ArrayList<String> idList = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdClientes(filtroPreCondicao);
+
+					if (buscaCondicoes.length() > 0) {
+						filtroCondicoes = buscaCondicoes + " AND ";
+
+						if (idList != null && idList.size() > 0) {
+							filtroCondicoes += " (id = " + idList.get(0);
+
+							for (int i = 1; i < idList.size(); i++) {
+								filtroCondicoes += " OR id = " + idList.get(i);
+							}
+
+							filtroCondicoes += ")";
+						}
+
+					} else {
+						if (idList != null && idList.size() > 0) {
+							filtroCondicoes = " (id = " + idList.get(0);
+
+							for (int i = 1; i < idList.size(); i++) {
+								filtroCondicoes += " OR id = " + idList.get(i);
+							}
+
+							filtroCondicoes += ")";
+						}
+					}
+				} else if (metodoBusca == Constantes.METODO_BUSCA_NUMERO_RESIDENCIA) {
+					String complemento = "(numero_imovel = \"" + Util.adicionarCharDireita(5, valorBusca.replaceAll("\"", ""), ' ') + "\")";
+
+					if (buscaCondicoes.length() > 0) {
+						filtroCondicoes = buscaCondicoes + " AND ";
+						filtroCondicoes += complemento;
+					} else {
+						filtroCondicoes = complemento;
+					}
+				}
+
+				imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(filtroCondicoes);
+				List<String> enderecos = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectEnderecoImoveis(filtroCondicoes);
+
+				if (enderecos != null && enderecos.size() > 0) {
+					adapter = new ListaImoveisAdapter(this, enderecos);
+					setListAdapter(adapter);
+				}
+			}
+		}
+	}
     
 	@Override
 	protected void onListItemClick(ListView l, View view, int position, long id) {
-		// user clicked a list item, make it "selected"
-		enderecoList.setSelectedPosition(position);
+		adapter.setSelectedPosition(position);
 
-		Controlador.getInstancia().setCadastroSelecionadoByListPositionInConsulta(position, filterCondition);
+		Controlador.getInstancia().setCadastroSelecionadoByListPositionInConsulta(position, filtroCondicoes);
 		Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
 		startActivityForResult(myIntent, 0);
 	}
 	
 	
-	public class MySimpleArrayAdapter extends ArrayAdapter<String> {
+	public class ListaImoveisAdapter extends ArrayAdapter<String> {
 		private final Activity context;
-		private final ArrayList<String> names;
+		private final List<String> enderecos;
 
-		// used to keep selected position in ListView
-		private int selectedPos = -1;
+		private int selectedPosition = -1;
 
-		public MySimpleArrayAdapter(Activity context, ArrayList<String> names) {
-			super(context, R.layout.rowimovel, names);
+		public ListaImoveisAdapter(Activity context, List<String> enderecos) {
+			super(context, R.layout.rowimovel, enderecos);
 			this.context = context;
-			this.names = names;
+			this.enderecos = enderecos;
 		}
 
-		public void setSelectedPosition(int pos){
-			selectedPos = pos;
-			// inform the view of this change
+		public void setSelectedPosition(int pos) {
+			selectedPosition = pos;
 			notifyDataSetChanged();
 		}
 
-		public int getSelectedPosition(){
-			return selectedPos;
+		public int getSelectedPosition() {
+			return selectedPosition;
 		}
 
+		@SuppressLint({ "ViewHolder", "InflateParams" })
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			LayoutInflater inflater = context.getLayoutInflater();
-			View rowView = inflater.inflate(R.layout.rowimovel, null, true);
+			View rowView = context.getLayoutInflater().inflate(R.layout.rowimovel, null, true);
 
-	        // change the row color based on selected state
-	        if(selectedPos == position){
-	        	rowView.setBackgroundColor(Color.argb(70, 255, 255, 255));
-	        }else{
-	        	rowView.setBackgroundColor(Color.TRANSPARENT);
-	        }
-	        
-	        ((TextView)rowView.findViewById(R.id.nomerota)).setText(names.get(position));
-
-			ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
-			
-			if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_A_SALVAR ){
-				imageView.setImageResource(R.drawable.todo);
-			
-			} else if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_SALVO){
-				imageView.setImageResource(R.drawable.done);
-			
-			} else if ( Integer.parseInt(listStatusImoveis.get(position)) == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE ){
-				imageView.setImageResource(R.drawable.done_anormal);
-			}
+			configurarSelecionado(position, rowView);
+			configurarStatus(position, rowView);
 
 			return rowView;
 		}
-		
-		public String getListElementName(int element){
-			return names.get(element);
+
+		public String getListElementName(int element) {
+			return enderecos.get(element);
+		}
+
+		private void configurarSelecionado(int position, View rowView) {
+			if (selectedPosition == position) {
+				rowView.setBackgroundColor(Color.argb(70, 255, 255, 255));
+			} else {
+				rowView.setBackgroundColor(Color.TRANSPARENT);
+			}
+		}
+
+		private void configurarStatus(int position, View rowView) {
+			((TextView) rowView.findViewById(R.id.nomerota)).setText(enderecos.get(position));
+
+			ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+
+			Imovel imovel = imoveis.get(position);
+			int status = imovel.getImovelStatus();
+
+			switch (status) {
+			case Constantes.IMOVEL_A_SALVAR:
+				imageView.setImageResource(R.drawable.a_salvar);
+				break;
+
+			case Constantes.IMOVEL_SALVO:
+
+				if (imovel.isEnviado()) {
+					imageView.setImageResource(R.drawable.salvo_enviado);
+				} else {
+					imageView.setImageResource(R.drawable.salvo);
+				}
+
+				break;
+
+			case Constantes.IMOVEL_SALVO_COM_ANORMALIDADE:
+
+				if (imovel.isEnviado()) {
+					imageView.setImageResource(R.drawable.salvo_anormalidade_enviado);
+				} else {
+					imageView.setImageResource(R.drawable.salvo_anormalidade);
+				}
+				break;
+
+			case Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA:
+				imageView.setImageResource(R.drawable.salvo_inconsistencia);
+				break;
+
+			case Constantes.IMOVEL_NOVO:
+				imageView.setImageResource(R.drawable.novo);
+				break;
+
+			case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
+				imageView.setImageResource(R.drawable.novo_anormalidade);
+				break;
+
+			default:
+				break;
+			}
 		}
 	}
-	
-	public void metodoBuscaOnItemSelectedListener (Spinner spinnerMetodoBusca){
 
-		spinnerMetodoBusca.setOnItemSelectedListener(new OnItemSelectedListener () {
-        	
-    		public void onItemSelected(AdapterView parent, View v, int position, long id){
-        		metodoBusca = position;
-        		
-        		if (metodoBusca == Constantes.METODO_BUSCA_CPF || metodoBusca == Constantes.METODO_BUSCA_CNPJ){
-        			Util.addTextChangedListenerConsultaVerifierAndMask((EditText)findViewById(R.id.consulta), metodoBusca);
-        		}
-        	}
-    		
-    		public void onNothingSelected(AdapterView<?> arg0) {}
-    	});
-	}	
-	
-	public void filtroBuscaOnItemSelectedListener (Spinner spinnerFiltro){
+	private void configurarSpinnerFiltroBusca() {
+		Spinner spinner = (Spinner) findViewById(R.id.spinnerFiltro);
+		
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.filtro, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+		
+		configurarFiltroBusca(spinner);
+	}
 
-		spinnerFiltro.setOnItemSelectedListener(new OnItemSelectedListener () {
-        	
-    		public void onItemSelected(AdapterView parent, View v, int position, long id){
-        		filtroBusca = position;
-        	}
-    		
-    		public void onNothingSelected(AdapterView<?> arg0) {}
-    	});
-	}	
-	
+	public void configurarFiltroBusca(Spinner spinner) {
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				filtroBusca = position;
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {}
+		});
+	}
+
+	private void configurarSpinnerMetodoBusca() {
+		Spinner spinner = (Spinner) findViewById(R.id.spinnerMetodoBusca);
+
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.consulta, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);
+
+		configurarMetodoBusca(spinner);
+	}
+
+	public void configurarMetodoBusca(Spinner spinner) {
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+				metodoBusca = position;
+				if (metodoBusca == Constantes.METODO_BUSCA_CPF || metodoBusca == Constantes.METODO_BUSCA_CNPJ) {
+					Util.addTextChangedListenerConsultaVerifierAndMask((EditText) findViewById(R.id.consulta), metodoBusca);
+				}
+			}
+
+			public void onNothingSelected(AdapterView<?> arg0) {}
+		});
+	}
 }

@@ -2,50 +2,49 @@ package com.AndroidExplorer;
 
 import java.util.ArrayList;
 
-import util.Constantes;
-
-import business.Controlador;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import business.Controlador;
 
 public class TelaRelatorio extends FragmentActivity {
-	
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
-    	setContentView(R.layout.roteirorelatorio);
-    	
-    	int numeroCadastros = Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis();
-    	ArrayList<Integer> listStatus = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
-    	
-    	((ProgressBar)findViewById(R.id.progressVisitados)).setMax(numeroCadastros);
-    	((ProgressBar)findViewById(R.id.progressVisitados)).setProgress(listStatus.get(Constantes.IMOVEL_SALVO));
-    	((TextView)findViewById(R.id.txtNumeroVisitados)).setText(String.valueOf(listStatus.get(Constantes.IMOVEL_SALVO)));
-    	
-    	((ProgressBar)findViewById(R.id.progressNaoVisitados)).setMax(numeroCadastros);
-    	((ProgressBar)findViewById(R.id.progressNaoVisitados)).setProgress(listStatus.get(Constantes.IMOVEL_A_SALVAR));
-    	((TextView)findViewById(R.id.txtNumeroNaoVisitados)).setText(String.valueOf(listStatus.get(Constantes.IMOVEL_A_SALVAR)));
 
-    	((ProgressBar)findViewById(R.id.progressVisitadosAnormalidade)).setMax(numeroCadastros);
-    	((ProgressBar)findViewById(R.id.progressVisitadosAnormalidade)).setProgress(listStatus.get(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE));
-    	((TextView)findViewById(R.id.txtNumeroVisitadosAnormalidade)).setText(String.valueOf(listStatus.get(Constantes.IMOVEL_SALVO_COM_ANORMALIDADE)));
-    
-    	((ProgressBar)findViewById(R.id.progressNovos)).setMax(numeroCadastros);
-    	((ProgressBar)findViewById(R.id.progressNovos)).setProgress(listStatus.get(Constantes.IMOVEL_NOVO));
-    	((TextView)findViewById(R.id.txtNumeroNovos)).setText(String.valueOf(listStatus.get(Constantes.IMOVEL_NOVO)));
-    
-    	((ProgressBar)findViewById(R.id.progressTransmitidos)).setMax(numeroCadastros);
-    	((ProgressBar)findViewById(R.id.progressTransmitidos)).setProgress(listStatus.get(Constantes.IMOVEL_TRANSMITIDO));
-    	((TextView)findViewById(R.id.txtNumeroTransmitidos)).setText(String.valueOf(listStatus.get(Constantes.IMOVEL_TRANSMITIDO)));
-    
-    	((ProgressBar)findViewById(R.id.progressNaoTransmitidos)).setMax(numeroCadastros);
-    	((ProgressBar)findViewById(R.id.progressNaoTransmitidos)).setProgress(listStatus.get(Constantes.IMOVEL_NAO_TRANSMITIDO));
-    	((TextView)findViewById(R.id.txtNumeroNaoTransmitidos)).setText(String.valueOf(listStatus.get(Constantes.IMOVEL_NAO_TRANSMITIDO)));
-    
-    }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.roteirorelatorio);
+
+		int total = Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis();
+		ArrayList<Integer> lista = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
+
+		((ProgressBar) findViewById(R.id.progressVisitados)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressVisitados)).setProgress(lista.get(0));
+		((TextView) findViewById(R.id.txtNumeroVisitados)).setText(String.valueOf(lista.get(0)));
+
+		((ProgressBar) findViewById(R.id.progressNaoVisitados)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressNaoVisitados)).setProgress(lista.get(1));
+		((TextView) findViewById(R.id.txtNumeroNaoVisitados)).setText(String.valueOf(lista.get(1)));
+
+		((ProgressBar) findViewById(R.id.progressVisitadosAnormalidade)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressVisitadosAnormalidade)).setProgress(lista.get(2));
+		((TextView) findViewById(R.id.txtNumeroVisitadosAnormalidade)).setText(String.valueOf(lista.get(2)));
+
+		((ProgressBar) findViewById(R.id.progressNovos)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressNovos)).setProgress(lista.get(3));
+		((TextView) findViewById(R.id.txtNumeroNovos)).setText(String.valueOf(lista.get(3)));
+
+		((ProgressBar) findViewById(R.id.progressTransmitidos)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressTransmitidos)).setProgress(lista.get(4));
+		((TextView) findViewById(R.id.txtNumeroTransmitidos)).setText(String.valueOf(lista.get(4)));
+		
+		((ProgressBar) findViewById(R.id.progressInconsistencias)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressInconsistencias)).setProgress(lista.get(5));
+		((TextView) findViewById(R.id.txtNumeroInconsistencias)).setText(String.valueOf(lista.get(5)));
+
+		((ProgressBar) findViewById(R.id.progressNaoTransmitidos)).setMax(total);
+		((ProgressBar) findViewById(R.id.progressNaoTransmitidos)).setProgress(lista.get(6));
+		((TextView) findViewById(R.id.txtNumeroNaoTransmitidos)).setText(String.valueOf(lista.get(6)));
+
+	}
 }

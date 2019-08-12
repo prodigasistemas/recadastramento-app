@@ -694,7 +694,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		// CPF / CNPJ do Proprietario
 		if (getCliente().getProprietario().getCpfCnpj() != Constantes.NULO_STRING) {
-			((EditText) (view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
+			((EditText) (view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ)));
 		}
 
 		// RG do Proprietario
@@ -780,7 +780,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		// CPF / CNPJ do Usuario
 		if (getCliente().getUsuario().getCpfCnpj() != Constantes.NULO_STRING) {
-			((EditText) (view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
+			((EditText) (view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ)));
 		}
 
 		// RG do Usuario
@@ -837,7 +837,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 			// CPF / CNPJ do Responsavel
 			if (getCliente().getResponsavel().getCpfCnpj() != Constantes.NULO_STRING) {
-				((EditText) (view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
+				((EditText) (view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ)));
 			}
 
 			// RG do Responsavel
@@ -1189,7 +1189,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			}
 
 			if (position == getCliente().getProprietario().getTipoPessoa() && !getCliente().getUsuario().getCpfCnpj().equals("")){
-                ((EditText)(view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
+                ((EditText)(view.findViewById(R.id.cpfCnpjProprietario))).setText(String.valueOf(getCliente().getProprietario().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ)));
     		}else{
             	((EditText)view.findViewById(R.id.cpfCnpjProprietario)).setText("");
     		}
@@ -1217,8 +1217,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 			}
 
 			if (position == getCliente().getUsuario().getTipoPessoa() && !getCliente().getUsuario().getCpfCnpj().equals("")){
-                ((EditText)(view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
-                String CpfCnpjOriginal = getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ);
+                ((EditText)(view.findViewById(R.id.cpfCnpjUsuario))).setText(String.valueOf(getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ)));
+                String CpfCnpjOriginal = getCliente().getUsuario().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ);
     		}else{
             	((EditText)view.findViewById(R.id.cpfCnpjUsuario)).setText("");
     		}
@@ -1247,7 +1247,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			}
 			
     		if (position == getCliente().getResponsavel().getTipoPessoa() && !getCliente().getUsuario().getCpfCnpj().equals("")){
-                ((EditText)(view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj().substring(0, Constantes.PARCIALCPFCNPJ)));
+                ((EditText)(view.findViewById(R.id.cpfCnpjResponsavel))).setText(String.valueOf(getCliente().getResponsavel().getCpfCnpj().substring(0, Constantes.PARCIAL_CPF_CNPJ)));
     		}else{
             	((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).setText("");
     		}

@@ -33,7 +33,7 @@ android:orientation="vertical">
 		   	    android:layout_height="wrap_content" 
 		   	    android:id="@+id/linearLayoutPeriodo1">
 				<Button 
-				    android:id="@+id/buttonAtualizar" 
+				    android:id="@+id/botaoAtualizar" 
 				    android:background="@drawable/btn_update_custom" 
 				    android:layout_width="wrap_content" 
 				    android:layout_height="wrap_content" />
@@ -89,8 +89,33 @@ android:orientation="vertical">
 					     				
 				</LinearLayout>
 			</LinearLayout>
-		</LinearLayout>	    	    
-	    
+		</LinearLayout>
+		
+	   	<LinearLayout 
+	   	    android:id="@+id/layoutInconsistencias"
+		    android:paddingTop="20dp" 
+		    android:layout_width="fill_parent" 
+		    android:layout_height="fill_parent" 
+		    android:orientation="vertical">
+	   	
+		   	<TextView 
+		        android:text="Inconsistências:" 
+		        android:id="@+id/txtInconsistencias" 
+		        android:textSize="17dp" 
+		        android:textColor="@color/textColor" 
+		        android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content" > 
+		    </TextView>
+		   	
+			<TextView 
+		        android:id="@+id/listaInconsistencias" 
+		        android:textSize="15dp" 
+		        android:textColor="@color/textColor" 
+		        android:layout_width="wrap_content" 
+		        android:layout_height="wrap_content" > 
+		    </TextView>
+		
+	   	</LinearLayout>
 	    <TextView 
 	        android:text="Anormalidade:" 
 	        android:id="@+id/txtAnormalidade" 
@@ -151,13 +176,13 @@ android:orientation="vertical">
 		    android:orientation="horizontal" 
 		    android:padding="10dp" >
 			<Button 
-			    android:id="@+id/buttonPicture1" 
+			    android:id="@+id/botaoFoto1" 
 			    android:background="@drawable/btn_camera" 
 			    android:layout_marginRight="10dp" 
 			    android:layout_width="wrap_content" 
 			    android:layout_height="wrap_content" />
 			<ImageView 
-			    android:id="@+id/imageView1" 
+			    android:id="@+id/foto1" 
 			    android:background="@drawable/photo_logo" 
 			    android:layout_width="200dip" 
 			    android:layout_height="200dip"/>
@@ -169,13 +194,13 @@ android:orientation="vertical">
 		    android:orientation="horizontal" 
 		    android:padding="10dp" >
 			<Button 
-			    android:id="@+id/buttonPicture2" 
+			    android:id="@+id/botaoFoto2" 
 			    android:background="@drawable/btn_camera" 
 			    android:layout_marginRight="10dp" 
 			    android:layout_width="wrap_content" 
 			    android:layout_height="wrap_content" />
 			<ImageView 
-			    android:id="@+id/imageView2" 
+			    android:id="@+id/foto2" 
 			    android:background="@drawable/photo_logo" 
 			    android:layout_width="200dip" 
 			    android:layout_height="200dip"/>
@@ -195,8 +220,8 @@ android:orientation="vertical">
 		    android:layout_weight="1" 
 		    android:ellipsize="end" />
 		<Button 
-		    android:id="@+id/buttonSave" 
-		    android:text="Finalizar" 
+		    android:id="@+id/botaoFinalizar" 
+		    android:text="@string/finalizar"
 		    android:textColor="@color/white" 
 		    android:textSize="20dp" 
 		    android:background="@drawable/button_rounded_corners" 

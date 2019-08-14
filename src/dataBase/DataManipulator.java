@@ -13,6 +13,7 @@ import model.Servicos;
 import model.Usuario;
 import util.Constantes;
 import util.ParserUtil;
+import util.Util;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -951,12 +952,12 @@ public List<String> selectEnderecoImoveis(String condition){
 
 		Cursor cursor = db.query(Constantes.TABLE_GERAL, new String[] { 
 				"id_rota",
-				"localidade", 
-				"setor", 
-				"rota", 
-				"nome_arquivo", 
-				"tipo_arquivo",
-				"versao_aplicativo"}, 
+				"localidade",
+				"setor",
+				"rota",
+				"versao_arquivo",
+				"nome_arquivo",
+				"tipo_arquivo"},
 				null, null, null, null, "id asc");
 
 		if (cursor.moveToFirst()) {
@@ -964,9 +965,9 @@ public List<String> selectEnderecoImoveis(String condition){
 			getDadosGerais().setLocalidade(cursor.getString(1));
 			getDadosGerais().setSetor(cursor.getString(2));
 			getDadosGerais().setRota(cursor.getString(3));
-			getDadosGerais().setNomeArquivo(cursor.getString(4));
-			getDadosGerais().setTipoArquivo(cursor.getString(5));
-			getDadosGerais().setVersaoAplicativo(cursor.getString(6));
+			getDadosGerais().setVersaoArquivo(cursor.getString(4));
+			getDadosGerais().setNomeArquivo(cursor.getString(5));
+			getDadosGerais().setTipoArquivo(cursor.getString(6));
 		}
 
 		if (cursor != null && !cursor.isClosed()) {
@@ -1130,7 +1131,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		cursor.close();
 	}
 
-	public long insertDadosGerais(String linhaArquivo, String nomeArquivo, String versaoAplicativo) {
+	public long insertDadosGerais(String linhaArquivo, String nomeArquivo) {
 		ParserUtil parser = new ParserUtil(linhaArquivo);
 		ContentValues initialValues = new ContentValues();
 
@@ -1143,7 +1144,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		parser.obterDadoParser(11);
 		parser.obterDadoParser(40);
 		parser.obterDadoParser(1);
-		parser.obterDadoParser(10);
+		initialValues.put("versao_arquivo", Util.removerZerosAEsquerda(parser.obterDadoParser(10)));
 		parser.obterDadoParser(8);
 		parser.obterDadoParser(8);
 		initialValues.put("id_rota", parser.obterDadoParser(4));
@@ -1156,8 +1157,6 @@ public List<String> selectEnderecoImoveis(String condition){
 		if (linhaArquivo.length() > 151)
 			initialValues.put("tipo_arquivo", parser.obterDadoParser(1));
 
-		initialValues.put("versao_aplicativo", versaoAplicativo);
-		
 		return db.insert(Constantes.TABLE_GERAL, null, initialValues);
 	}
    

@@ -24,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import business.Controlador;
 import business.ControladorAcessoOnline;
 
@@ -106,43 +107,56 @@ public class Fachada extends FragmentActivity {
 			final EditText user = (EditText) layout.findViewById(R.id.EditText_User);
 			final EditText password = (EditText) layout.findViewById(R.id.EditText_Password);
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Autenticação");
-			builder.setView(layout);
+			if (versoesCompativeis()) {
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Autenticação");
+				builder.setView(layout);
 
-			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 
-				@SuppressWarnings("deprecation")
-				public void onClick(DialogInterface dialog, int whichButton) {
-					removeDialog(Constantes.DIALOG_ID_PASSWORD);
-					Controlador.getInstancia().setPermissionGranted(false);
-				}
-			});
-
-			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					String strUsr = user.getText().toString();
-					String strPass = password.getText().toString();
-
-					Controlador.getInstancia().getCadastroDataManipulator().selectUsuario(strUsr);
-					Usuario usuario = Controlador.getInstancia().getCadastroDataManipulator().getUsuario();
-
-					if (usuario != null) {
-						if (Criptografia.encode(strPass).equals(usuario.getSenha())) {
-							permitirAcesso(layout);
-						} else {
-							showNotifyDialog(R.drawable.aviso, "Alerta!", "Senha inválida.", Constantes.DIALOG_ID_ERRO);
-						}
-					} else {
-						showNotifyDialog(R.drawable.aviso, "Alerta!", "Login inválido.", Constantes.DIALOG_ID_ERRO);
+					@SuppressWarnings("deprecation")
+					public void onClick(DialogInterface dialog, int whichButton) {
+						removeDialog(Constantes.DIALOG_ID_PASSWORD);
+						Controlador.getInstancia().setPermissionGranted(false);
 					}
-				}
-			});
+				});
 
-			AlertDialog passwordDialog = builder.create();
-			return passwordDialog;
+				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						String strUsr = user.getText().toString();
+						String strPass = password.getText().toString();
+
+						Controlador.getInstancia().getCadastroDataManipulator().selectUsuario(strUsr);
+						Usuario usuario = Controlador.getInstancia().getCadastroDataManipulator().getUsuario();
+
+						if (usuario != null) {
+							if (Criptografia.encode(strPass).equals(usuario.getSenha())) {
+								permitirAcesso(layout);
+							} else {
+								showNotifyDialog(R.drawable.aviso, "Alerta!", "Senha inválida.", Constantes.DIALOG_ID_ERRO);
+							}
+						} else {
+							showNotifyDialog(R.drawable.aviso, "Alerta!", "Login inválido.", Constantes.DIALOG_ID_ERRO);
+						}
+					}
+				});
+
+				AlertDialog passwordDialog = builder.create();
+				return passwordDialog;
+				
+			} else {
+				limparDB();
+			}
 		}
 		return null;
+	}
+
+	private boolean versoesCompativeis() {
+		String versaoAplicativo = getString(R.string.app_versao);
+		String versaoArquivo = Controlador.getInstancia().getDadosGerais().getVersaoArquivo();
+		
+		return versaoAplicativo.equals(versaoArquivo);
 	}
 
 	@Override
@@ -154,31 +168,37 @@ public class Fachada extends FragmentActivity {
 		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
 		newFragment.show(getSupportFragmentManager(), "dialog");
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private void permitirAcesso(final View layout) {
 		Controlador.getInstancia().setPermissionGranted(true);
 		removeDialog(Constantes.DIALOG_ID_PASSWORD);
-		
+
 		Intent myIntent = new Intent(layout.getContext(), MenuPrincipal.class);
 		startActivity(myIntent);
 	}
-	
+
 	private boolean validar() {
 		List<String> informacoes = Controlador.getInstancia().getCadastroDataManipulator().selectInformacoesRota();
-		
+
 		String tipoArquivo = informacoes.get(4).trim();
-		
-		if (tipoArquivo.equals("") || 
-			tipoArquivo.equals("R") || 
-			tipoArquivo.equals("V")) {
-			
+		if (tipoArquivo.equals("") || tipoArquivo.equals("R") || tipoArquivo.equals("V")) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
+	private void limparDB() {
+		Controlador.getInstancia().finalizeDataManipulator();
+		Controlador.getInstancia().deleteDatabase();
+
+		Toast.makeText(getBaseContext(), "Versão do aplicativo e arquivo incompatíveis. Por favor, atualize sua versão.", Toast.LENGTH_LONG).show();
+
+		Intent myIntent = new Intent(getBaseContext(), Fachada.class);
+		startActivity(myIntent);
+	}
+
 	private void configurarUrlServidor() {
 		Properties prop = new Properties();
 		try {

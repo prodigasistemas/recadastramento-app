@@ -357,7 +357,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		((MainTab) getActivity()).setTabColor();
 		anormalidadeImovel.setTabSaved(true);
 		
-		EnviarCadastroOnlineThread enviar = new EnviarCadastroOnlineThread(imovel);
+		EnviarCadastroOnlineThread enviar = new EnviarCadastroOnlineThread(view.getContext(), imovel);
 		enviar.start();
 	}
 	

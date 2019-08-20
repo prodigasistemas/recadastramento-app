@@ -1237,4 +1237,8 @@ import com.AndroidExplorer.ClienteTab;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		return sdf.format(new Date());
 	}
+	
+	public static String removerZerosAEsquerda(String valor) {
+		return valor.trim().replaceFirst("^0+(?!$)", "");
+	}
 }

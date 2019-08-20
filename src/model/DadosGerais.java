@@ -8,7 +8,7 @@ public class DadosGerais {
 	private String rota;
 	private String nomeArquivo;
 	private String tipoArquivo;
-	private String versaoAplicativo;
+	private String versaoArquivo;
 
 	private static DadosGerais instancia;
 
@@ -75,11 +75,11 @@ public class DadosGerais {
 		this.tipoArquivo = tipoArquivo;
 	}
 
-	public String getVersaoAplicativo() {
-		return versaoAplicativo;
+	public String getVersaoArquivo() {
+		return versaoArquivo;
 	}
 
-	public void setVersaoAplicativo(String versaoAplicativo) {
-		this.versaoAplicativo = versaoAplicativo;
+	public void setVersaoArquivo(String versaoArquivo) {
+		this.versaoArquivo = versaoArquivo;
 	}
 }

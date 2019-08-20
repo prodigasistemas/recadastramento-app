@@ -23,6 +23,8 @@ import android.os.Message;
 import android.widget.Toast;
 import business.Controlador;
 
+import com.AndroidExplorer.R;
+
 public class ArquivoRetorno {
 
 	private static ArquivoRetorno instancia;
@@ -47,7 +49,7 @@ public class ArquivoRetorno {
 		return instancia;
 	}
 
-	public static StringBuffer gerarDadosImovel(Imovel imovel) {
+	public static StringBuffer gerarDadosImovel(Context context, Imovel imovel) {
 		arquivo = new StringBuffer();
 		
 		Cliente cliente = Controlador.getInstancia().getCadastroDataManipulator().selectClientePorId(imovel.getImovelId());
@@ -55,7 +57,7 @@ public class ArquivoRetorno {
 		Medidor medidor = Controlador.getInstancia().getCadastroDataManipulator().selectMedidorPorId(imovel.getImovelId());
 		AnormalidadeImovel anormalidade = Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(imovel.getMatricula()));
 
-		gerarLinhaZero();
+		gerarLinhaZero(context);
 		gerarRegistroTipoCliente(cliente);
 		gerarRegistroTipoImovel(imovel);
 		gerarRegistrosTipoRamosAtividadeImovel(imovel);
@@ -85,7 +87,7 @@ public class ArquivoRetorno {
 			ArrayList<String> ids = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(
 					"imovel_status != " + Constantes.IMOVEL_A_SALVAR);
 
-			gerarLinhaZero();
+			gerarLinhaZero(context);
 
 			for (int i = 0; i < ids.size(); i++) {
 				Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(ids.get(i)));
@@ -159,7 +161,7 @@ public class ArquivoRetorno {
 
 			ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
 
-			gerarLinhaZero();
+			gerarLinhaZero(context);
 
 			for (int i = 0; i < listIdImoveis.size(); i++) {
 				try{
@@ -232,7 +234,7 @@ public class ArquivoRetorno {
 		return arquivo;
 	}
 
-	private static void gerarLinhaZero() {
+	private static void gerarLinhaZero(Context context) {
 		registrosTipoZero = new StringBuffer();
 
 		registrosTipoZero.append("00");
@@ -240,7 +242,7 @@ public class ArquivoRetorno {
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getSetor()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(2, Controlador.getInstancia().getDadosGerais().getRota()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(4, Controlador.getInstancia().getDadosGerais().getIdRota()));
-		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, Controlador.getInstancia().getDadosGerais().getVersaoAplicativo()));
+		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, context.getString(R.string.app_versao)));
 		registrosTipoZero.append(Util.adicionarCharDireita(1, Controlador.getInstancia().getDadosGerais().getTipoArquivo(), ' '));
 		
 		registrosTipoZero.append("\n");

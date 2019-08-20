@@ -6,22 +6,25 @@ import model.Imovel;
 import ui.ArquivoRetorno;
 import ui.MessageDispatcher;
 import util.Constantes;
+import android.content.Context;
 import android.util.Log;
 import business.Controlador;
 import business.ControladorAcessoOnline;
 
 public class EnviarCadastroOnlineThread extends Thread {
 
+	private Context context;
 	private Imovel imovel;
 
-	public EnviarCadastroOnlineThread(Imovel imovel) {
+	public EnviarCadastroOnlineThread(Context context, Imovel imovel) {
+		this.context = context;
 		this.imovel = imovel;
 	}
 
 	@Override
 	public void run() {
 		try {
-			StringBuffer arquivo = ArquivoRetorno.gerarDadosImovel(imovel);
+			StringBuffer arquivo = ArquivoRetorno.gerarDadosImovel(context, imovel);
 
 			ControladorAcessoOnline.getInstancia().atualizarCadastro(arquivo.toString().getBytes());
 

@@ -24,9 +24,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
-
-import com.AndroidExplorer.R;
-
 import dataBase.DataManipulator;
 
 public class Controlador {
@@ -280,7 +277,7 @@ public class Controlador {
 						manipulator.insertAnormalidadeImovel(linha);
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
-						manipulator.insertDadosGerais(linha, fileName, context.getString(R.string.app_versao));
+						manipulator.insertDadosGerais(linha, fileName);
 						
 					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
 						manipulator.insertAnormalidade(linha);

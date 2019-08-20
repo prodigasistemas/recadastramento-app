@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import model.Cliente;
 import model.Usuario;
 import util.Constantes;
 import util.Criptografia;
@@ -123,10 +124,9 @@ public class Fachada extends FragmentActivity {
 				public void onClick(DialogInterface dialog, int which) {
 					String strUsr = user.getText().toString();
 					String strPass = password.getText().toString();
-
-					Controlador.getInstancia().getCadastroDataManipulator().selectUsuario(strUsr);
-					Usuario usuario = Controlador.getInstancia().getCadastroDataManipulator().getUsuario();
-
+				
+					Usuario usuario = Controlador.getInstancia().getCadastroDataManipulator().selectUsuario(strUsr);
+	
 					if (usuario != null) {
 						if (Criptografia.encode(strPass).equals(usuario.getSenha())) {
 							permitirAcesso(layout);
@@ -135,7 +135,11 @@ public class Fachada extends FragmentActivity {
 						}
 					} else {
 						showNotifyDialog(R.drawable.aviso, "Alerta!", "Login inválido.", Constantes.DIALOG_ID_ERRO);
+											
 					}
+					layout.findViewById(R.id.EditText_User).clearFocus();
+					user.getText().clear();
+					password.getText().clear();
 				}
 			});
 

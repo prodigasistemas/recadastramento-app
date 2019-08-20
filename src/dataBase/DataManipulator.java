@@ -1112,13 +1112,16 @@ public List<String> selectEnderecoImoveis(String condition){
         }
    }
 	
-	public void selectUsuario(String login) {
+	public Usuario selectUsuario(String login) {
 		Cursor cursor = db.query(Constantes.TABLE_USUARIO, new String[] { "nome", "login", "senha" }, "login = '" + login + "'", null, null, null, "nome ASC");
-
+		Usuario usuario = null;
+			
 		if (cursor.moveToFirst()) {
-			getUsuario().setNome(cursor.getString(0));
-			getUsuario().setLogin(cursor.getString(1));
-			getUsuario().setSenha(cursor.getString(2));
+			usuario = new Usuario();
+					
+			usuario.setNome(cursor.getString(0));
+			usuario.setLogin(cursor.getString(1));
+			usuario.setSenha(cursor.getString(2));
 		} else {
 			Controlador.getInstancia().setUsuario(null);
 		}
@@ -1128,6 +1131,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		}
 
 		cursor.close();
+		return usuario;
 	}
 
 	public long insertDadosGerais(String linhaArquivo, String nomeArquivo, String versaoAplicativo) {

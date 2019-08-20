@@ -102,49 +102,7 @@ public class ClienteTab extends Fragment implements LocationListener {
     	Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularUsuario));
     	Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjUsuario), Constantes.PESSOA_USUARIO);
     	cpfCnpjOriginal = getCliente().getUsuario().getCpfCnpj();
-    	
-    	// Verifica após preencher o campo se está válido
-    	((EditText)view.findViewById(R.id.cpfCnpjUsuario)).setOnFocusChangeListener(new OnFocusChangeListener() {          
-    		public void onFocusChange(View v, boolean hasFocus) {
-    			
-    			if(!hasFocus){
-    				
-    				if (isTipoCpf(Constantes.PESSOA_USUARIO)){
-    					
-    					if ( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
-							( !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "")))){
-
-    						dialogMessage = "CPF do campo usuário inválido.";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-                            
-    					}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
-
-    						dialogMessage = "Valide campo CPF do usuário.";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-    						
-    					}
-    				
-    				}else{
-    					
-    					if ( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
-    						( !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())) ){
-    						
-    						dialogMessage = "CNPJ do campo usuário inválido.";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-                            
-    					}else if(!cpfCnpjOriginal.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
-
-    						dialogMessage = "Valide campo CNJP da empresa.";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-    						
-    					}
-    					
-    				}
-    			}
-    		}
-    	});
-    	
-   	
+      	
       	// Spinner Entrevistado
         Spinner spinnerEntrevistado = (Spinner) view.findViewById(R.id.spinnerEntrevistado);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.listaEntrevistado, android.R.layout.simple_spinner_item);
@@ -1018,33 +976,6 @@ public class ClienteTab extends Fragment implements LocationListener {
     	Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularProprietario));
     	Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjProprietario), Constantes.PESSOA_PROPRIETARIO);
 
-    	// Verifica após preencher o campo se esta válido
-    	((EditText)view.findViewById(R.id.cpfCnpjProprietario)).setOnFocusChangeListener(new OnFocusChangeListener() {          
-    		public void onFocusChange(View v, boolean hasFocus) {
-    			
-    			if(!hasFocus){
-    				
-    				if (isTipoCpf(Constantes.PESSOA_PROPRIETARIO)){
-    					
-    					if ( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
-    						 (!Util.getCpfProprietarioOk()) ){
-    						
-    						dialogMessage = " CPF do proprietário inválido. ";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-    					}
-    				
-    				}else{
-    					
-    					if ( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
-    						 (!Util.getCnpjProprietarioOk()) ){
-    						
-    						dialogMessage = " CNPJ do proprietário inválido. ";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-    					}
-    				}
-    			}
-    		}
-    	});
         // Spinner Tipo Pessoa Proprietario
         Spinner spinnerTipoPessoaProprietario = (Spinner) view.findViewById(R.id.spinnerTipoPessoaProprietario);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.tipoPessoa, android.R.layout.simple_spinner_item);
@@ -1106,32 +1037,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularResponsavel));
 		Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjResponsavel), Constantes.PESSOA_RESPONSAVEL);
 
-    	// Verifica após preencher o campo se esta válido
-    	((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).setOnFocusChangeListener(new OnFocusChangeListener() {          
-    		public void onFocusChange(View v, boolean hasFocus) {
-    			if(!hasFocus){
-    				
-    				if (isTipoCpf(Constantes.PESSOA_RESPONSAVEL)){
-    					
-    					if ( (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) && 
-    						 (!Util.getCpfResponsavelOk()) ){
-    						
-    						dialogMessage = " CPF do responsável inválido. ";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-    					}
-    				
-    				}else{
-    					
-    					if ( (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) && 
-    						 (!Util.getCnpjResponsavelOk()) ){
-    						
-    						dialogMessage = " CNPJ do responsável inválido. ";
-                            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-    					}
-    				}
-    			}
-    		}
-    	});
+   ;
 	    // Spinner Tipo Pessoa Responsavel
 	    Spinner spinnerTipoPessoaResponsavel = (Spinner) view.findViewById(R.id.spinnerTipoPessoaResponsavel);
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.tipoPessoa, android.R.layout.simple_spinner_item);

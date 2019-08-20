@@ -677,7 +677,16 @@ import com.AndroidExplorer.ClienteTab;
         d1 = d2 = 0;  
         digito1 = digito2 = resto = 0;  
 
-        if (cpf.length() != 11 || cpf.contentEquals("0000000000")){
+        if (cpf.length() != 11 || cpf.contentEquals("00000000000") ||
+					        	  cpf.contentEquals("11111111111") ||
+					        	  cpf.contentEquals("22222222222") ||
+					        	  cpf.contentEquals("33333333333") ||
+					        	  cpf.contentEquals("44444444444") ||
+					        	  cpf.contentEquals("55555555555") ||
+					        	  cpf.contentEquals("66666666666") || 
+					        	  cpf.contentEquals("77777777777") || 
+					        	  cpf.contentEquals("88888888888") || 
+					        	  cpf.contentEquals("99999999999")){
         	return false;
         }
         

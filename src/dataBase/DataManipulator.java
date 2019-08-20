@@ -77,6 +77,7 @@ public class DataManipulator
     public Registro getRamosAtividade(){
     	return Controlador.getInstancia().getRamosAtividade();
     }
+    
     public Usuario getUsuario(){
     	return Controlador.getInstancia().getUsuario();
     }
@@ -1123,6 +1124,8 @@ public List<String> selectEnderecoImoveis(String condition){
 			usuario.setNome(cursor.getString(0));
 			usuario.setLogin(cursor.getString(1));
 			usuario.setSenha(cursor.getString(2));
+			
+			Controlador.getInstancia().setUsuario(usuario);
 		} else {
 			Controlador.getInstancia().setUsuario(null);
 		}

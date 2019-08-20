@@ -125,6 +125,7 @@ public class Controlador {
 	public void setRamosAtividade(Registro ramosAtividade) {
 		Controlador.ramosAtividade = ramosAtividade;
 	}
+	
 	public void setUsuario(Usuario usuario) {
 		Controlador.usuario = usuario;
 	}

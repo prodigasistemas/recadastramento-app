@@ -3,3 +3,5 @@
 app.properties
 /gen/*
 .DS_Store
+/doc
+/doc/*

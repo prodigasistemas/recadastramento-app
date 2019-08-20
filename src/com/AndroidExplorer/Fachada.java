@@ -138,6 +138,10 @@ public class Fachada extends FragmentActivity {
 						} else {
 							showNotifyDialog(R.drawable.aviso, "Alerta!", "Login inválido.", Constantes.DIALOG_ID_ERRO);
 						}
+						
+						layout.findViewById(R.id.EditText_User).clearFocus();
+						user.getText().clear();
+						password.getText().clear();
 					}
 				});
 

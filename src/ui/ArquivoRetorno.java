@@ -68,7 +68,7 @@ public class ArquivoRetorno {
 		return arquivo;
 	}
 
-	public static void gerar(Handler handler, Context context, int increment) {
+	public static void gerar(Handler handler, Context context) {
 		try {
 			File diretorio = new File(Util.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
 			if (!diretorio.exists()) {
@@ -107,10 +107,10 @@ public class ArquivoRetorno {
 				gerarRegistroTipoMedidor(getImovelSelecionado(), getMedidorSelecionado());
 				gerarRegistroTipoAnormalidadeImovel(getImovelSelecionado(), getAnormalidadeImovelSelecionado());
 
-				atualizarProcessamento(handler, increment, i + 1);
+				atualizarProcessamento(handler, i++);
 			}
 
-			atualizarProcessamento(handler, increment, ids.size());
+			atualizarProcessamento(handler, ids.size());
 			
 			out.write(arquivo.toString());
 			out.close();
@@ -123,10 +123,10 @@ public class ArquivoRetorno {
 		}
 	}
 
-	private static void atualizarProcessamento(Handler handler, int increment, int size) {
+	private static void atualizarProcessamento(Handler handler, int progresso) {
 		Bundle bundle = new Bundle();
 		Message msg = handler.obtainMessage();
-		bundle.putInt("arquivoCompleto" + increment, size);
+		bundle.putInt("progressoArquivoRetorno", progresso);
 		msg.setData(bundle);
 		handler.sendMessage(msg);
 	}
@@ -138,102 +138,6 @@ public class ArquivoRetorno {
 				&& getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_NOVO_COM_ANORMALIDADE;
 	}
 	
-	public static void gerarArquivoParcial(Handler mHandler, Context context, int increment) {
-
-		try {
-
-			File diretorioRetorno = new File(Util.getExternalStorageDirectory() + "/external_sd/Cadastro", "Retorno");
-			if (!diretorioRetorno.exists()) {
-				diretorioRetorno.mkdirs();
-			}
-
-			File fileArquivoCompleto = new File(Util.getRetornoRotaDirectory(), Util.getRotaFileName() + ".txt");
-
-			if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-				Toast.makeText(context, "Erro ao salvar no cartão de memória!", Toast.LENGTH_SHORT).show();
-				return;
-			}
-
-			FileOutputStream os = new FileOutputStream(fileArquivoCompleto);
-			OutputStreamWriter out = new OutputStreamWriter(os);
-
-			arquivo = new StringBuffer();
-
-			ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
-
-			gerarLinhaZero(context);
-
-			for (int i = 0; i < listIdImoveis.size(); i++) {
-				try{
-					Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
-					Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
-					
-					if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_A_SALVAR)
-						continue;
-					
-					Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
-					Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
-					Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
-					
-				}catch(Exception e){
-					continue;
-				}
-
-				gerarRegistroTipoCliente(getClienteSelecionado());
-				gerarRegistroTipoImovel(getImovelSelecionado());
-				gerarRegistrosTipoRamosAtividadeImovel(getImovelSelecionado());
-				gerarRegistroTipoServico(getImovelSelecionado(), getServicosSelecionado());
-				gerarRegistroTipoMedidor(getImovelSelecionado(), getMedidorSelecionado());
-				gerarRegistroTipoAnormalidadeImovel(getImovelSelecionado(), getAnormalidadeImovelSelecionado());
-
-				Bundle b = new Bundle();
-				Message msg = mHandler.obtainMessage();
-				b.putInt("arquivoParcial" + String.valueOf(increment), (i + 1));
-				msg.setData(b);
-				mHandler.sendMessage(msg);
-			}
-
-			out.write(arquivo.toString());
-			out.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static StringBuffer gerarDadosFinalizacaoRotaOnline(Handler mHandler, Context context, int increment) {
-		arquivo = new StringBuffer();
-
-		String filterCondition = "(imovel_enviado = " + Constantes.NAO + ")";
-
-		ArrayList<String> listIdImoveis = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(filterCondition);
-
-		for (int i = 0; i < listIdImoveis.size(); i++) {
-
-			Controlador.getInstancia().getCadastroDataManipulator().selectCliente(Long.parseLong(listIdImoveis.get(i)));
-			Controlador.getInstancia().getCadastroDataManipulator().selectImovel(Long.parseLong(listIdImoveis.get(i)));
-			Controlador.getInstancia().getCadastroDataManipulator().selectServico(Long.parseLong(listIdImoveis.get(i)));
-			Controlador.getInstancia().getCadastroDataManipulator().selectMedidor(Long.parseLong(listIdImoveis.get(i)));
-			Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidadeImovel(Long.parseLong(listIdImoveis.get(i)));
-
-			gerarRegistroTipoCliente(getClienteSelecionado());
-			gerarRegistroTipoImovel(getImovelSelecionado());
-			gerarRegistrosTipoRamosAtividadeImovel(getImovelSelecionado());
-			gerarRegistroTipoServico(getImovelSelecionado(), getServicosSelecionado());
-			gerarRegistroTipoMedidor(getImovelSelecionado(), getMedidorSelecionado());
-			gerarRegistroTipoAnormalidadeImovel(getImovelSelecionado(), getAnormalidadeImovelSelecionado());
-
-			Bundle b = new Bundle();
-			Message msg = mHandler.obtainMessage();
-			b.putInt("finalizacao" + String.valueOf(increment), (i + 1));
-			msg.setData(b);
-			mHandler.sendMessage(msg);
-		}
-
-		return arquivo;
-	}
-
 	private static void gerarLinhaZero(Context context) {
 		registrosTipoZero = new StringBuffer();
 
@@ -474,24 +378,23 @@ public class ArquivoRetorno {
 		arquivo.append(registroTipoAnormalidadeImovel.toString());
 	}
 
-	public static Cliente getClienteSelecionado() {
+	private static Cliente getClienteSelecionado() {
 		return Controlador.getInstancia().getClienteSelecionado();
 	}
 
-	public static Imovel getImovelSelecionado() {
+	private static Imovel getImovelSelecionado() {
 		return Controlador.getInstancia().getImovelSelecionado();
 	}
 
-	public static Medidor getMedidorSelecionado() {
+	private static Medidor getMedidorSelecionado() {
 		return Controlador.getInstancia().getMedidorSelecionado();
 	}
 
-	public static Servicos getServicosSelecionado() {
+	private static Servicos getServicosSelecionado() {
 		return Controlador.getInstancia().getServicosSelecionado();
 	}
 
-	public static AnormalidadeImovel getAnormalidadeImovelSelecionado() {
+	private static AnormalidadeImovel getAnormalidadeImovelSelecionado() {
 		return Controlador.getInstancia().getAnormalidadeImovelSelecionado();
 	}
-
 }

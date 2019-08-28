@@ -1191,7 +1191,7 @@ import com.AndroidExplorer.ClienteTab;
 		return result;
 	}
 
-	public static void zipArquivoCompleto() throws IOException {
+	public static void gerarZip() throws IOException {
 		ArrayList<String> filesToZip = new ArrayList<String>();
     	File diretorio = new File(getRetornoRotaDirectory());
 
@@ -1212,8 +1212,8 @@ import com.AndroidExplorer.ClienteTab;
 	    	}
     	}
 
-        Compress zipRetornoCompleto = new Compress(filesToZip, nome);
-        zipRetornoCompleto.zip();
+        Compress arquivo = new Compress(filesToZip, nome);
+        arquivo.zip();
 	}
 	
 	public static String getDecimalView(String value){

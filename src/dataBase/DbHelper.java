@@ -63,7 +63,7 @@ public class DbHelper extends SQLiteOpenHelper {
     	"CREATE TABLE medidor (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, possui_medidor TEXT, numero_hidrometro TEXT, marca TEXT, capacidade TEXT, tipo_caixa_protecao TEXT, latitude TEXT, longitude TEXT, data TEXT)";
 
     private static final String DATABASE_GERAL_QUERY =
-    	"CREATE TABLE geral (id INTEGER PRIMARY KEY autoincrement, id_rota TEXT, localidade TEXT, setor TEXT, rota TEXT, qtd_imoveis_novos INTEGER, versao_arquivo TEXT, nome_arquivo TEXT, tipo_arquivo TEXT)";
+    	"CREATE TABLE geral (id INTEGER PRIMARY KEY autoincrement, id_rota TEXT, localidade TEXT, setor TEXT, rota TEXT, qtd_imoveis_novos INTEGER, versao_arquivo TEXT, nome_arquivo TEXT, tipo_arquivo TEXT, id_arquivo TEXT)";
 
     private static final String DATABASE_ANORMALIDADE_QUERY =
     	"CREATE TABLE anormalidade (id INTEGER PRIMARY KEY autoincrement, codigo INTEGER, descricao TEXT, data DATE)";

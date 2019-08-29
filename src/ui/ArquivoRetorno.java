@@ -148,7 +148,8 @@ public class ArquivoRetorno {
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(4, Controlador.getInstancia().getDadosGerais().getIdRota()));
 		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(10, context.getString(R.string.app_versao)));
 		registrosTipoZero.append(Util.adicionarCharDireita(1, Controlador.getInstancia().getDadosGerais().getTipoArquivo(), ' '));
-		
+		registrosTipoZero.append(Util.adicionarZerosEsquerdaNumero(11, Controlador.getInstancia().getDadosGerais().getIdArquivo()));
+
 		registrosTipoZero.append("\n");
 
 		arquivo.append(registrosTipoZero);

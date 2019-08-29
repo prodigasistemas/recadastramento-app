@@ -12,15 +12,15 @@ public class ParserUtil {
 	}
 
 	public String obterDadoParser(int tamanho) {
-		String retorno = "";
+		String retorno = null;
 
-		int posicaoInicial = contador;
-		contador += tamanho;
+		try {
+			int posicaoInicial = contador;
+			contador += tamanho;
 
-		if (contador <= fonte.length()) {
 			retorno = fonte.substring(posicaoInicial, contador);
-		} else {
-			retorno = null;
+		} catch (IndexOutOfBoundsException e) {
+			retorno = "";
 		}
 
 		this.setConteudo(retorno);

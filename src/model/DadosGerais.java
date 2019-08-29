@@ -9,6 +9,7 @@ public class DadosGerais {
 	private String nomeArquivo;
 	private String tipoArquivo;
 	private String versaoArquivo;
+	private String idArquivo;
 
 	private static DadosGerais instancia;
 
@@ -81,5 +82,13 @@ public class DadosGerais {
 
 	public void setVersaoArquivo(String versaoArquivo) {
 		this.versaoArquivo = versaoArquivo;
+	}
+
+	public String getIdArquivo() {
+		return idArquivo;
+	}
+
+	public void setIdArquivo(String idArquivo) {
+		this.idArquivo = idArquivo;
 	}
 }

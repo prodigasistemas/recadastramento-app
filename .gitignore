@@ -5,3 +5,4 @@ app.properties
 .DS_Store
 /doc
 /doc/*
+app.crt

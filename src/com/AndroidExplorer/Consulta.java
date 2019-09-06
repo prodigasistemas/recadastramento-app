@@ -193,9 +193,14 @@ public class Consulta extends ListActivity {
 	protected void onListItemClick(ListView l, View view, int position, long id) {
 		adapter.setSelectedPosition(position);
 
-		Controlador.getInstancia().setCadastroSelecionadoByListPositionInConsulta(position, filtroCondicoes);
-		Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-		startActivityForResult(myIntent, 0);
+		Imovel imovel = imoveis.get(position);
+		int status = imovel.getImovelStatus();
+
+		if (status != Constantes.IMOVEL_INFORMATIVO) {
+			Controlador.getInstancia().setCadastroSelecionadoByListPositionInConsulta(position, filtroCondicoes);
+			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
+			startActivityForResult(myIntent, 0);
+		}
 	}
 	
 	
@@ -285,6 +290,10 @@ public class Consulta extends ListActivity {
 
 			case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
 				imageView.setImageResource(R.drawable.novo_anormalidade);
+				break;
+				
+			case Constantes.IMOVEL_INFORMATIVO:
+				imageView.setImageResource(R.drawable.ic_informativo);
 				break;
 
 			default:

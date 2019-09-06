@@ -131,6 +131,8 @@ public class Constantes {
     public static final int IMOVEL_SALVO_COM_INCONSISTENCIA = 3;
     public static final int IMOVEL_NOVO = 4;
     public static final int IMOVEL_NOVO_COM_ANORMALIDADE = 5;
+    public static final int IMOVEL_INFORMATIVO = 6;
+    
     
     public static final int OPERACAO_CADASTRO_ALTERADO = 1;
     public static final int OPERACAO_CADASTRO_NOVO = 2;

@@ -63,7 +63,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 			dialog.dismiss();
 		}
 
-		Util.showNotifyDialog((FragmentActivity) activity, R.drawable.save, "", "Imóveis transmitidos com sucesso.",
+		Util.showNotifyDialog((FragmentActivity) activity, R.drawable.save, "Sucesso", "Imóveis transmitidos com sucesso.",
 				Constantes.DIALOG_ID_SUCESSO);
 	}
 }

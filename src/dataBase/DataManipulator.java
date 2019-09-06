@@ -1231,12 +1231,19 @@ public List<String> selectEnderecoImoveis(String condition){
 	   
 	   initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
 	   initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
-	   
-	   initialValues.put("observacao", parser.obterDadoParser(100));
 
 	   initialValues.put("percentual_abastecimento", parser.obterDadoParser(3) != null ? parser.getConteudo() : "000");
 	   
-	   initialValues.put("imovel_status", String.valueOf(Constantes.IMOVEL_A_SALVAR));
+		String informativo = parser.obterDadoParser(1);
+		String status = null;
+		if (informativo.length() > 0 && Integer.valueOf(informativo) == Constantes.SIM) {
+			status = String.valueOf(Constantes.IMOVEL_INFORMATIVO);
+		} else {
+			status = String.valueOf(Constantes.IMOVEL_A_SALVAR);
+		}
+
+		initialValues.put("imovel_status", status);
+       
 	   initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
 	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
 	   initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
@@ -1261,6 +1268,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		initialValues.put("path_image_1", "");
 		initialValues.put("path_image_2", "");
 		initialValues.put("data", "");
+
 		
 		return db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues);
 	}
@@ -1798,7 +1806,8 @@ public List<String> selectEnderecoImoveis(String condition){
 	
 	public List<Imovel> pesquisarImoveisFinalizados() {
 
-		Cursor cursor = getCursorTabelaImovel("imovel_enviado = " + Constantes.NAO + " and imovel_status != " + Constantes.IMOVEL_A_SALVAR);
+		Cursor cursor = getCursorTabelaImovel("imovel_enviado = " + Constantes.NAO + 
+				" AND imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		List<Imovel> imoveis = new ArrayList<Imovel>();
 

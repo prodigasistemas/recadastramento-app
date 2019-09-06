@@ -44,7 +44,7 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 	protected void onPreExecute() {
 		super.onPreExecute();
 		
-		imoveis = (List<String>) manipulator.selectIdImoveis("imovel_status != " + Constantes.IMOVEL_A_SALVAR);
+		imoveis = (List<String>) manipulator.selectIdImoveis("imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		if (!imoveis.isEmpty()) {
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);

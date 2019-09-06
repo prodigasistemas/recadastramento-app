@@ -38,7 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import background.EnviarCadastroOnlineThread;
+import background.TransmitirImovelTask;
 import business.Controlador;
 
 public class AnormalidadeTab extends Fragment implements LocationListener {
@@ -291,7 +291,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 						verificarImovel();
 						salvar();
 						finalizar();
-						configurarMensagem();
 					}
 				} else if (imovel.getImovelStatus() != Constantes.IMOVEL_A_SALVAR) {
 					verificarImovel();
@@ -300,8 +299,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 					Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
 					
 					finalizar();
-					configurarMensagem();
-					
 				} else {
 					verificarAbasFinalizadas();
 				}
@@ -311,33 +308,6 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		});
 	}
 	
-	private void configurarMensagem() {
-		String mensagem = "";
-		switch (imovel.getImovelStatus()) {
-
-		case Constantes.IMOVEL_SALVO:
-			mensagem = "Imóvel finalizado com sucesso.";
-			break;
-
-		case Constantes.IMOVEL_SALVO_COM_ANORMALIDADE:
-			mensagem = "Imóvel com anormalidade finalizado com sucesso.";
-			break;
-
-		case Constantes.IMOVEL_NOVO:
-			mensagem = "Imóvel novo criado com sucesso.";
-			break;
-
-		case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
-			mensagem = "Imóvel novo com anormalidade criado com sucesso.";
-			break;
-
-		default:
-			break;
-		}
-
-		showNotifyDialog(R.drawable.save, "", mensagem, Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO);
-	}
-
 	private void verificarAbasFinalizadas() {
 		String mensagem = null;
 		if (!Controlador.getInstancia().getClienteSelecionado().isTabSaved()) {
@@ -356,9 +326,8 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	private void finalizar() {
 		((MainTab) getActivity()).setTabColor();
 		anormalidadeImovel.setTabSaved(true);
-		
-		EnviarCadastroOnlineThread enviar = new EnviarCadastroOnlineThread(view.getContext(), imovel);
-		enviar.start();
+
+		new TransmitirImovelTask(getActivity()).execute(imovel);
 	}
 	
 	private void salvar() {

@@ -206,7 +206,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-		final int posicao = Controlador.getInstancia().getCadastroListPosition();
+		final int posicao = Controlador.getInstancia().getPosicaoListaImoveis();
 
 		// Handle item selection
 	    switch (item.getItemId()) {
@@ -214,11 +214,11 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	    	Controlador.getInstancia().isCadastroAlterado();
 	    	
-	    	if(Controlador.getInstancia().getCadastroListPosition() == (getCadastroDataManipulator().getNumeroImoveis())-1){
+	    	if(Controlador.getInstancia().getPosicaoListaImoveis() == (getCadastroDataManipulator().getNumeroImoveis())-1){
 				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
 
 			}else{
-		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()+1);
+		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getPosicaoListaImoveis()+1);
 			}
 	    	finish();
 			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
@@ -229,10 +229,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	    	Controlador.getInstancia().isCadastroAlterado();
 	    	
-	    	if(Controlador.getInstancia().getCadastroListPosition() <= 0){
+	    	if(Controlador.getInstancia().getPosicaoListaImoveis() <= 0){
 				Controlador.getInstancia().setCadastroSelecionadoByListPosition((int)getCadastroDataManipulator().getNumeroImoveis()-1);
 			}else{
-		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition()-1);
+		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getPosicaoListaImoveis()-1);
 			}
 	    	finish();
 	    	
@@ -295,7 +295,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 				
 				public void onClick(View v) {
 					dialog.dismiss();
-					Controlador.getInstancia().setCadastroListPosition(posicao);
+					Controlador.getInstancia().setPosicaoListaImoveis(posicao);
 					if (isInicioLista(posicao)) {
 					
 						indiceNovoImovel = posicao + 1;
@@ -341,7 +341,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	    		
 	    		public void onClick(View v) {
 	    			dialog.dismiss();
-	    			Controlador.getInstancia().setCadastroListPosition(posicao);
+	    			Controlador.getInstancia().setPosicaoListaImoveis(posicao);
 	    			int qtdImoveisRota = getCadastroDataManipulator().getNumeroImoveis();
 
 	    			if (qtdImoveisRota == 1) {
@@ -387,7 +387,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	        
 	    case R.id.novoSublote:
 
-	    	Controlador.getInstancia().setCadastroListPosition(posicao);
+	    	Controlador.getInstancia().setPosicaoListaImoveis(posicao);
 			
 			indiceNovoImovel = posicao + 1;
 			preencheSubLote(getImovelSelecionado());
@@ -650,10 +650,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		if (indiceNovoImovel != null) {
 			Controlador.getInstancia().setCadastroSelecionadoByListPosition(indiceNovoImovel);
 			indiceNovoImovel = null;
-		} else if (Controlador.getInstancia().getCadastroListPosition() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) - 1) {
+		} else if (Controlador.getInstancia().getPosicaoListaImoveis() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) - 1) {
 			Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
 		} else {
-			Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getCadastroListPosition() + 1);
+			Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getPosicaoListaImoveis() + 1);
 		}
 
 		finish();

@@ -176,4 +176,7 @@ public class Cliente extends Model{
 		this.novoResponsavel = novoResponsavel;
 	}
 	
+	public boolean matriculaUsuarioInvalida() {
+		return usuario.getMatricula() == Constantes.NULO_INT || usuario.getMatricula() == 0;
+	}
 }

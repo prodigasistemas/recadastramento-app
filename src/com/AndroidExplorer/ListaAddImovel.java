@@ -154,7 +154,7 @@ public class ListaAddImovel extends ListActivity {
 			
 		case Constantes.DIALOG_ID_ERRO:
 
-			View layout = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
+			View layout = inflater.inflate(R.layout.custom_dialog, (ViewGroup) findViewById(R.id.layout_root));
 			((TextView) layout.findViewById(R.id.messageDialog)).setText(dialogMessage);
 
 			if (id == Constantes.DIALOG_ID_SUCESSO) {
@@ -181,7 +181,7 @@ public class ListaAddImovel extends ListActivity {
 			
 		case Constantes.DIALOG_ID_ADD_NOVO_IMOVEL_APOS_ULTIMO:
 
-			final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmationdialog, (ViewGroup) findViewById(R.id.root));
+			final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmation_dialog, (ViewGroup) findViewById(R.id.root));
 
 			if (id == Constantes.DIALOG_ID_ADD_NOVO_IMOVEL) {
 

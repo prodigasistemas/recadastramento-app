@@ -9,23 +9,19 @@ public class Constantes {
 
     public static final int DIALOG_ID_PASSWORD = 0;
     public static final int DIALOG_ID_CARREGAR_ROTA = 1;
-    public static final int DIALOG_ID_CLEAN_DB = 2;
-    public static final int DIALOG_ID_GERAR_ARQUIVO_RETORNO = 3;
-    public static final int DIALOG_ID_SUCESSO = 4;
-    public static final int DIALOG_ID_AVISO = 5;
-    public static final int DIALOG_ID_ERRO = 6;
-    public static final int DIALOG_ID_ERRO_GPS_DESLIGADO = 7;
-    public static final int DIALOG_ID_NOVO_IMOVEL_ANTES_PRIMEIRO = 8;
-    public static final int DIALOG_ID_NOVO_IMOVEL_APOS_ULTIMO = 9;
-    public static final int DIALOG_ID_ADD_NOVO_IMOVEL = 10;
-    public static final int DIALOG_ID_ADD_NOVO_IMOVEL_ANTES_PRIMEIRO = 11;
-    public static final int DIALOG_ID_ADD_NOVO_IMOVEL_APOS_ULTIMO = 12;
-    public static final int DIALOG_ID_CONFIRMA_VOLTAR = 13;
-    public static final int DIALOG_ID_CONFIRMA_MUDANCA = 14;
-    public static final int DIALOG_ID_CONFIRMA_EXCLUSAO = 15;
-    public static final int DIALOG_ID_CONFIRMA_IMOVEL_SALVO = 16;
-    public static final int DIALOG_ID_IMOVEL_EXCLUIDO = 17;
-    public static final int DIALOG_ID_EXPORTAR_BANCO = 18;
+    public static final int DIALOG_ID_LIMPAR_TUDO = 2;
+    public static final int DIALOG_ID_SUCESSO = 3;
+    public static final int DIALOG_ID_AVISO = 4;
+    public static final int DIALOG_ID_ERRO = 5;
+    public static final int DIALOG_ID_ERRO_GPS_DESLIGADO = 6;
+    public static final int DIALOG_ID_ADD_NOVO_IMOVEL = 7;
+    public static final int DIALOG_ID_ADD_NOVO_IMOVEL_ANTES_PRIMEIRO = 8;
+    public static final int DIALOG_ID_ADD_NOVO_IMOVEL_APOS_ULTIMO = 9;
+    public static final int DIALOG_ID_CONFIRMA_VOLTAR = 10;
+    public static final int DIALOG_ID_CONFIRMA_MUDANCA = 11;
+    public static final int DIALOG_ID_CONFIRMA_EXCLUSAO = 12;
+    public static final int DIALOG_ID_CONFIRMA_IMOVEL_SALVO = 13;
+    public static final int DIALOG_ID_EXPORTAR_BANCO = 14;
     
     public static final int FRAGMENT_ID_CLIENTE = 0;
     public static final int FRAGMENT_ID_IMOVEL = 1;

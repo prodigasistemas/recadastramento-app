@@ -12,14 +12,17 @@ import java.util.Date;
 import java.util.Vector;
 
 import android.annotation.SuppressLint;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import business.Controlador;
 
 import com.AndroidExplorer.ClienteTab;
+import com.AndroidExplorer.NotifyAlertDialogFragment;
 
-@SuppressLint({ "SdCardPath", "SimpleDateFormat", "DefaultLocale" }) public class Util {
+@SuppressLint({ "SdCardPath", "SimpleDateFormat", "DefaultLocale" })
+public class Util {
 
 	static boolean isUpdatingCep;
 	static boolean isUpdatingIptu;
@@ -1191,29 +1194,29 @@ import com.AndroidExplorer.ClienteTab;
 		return result;
 	}
 
-	public static void gerarZip() throws IOException {
+	public static void gerarZipRetorno() throws IOException {
 		ArrayList<String> filesToZip = new ArrayList<String>();
-    	File diretorio = new File(getRetornoRotaDirectory());
+		File diretorio = new File(getRetornoRotaDirectory());
 
-    	String nome = diretorio.getPath() + "/" + getRotaFileName() + ".zip";
+		String nome = diretorio.getPath() + "/" + getRotaFileName() + ".zip";
 
-    	File[] files = diretorio.listFiles();
-    	
-    	if(files != null){
+		File[] files = diretorio.listFiles();
 
-    		for(int i=0; i < files.length; i++){
+		if (files != null) {
 
-    			File file = files[i];
-	    		if(!file.isDirectory()){
-	    			if ( !file.getName().endsWith(".zip") && !file.getName().startsWith("._")){
-	    				filesToZip.add(file.getPath());
-	    			}
-	    		}
-	    	}
-    	}
+			for (int i = 0; i < files.length; i++) {
 
-        Compress arquivo = new Compress(filesToZip, nome);
-        arquivo.zip();
+				File file = files[i];
+				if (!file.isDirectory()) {
+					if (!file.getName().endsWith(".zip") && !file.getName().startsWith("._")) {
+						filesToZip.add(file.getPath());
+					}
+				}
+			}
+		}
+
+		Compress arquivo = new Compress(filesToZip, nome);
+		arquivo.zip();
 	}
 	
 	public static String getDecimalView(String value){
@@ -1228,12 +1231,14 @@ import com.AndroidExplorer.ClienteTab;
 		return value.replace(".","");
 	}
 	
-	@SuppressLint("NewApi") public static String removerCaractereEspecial(String valor) {
+	@SuppressLint("NewApi") 
+	public static String removerCaractereEspecial(String valor) {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", " ");
 	}
 	
-	@SuppressLint("NewApi") public static String removerCaractereEspecialNovo(String valor) {
+	@SuppressLint("NewApi")
+	public static String removerCaractereEspecialNovo(String valor) {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
@@ -1249,5 +1254,10 @@ import com.AndroidExplorer.ClienteTab;
 	
 	public static String removerZerosAEsquerda(String valor) {
 		return valor.trim().replaceFirst("^0+(?!$)", "");
+	}
+	
+	public static void showNotifyDialog(FragmentActivity activity, int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment dialog = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		dialog.show((activity).getSupportFragmentManager(), "dialog");
 	}
 }

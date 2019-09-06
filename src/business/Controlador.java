@@ -1,6 +1,5 @@
 package business;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -17,12 +16,10 @@ import model.Registro;
 import model.Servicos;
 import model.Usuario;
 import util.Constantes;
+import util.LogUtil;
 import util.Util;
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.widget.Toast;
 import dataBase.DataManipulator;
 
@@ -30,8 +27,6 @@ public class Controlador {
 
 	public static Controlador instancia;
 	private boolean permissionGranted = false;
-	private int qtdRegistros = 0;
-	private static int linhasLidas = 0;
 
 	private static Cliente clienteSelecionado = new Cliente();
 	private static Imovel imovelSelecionado = new Imovel();
@@ -44,17 +39,15 @@ public class Controlador {
 	private static Usuario usuario = new Usuario();
 
 	private static long idCadastroSelecionado = 0;
-	private static int cadastroListPosition = -1;
+	private static int posicaoListaImoveis = -1;
 
-	private static int isRotaCarregadaOk = Constantes.NAO;
-
-	DataManipulator manipulator;
+	private DataManipulator manipulator;
 
 	public static Controlador getInstancia() {
 		if (Controlador.instancia == null) {
 			Controlador.instancia = new Controlador();
 		}
-		
+
 		return Controlador.instancia;
 	}
 
@@ -89,7 +82,7 @@ public class Controlador {
 	public Registro getRamosAtividade() {
 		return Controlador.ramosAtividade;
 	}
-	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -125,15 +118,15 @@ public class Controlador {
 	public void setRamosAtividade(Registro ramosAtividade) {
 		Controlador.ramosAtividade = ramosAtividade;
 	}
-	
+
 	public void setUsuario(Usuario usuario) {
 		Controlador.usuario = usuario;
 	}
 
-	public void setCadastroSelecionadoByListPosition(int listPosition) {
-		initCadastroTabs();
-		setCadastroListPosition(listPosition);
-		idCadastroSelecionado = getIdCadastroSelecionado(listPosition, null);
+	public void setCadastroSelecionadoByListPosition(int posicao) {
+		iniciarTabs();
+		setPosicaoListaImoveis(posicao);
+		idCadastroSelecionado = getIdCadastroSelecionado(posicao, null);
 		manipulator.selectCliente(idCadastroSelecionado);
 		manipulator.selectImovel(idCadastroSelecionado);
 		manipulator.selectServico(idCadastroSelecionado);
@@ -142,9 +135,9 @@ public class Controlador {
 	}
 
 	public void setCadastroSelecionadoByListPositionInConsulta(int listPositionInConsulta, String condition) {
-		initCadastroTabs();
+		iniciarTabs();
 		idCadastroSelecionado = getIdCadastroSelecionado(listPositionInConsulta, condition);
-		setCadastroListPosition(getCadastroListPositionById(idCadastroSelecionado));
+		setPosicaoListaImoveis(getCadastroListPositionById(idCadastroSelecionado));
 
 		manipulator.selectCliente(idCadastroSelecionado);
 		manipulator.selectImovel(idCadastroSelecionado);
@@ -154,7 +147,7 @@ public class Controlador {
 	}
 
 	public void setCadastroSelecionado(long id) {
-		initCadastroTabs();
+		iniciarTabs();
 		idCadastroSelecionado = id;
 		manipulator.selectCliente(idCadastroSelecionado);
 		manipulator.selectImovel(idCadastroSelecionado);
@@ -164,11 +157,11 @@ public class Controlador {
 	}
 
 	public void setCadastroSelecionadoNovoImovel() {
-		initCadastroTabs();
+		iniciarTabs();
 		idCadastroSelecionado = -1;
 	}
 
-	public void initCadastroTabs() {
+	public void iniciarTabs() {
 		clienteSelecionado = new Cliente();
 		imovelSelecionado = new Imovel();
 		medidorSelecionado = new Medidor();
@@ -195,7 +188,7 @@ public class Controlador {
 				break;
 			}
 		}
-		
+
 		return position;
 	}
 
@@ -233,118 +226,8 @@ public class Controlador {
 			medidorSelecionado = medidorEditado;
 			anormalidadeImovelSelecionado = anormalidadeImovelEditado;
 		}
-		
+
 		return result;
-	}
-
-	public void carregarDadosParaRecordStore(String fileName, BufferedReader input, Handler handler, Context context) {
-		String linha = "";
-		linhasLidas = 0;
-
-		if (input != null) {
-			try {
-				Bundle bundle = new Bundle();
-
-				while ((linha = input.readLine()) != null) {
-
-					if (linhasLidas == 0) {
-						qtdRegistros = Integer.parseInt(linha);
-						linhasLidas++;
-						continue;
-					}
-
-					linhasLidas++;
-
-					linha = Util.removerCaractereEspecial(linha);
-
-					int tipoRegistro = Integer.parseInt(linha.substring(0, 2));
-
-					if (tipoRegistro == Constantes.REGISTRO_TIPO_CLIENTE) {
-						manipulator.insertCliente(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_IMOVEL) {
-						manipulator.insertImovel(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMOS_ATIVIDADE_IMOVEL) {
-						manipulator.insertRamosAtividadeImovel(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SERVICO) {
-						manipulator.insertServico(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_HIDROMETRO) {
-						manipulator.insertMedidor(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE_IMOVEL) {
-						manipulator.insertAnormalidadeImovel(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_GERAL) {
-						manipulator.insertDadosGerais(linha, fileName);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ANORMALIDADE) {
-						manipulator.insertAnormalidade(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_RAMO_ATIVIDADE) {
-						manipulator.insertRamoAtividade(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_AGUA) {
-						manipulator.insertSituacaoLigacaoAgua(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_SITUACAO_ESGOTO) {
-						manipulator.insertSituacaoLigacaoEsgoto(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_PROTECAO_HIDROMETRO) {
-						manipulator.insertProtecaoHidrometro(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_FONTE_ABASTECIMENTO) {
-						manipulator.insertFonteAbastecimento(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_MARCA_HIDROMETRO) {
-						manipulator.insertMarcaHidrometro(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOCAl_INSTALACAO_RAMAL) {
-						manipulator.insertLocalInstalacaoRamal(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_CAPACIDADE_HIDROMETRO) {
-						manipulator.insertCapacidadeHidrometro(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_LOGRADOURO) {
-						manipulator.insertLogradouro(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_CLASSE_SOCIAL) {
-						manipulator.insertClasseSocial(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_USO) {
-						manipulator.insertTipoUso(linha);
-						
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_HIDROMETRO) {
-						manipulator.insertAcessoHidrometro(linha);
-					
-					} else if (tipoRegistro == Constantes.REGISTRO_TIPO_ACESSO_USUARIO) {
-						manipulator.insertUsuario(linha);
-					}
-
-					if (linhasLidas < qtdRegistros) {
-						Message msg = handler.obtainMessage();
-						bundle.putInt("total", linhasLidas);
-						msg.setData(bundle);
-						handler.sendMessage(msg);
-					}
-				}
-
-				setRotaCarregamentoOk(Constantes.SIM);
-
-				Message msg = handler.obtainMessage();
-				bundle.putInt("total", linhasLidas);
-				msg.setData(bundle);
-				handler.sendMessage(msg);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	public int getQtdRegistros() {
-		return qtdRegistros;
 	}
 
 	public void setPermissionGranted(boolean state) {
@@ -377,36 +260,27 @@ public class Controlador {
 		return idCadastroSelecionado;
 	}
 
-	public int getCadastroListPosition() {
-		return cadastroListPosition;
+	public int getPosicaoListaImoveis() {
+		return posicaoListaImoveis;
 	}
 
 	@SuppressWarnings("static-access")
-	public void setCadastroListPosition(int position) {
-		this.cadastroListPosition = position;
-		manipulator.updateConfiguracao("posicao_cadastro_selecionado", position);
+	public void setPosicaoListaImoveis(int posicao) {
+		this.posicaoListaImoveis = posicao;
+		manipulator.updateConfiguracao("posicao_cadastro_selecionado", posicao);
 	}
 
-	public boolean databaseExists(Context context) {
-		File dbFile = new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME);
-
-		initiateDataManipulator(context);
-
-		return (dbFile.exists() && manipulator.selectAnormalidades().size() > 0);
+	public boolean databaseExists() {
+		File db = new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME);
+		return db.exists();
 	}
 
-	@SuppressWarnings("static-access")
-	public int isDatabaseRotaCarregadaOk() {
-
+	public boolean rotaCarregada() {
 		if (manipulator.selectConfiguracaoElement("rota_carregada") == Constantes.SIM) {
-			this.isRotaCarregadaOk = Constantes.SIM;
+			return true;
+		} else {
+			return false;
 		}
-
-		return this.isRotaCarregadaOk;
-	}
-
-	public void setRotaCarregamentoOk(int isRotaCarregadaOk) {
-		manipulator.updateConfiguracao("rota_carregada", Constantes.SIM);
 	}
 
 	public void deleteDatabase() {
@@ -414,66 +288,64 @@ public class Controlador {
 		File file = new File(strDBFilePath);
 		file.delete();
 	}
-	
+
 	@SuppressWarnings("resource")
 	public void exportDB(Context context) {
-        try {
-            File sd = Environment.getExternalStorageDirectory();
+		try {
+			File sd = Environment.getExternalStorageDirectory();
 
-            if (sd.canWrite()) {
-            	String  caminho = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
-	            
-	            File original = new File(caminho);
-	            File diretorio = new File(sd + Constantes.DIRETORIO_EXPORTACAO_BANCO);
-	            
-	            if(!diretorio.exists()) {
-	            	diretorio.mkdirs();
-	            }
-	            
-	            File backup = getBackup(diretorio);
-	            
-	            FileChannel origem = new FileInputStream(original).getChannel();
-	            FileChannel destino = new FileOutputStream(backup).getChannel();
-	            
-	            destino.transferFrom(origem, 0, origem.size());
-	            
-	            origem.close();
-	            destino.close();
-	            
-	            Toast.makeText(context, "Banco de Dados exportado para "+Constantes.DIRETORIO_EXPORTACAO_BANCO, Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-	
+			if (sd.canWrite()) {
+				String caminho = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
+
+				File original = new File(caminho);
+				File diretorio = new File(sd + Constantes.DIRETORIO_EXPORTACAO_BANCO);
+
+				if (!diretorio.exists()) {
+					diretorio.mkdirs();
+				}
+
+				File backup = getBackup(diretorio);
+
+				FileChannel origem = new FileInputStream(original).getChannel();
+				FileChannel destino = new FileOutputStream(backup).getChannel();
+
+				destino.transferFrom(origem, 0, origem.size());
+
+				origem.close();
+				destino.close();
+
+				Toast.makeText(context, "Banco de Dados exportado para " + Constantes.DIRETORIO_EXPORTACAO_BANCO, Toast.LENGTH_LONG).show();
+			}
+		} catch (IOException e) {
+			LogUtil.salvar(Controlador.class, "Erro ao exportar banco de dados", e);
+		}
+	}
+
 	@SuppressWarnings("resource")
 	public void importDB(Context context) {
-        try {
-            File sd = Environment.getExternalStorageDirectory();
+		try {
+			File sd = Environment.getExternalStorageDirectory();
 
-            if (sd.canWrite()) {
-            	File diretorio = new File(sd + Constantes.DIRETORIO_EXPORTACAO_BANCO);
-	            File original = new File(diretorio, "cadastro.db");
-	            
-	            FileChannel origem = new FileInputStream(original).getChannel();
-	            FileChannel destino = new FileOutputStream(new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME)).getChannel();
-	            
-	            destino.transferFrom(origem, 0, origem.size());
-	            
-	            origem.close();
-	            destino.close();
-	            
-	            Toast.makeText(context, "Banco de Dados importado com sucesso!", Toast.LENGTH_LONG).show();
-            }
-        } catch (Exception e) {
-            Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-	
+			if (sd.canWrite()) {
+				File diretorio = new File(sd + Constantes.DIRETORIO_EXPORTACAO_BANCO);
+				File original = new File(diretorio, "cadastro.db");
+
+				FileChannel origem = new FileInputStream(original).getChannel();
+				FileChannel destino = new FileOutputStream(new File(Constantes.DATABASE_PATH + Constantes.DATABASE_NAME)).getChannel();
+
+				destino.transferFrom(origem, 0, origem.size());
+
+				origem.close();
+				destino.close();
+
+				Toast.makeText(context, "Banco de Dados importado com sucesso.", Toast.LENGTH_LONG).show();
+			}
+		} catch (IOException e) {
+			LogUtil.salvar(Controlador.class, "Erro ao importar banco de dados", e);
+		}
+	}
+
 	private File getBackup(File diretorio) {
 		return new File(diretorio, "cadastro_" + Util.getRotaFileName() + ".db");
 	}
-
-	
 }

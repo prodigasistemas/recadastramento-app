@@ -54,9 +54,9 @@ public class ListaImoveis extends ListActivity {
 				adapter = new ListaImoveisAdapter(this, enderecos);
 				setListAdapter(adapter);
 
-				if (Controlador.getInstancia().getCadastroListPosition() > -1) {
-					this.setSelection(Controlador.getInstancia().getCadastroListPosition());
-					adapter.setSelectedPosition(Controlador.getInstancia().getCadastroListPosition());
+				if (Controlador.getInstancia().getPosicaoListaImoveis() > -1) {
+					this.setSelection(Controlador.getInstancia().getPosicaoListaImoveis());
+					adapter.setSelectedPosition(Controlador.getInstancia().getPosicaoListaImoveis());
 				}
 			}
 		}

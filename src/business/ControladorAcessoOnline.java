@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.util.Vector;
 
 import ui.MessageDispatcher;
+import util.LogUtil;
 import util.Util;
 
 public class ControladorAcessoOnline {
 
-	private static final byte ATUALIZAR_CADASTRO = 1;
-
-	private boolean requestOK = false;
+	private static final byte TRANSMITIR_IMOVEL = 1;
 
 	private static ControladorAcessoOnline instance;
-
 	private static MessageDispatcher dispatcher;
+	
+	private boolean imovelTransmitido = false;
 
 	private ControladorAcessoOnline() {
 		ControladorAcessoOnline.dispatcher = MessageDispatcher.getInstancia();
@@ -41,7 +41,8 @@ public class ControladorAcessoOnline {
 	public void enviar(Vector<Object> parametros) {
 		dispatcher.setMensagem(Util.empacotarParametros(parametros));
 		dispatcher.enviarMensagem();
-		requestOK = MessageDispatcher.getRespostaServidor().equals(MessageDispatcher.RESPOSTA_SUCESSO);
+		
+		imovelTransmitido = MessageDispatcher.getRespostaServidor().equals(MessageDispatcher.RESPOSTA_SUCESSO);
 	}
 
 	public void setURL(String url) {
@@ -55,19 +56,22 @@ public class ControladorAcessoOnline {
 	 * @param arquivo Array de bytes do arquivo de retorno
 	 * @throws IOException
 	 */
-	public void atualizarCadastro(byte[] arquivo) throws IOException {
-		ByteArrayOutputStream bais = new ByteArrayOutputStream();
-		bais.write(ATUALIZAR_CADASTRO);
-		bais.write(arquivo);
+	public void transmitirImovel(byte[] arquivo) {
+		try {
+			ByteArrayOutputStream bais = new ByteArrayOutputStream();
+			bais.write(TRANSMITIR_IMOVEL);
+			bais.write(arquivo);
+			Vector<Object> parametros = new Vector<Object>();
+			parametros.addElement(bais.toByteArray());
+			parametros.trimToSize();
 
-		Vector<Object> parametros = new Vector<Object>();
-		parametros.addElement(bais.toByteArray());
-		parametros.trimToSize();
-
-		this.enviar(parametros);
+			this.enviar(parametros);
+		} catch (IOException e) {
+			LogUtil.salvar(ControladorAcessoOnline.class, "Erro ao escrever ByteArrayOutputStream.", e);
+		}
 	}
 
-	public boolean isRequestOK() {
-		return requestOK;
+	public boolean isImovelTransmitido() {
+		return imovelTransmitido;
 	}
 }

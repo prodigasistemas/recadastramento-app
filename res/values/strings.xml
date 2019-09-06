@@ -12,7 +12,7 @@
     <color name="white">#FFFFFF</color>
 
     <string name="app_name">Cadastro</string>
-    <string name="app_versao">1.5.1</string>
+    <string name="app_versao">1.6.0</string>
     <string name="user">Usuário</string>
     <string name="password">Senha</string>
     <string name="auth_problem">Dados Incorretos</string>
@@ -20,7 +20,7 @@
     <string name="menu_info">Informações do Roteiro</string>
     <string name="menu_consulta">Consultar Cadastro</string>
     <string name="menu_relatorio">Relatórios</string>
-    <string name="menu_cadastros_concluidos">Enviar Concluídos </string>
+    <string name="menu_transmitir_finalizados">Transmitir Finalizados</string>
     <string name="menu_novo_roteiro">Limpar Tudo</string>
     <string name="menu_arquivo_retorno">Arquivo de Retorno</string>
     <string name="menu_exportar_banco">Exportar Banco de Dados</string>

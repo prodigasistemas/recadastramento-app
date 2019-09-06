@@ -1,27 +1,19 @@
 package com.AndroidExplorer;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import ui.FileManager;
 import util.Constantes;
 import util.Util;
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -36,18 +28,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import background.CarregarRotaThread;
+import background.CarregarRotaTask;
 import business.Controlador;
 
 public class ListaRotas extends ListActivity {
 
-	private ArrayList<String> item = null;
-	private ArrayList<String> path = null;
-	private String root;
-	private String fileName;
-	private CarregarRotaThread progThread;
-	private ProgressDialog progDialog;
-	MySimpleArrayAdapter fileList;
+	private MySimpleArrayAdapter adapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +65,7 @@ public class ListaRotas extends ListActivity {
 			File path = Util.getExternalStorageDirectory();
 			path.getAbsolutePath();
 			Log.i("ExternalStorage", "ExternalStorage :" + path.getAbsolutePath());
-			root = path.getAbsolutePath() + Constantes.DIRETORIO_ROTAS;
+			String root = path.getAbsolutePath() + Constantes.DIRETORIO_ROTAS;
 			getDir(root);
 
 			// Display a messagebox.
@@ -87,26 +73,11 @@ public class ListaRotas extends ListActivity {
 		}
 	}
 
-	// Handler on the main (UI) thread that will receive messages from the second thread and update the progress.
-	final Handler handler = new Handler() {
-		public void handleMessage(Message msg) {
-			// Get the current value of the variable total from the message data and update the progress bar.
-			int total = msg.getData().getInt("total");
-			progDialog.setProgress(total);
+	private void getDir(String root) {
 
-			if (total >= Controlador.getInstancia().getQtdRegistros() || progThread.getCustomizedState() == CarregarRotaThread.DONE) {
-				dismissDialog(Constantes.DIALOG_ID_CARREGAR_ROTA);
-				setResult(RESULT_FIRST_USER, new Intent(getBaseContext(), Fachada.class));
-				finish();
-			}
-		}
-	};
-
-	private void getDir(String dirPath) {
-
-		item = new ArrayList<String>();
-		path = new ArrayList<String>();
-		File f = new File(dirPath);
+		ArrayList<String> item = new ArrayList<String>();
+		ArrayList<String> path = new ArrayList<String>();
+		File f = new File(root);
 		File[] files = f.listFiles();
 
 		if (files != null) {
@@ -121,94 +92,16 @@ public class ListaRotas extends ListActivity {
 				}
 			}
 		}
-		fileList = new MySimpleArrayAdapter(this, item);
-		setListAdapter(fileList);
+		adapter = new MySimpleArrayAdapter(this, item);
+		setListAdapter(adapter);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View view, int position, long id) {
-
-		// user clicked a list item, make it "selected"
-		fileList.setSelectedPosition(position);
-
-		if (progThread != null && progThread.getCustomizedState() == CarregarRotaThread.DONE) {
-			setResult(RESULT_FIRST_USER, new Intent(getBaseContext(), Fachada.class));
-			finish();
-
-		} else {
-			fileName = fileList.getListElementName(position);
-			carregaRotaDialogButtonClick();
-
-		}
-	}
-
-	public void carregaRotaDialogButtonClick() {
+		adapter.setSelectedPosition(position);
+		String nomeArquivo = adapter.getListElementName(position);
 		Controlador.getInstancia().initiateDataManipulator(getBaseContext());
-		showDialog(Constantes.DIALOG_ID_CARREGAR_ROTA);
-	}
-
-	@Override
-	protected Dialog onCreateDialog(final int id) {
-
-		if (id == Constantes.DIALOG_ID_CARREGAR_ROTA) {
-			progDialog = new ProgressDialog(this);
-			progDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			progDialog.setMessage("Por favor, espere enquanto a rota está sendo carregada...");
-			progDialog.setCancelable(false);
-			progDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-
-				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-					if (keyCode == KeyEvent.KEYCODE_SEARCH && event.getRepeatCount() == 0) {
-						return true; // Pretend we processed it
-
-					} else if (keyCode == KeyEvent.KEYCODE_HOME && event.getRepeatCount() == 0) {
-						return true; // Pretend we processed it
-					}
-					return false; // Any other keys are still processed as normal
-				}
-			});
-
-			try {
-				int fileLineNumber = FileManager.getFileLineNumber(fileName);
-
-				if (fileLineNumber == Constantes.NULO_INT) {
-					showDialog(Constantes.DIALOG_ID_ERRO);
-					return null;
-				}
-				progDialog.setMax(fileLineNumber);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-			progThread = new CarregarRotaThread(handler, fileName, this);
-			progThread.start();
-			return progDialog;
-
-		} else if (id == Constantes.DIALOG_ID_ERRO) {
-
-			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			AlertDialog.Builder builder;
-
-			View layout = inflater.inflate(R.layout.custon_dialog, (ViewGroup) findViewById(R.id.layout_root));
-			((TextView) layout.findViewById(R.id.messageDialog)).setText("Arquivo de rota não localizado. Verifique se o cartão de memória está em uso.");
-
-			((ImageView) layout.findViewById(R.id.imageDialog)).setImageResource(R.drawable.aviso);
-
-			builder = new AlertDialog.Builder(this);
-			builder.setView(layout);
-			builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-				public void onClick(DialogInterface dialog, int whichButton) {
-					removeDialog(id);
-				}
-			});
-
-			AlertDialog messageDialog = builder.create();
-			return messageDialog;
-		}
-
-		return null;
+		new CarregarRotaTask(this, nomeArquivo).execute();
 	}
 
 	public class MySimpleArrayAdapter extends ArrayAdapter<String> {
@@ -233,6 +126,7 @@ public class ListaRotas extends ListActivity {
 			return selectedPos;
 		}
 
+		@SuppressLint({ "ViewHolder", "InflateParams" })
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = context.getLayoutInflater();
@@ -292,7 +186,7 @@ public class ListaRotas extends ListActivity {
 		case R.id.importarBanco:
 			Controlador.getInstancia().importDB(ListaRotas.this);
 			Intent intent = new Intent(ListaRotas.this, MenuPrincipal.class);
-            startActivity(intent);
+			startActivity(intent);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

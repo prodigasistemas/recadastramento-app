@@ -293,7 +293,7 @@ public class Consulta extends ListActivity {
 				break;
 				
 			case Constantes.IMOVEL_INFORMATIVO:
-				imageView.setImageResource(R.drawable.ic_informativo);
+				imageView.setImageResource(R.drawable.informativo);
 				break;
 
 			default:

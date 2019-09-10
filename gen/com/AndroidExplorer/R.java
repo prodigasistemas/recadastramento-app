@@ -52,8 +52,8 @@ public final class R {
         public static final int edittext_rounded_corners=0x7f020011;
         public static final int fundocadastro=0x7f020012;
         public static final int gsan=0x7f020013;
-        public static final int ic_informativo=0x7f020014;
-        public static final int icon=0x7f020015;
+        public static final int icon=0x7f020014;
+        public static final int informativo=0x7f020015;
         public static final int linearlayout_rounded_corners=0x7f020016;
         public static final int linearlayout_rounded_corners_2=0x7f020017;
         public static final int logo_cosanpa=0x7f020018;

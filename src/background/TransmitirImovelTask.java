@@ -6,8 +6,11 @@ import util.Constantes;
 import util.Util;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 
+import com.AndroidExplorer.MainTab;
 import com.AndroidExplorer.R;
 
 public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
@@ -57,10 +60,10 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 			dialog.dismiss();
 		}
 
-		exibirMensagem();
+		Util.exibirMensagem(activity, "Sucesso", getMensagem(), R.drawable.save, getListener(), null);
 	}
 
-	private void exibirMensagem() {
+	private String getMensagem() {
 		String mensagem = "";
 		String transmitido = "";
 
@@ -94,6 +97,16 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 			break;
 		}
 
-		Util.exibirMensagem(activity, "Sucesso", mensagem, R.drawable.save, null, null);
+		return mensagem;
+	}
+
+	private OnClickListener getListener() {
+		OnClickListener listener = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				((MainTab) activity).chamaProximoImovel();
+			}
+		};
+
+		return listener;
 	}
 }

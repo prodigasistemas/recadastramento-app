@@ -40,10 +40,6 @@ public class NotifyAlertDialogFragment extends DialogFragment {
 							((MainTab) getActivity()).doGpsDesligado();
 							break;
 
-						case Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO:
-							((MainTab) getActivity()).chamaProximoImovel();
-							break;
-
 						default:
 							break;
 						}

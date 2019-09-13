@@ -45,7 +45,9 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 		
 		imoveis = (List<String>) manipulator.selectIdImoveis("imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
-		if (!imoveis.isEmpty()) {
+		if (imoveis.isEmpty()) {
+			Util.exibirMensagem(activity, "Atenção", "Não há nenhum imóvel finalizado para geração do arquivo de retorno", R.drawable.aviso, null, null);
+		} else {
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setCancelable(false);
 			dialog.setIndeterminate(false);
@@ -60,12 +62,12 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 		StringBuffer arquivo = null;
 
 		try {
-			ArquivoRetorno retorno = new ArquivoRetorno();
+			ArquivoRetorno arquivoRetorno = new ArquivoRetorno();
 
-			if (imoveis != null && !imoveis.isEmpty()) {
+			if (!imoveis.isEmpty()) {
 				criarDiretorio();
 
-				arquivo = new StringBuffer(retorno.gerarHeader(activity));
+				arquivo = new StringBuffer(arquivoRetorno.gerarHeader(activity));
 
 				for (int i = 0; i < imoveis.size(); i++) {
 					long idImovel = Long.parseLong(imoveis.get(i));
@@ -80,12 +82,12 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 					manipulator.selectMedidor(idImovel);
 					manipulator.selectAnormalidadeImovel(String.valueOf(getImovel().getMatricula()));
 
-					arquivo.append(retorno.gerarLinhaCliente(getCliente()));
-					arquivo.append(retorno.gerarLinhaImovel(getImovel()));
-					arquivo.append(retorno.gerarLinhasRamoAtividade(getImovel()));
-					arquivo.append(retorno.gerarLinhaServico(getImovel(), getServicos()));
-					arquivo.append(retorno.gerarLinhaMedidor(getImovel(), getMedidor()));
-					arquivo.append(retorno.gerarLinhaAnormalidade(getImovel(), getAnormalidade()));
+					arquivo.append(arquivoRetorno.gerarLinhaCliente(getCliente()));
+					arquivo.append(arquivoRetorno.gerarLinhaImovel(getImovel()));
+					arquivo.append(arquivoRetorno.gerarLinhasRamoAtividade(getImovel()));
+					arquivo.append(arquivoRetorno.gerarLinhaServico(getImovel(), getServicos()));
+					arquivo.append(arquivoRetorno.gerarLinhaMedidor(getImovel(), getMedidor()));
+					arquivo.append(arquivoRetorno.gerarLinhaAnormalidade(getImovel(), getAnormalidade()));
 
 					publishProgress(i + 1);
 				}
@@ -94,7 +96,7 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 			}
 		} catch (Exception e) {
 			arquivo = null;
-			LogUtil.salvar(ArquivoRetornoTask.class, "Erro ao gerar arquivo de retorno.", e);
+			LogUtil.salvar(ArquivoRetornoTask.class, "Erro ao gerar arquivo de retorno", e);
 		}
 
 		return arquivo;
@@ -112,21 +114,14 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 
 		if (dialog.isShowing()) {
 			dialog.dismiss();
+			
+			if (arquivo != null) {
+				Util.exibirMensagem(activity, "Sucesso", "Arquivo de retorno gerado com sucesso", R.drawable.save, null, null);
+			} else {
+				Util.exibirMensagem(activity, "Atenção", "Não foi possível gerar o arquivo de retorno", R.drawable.aviso, null, null);
+			}
 		}
 
-		if (arquivo != null && arquivo.toString().length() > 0) {
-			Util.exibirMensagem(activity, "Sucesso", "Arquivo de retorno gerado com sucesso.", R.drawable.save, null, null);
-		} else {
-			Util.exibirMensagem(activity, "Atenção", getMensagemAtencao(), R.drawable.aviso, null, null);
-		}
-	}
-
-	private String getMensagemAtencao() {
-		String mensagem = "";
-		if (imoveis.isEmpty()) {
-			mensagem += "Roteiro sem imóveis finalizados. ";
-		}
-		return mensagem + "Não foi possível gerar o arquivo de retorno.";
 	}
 
 	private OutputStreamWriter getOutput() throws FileNotFoundException {
@@ -156,9 +151,9 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 
 			Util.gerarZipRetorno();
 		} catch (FileNotFoundException e) {
-			LogUtil.salvar(ArquivoRetornoTask.class, "Arquivo de retorno não encontrado.", e);
+			LogUtil.salvar(ArquivoRetornoTask.class, "Arquivo de retorno não encontrado", e);
 		} catch (IOException e) {
-			LogUtil.salvar(ArquivoRetornoTask.class, "Erro ao gerar zip do arquivo de retorno.", e);
+			LogUtil.salvar(ArquivoRetornoTask.class, "Erro ao gerar zip do arquivo de retorno", e);
 		}
 	}
 	

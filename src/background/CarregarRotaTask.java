@@ -209,10 +209,10 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 	private boolean versoesCompativeis() {
 		manipulator.selectGeral();
 
-		String versaoAplicativo = activity.getString(R.string.app_versao);
-		String versaoArquivo = manipulator.getDadosGerais().getVersaoArquivo();
+		int versaoAplicativo = Integer.parseInt(activity.getString(R.string.app_versao).replace(".", ""));
+		int versaoArquivo = Integer.parseInt(manipulator.getDadosGerais().getVersaoArquivo().replace(".", ""));
 
-		return versaoAplicativo.equals(versaoArquivo);
+		return versaoAplicativo >= versaoArquivo;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -225,7 +225,7 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 				activity.recreate();
 			}
 		};
-		
+
 		Util.exibirAlerta(activity, "Alerta", "As versões do aplicativo e arquivo são incompatíveis", R.drawable.aviso, listener, null);
 	}
 }

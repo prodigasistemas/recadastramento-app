@@ -1,12 +1,12 @@
 package business;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
 import ui.MessageDispatcher;
 import util.LogUtil;
-import util.Util;
 
 public class ControladorAcessoOnline {
 
@@ -39,7 +39,7 @@ public class ControladorAcessoOnline {
 	 * @param recebeResposta Boolean que diz se recebe ou não um InputStream do servidor
 	 */
 	public void enviar(Vector<Object> parametros) {
-		dispatcher.setMensagem(Util.empacotarParametros(parametros));
+		dispatcher.setMensagem(empacotarParametros(parametros));
 		dispatcher.enviarMensagem();
 		
 		imovelTransmitido = MessageDispatcher.getRespostaServidor().equals(MessageDispatcher.RESPOSTA_SUCESSO);
@@ -73,5 +73,60 @@ public class ControladorAcessoOnline {
 
 	public boolean isImovelTransmitido() {
 		return imovelTransmitido;
+	}
+	
+	/**
+     * Método responsável por transformar um vetor de parâmetros em uma mensagem um array de bytes.
+     * 
+     * @param parameters Vetor de parâmetros.
+     * @return O array de bytes com os parâmetros empacotados.
+     */
+	private byte[] empacotarParametros(Vector<?> parametros) {
+
+		byte[] resposta = null;
+
+		try {
+			parametros.trimToSize();
+
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			DataOutputStream dos = new DataOutputStream(baos);
+
+			if (parametros != null) {
+				int tamanho = parametros.size();
+
+				for (int i = 0; i < tamanho; i++) {
+
+					Object param = parametros.elementAt(i);
+
+					if (param instanceof Byte) {
+						dos.writeByte(((Byte) param).byteValue());
+					} else if (param instanceof Integer) {
+						dos.writeInt(((Integer) param).intValue());
+					} else if (param instanceof Long) {
+						dos.writeLong(((Long) param).longValue());
+					} else if (param instanceof String) {
+						dos.writeUTF((String) param);
+					} else if (param instanceof byte[]) {
+						dos.write((byte[]) param);
+					}
+				}
+			}
+
+			resposta = baos.toByteArray();
+
+			if (dos != null) {
+				dos.close();
+				dos = null;
+			}
+
+			if (baos != null) {
+				baos.close();
+				baos = null;
+			}
+		} catch (IOException e) {
+			LogUtil.salvar(getClass(), "Erro ao empacotar parametros", e);
+		}
+
+		return resposta;
 	}
 }

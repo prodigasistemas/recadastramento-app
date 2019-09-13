@@ -30,18 +30,20 @@ import business.ControladorAcessoOnline;
 import dataBase.DataManipulator;
 
 public class Fachada extends FragmentActivity {
-	
+
 	private Controlador controlador;
 	private DataManipulator manipulator;
+
+	private AlertDialog.Builder builder;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		controlador = Controlador.getInstancia();
 		controlador.initiateDataManipulator(getBaseContext());
 		manipulator = controlador.getCadastroDataManipulator();
-		
+
 		setContentView(R.layout.welcome);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -52,15 +54,13 @@ public class Fachada extends FragmentActivity {
 		botaoIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				v.clearAnimation();
-				
+
 				configurarUrlServidor();
 
 				if (permiteLogin()) {
 					configurarDialogLogin(findViewById(R.id.buttonStart));
-
 				} else {
-					Intent intent = new Intent(getBaseContext(), ListaRotas.class);
-					startActivityForResult(intent, 1);
+					startActivityForResult(new Intent(getBaseContext(), ListaRotas.class), 1);
 				}
 			}
 		});
@@ -104,62 +104,60 @@ public class Fachada extends FragmentActivity {
 			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			final View layout = inflater.inflate(R.layout.login, (ViewGroup) findViewById(R.id.root));
-			final EditText user = (EditText) layout.findViewById(R.id.EditText_User);
-			final EditText password = (EditText) layout.findViewById(R.id.EditText_Password);
+			final EditText campoLogin = (EditText) layout.findViewById(R.id.EditText_User);
+			final EditText campoSenha = (EditText) layout.findViewById(R.id.EditText_Password);
 
-			if (versoesCompativeis()) {
-				
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Autenticação");
-				builder.setView(layout);
+			builder = new AlertDialog.Builder(this);
+			builder.setTitle("Autenticação");
+			builder.setView(layout);
 
-				builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+			cancelarLogin();
 
-					@SuppressWarnings("deprecation")
-					public void onClick(DialogInterface dialog, int whichButton) {
-						removeDialog(Constantes.DIALOG_ID_PASSWORD);
-						controlador.setPermissionGranted(false);
-					}
-				});
+			confirmarLogin(layout, campoLogin, campoSenha);
 
-				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						String strUsr = user.getText().toString();
-						String strPass = password.getText().toString();
+			return builder.create();
 
-						Usuario usuario = manipulator.selectUsuario(strUsr);
-
-						if (usuario != null) {
-							if (Criptografia.encode(strPass).equals(usuario.getSenha())) {
-								logar(layout);
-							} else {
-								Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta.", "Senha inválida.", Constantes.DIALOG_ID_ERRO);
-							}
-						} else {
-							Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta", "Login inválido.", Constantes.DIALOG_ID_ERRO);
-						}
-						
-						layout.findViewById(R.id.EditText_User).clearFocus();
-						user.getText().clear();
-						password.getText().clear();
-					}
-				});
-
-				AlertDialog passwordDialog = builder.create();
-				return passwordDialog;
-				
-			} else {
-				limparDB();
-			}
+		default:
+			return null;
 		}
-		return null;
 	}
 
-	private boolean versoesCompativeis() {
-		String versaoAplicativo = getString(R.string.app_versao);
-		String versaoArquivo = controlador.getDadosGerais().getVersaoArquivo();
-		
-		return versaoAplicativo.equals(versaoArquivo);
+	private void confirmarLogin(final View layout, final EditText campoLogin, final EditText campoSenha) {
+
+		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				String login = campoLogin.getText().toString();
+				String senha = campoSenha.getText().toString();
+
+				Usuario usuario = manipulator.selectUsuario(login);
+
+				if (usuario != null) {
+					if (Criptografia.encode(senha).equals(usuario.getSenha())) {
+						efetuarLogin(layout);
+					} else {
+						Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta", "Senha inválida", Constantes.DIALOG_ID_AVISO);
+					}
+				} else {
+					Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta", "Login inválido", Constantes.DIALOG_ID_AVISO);
+				}
+
+				campoLogin.setFocusable(true);
+				campoLogin.getText().clear();
+				campoSenha.getText().clear();
+			}
+		});
+	}
+
+	private void cancelarLogin() {
+		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+
+			@SuppressWarnings("deprecation")
+			public void onClick(DialogInterface dialog, int whichButton) {
+				removeDialog(Constantes.DIALOG_ID_PASSWORD);
+				controlador.setPermissionGranted(false);
+			}
+		});
 	}
 
 	@Override
@@ -168,7 +166,7 @@ public class Fachada extends FragmentActivity {
 	}
 
 	@SuppressWarnings("deprecation")
-	private void logar(final View layout) {
+	private void efetuarLogin(final View layout) {
 		controlador.setPermissionGranted(true);
 		removeDialog(Constantes.DIALOG_ID_PASSWORD);
 
@@ -185,16 +183,6 @@ public class Fachada extends FragmentActivity {
 		} else {
 			return false;
 		}
-	}
-	
-	private void limparDB() {
-		controlador.finalizeDataManipulator();
-		controlador.deleteDatabase();
-
-		Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta", "Versões do aplicativo e arquivo são incompatíveis.", Constantes.DIALOG_ID_ERRO);
-
-		Intent intent = new Intent(getBaseContext(), Fachada.class);
-		startActivity(intent);
 	}
 
 	private void configurarUrlServidor() {

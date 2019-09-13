@@ -7,20 +7,26 @@ import ui.FileManager;
 import util.Constantes;
 import util.LogUtil;
 import util.Util;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.widget.Toast;
 import business.Controlador;
 
 import com.AndroidExplorer.Fachada;
+import com.AndroidExplorer.R;
 
 import dataBase.DataManipulator;
 
 public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 
 	private Activity activity;
+	private Controlador controlador;
 	private DataManipulator manipulator;
 	private ProgressDialog dialog;
 	private int total;
@@ -31,7 +37,8 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 
 	public CarregarRotaTask(Activity activity, String nomeArquivo) {
 		this.activity = activity;
-		this.manipulator = Controlador.getInstancia().getCadastroDataManipulator();
+		this.controlador = Controlador.getInstancia();
+		this.manipulator = controlador.getCadastroDataManipulator();
 		this.dialog = new ProgressDialog(activity);
 		this.nomeArquivo = nomeArquivo;
 		this.total = FileManager.getQtdLinhas(nomeArquivo);
@@ -189,10 +196,36 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 			dialog.dismiss();
 		}
 
-		Intent intent = new Intent(activity, Fachada.class);
-		activity.startActivity(intent);
-		activity.finish();
+		if (versoesCompativeis()) {
+			Toast.makeText(activity.getBaseContext(), "Arquivo de rota carregado com sucesso", Toast.LENGTH_LONG).show();
+
+			activity.finish();
+			activity.startActivity(new Intent(activity, Fachada.class));
+		} else {
+			apagarBancoDeDados();
+		}
+	}
+
+	private boolean versoesCompativeis() {
+		manipulator.selectGeral();
+
+		String versaoAplicativo = activity.getString(R.string.app_versao);
+		String versaoArquivo = manipulator.getDadosGerais().getVersaoArquivo();
+
+		return versaoAplicativo.equals(versaoArquivo);
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void apagarBancoDeDados() {
+		controlador.finalizeDataManipulator();
+		controlador.deleteDatabase();
+
+		OnClickListener listener = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				activity.recreate();
+			}
+		};
 		
-		Toast.makeText(activity.getBaseContext(), "Arquivo de rota carregado com sucesso.", Toast.LENGTH_LONG).show();
+		Util.exibirAlerta(activity, "Alerta", "As versões do aplicativo e arquivo são incompatíveis", R.drawable.aviso, listener, null);
 	}
 }

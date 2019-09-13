@@ -1,7 +1,5 @@
 package util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.Normalizer;
@@ -9,9 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface.OnClickListener;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,23 +37,6 @@ public class Util {
 	static boolean isUpdatingConsulta = false;
 	static TextWatcher consultaTextWatcher = null;
 	
-	
-	public static boolean getCpfProprietarioOk(){
-		return isCpfProprietarioOk;
-	}
-
-	public static boolean getCnpjProprietarioOk(){
-		return isCnpjProprietarioOk;
-	}
-
-	public static boolean getCpfUsuarioOk(){
-		return isCpfUsuarioOk;
-	}
-
-	public static boolean getCnpjUsuarioOk(){
-		return isCnpjUsuarioOk;
-	}
-
 	public static boolean getCpfResponsavelOk(){
 		return isCpfResponsavelOk;
 	}
@@ -838,57 +821,6 @@ public class Util {
     }
 
     /**
-     * Verifica se o valor da String.trim() veio como null ou como
-     * Constantes.NULO_INT, setando como Constantes.NULO_INT caso
-     * verdadadeiro
-     * 
-     * @param valor
-     * @return
-     */
-    public static long verificarNuloLong(String valor) {
-		if (valor == null || valor.trim().equals(Constantes.NULO_STRING)) {
-		    return Constantes.NULO_INT;
-		} else {
-		    return Long.parseLong(valor.trim());
-		}
-    }
-
-    /**
-     * Verifica se o valor da String.trim() veio como null ou como
-     * Constantes.NULO_STRING, setando como Constantes.NULO_INT caso
-     * verdadadeiro
-     * 
-     * @param valor
-     * @return
-     */
-    public static short verificarNuloShort(String valor) {
-		if (valor == null || valor.trim().equals(Constantes.NULO_STRING)) {
-		    return Constantes.NULO_SHORT;
-		} else {
-		    return Short.parseShort(valor.trim());
-		}
-    }
-
-    public static Date getData(String data) {
-
-    	if (data.equals(Constantes.NULO_STRING)) {
-    	    return null;
-    	} else {
-    	    Calendar calendario = Calendar.getInstance();
-    	    calendario.set(Calendar.YEAR, Integer.valueOf(data.substring(0, 4)).intValue());
-    	    calendario.set(Calendar.MONTH, Integer.valueOf(data.substring(4, 6)).intValue() - 1);
-    	    calendario.set(Calendar.DAY_OF_MONTH, Integer.valueOf(data.substring(6, 8)).intValue());
-    	    calendario.set(Calendar.HOUR, 0);
-    	    calendario.set(Calendar.HOUR_OF_DAY, 0);
-    	    calendario.set(Calendar.MINUTE, 0);
-    	    calendario.set(Calendar.SECOND, 0);
-    	    calendario.set(Calendar.MILLISECOND, 0);
-
-    	    return new Date(calendario.getTime().getTime());
-    	}
-	}
-
-    /**
      * < <Descrição do método>>
      * 
      * @param data
@@ -992,28 +924,6 @@ public class Util {
     }
 
     /**
-     * Adiciona zeros a direita do número informado tamamho máximo campo 6
-     * Número 16 retorna 000016
-     * 
-     * @param tamanhoMaximoCampo
-     *            Descrição do parâmetro
-     * @param numero
-     *            Descrição do parâmetro
-     * @return Descrição do retorno
-     */
-    public static String adicionarZerosDireitaNumero(int tamanhoMaximoCampo, String numero) {
-		String retorno = "";
-		String zeros = "";
-	
-		for (int i = 0; i < (tamanhoMaximoCampo - numero.length()); i++) {
-		    zeros += "0";
-		}
-	
-		retorno += numero + zeros;
-		return retorno;
-    }
-
-    /**
      * Adiciona char " " a esqueda da String informada número 16 retorna 000016
      * 
      * @param tamanhoMaximoCampo
@@ -1069,11 +979,6 @@ public class Util {
 		return retorno;
     }
 
-    public static String cleanStringForFileNameFormat(String fileName){
-    	return fileName.trim().replace(' ', '_').replaceAll("[/]", "").replaceAll("[-]", "").replaceAll("[.]", "").replaceAll("[,]", "").replaceAll("[:]", "")
-    	.replaceAll("[;]", "").replaceAll("[(]", "").replaceAll("[)]", "");
-    }
-
     public static String getRetornoRotaDirectory() {
     	Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
     	String nomeArquivo = Controlador.getInstancia().getDadosGerais().getNomeArquivo() + "_" + getData();
@@ -1089,76 +994,6 @@ public class Util {
     public static String getRotaFileName(){
     	Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
     	return Controlador.getInstancia().getDadosGerais().getNomeArquivo() + "_" + getData();
-    }
-    
-    /**
-     * Método responsável por transformar um vetor de parâmetros em uma mensagem
-     * um array de bytes.
-     * 
-     * @param parameters
-     *            Vetor de parâmetros.
-     * @return O array de bytes com os parâmetros empacotados.
-     */
-    @SuppressWarnings("rawtypes")
-	public static byte[] empacotarParametros(Vector parametros) {
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(baos);
-	
-		byte[] resposta = null;
-	
-		parametros.trimToSize();
-	
-		try {
-
-			// escreve os dados no OutputStream
-		    if (parametros != null) {
-				int tamanho = parametros.size();
-				
-				for (int i = 0; i < tamanho; i++) {
-				    
-					Object param = parametros.elementAt(i);
-	
-					if (param instanceof Byte) {
-						dos.writeByte(((Byte) param).byteValue());
-				    
-					} else if (param instanceof Integer) {
-						dos.writeInt(((Integer) param).intValue());
-				    
-					} else if (param instanceof Long) {
-						dos.writeLong(((Long) param).longValue());
-				    
-					} else if (param instanceof String) {
-						dos.writeUTF((String) param);
-				    
-					} else if (param instanceof byte[]) {
-						dos.write((byte[]) param);
-				    }
-				}
-		    }
-	
-		    // pega os dados enpacotados
-		    resposta = baos.toByteArray();
-	
-		    if (dos != null) {
-				dos.close();
-				dos = null;
-		    }
-
-		    if (baos != null) {
-				baos.close();
-				baos = null;
-		    }
-	
-		} catch (IOException e) {
-		    e.printStackTrace();
-		
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-	
-		// retorna o array de bytes
-	return resposta;
     }
     
 	public static String capitalizarString(String string) {
@@ -1177,18 +1012,18 @@ public class Util {
     	return novaString;
     }
 
-    @SuppressLint("SdCardPath") public static File getExternalStorageDirectory(){
-    		return new File("/mnt/sdcard/");
-    	
-    }
+    @SuppressLint("SdCardPath") 
+	public static File getExternalStorageDirectory() {
+		return new File("/mnt/sdcard/");
+
+	}
     
-	public static boolean allowPopulateDados(){
+	public static boolean allowPopulateDados() {
 		boolean result = false;
-		if ( (Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO || 
-			 Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) 
-			 ||
-			 (Controlador.getInstancia().getImovelSelecionado().isTabSaved()) ){
-			
+		if ((Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO || Controlador.getInstancia()
+				.getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE)
+				|| (Controlador.getInstancia().getImovelSelecionado().isTabSaved())) {
+
 			result = true;
 		}
 		return result;
@@ -1217,14 +1052,6 @@ public class Util {
 
 		Compress arquivo = new Compress(filesToZip, nome);
 		arquivo.zip();
-	}
-	
-	public static String getDecimalView(String value){
-		if(value==null) return "";
-		
-		StringBuilder builder = new StringBuilder(value);
-		
-		return builder.insert(value.length()-2, '.').toString();
 	}
 	
 	public static String removeDecimalChar(String value){
@@ -1259,5 +1086,24 @@ public class Util {
 	public static void showNotifyDialog(FragmentActivity activity, int iconId, String title, String message, int messageType) {
 		NotifyAlertDialogFragment dialog = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
 		dialog.show((activity).getSupportFragmentManager(), "dialog");
+	}
+	
+	public static void exibirAlerta(Activity context, String title, String message, int iconId, 
+			OnClickListener positiveListener, OnClickListener negativeListener) {
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle(title);
+		builder.setMessage(message);
+		builder.setIcon(iconId);
+		builder.setPositiveButton(android.R.string.ok, positiveListener);
+		
+		if (negativeListener == null) {
+			builder.setCancelable(false);
+		} else {
+			builder.setNegativeButton(android.R.string.cancel, negativeListener);
+		}
+
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 }

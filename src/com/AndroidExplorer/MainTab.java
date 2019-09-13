@@ -70,8 +70,12 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-	    setContentView(R.layout.maintab);
 	    
+	    if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_INFORMATIVO) {
+			chamarProximoImovel();
+		}
+	    
+	    setContentView(R.layout.maintab);
 	    initializeTabs();
 	}
 	
@@ -406,7 +410,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	@Override
 	protected void onResume() {
-//		initializeTabs();
 		super.onResume();
 	}
 
@@ -644,21 +647,23 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		startActivity(intent);
     }
     
-	public void chamaProximoImovel() {
-		Controlador.getInstancia().isCadastroAlterado();
+	public void chamarProximoImovel() {
+		int posicao = Controlador.getInstancia().getPosicaoListaImoveis();
+		int proximo = -1;
 
 		if (indiceNovoImovel != null) {
-			Controlador.getInstancia().setCadastroSelecionadoByListPosition(indiceNovoImovel);
+			proximo = indiceNovoImovel;
 			indiceNovoImovel = null;
-		} else if (Controlador.getInstancia().getPosicaoListaImoveis() == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) - 1) {
-			Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
+		} else if (posicao == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) - 1) {
+			proximo = 0;
 		} else {
-			Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getPosicaoListaImoveis() + 1);
+			proximo = posicao + 1;
 		}
 
+		Controlador.getInstancia().setCadastroSelecionadoByListPosition(proximo);
+		
 		finish();
-		Intent myIntent = new Intent(this, MainTab.class);
-		startActivity(myIntent);
+		startActivity(new Intent(this, MainTab.class));
 	}
 
 	public String montarLote(String lote) {

@@ -103,7 +103,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 	private OnClickListener getListener() {
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				((MainTab) activity).chamaProximoImovel();
+				((MainTab) activity).chamarProximoImovel();
 			}
 		};
 

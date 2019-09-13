@@ -19,7 +19,6 @@ import util.Util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import business.Controlador;
 
 import com.AndroidExplorer.R;
@@ -116,9 +115,9 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 		}
 
 		if (arquivo != null && arquivo.toString().length() > 0) {
-			Util.showNotifyDialog((FragmentActivity) activity, R.drawable.save, "Sucesso", "Arquivo de retorno gerado com sucesso.", Constantes.DIALOG_ID_SUCESSO);
+			Util.exibirMensagem(activity, "Sucesso", "Arquivo de retorno gerado com sucesso.", R.drawable.save, null, null);
 		} else {
-			Util.showNotifyDialog((FragmentActivity) activity, R.drawable.aviso, "Atenção", getMensagemAtencao(), Constantes.DIALOG_ID_AVISO);
+			Util.exibirMensagem(activity, "Atenção", getMensagemAtencao(), R.drawable.aviso, null, null);
 		}
 	}
 

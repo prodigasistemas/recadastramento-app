@@ -7,7 +7,6 @@ import util.Util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 
 import com.AndroidExplorer.R;
 
@@ -95,6 +94,6 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 			break;
 		}
 
-		Util.showNotifyDialog((FragmentActivity) activity, R.drawable.save, "", mensagem, Constantes.DIALOG_ID_CONFIRMA_IMOVEL_SALVO);
+		Util.exibirMensagem(activity, "Sucesso", mensagem, R.drawable.save, null, null);
 	}
 }

@@ -4,12 +4,10 @@ import java.util.List;
 
 import model.Imovel;
 import ui.ArquivoRetorno;
-import util.Constantes;
 import util.Util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
 import business.Controlador;
 
 import com.AndroidExplorer.R;
@@ -63,7 +61,6 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 			dialog.dismiss();
 		}
 
-		Util.showNotifyDialog((FragmentActivity) activity, R.drawable.save, "Sucesso", "Imóveis transmitidos com sucesso.",
-				Constantes.DIALOG_ID_SUCESSO);
+		Util.exibirMensagem(activity, "Sucesso", "Imóveis transmitidos com sucesso.", R.drawable.save, null, null);
 	}
 }

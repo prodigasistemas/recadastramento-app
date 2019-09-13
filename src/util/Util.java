@@ -12,14 +12,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface.OnClickListener;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import business.Controlador;
 
 import com.AndroidExplorer.ClienteTab;
-import com.AndroidExplorer.NotifyAlertDialogFragment;
 
 @SuppressLint({ "SdCardPath", "SimpleDateFormat", "DefaultLocale" })
 public class Util {
@@ -1083,12 +1081,7 @@ public class Util {
 		return valor.trim().replaceFirst("^0+(?!$)", "");
 	}
 	
-	public static void showNotifyDialog(FragmentActivity activity, int iconId, String title, String message, int messageType) {
-		NotifyAlertDialogFragment dialog = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
-		dialog.show((activity).getSupportFragmentManager(), "dialog");
-	}
-	
-	public static void exibirAlerta(Activity context, String title, String message, int iconId, 
+	public static void exibirMensagem(Activity context, String title, String message, int iconId, 
 			OnClickListener positiveListener, OnClickListener negativeListener) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);

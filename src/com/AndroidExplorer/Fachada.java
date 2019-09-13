@@ -136,10 +136,10 @@ public class Fachada extends FragmentActivity {
 					if (Criptografia.encode(senha).equals(usuario.getSenha())) {
 						efetuarLogin(layout);
 					} else {
-						Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta", "Senha inválida", Constantes.DIALOG_ID_AVISO);
+						Util.exibirMensagem(Fachada.this, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
 					}
 				} else {
-					Util.showNotifyDialog(Fachada.this, R.drawable.aviso, "Alerta", "Login inválido", Constantes.DIALOG_ID_AVISO);
+					Util.exibirMensagem(Fachada.this, "Alerta", "Login inválido", R.drawable.aviso, null, null);
 				}
 
 				campoLogin.setFocusable(true);

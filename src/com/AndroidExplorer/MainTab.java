@@ -3,6 +3,7 @@ package com.AndroidExplorer;
 import java.util.Calendar;
 import java.util.List;
 
+import model.Endereco;
 import model.Imovel;
 import util.Constantes;
 import util.Util;
@@ -10,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -23,12 +25,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.CellLocation;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,373 +37,91 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
+import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 import business.Controlador;
 import dataBase.DataManipulator;
- 
+
 public class MainTab extends FragmentActivity implements TabHost.OnTabChangeListener, OnItemClickListener, LocationListener {
 
-	private static TabHost tabHost;
+	private static final int IMOVEL_ANTERIOR = 0;
+	private static final int IMOVEL_POSTERIOR = 1;
+	
 	public static Integer indiceNovoImovel;
-	public boolean numeroLoteInsuficiente = false;
-	private static final int IMOVEL_ANTERIOR = 0; 
-	private static final int IMOVEL_POSTERIOR = 1; 
-	private String dialogMessage = null;
-	Fragment clienteFragment;
-	Fragment imovelFragment;
-	Fragment servicosFragment;
-	Fragment medidorFragment;
-	Fragment anormalidadeFragment;
-	ClienteTab clienteTab = new ClienteTab();
-	ImovelTab imovelTab = new ImovelTab();
-	ServicosTab servicosTab = new ServicosTab();
-	MedidorTab medidorTab = new MedidorTab();
-	AnormalidadeTab anormalidadeTab = new AnormalidadeTab();
+	
+	private Controlador controlador;
+	private DataManipulator manipulator;
+	
+	private static TabHost tabHost;
 
-	public LocationManager mLocManager;
-	Location lastKnownLocation;
-	private String provider;
+	private Fragment clienteFragment;
+	private Fragment imovelFragment;
+	private Fragment servicosFragment;
+	private Fragment medidorFragment;
+	private Fragment anormalidadeFragment;
+
+	private ClienteTab clienteTab = new ClienteTab();
+	private ImovelTab imovelTab = new ImovelTab();
+	private ServicosTab servicosTab = new ServicosTab();
+	private MedidorTab medidorTab = new MedidorTab();
+	private AnormalidadeTab anormalidadeTab = new AnormalidadeTab();
+	
+	private boolean loteInvalido = false;
 
 	public void onCreate(Bundle savedInstanceState) {
-	    super.onCreate(savedInstanceState);
-	    
-	    if (getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_INFORMATIVO) {
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.maintab);
+
+		this.controlador = Controlador.getInstancia();
+		this.manipulator = controlador.getCadastroDataManipulator();
+
+		if (controlador.getImovelSelecionado().isInformativo()) {
 			chamarProximoImovel();
 		}
-	    
-	    setContentView(R.layout.maintab);
-	    initializeTabs();
+		
+		verificarGPS();
+		configurarTabHost();
+		configurarTabs();
+		adicionarTabs();
+		configurarCor();
+		tabHost.setCurrentTab(0);
+		
+		configurarMenu();
 	}
-	
-    public boolean onKeyDown(int keyCode, KeyEvent event){
-    	if ((keyCode == KeyEvent.KEYCODE_BACK)){
-    		dialogMessage = " Deseja voltar para a lista de cadastros? ";
-    		showCompleteDialog(R.drawable.aviso, "Atenção!", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_VOLTAR);
-            return true;
 
-        }else{
-            return super.onKeyDown(keyCode, event);
-        }
-    }
-
-    @SuppressWarnings("static-access")
-	private void initializeTabs(){
-	    
-        /* Use the LocationManager class to obtain GPS locations */
-        mLocManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        if(mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-        	mLocManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }
-
-        boolean enabled = mLocManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        // Check if enabled and if not send user to the GPS settings
-        // Better solution would be to display a dialog and suggesting to 
-        // go to the settings
-        if (!enabled){
-	        dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
-        }	    
-
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		criteria.setCostAllowed(true);
-		provider = mLocManager.getBestProvider(criteria, false);
-		lastKnownLocation = mLocManager.getLastKnownLocation(provider);
-    	CellLocation.requestLocationUpdate();
-
-	    tabHost = (TabHost) findViewById(android.R.id.tabhost);
-	    tabHost.setup();
-	    tabHost.setOnTabChangedListener(this);
-	    
-	    // Define a imagem de fundo de acordo com a orientacao do dispositivo
-	    if (getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_PORTRAIT){
-	    	tabHost.setBackgroundResource(R.drawable.fundocadastro);
-	    }else{
-	    	tabHost.setBackgroundResource(R.drawable.fundocadastro);
-	    }
-	    
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-
-		ft.add(R.id.tabCliente, clienteTab);
-    	ft.add(R.id.tabImovel, imovelTab);
-    	ft.add(R.id.tabServicos, servicosTab);
-    	ft.add(R.id.tabMedidor, medidorTab);
-    	ft.add(R.id.tabAnormalidade, anormalidadeTab);
-    	
-    	clienteFragment = fm.findFragmentById(R.id.tabCliente);
-    	imovelFragment = fm.findFragmentById(R.id.tabImovel);
-    	servicosFragment = fm.findFragmentById(R.id.tabServicos);
-    	medidorFragment = fm.findFragmentById(R.id.tabMedidor);
-    	anormalidadeFragment = fm.findFragmentById(R.id.tabAnormalidade);
-
-    	ft.show(clienteFragment);
-    	ft.hide(imovelFragment);
-    	ft.hide(servicosFragment);
-    	ft.hide(medidorFragment);
-    	ft.hide(anormalidadeFragment);
-    	ft.commit();
-
-	    addTab("cliente", "Cliente", R.drawable.tab_cliente, R.layout.clientetab);
-	    addTab("imovel", "Imóvel", R.drawable.tab_imovel, R.layout.imoveltab);
-	    addTab("servico", "Serviço", R.drawable.tab_servico, R.layout.servicotab);
-	    addTab("medidor", "Medidor", R.drawable.tab_medidor, R.layout.medidortab);
-	    addTab("anormalidade", "Anormalidade", R.drawable.tab_anormalidade, R.layout.anormalidadetab);
-
-	    setTabColor();
-	    tabHost.setCurrentTab(0);
-    }
-        
-	// Instancia novas tabs
-	public void addTab(String tag, String titulo, int imagem, final int view) {
-		TabHost.TabSpec tabSpec;
-	    Resources res = getResources();
-	    		
-	    tabSpec = tabHost.newTabSpec(tag).setIndicator(titulo, res.getDrawable(imagem)).setContent(new TabContentFactory() {
-
-            public View createTabContent(String tag) {
-            	LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            	View layout = inflater.inflate(view, (ViewGroup) findViewById(R.layout.maintab));
-                return layout;
-            }
-        });
-	    
-	    tabHost.addTab(tabSpec);
-	    
-	    setTabColor();
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			showCompleteDialog(R.drawable.aviso, "Atenção.", "Deseja voltar para a lista de cadastros?", Constantes.DIALOG_ID_CONFIRMA_VOLTAR);
+			return true;
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
 	}
-	
-	public void setTabColor() {
-		int status = getCadastroDataManipulator().getImovelSelecionado().getImovelStatus();
+
+	public void configurarCor() {
+		Imovel imovel = manipulator.getImovelSelecionado();
+		int status = imovel.getImovelStatus();
 
 		TabWidget tabWidget = tabHost.getTabWidget();
 		for (int i = 0; i < tabWidget.getChildCount(); i++) {
 			View child = tabWidget.getChildAt(i);
 
-			if (status == Constantes.IMOVEL_SALVO || status == Constantes.IMOVEL_NOVO) {
+			if (status == Constantes.IMOVEL_SALVO && !imovel.isExcluido()) {
 				child.setBackgroundResource(R.drawable.tab_custom_green);
 
-			} else if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE || status == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE) {
+			} else if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) {
 				child.setBackgroundResource(R.drawable.tab_custom_red);
 
 			} else if (status == Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA) {
 				child.setBackgroundResource(R.drawable.tab_custom_yellow);
 
-			} else if (status == Constantes.IMOVEL_A_SALVAR) {
+			} else {
 				child.setBackgroundResource(R.drawable.tab_custom_white);
 			}
 		}
-	}
-    
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    if (indiceNovoImovel == null) {
-	    	MenuInflater inflater = getMenuInflater();
-		    inflater.inflate(R.layout.menuoptions, menu);
-	    }
-	    return true;
-	}
-
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		final int posicao = Controlador.getInstancia().getPosicaoListaImoveis();
-
-		// Handle item selection
-	    switch (item.getItemId()) {
-	    case R.id.proximoImovel:
-
-	    	Controlador.getInstancia().isCadastroAlterado();
-	    	
-	    	if(Controlador.getInstancia().getPosicaoListaImoveis() == (getCadastroDataManipulator().getNumeroImoveis())-1){
-				Controlador.getInstancia().setCadastroSelecionadoByListPosition(0);
-
-			}else{
-		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getPosicaoListaImoveis()+1);
-			}
-	    	finish();
-			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-			startActivity(myIntent);
-	    	return true;
-
-	    case R.id.imovelAnterior:
-
-	    	Controlador.getInstancia().isCadastroAlterado();
-	    	
-	    	if(Controlador.getInstancia().getPosicaoListaImoveis() <= 0){
-				Controlador.getInstancia().setCadastroSelecionadoByListPosition((int)getCadastroDataManipulator().getNumeroImoveis()-1);
-			}else{
-		    	Controlador.getInstancia().setCadastroSelecionadoByListPosition(Controlador.getInstancia().getPosicaoListaImoveis()-1);
-			}
-	    	finish();
-	    	
-			myIntent = new Intent(getApplicationContext(), MainTab.class);
-			startActivity(myIntent);
-	        return true;
-	    
-	    case R.id.adicionarNovo:
-	    	
-	    	
-	    	List<Imovel> imoveis = getCadastroDataManipulator().selectEnderecoImovel(null);
-			
-	    	Imovel proximo = null;
-	    	
-	    	Imovel anterior = null;
-	    	
-	    	String imovelAnterior = "";
-	    	String imovelPosterior = "";
-	    	
-	    	if (!isInicioLista(posicao)) {
-	    		anterior = imoveis.get(posicao-1);
-	    		imovelAnterior = Util.capitalizarString(anterior.getEnderecoImovel().getLogradouro() + ", nº " + anterior.getEnderecoImovel().getNumero() + 
-	    				" " + anterior.getEnderecoImovel().getComplemento());
-	    	}
-	    	
-	    	if (!isFimLista(posicao)) {
-	    		proximo = imoveis.get(posicao+1);
-	    		imovelPosterior = Util.capitalizarString(proximo.getEnderecoImovel().getLogradouro() + ", nº " + proximo.getEnderecoImovel().getNumero() + 
-	    				" " + proximo.getEnderecoImovel().getComplemento());
-	    	}
-	    	
-	    	String imovelAtual = Util.capitalizarString(getImovelSelecionado().getEnderecoImovel().getLogradouro() + ", nº " + 
-	    						 getImovelSelecionado().getEnderecoImovel().getNumero() + 
-	    						 " " + getImovelSelecionado().getEnderecoImovel().getComplemento());
-	    	
-	    	
-	    	LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    	final View view = (View) inflater.inflate(R.layout.add_lote_dialog, (ViewGroup) findViewById(R.layout.maintab));
-	    	
-	    	final AlertDialog dialog = new AlertDialog.Builder(this).create();
-	    	dialog.setTitle("Por favor, escolha a posição do novo imóvel");
-	    	dialog.setView(view);
-	    	dialog.show();
-	    	
-	    	if (posicao >= 1) {
-	    		((TextView) view.findViewById(R.id.txtImovelAnterior)).setText(imovelAnterior);
-	    	}
-	    	
-	    	if (posicao <= getCadastroDataManipulator().getNumeroImoveis()) {
-	    		((TextView) view.findViewById(R.id.txtImovelPosterior)).setText(imovelPosterior);
-	    	}
-	    	
-	    	((TextView) view.findViewById(R.id.txtImovelAtual)).setText(imovelAtual); 
-	    	 
-	    	// Primeiro botao para adicionar imovel
-	    	Button inserirImoveAntes = (Button) view.findViewById(R.id.txtInserirImovelAntes);
-	    	final Imovel ant = anterior;
-	    	final Imovel prox = proximo;
-	    	inserirImoveAntes.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					dialog.dismiss();
-					Controlador.getInstancia().setPosicaoListaImoveis(posicao);
-					if (isInicioLista(posicao)) {
-					
-						indiceNovoImovel = posicao + 1;
-						int lote = (int)(Integer.parseInt(getImovelSelecionado().getLote())/2);
-						if (lote < 1) {
-							numeroLoteInsuficiente = true;;
-						}
-						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
-						
-					} else if (isFimLista(posicao)) {
-						
-						indiceNovoImovel = 0;
-						
-						int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(ant.getLote()))/2;
-						if (getImovelSelecionado().getLote().equals(""+lote) || ant.getLote().equals(""+lote)) {
-							numeroLoteInsuficiente = true;;
-						}
-						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
-					
-					} else if (isMesmoEndereco(ant.getEnderecoImovel().getLogradouro(), getImovelSelecionado().getEnderecoImovel().getLogradouro())) {
-						
-						indiceNovoImovel = posicao + 1;
-						
-						int lote = (Integer.parseInt(ant.getLote()) + Integer.parseInt(getImovelSelecionado().getLote()))/2;
-						if (getImovelSelecionado().getLote().equals(""+lote) || ant.getLote().equals(""+lote)) {
-							numeroLoteInsuficiente = true;;
-						}
-	                    preencheNovoImovel(ant, montarLote(""+lote));
-	                    
-					} else if (!isMesmoEndereco(ant.getEnderecoImovel().getLogradouro(), Controlador.getInstancia()
-							.getImovelSelecionado().getEnderecoImovel().getLogradouro())) {
-						
-						indiceNovoImovel = posicao + 1;
-						showDialogSelecionarFace(ant, IMOVEL_ANTERIOR);
-	                    
-					} 
-				}
-			});
-	    	
-	    	// Segundo botao para adicionar imovel
-	    	Button inserirImoveDepois = (Button) view.findViewById(R.id.txtInserirImovelDepois);
-	    	inserirImoveDepois.setOnClickListener(new OnClickListener() {
-	    		
-	    		public void onClick(View v) {
-	    			dialog.dismiss();
-	    			Controlador.getInstancia().setPosicaoListaImoveis(posicao);
-	    			int qtdImoveisRota = getCadastroDataManipulator().getNumeroImoveis();
-
-	    			if (qtdImoveisRota == 1) {
-	    				indiceNovoImovel = 0;
-						int lote = (Integer.parseInt(getImovelSelecionado().getLote())+4);
-						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
-						
-	    			} else if (isInicioLista(posicao)) {
-						
-	    				indiceNovoImovel = posicao+2;
-	    				int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(prox.getLote()))/2;
-	    				if (getImovelSelecionado().getLote().equals(""+lote) || prox.getLote().equals(""+lote)) {
-							numeroLoteInsuficiente = true;;
-						}
-						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
-						
-					} else if (isFimLista(posicao)) {
-						
-						indiceNovoImovel = 0;
-						int lote = (Integer.parseInt(getImovelSelecionado().getLote())+4);
-						preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
-					
-					} else if (isMesmoEndereco(getImovelSelecionado().getEnderecoImovel().getLogradouro(), prox.getEnderecoImovel().getLogradouro())) {
-	                
-						indiceNovoImovel = posicao+2;
-						int lote = (Integer.parseInt(getImovelSelecionado().getLote()) + Integer.parseInt(prox.getLote()))/2;
-						if (getImovelSelecionado().getLote().equals(""+lote) || prox.getLote().equals(""+lote)) {
-							numeroLoteInsuficiente = true;;
-						}
-	                    preencheNovoImovel(prox, montarLote(""+lote));
-					
-	    			} else if (!isMesmoEndereco(prox.getEnderecoImovel().getLogradouro(), getImovelSelecionado().getEnderecoImovel().getLogradouro())) {
-						
-						indiceNovoImovel = posicao+2;
-						showDialogSelecionarFace(prox, IMOVEL_POSTERIOR);
-	                    
-					}
-	    		}
-	    	});
-	    	
-
-	        return true;
-	        
-	    case R.id.novoSublote:
-
-	    	Controlador.getInstancia().setPosicaoListaImoveis(posicao);
-			
-			indiceNovoImovel = posicao + 1;
-			preencheSubLote(getImovelSelecionado());
-			
-	    	return true;
-	        
-	    case R.id.imovelExcluir:
-    		dialogMessage = "Confirma exclusão deste imóvel?";
-    		showCompleteDialog(R.drawable.aviso, "Atenção!", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
-            return true;
-	    		        
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }
 	}
 
 	@Override
@@ -413,63 +129,424 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		super.onResume();
 	}
 
-    public boolean ImovelExcluidoDialog(){
+	public int getCodigoAnormalidade() {
+		return anormalidadeTab.getCodigoAnormalidade();
+	}
 
-    	// setando dados do imóvel excluído.
-    	getImovelSelecionado().setOperacoTipo(Constantes.OPERACAO_CADASTRO_EXCLUIDO);
-    	getImovelSelecionado().setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
-    	getImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+	public void doGpsDesligado() {
+		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+		startActivity(intent);
+	}
 
-    	Controlador.getInstancia().getClienteSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
-    	Controlador.getInstancia().getServicosSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
-    	Controlador.getInstancia().getMedidorSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
-    	Controlador.getInstancia().getAnormalidadeImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
-    	
-    	// Cadastro configurado como Nao Transmitido
-    	Controlador.getInstancia().getImovelSelecionado().setImovelEnviado(String.valueOf(Constantes.NAO));
-    	
-    	Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
-    	Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
-    	Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
-    	Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
-    	Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
-        this.setTabColor();
-   		dialogMessage = " Imovel excluído com sucesso!";
-        showNotifyDialog(R.drawable.save, "", dialogMessage, Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
-        return true;
-    }
-    
-	public void preencheNovoImovel(Imovel imovelReferencia, String lote) {
-        Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
-        
-        int qtdImoveisNovos = getCadastroDataManipulator().getQtdImoveisNovo(); 
-        
+	public void chamarProximoImovel() {
+		controlador.isCadastroAlterado();
+
+		if (controlador.getPosicaoListaImoveis() == (manipulator.getNumeroImoveis()) - 1) {
+			controlador.setCadastroSelecionadoByListPosition(0);
+		} else {
+			controlador.setCadastroSelecionadoByListPosition(controlador.getPosicaoListaImoveis() + 1);
+		}
+
+		finish();
+		Intent intent = new Intent(this, MainTab.class);
+		startActivity(intent);
+	}
+
+	public void onTabChanged(String tabId) {
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+
+		if (tabId.equals("cliente")) {
+			transaction.show(clienteFragment);
+			transaction.hide(imovelFragment);
+			transaction.hide(servicosFragment);
+			transaction.hide(medidorFragment);
+			transaction.hide(anormalidadeFragment);
+
+		} else if (tabId.equals("imovel")) {
+			transaction.show(imovelFragment);
+			transaction.hide(clienteFragment);
+			transaction.hide(servicosFragment);
+			transaction.hide(medidorFragment);
+			transaction.hide(anormalidadeFragment);
+
+		} else if (tabId.equals("servico")) {
+			transaction.show(servicosFragment);
+			transaction.hide(clienteFragment);
+			transaction.hide(imovelFragment);
+			transaction.hide(medidorFragment);
+			transaction.hide(anormalidadeFragment);
+
+		} else if (tabId.equals("medidor")) {
+			transaction.show(medidorFragment);
+			transaction.hide(clienteFragment);
+			transaction.hide(imovelFragment);
+			transaction.hide(servicosFragment);
+			transaction.hide(anormalidadeFragment);
+
+		} else if (tabId.equals("anormalidade")) {
+			transaction.show(anormalidadeFragment);
+			transaction.hide(clienteFragment);
+			transaction.hide(imovelFragment);
+			transaction.hide(servicosFragment);
+			transaction.hide(medidorFragment);
+		}
+
+		transaction.commit();
+	}
+
+	public void onLocationChanged(Location location) {
+		((TextView) findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
+		((TextView) findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
+	}
+
+	public void onProviderDisabled(String provider) {
+		showNotifyDialog(R.drawable.aviso, "Alerta.", "O GPS está desligado. Por favor, ligue-o para continuar o cadastro.",
+				Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+	}
+
+	public void onProviderEnabled(String provider) {
+		Toast.makeText(this, "GPS ligado", Toast.LENGTH_SHORT).show();
+	}
+
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
+
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	}
+
+	private void verificarGPS() {
+		LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+		}
+
+		boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		if (!enabled) {
+			showNotifyDialog(R.drawable.aviso, "Alerta", "O GPS está desligado. Por favor, ligue-o para continuar o cadastro.",
+					Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+		}
+
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setCostAllowed(true);
+
+		CellLocation.requestLocationUpdate();
+	}
+
+	private void configurarTabHost() {
+		tabHost = (TabHost) findViewById(android.R.id.tabhost);
+		tabHost.setup();
+		tabHost.setOnTabChangedListener(this);
+
+		getResources().getConfiguration();
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			tabHost.setBackgroundResource(R.drawable.fundocadastro);
+		} else {
+			tabHost.setBackgroundResource(R.drawable.fundocadastro);
+		}
+	}
+
+	private void configurarTabs() {
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+
+		transaction.add(R.id.tabCliente, clienteTab);
+		transaction.add(R.id.tabImovel, imovelTab);
+		transaction.add(R.id.tabServicos, servicosTab);
+		transaction.add(R.id.tabMedidor, medidorTab);
+		transaction.add(R.id.tabAnormalidade, anormalidadeTab);
+
+		clienteFragment = manager.findFragmentById(R.id.tabCliente);
+		imovelFragment = manager.findFragmentById(R.id.tabImovel);
+		servicosFragment = manager.findFragmentById(R.id.tabServicos);
+		medidorFragment = manager.findFragmentById(R.id.tabMedidor);
+		anormalidadeFragment = manager.findFragmentById(R.id.tabAnormalidade);
+
+		transaction.show(clienteFragment);
+		transaction.hide(imovelFragment);
+		transaction.hide(servicosFragment);
+		transaction.hide(medidorFragment);
+		transaction.hide(anormalidadeFragment);
+		transaction.commit();
+	}
+
+	private void adicionarTabs() {
+		addTab("cliente", "Cliente", R.drawable.tab_cliente, R.layout.clientetab);
+		addTab("imovel", "Imóvel", R.drawable.tab_imovel, R.layout.imoveltab);
+		addTab("servico", "Serviço", R.drawable.tab_servico, R.layout.servicotab);
+		addTab("medidor", "Medidor", R.drawable.tab_medidor, R.layout.medidortab);
+		addTab("anormalidade", "Anormalidade", R.drawable.tab_anormalidade, R.layout.anormalidadetab);
+	}
+
+	private void addTab(String tag, String titulo, int imagem, final int view) {
+		Resources resources = getResources();
+
+		TabSpec tabSpec = tabHost.newTabSpec(tag).setIndicator(titulo, resources.getDrawable(imagem)).setContent(new TabContentFactory() {
+
+			public View createTabContent(String tag) {
+				LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				View layout = inflater.inflate(view, (ViewGroup) findViewById(R.layout.maintab));
+				return layout;
+			}
+		});
+
+		tabHost.addTab(tabSpec);
+
+		configurarCor();
+	}
+
+	private void showNotifyDialog(int iconId, String title, String message, int messageType) {
+		NotifyAlertDialogFragment dialog = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		dialog.show(getSupportFragmentManager(), "dialog");
+	}
+
+	private void showCompleteDialog(int iconId, String title, String message, int messageType) {
+		CompleteAlertDialogFragment dialog = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
+		dialog.show(getSupportFragmentManager(), "dialog");
+	}
+	
+	private void configurarMenu() {
+
+		final int menu = controlador.getMenuSelecionado();
+		final int posicao = controlador.getPosicaoListaImoveis();
+		
+		switch (menu) {
+		case R.id.botaoNovoImovel:
+			
+			final Imovel imovelSelecionado = controlador.getImovelSelecionado();
+			List<Imovel> imoveis = manipulator.selectEnderecoImovel(null);
+
+			final Imovel imovelAnterior = imoveis.get(posicao - 1);
+			final Imovel imovelPosterior = imoveis.get(posicao + 1);
+			
+			String enderecoAnterior = "";
+			String enderecoPosterior = "";
+
+			if (!isInicioLista(posicao)) {
+				enderecoAnterior = montarEndereco(imovelAnterior);
+			}
+
+			if (!isFimLista(posicao)) {
+				enderecoPosterior = montarEndereco(imovelPosterior);
+			}
+
+			Imovel imovelAtual = imoveis.get(posicao);
+			String enderecoAtual = montarEndereco(imovelAtual);
+
+			final View view = getViewDialogImovelNovo();
+			final AlertDialog dialog = configurarDialogImovelNovo(view, posicao, enderecoAnterior, enderecoPosterior, enderecoAtual);
+
+			configurarBotaoInserirImovelNovoAntes(posicao, imovelSelecionado, imovelAnterior, view, dialog);
+			configurarBotaoInserirImovelNovoDepois(posicao, imovelSelecionado, imovelPosterior, view, dialog);
+			
+			break;
+
+		case R.id.botaoAdicionarSublote:
+			indiceNovoImovel = posicao + 1;
+			montarImovelNovoSublote();
+			
+			break;
+
+		case R.id.botaoExcluirImovel:
+
+			showCompleteDialog(R.drawable.aviso, "Atenção", "Confirma exclusão deste imóvel?", Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
+
+			break;
+
+		default:
+			break;
+		}
+		
+		controlador.setMenuSelecionado(-1);
+	}
+
+	private boolean isInicioLista(long id) {
+		return id == 0;
+	}
+
+	private boolean isFimLista(long id) {
+		return id == manipulator.getNumeroImoveis() - 1;
+	}
+	
+	private String montarEndereco(Imovel imovel) {
+		return Util.capitalizarString(
+				imovel.getEnderecoImovel().getLogradouro() + ", nº " + 
+		        imovel.getEnderecoImovel().getNumero() + " " + 
+				imovel.getEnderecoImovel().getComplemento());
+	}
+	
+	private View getViewDialogImovelNovo() {
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final View view = (View) inflater.inflate(R.layout.dialog_imovel_novo, (ViewGroup) findViewById(R.layout.maintab));
+		return view;
+	}
+	
+	private AlertDialog configurarDialogImovelNovo(final View view, int posicao, String enderecoAnterior, String enderecoPosterior, String enderecoAtual) {
+		final AlertDialog dialog = new AlertDialog.Builder(this).create();
+		dialog.setTitle("Por favor, escolha a posição do imóvel novo");
+		dialog.setView(view);
+		dialog.show();
+
+		if (posicao >= 1) {
+			((TextView) view.findViewById(R.id.txtImovelAnterior)).setText(enderecoAnterior);
+		}
+
+		if (posicao <= manipulator.getNumeroImoveis()) {
+			((TextView) view.findViewById(R.id.txtImovelPosterior)).setText(enderecoPosterior);
+		}
+
+		((TextView) view.findViewById(R.id.txtImovelAtual)).setText(enderecoAtual);
+
+		return dialog;
+	}
+	
+	private void configurarBotaoInserirImovelNovoAntes(final int posicao, final Imovel imovelSelecionado, final Imovel imovelAnterior, 
+			final View view, final AlertDialog dialog) {
+
+		Button botao = (Button) view.findViewById(R.id.txtInserirImovelAntes);
+		botao.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				dialog.dismiss();
+
+				Controlador.getInstancia().setPosicaoListaImoveis(posicao); // TODO - Necessário?
+				
+				if (isInicioLista(posicao)) {
+
+					indiceNovoImovel = posicao + 1;
+
+					int lote = Integer.parseInt(imovelSelecionado.getLote()) / 2;
+
+					if (lote < 1) {
+						loteInvalido = true;
+					}
+
+					montarImovelNovo(imovelSelecionado, lote);
+
+				} else if (isFimLista(posicao)) {
+
+					indiceNovoImovel = 0;
+
+					int lote = verificarLoteInvalido(imovelSelecionado, imovelAnterior);
+
+					montarImovelNovo(imovelSelecionado, lote);
+
+				} else if (isMesmoEndereco(imovelAnterior, imovelSelecionado)) {
+
+					indiceNovoImovel = posicao + 1;
+
+					int lote = verificarLoteInvalido(imovelSelecionado, imovelAnterior);
+
+					montarImovelNovo(imovelAnterior, lote);
+
+				} else if (!isMesmoEndereco(imovelAnterior, imovelSelecionado)) {
+
+					indiceNovoImovel = posicao + 1;
+					
+					configurarDialogFace(imovelSelecionado, imovelAnterior, IMOVEL_ANTERIOR);
+				}
+			}
+		});
+	}
+
+	private void configurarBotaoInserirImovelNovoDepois(final int posicao, final Imovel imovelSelecionado, final Imovel imovelPosterior,
+			final View view, final AlertDialog dialog) {
+
+		Button botao = (Button) view.findViewById(R.id.txtInserirImovelDepois);
+		botao.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				dialog.dismiss();
+
+				Controlador.getInstancia().setPosicaoListaImoveis(posicao); // TODO - Necessário???
+
+				if (manipulator.getNumeroImoveis() == 1) {
+
+					indiceNovoImovel = 0;
+
+					int lote = Integer.parseInt(imovelSelecionado.getLote()) + 4;
+
+					montarImovelNovo(imovelSelecionado, lote);
+
+				} else if (isInicioLista(posicao)) {
+
+					indiceNovoImovel = posicao + 2;
+
+					int lote = verificarLoteInvalido(imovelSelecionado, imovelPosterior);
+
+					montarImovelNovo(imovelSelecionado, lote);
+
+				} else if (isFimLista(posicao)) {
+
+					indiceNovoImovel = 0;
+
+					int lote = Integer.parseInt(imovelSelecionado.getLote()) + 4;
+
+					montarImovelNovo(imovelSelecionado, lote);
+
+				} else if (isMesmoEndereco(imovelSelecionado, imovelPosterior)) {
+
+					indiceNovoImovel = posicao + 2;
+
+					int lote = verificarLoteInvalido(imovelSelecionado, imovelPosterior);
+
+					montarImovelNovo(imovelPosterior, lote);
+
+				} else if (!isMesmoEndereco(imovelPosterior, imovelSelecionado)) {
+
+					indiceNovoImovel = posicao + 2;
+					
+					configurarDialogFace(imovelSelecionado, imovelPosterior, IMOVEL_POSTERIOR);
+				}
+			}
+		});
+	}
+	
+	private int verificarLoteInvalido(final Imovel imovelSelecionado, final Imovel imovelAnteriorOuPosterior) {
+		int loteSelecionado = Integer.parseInt(imovelSelecionado.getLote());
+		int loteAnteriorOuPosterior = Integer.parseInt(imovelAnteriorOuPosterior.getLote());
+
+		int lote = (loteSelecionado + loteAnteriorOuPosterior) / 2;
+
+		if (loteSelecionado == lote || loteAnteriorOuPosterior == lote) {
+			loteInvalido = true;
+		}
+
+		return lote;
+	}
+	
+	private void montarImovelNovo(Imovel imovelReferencia, int lote) {
+		controlador.setCadastroSelecionadoNovoImovel();
+
+		int qtdImoveisNovos = manipulator.getQtdImoveisNovo();
+
 		Imovel imovel = new Imovel();
-		imovel.setMatricula(""+(++qtdImoveisNovos));
+		imovel.setMatricula("" + (++qtdImoveisNovos));
 		imovel.getEnderecoImovel().setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
 		imovel.getEnderecoImovel().setBairro(imovelReferencia.getEnderecoImovel().getBairro());
 		imovel.getEnderecoImovel().setCep(imovelReferencia.getEnderecoImovel().getCep());
 		imovel.getEnderecoImovel().setMunicipio(imovelReferencia.getEnderecoImovel().getMunicipio());
 		imovel.setRota(imovelReferencia.getRota());
 		imovel.setFace(imovelReferencia.getFace());
-		imovel.setCodigoMunicipio(""+imovelReferencia.getCodigoMunicipio());
+		imovel.setCodigoMunicipio("" + imovelReferencia.getCodigoMunicipio());
 		imovel.setSubLote("000");
-		imovel.setLote(lote);
-		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
+		imovel.setLote(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(lote)));
+		imovel.setCodigoLogradouro("" + imovelReferencia.getCodigoLogradouro());
 		imovel.setLocalidade(imovelReferencia.getLocalidade());
 		imovel.setSetor(imovelReferencia.getSetor());
 		imovel.setQuadra(imovelReferencia.getQuadra());
-		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
-		imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
+		imovel.setImovelStatus("" + Constantes.IMOVEL_NOVO);
+		imovel.setOperacoTipo("" + Constantes.OPERACAO_CADASTRO_NOVO);
 		imovel.setNovoRegistro(true);
-		
-		Controlador.getInstancia().setImovelSelecionado(imovel);
-		Controlador.getInstancia().getClienteSelecionado().setNovoRegistro(true);
-		Controlador.getInstancia().getServicosSelecionado().setNovoRegistro(true);
-		Controlador.getInstancia().getMedidorSelecionado().setNovoRegistro(true);
-		Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(true);
-		
-		if (numeroLoteInsuficiente) {
+
+		controlador.setImovelSelecionado(imovel);
+		controlador.getClienteSelecionado().setNovoRegistro(true);
+		controlador.getServicosSelecionado().setNovoRegistro(true);
+		controlador.getMedidorSelecionado().setNovoRegistro(true);
+		controlador.getAnormalidadeImovelSelecionado().setNovoRegistro(true);
+
+		if (loteInvalido) {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 			dialog.setTitle("Erro");
 			dialog.setMessage("Não há mais lotes disponíveis");
@@ -477,287 +554,168 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 				public void onClick(DialogInterface dialog, int which) {
 					finish();
 					Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-			        startActivity(myIntent);
+					startActivity(myIntent);
 				}
 			});
-			
+
 			dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
 
-			    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-			        if ( (keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) && 
-				         (event.getRepeatCount() == 0)) {
-				            
-				        return true; // Pretend we processed it
-			        }
-			        return false; // Any other keys are still processed as normal
-			    }
+				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+					if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK)
+							&& (event.getRepeatCount() == 0)) {
+
+						return true; // Pretend we processed it
+					}
+					return false; // Any other keys are still processed as
+									// normal
+				}
 			});
 
-			
 			dialog.show();
 		} else {
 			finish();
-			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-	        startActivity(myIntent);
+			startActivity(new Intent(getApplicationContext(), MainTab.class));
 		}
 	}
-	
-	public void preencheSubLote(Imovel imovelReferencia) {
-        Controlador.getInstancia().setCadastroSelecionadoNovoImovel();
-        
-        // Verifica se existem outros sublotes neste mesmo lote.
-        List<String> listaInscricao = getCadastroDataManipulator().selectSubLotesImovel(imovelReferencia.getLocalidade() + 
-        																				imovelReferencia.getSetor() + 
-        																				imovelReferencia.getQuadra() + 
-        																				imovelReferencia.getLote());
-        // Maior Sublote deste Lote
-        String ultimaInscricao = listaInscricao.get(listaInscricao.size()-1);
-        String ultimoSubLote = null;
-        
-        if (ultimaInscricao.trim().length() == 16){
-        	ultimoSubLote = ultimaInscricao.substring(13, 16);
-        }else{
-        	ultimoSubLote = ultimaInscricao.substring(14, 17);        	
-        }        
-        
-        int qtdImoveisNovos = getCadastroDataManipulator().getQtdImoveisNovo(); 
-        
-		Imovel imovel = new Imovel();
-		imovel.setMatricula(""+(++qtdImoveisNovos));
-		imovel.setLocalidade(imovelReferencia.getLocalidade());
-		imovel.setSetor(imovelReferencia.getSetor());
-		imovel.setQuadra(imovelReferencia.getQuadra());
-		imovel.setLote(imovelReferencia.getLote());
-		imovel.setSubLote(Util.adicionarZerosEsquerdaNumero(3, ""+(Integer.valueOf(ultimoSubLote)+1)));
-		imovel.setRota(imovelReferencia.getRota());
-		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
-		imovel.setFace(imovelReferencia.getFace());
-		imovel.getEnderecoImovel().setTipoLogradouro(""+imovelReferencia.getEnderecoImovel().getTipoLogradouro());
-		imovel.getEnderecoImovel().setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
-		imovel.getEnderecoImovel().setBairro(imovelReferencia.getEnderecoImovel().getBairro());
-		imovel.getEnderecoImovel().setCep(imovelReferencia.getEnderecoImovel().getCep());
-		imovel.getEnderecoImovel().setMunicipio(imovelReferencia.getEnderecoImovel().getMunicipio());
-		imovel.setCodigoMunicipio(""+imovelReferencia.getCodigoMunicipio());
-		imovel.setCodigoLogradouro(""+imovelReferencia.getCodigoLogradouro());
-		imovel.setImovelStatus(""+Constantes.IMOVEL_NOVO);
-		imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
 
-		Controlador.getInstancia().setImovelSelecionado(imovel);
-		
-		finish();
-		Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-        startActivity(myIntent);
-	}	
+	private boolean isMesmoEndereco(Imovel imovelAnterior, Imovel imovelSelecionado) {
+		return imovelAnterior.getEnderecoImovel().getLogradouro().trim().equals(imovelSelecionado.getEnderecoImovel().getLogradouro().trim());
+	}
 	
-	/**
-	 * 
-	 * @param imovelReferencia
-	 * @param posicaoImovel - 0: anterior, 1: posterior
-	 */
-	public void showDialogSelecionarFace(final Imovel imovelReferencia, final int posicaoImovel) {
+	private void configurarDialogFace(final Imovel imovelSelecionado, final Imovel imovelReferencia, final int posicao) {
 		ListView lista = new ListView(MainTab.this);
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainTab.this, android.R.layout.simple_list_item_1);
-		
+
 		final AlertDialog dialog = new AlertDialog.Builder(MainTab.this).create();
 		dialog.setTitle("Por favor, selecione a rua ao qual o imóvel faz frente");
 		dialog.setView(lista);
 		dialog.show();
-		
-		if (posicaoImovel == IMOVEL_ANTERIOR) {
-			arrayAdapter.add(Util.capitalizarString(imovelReferencia.getEnderecoImovel().getLogradouro() + ", nº " + imovelReferencia.getEnderecoImovel().getNumero() + 
-					" " + imovelReferencia.getEnderecoImovel().getComplemento()));
-			arrayAdapter.add(Util.capitalizarString(getImovelSelecionado().getEnderecoImovel().getLogradouro() + ", nº " + 
-					 getImovelSelecionado().getEnderecoImovel().getNumero() + 
-					 " " + getImovelSelecionado().getEnderecoImovel().getComplemento()));
-		
-		} else if (posicaoImovel == IMOVEL_POSTERIOR) {
-			arrayAdapter.add(Util.capitalizarString(getImovelSelecionado().getEnderecoImovel().getLogradouro() + ", nº " + 
-					getImovelSelecionado().getEnderecoImovel().getNumero() + 
-					" " + getImovelSelecionado().getEnderecoImovel().getComplemento()));
-			arrayAdapter.add(Util.capitalizarString(imovelReferencia.getEnderecoImovel().getLogradouro() + ", nº " + imovelReferencia.getEnderecoImovel().getNumero() + 
-					" " + imovelReferencia.getEnderecoImovel().getComplemento()));
+
+		if (posicao == IMOVEL_ANTERIOR) {
+			arrayAdapter.add(Util.capitalizarString(imovelReferencia.getEnderecoImovel().getLogradouro() + ", nº "
+					+ imovelReferencia.getEnderecoImovel().getNumero() + " " + imovelReferencia.getEnderecoImovel().getComplemento()));
+			arrayAdapter.add(Util.capitalizarString(imovelSelecionado.getEnderecoImovel().getLogradouro() + ", nº "
+					+ imovelSelecionado.getEnderecoImovel().getNumero() + " " + imovelSelecionado.getEnderecoImovel().getComplemento()));
+
+		} else if (posicao == IMOVEL_POSTERIOR) {
+			arrayAdapter.add(Util.capitalizarString(imovelSelecionado.getEnderecoImovel().getLogradouro() + ", nº "
+					+ imovelSelecionado.getEnderecoImovel().getNumero() + " " + imovelSelecionado.getEnderecoImovel().getComplemento()));
+			arrayAdapter.add(Util.capitalizarString(imovelReferencia.getEnderecoImovel().getLogradouro() + ", nº "
+					+ imovelReferencia.getEnderecoImovel().getNumero() + " " + imovelReferencia.getEnderecoImovel().getComplemento()));
 		}
-		
+
 		lista.setAdapter(arrayAdapter);
 		lista.setBackgroundColor(Color.parseColor("#6e6e6e"));
 		lista.setCacheColorHint(0);
 		lista.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				
+
 				dialog.dismiss();
-				
+
 				// Monta o novo imovel com os dados do imovel selecionado
-				if ((position == 0 && posicaoImovel == IMOVEL_POSTERIOR)) {
-					preencheNovoImovel(getImovelSelecionado(), montarLote(""+(Integer.parseInt(getImovelSelecionado().getLote()) + 4)));
+				if ((position == 0 && posicao == IMOVEL_POSTERIOR)) {
+					montarImovelNovo(imovelSelecionado, (Integer.parseInt(imovelSelecionado.getLote()) + 4));
 					return;
-				
-				} else if (position == 1 && posicaoImovel == IMOVEL_ANTERIOR) {
-					int lote = Integer.parseInt(getImovelSelecionado().getLote())/2;
+
+				} else if (position == 1 && posicao == IMOVEL_ANTERIOR) {
+					int lote = Integer.parseInt(imovelSelecionado.getLote()) / 2;
 					if (lote < 1) {
-						numeroLoteInsuficiente = true;
+						loteInvalido = true;
 					}
-					preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
+					montarImovelNovo(imovelSelecionado, lote);
 					return;
 				}
-				
-				if (posicaoImovel == IMOVEL_ANTERIOR) {
+
+				if (posicao == IMOVEL_ANTERIOR) {
 					int lote = (Integer.parseInt(imovelReferencia.getLote()) + 4);
-					preencheNovoImovel(getImovelSelecionado(), montarLote(""+lote));
-				
-				} else if (posicaoImovel == IMOVEL_POSTERIOR) {
-					int lote = Integer.parseInt(imovelReferencia.getLote())/2;
+					montarImovelNovo(imovelSelecionado, lote);
+
+				} else if (posicao == IMOVEL_POSTERIOR) {
+					int lote = Integer.parseInt(imovelReferencia.getLote()) / 2;
 					if (lote < 1) {
-						numeroLoteInsuficiente = true;
+						loteInvalido = true;
 					}
-					preencheNovoImovel(imovelReferencia, montarLote(""+lote));
+					montarImovelNovo(imovelReferencia, lote);
 				}
-				
+
 			}
 		});
-
-	}
-
-	private void showNotifyDialog(int iconId, String title, String message, int messageType) {
-		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
-        newFragment.show(getSupportFragmentManager(), "dialog");
-    }
-	
-	private void showCompleteDialog(int iconId, String title, String message, int messageType) {
-		CompleteAlertDialogFragment newFragment = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
-        newFragment.show(getSupportFragmentManager(), "dialog");
-    }
-
-	public int getCodigoAnormalidade(){
-		return anormalidadeTab.getCodigoAnormalidade();
-	}
-
-	public void doPositiveClick() {
-        // Do stuff here.
-        Log.i("FragmentAlertDialog", "Positive click!");
-    }
-
-	public void doNegativeClick() {
-		// Do stuff here.
-		Log.i("FragmentAlertDialog", "Negative click!");
 	}
 	
-	public void doGpsDesligado() {
-		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		startActivity(intent);
-    }
-    
-	public void chamarProximoImovel() {
-		int posicao = Controlador.getInstancia().getPosicaoListaImoveis();
-		int proximo = -1;
-
-		if (indiceNovoImovel != null) {
-			proximo = indiceNovoImovel;
-			indiceNovoImovel = null;
-		} else if (posicao == (Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis()) - 1) {
-			proximo = 0;
-		} else {
-			proximo = posicao + 1;
-		}
-
-		Controlador.getInstancia().setCadastroSelecionadoByListPosition(proximo);
+	private void montarImovelNovoSublote() {
+		Imovel imovelReferencia = controlador.getImovelSelecionado();
 		
+		controlador.setCadastroSelecionadoNovoImovel();
+
+		List<String> inscricoes = manipulator.selectSubLotesImovel(imovelReferencia.getLocalidade() + imovelReferencia.getSetor()
+				+ imovelReferencia.getQuadra() + imovelReferencia.getLote());
+
+		int quantidadeImoveisNovos = manipulator.getQtdImoveisNovo() + 1;
+
+		Imovel imovel = new Imovel();
+		imovel.setSubLote(Util.adicionarZerosEsquerdaNumero(3, getNovoSublote(inscricoes)));
+		imovel.setMatricula(String.valueOf((quantidadeImoveisNovos)));
+		imovel.setLocalidade(imovelReferencia.getLocalidade());
+		imovel.setSetor(imovelReferencia.getSetor());
+		imovel.setQuadra(imovelReferencia.getQuadra());
+		imovel.setLote(imovelReferencia.getLote());
+		imovel.setRota(imovelReferencia.getRota());
+		imovel.setCodigoLogradouro(String.valueOf(imovelReferencia.getCodigoLogradouro()));
+		imovel.setFace(imovelReferencia.getFace());
+		
+		Endereco endereco = new Endereco();
+		endereco.setTipoLogradouro(String.valueOf(imovelReferencia.getEnderecoImovel().getTipoLogradouro()));
+		endereco.setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
+		endereco.setBairro(imovelReferencia.getEnderecoImovel().getBairro());
+		endereco.setCep(imovelReferencia.getEnderecoImovel().getCep());
+		endereco.setMunicipio(imovelReferencia.getEnderecoImovel().getMunicipio());
+		imovel.setEnderecoImovel(endereco);
+		
+		imovel.setCodigoMunicipio(String.valueOf(imovelReferencia.getCodigoMunicipio()));
+		imovel.setCodigoLogradouro(String.valueOf(imovelReferencia.getCodigoLogradouro()));
+		imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO));
+		imovel.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
+
+		controlador.setImovelSelecionado(imovel);
+
 		finish();
-		startActivity(new Intent(this, MainTab.class));
+		startActivity(new Intent(getApplicationContext(), MainTab.class));
 	}
 
-	public String montarLote(String lote) {
-		return Util.adicionarZerosEsquerdaNumero(4, lote);
-	}
-	
-	public boolean isInicioLista(long id) {
-		return id == 0;
-	}
-	
-	public boolean isFimLista(long id) {
-		return id == getCadastroDataManipulator().getNumeroImoveis()-1;
-	}
-	
-	public boolean isMesmoEndereco(String e1, String e2) {
-		return e1.trim().equals(e2.trim());
-	}
-	
-	public Imovel getImovelSelecionado() {
-		return Controlador.getInstancia().getImovelSelecionado();
-	}
-	
-	public int getPosicaoImovelLista(Imovel imovel) {
-		return getCadastroDataManipulator().getPosicaoImovelLista(imovel);
-	}
+	private String getNovoSublote(List<String> inscricoes) {
+		String ultimaInscricao = inscricoes.get(inscricoes.size() - 1);
 
-	public static DataManipulator getCadastroDataManipulator(){
-		return Controlador.getInstancia().getCadastroDataManipulator();
-	}
-
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-		
-	}
-
-	public void onTabChanged(String tabId) {
-		FragmentManager fm = getSupportFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-
-		if (tabId.equals("cliente")){
-	    	ft.show(clienteFragment);
-	    	ft.hide(imovelFragment);
-	    	ft.hide(servicosFragment);
-	    	ft.hide(medidorFragment);
-	    	ft.hide(anormalidadeFragment);
-		
-		}else if (tabId.equals("imovel")){
-	    	ft.show(imovelFragment);
-	    	ft.hide(clienteFragment);
-	    	ft.hide(servicosFragment);
-	    	ft.hide(medidorFragment);
-	    	ft.hide(anormalidadeFragment);
-		
-		}else if (tabId.equals("servico")){
-	    	ft.show(servicosFragment);
-	    	ft.hide(clienteFragment);
-	    	ft.hide(imovelFragment);
-	    	ft.hide(medidorFragment);
-	    	ft.hide(anormalidadeFragment);
-		
-		}else if (tabId.equals("medidor")){
-	    	ft.show(medidorFragment);
-	    	ft.hide(clienteFragment);
-	    	ft.hide(imovelFragment);
-	    	ft.hide(servicosFragment);
-	    	ft.hide(anormalidadeFragment);
-		
-		}else if (tabId.equals("anormalidade")){
-	    	ft.show(anormalidadeFragment);
-	    	ft.hide(clienteFragment);
-	    	ft.hide(imovelFragment);
-	    	ft.hide(servicosFragment);
-	    	ft.hide(medidorFragment);
+		String ultimoSublote = null;
+		if (ultimaInscricao.trim().length() == 16) {
+			ultimoSublote = ultimaInscricao.substring(13, 16);
+		} else {
+			ultimoSublote = ultimaInscricao.substring(14, 17);
 		}
+
+		return String.valueOf(Integer.parseInt(ultimoSublote) + 1);
+	}
+	
+	public void excluirImovel() {
+		Imovel imovelSelecionado = controlador.getImovelSelecionado();
+		imovelSelecionado.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_EXCLUIDO));
+		imovelSelecionado.setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
+		imovelSelecionado.setData(Util.formatarData(Calendar.getInstance().getTime()));
+		imovelSelecionado.setImovelEnviado(String.valueOf(Constantes.NAO)); // TODO - TRANSMISTIR?
+
+		manipulator.getClienteSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+		manipulator.getServicosSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+		manipulator.getMedidorSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+		manipulator.getAnormalidadeImovelSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
+
+		manipulator.salvarCliente();
+		manipulator.salvarServico();
+		manipulator.salvarImovel();
+		manipulator.salvarMedidor();
+		manipulator.salvarAnormalidadeImovel();
+
+		configurarCor();
 		
-    	ft.commit();
+		showNotifyDialog(R.drawable.save, "Sucesso", "Imovel excluído com sucesso", Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
 	}
-
-	public void onLocationChanged(Location location) {
-		((TextView)findViewById(R.id.txtValorLatitude)).setText(String.valueOf(location.getLatitude()));
-		((TextView)findViewById(R.id.txtValorLongitude)).setText(String.valueOf(location.getLongitude()));
-	}
-	
-	public void onProviderDisabled(String provider) {
-        // Check if enabled and if not send user to the GSP settings
-        // Better solution would be to display a dialog and suggesting to 
-        // go to the settings
-		dialogMessage = " GPS está desligado. Por favor, ligue-o para continuar o cadastro. ";
-        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
-	}
-	
-	public void onProviderEnabled(String provider) {
-		Toast.makeText(this,"GPS ligado",Toast.LENGTH_SHORT).show();
-	}
-	
-	public void onStatusChanged(String provider, int status, Bundle extras) {}
-
 }

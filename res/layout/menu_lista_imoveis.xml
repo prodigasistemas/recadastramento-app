@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_menu_lista_imoveis"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/botaoNovoImovel"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:drawableLeft="@drawable/ic_novo_imovel"
+        android:onClick="chamarMainTab"
+        android:text="@string/menu_novo_imovel"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/botaoAdicionarSublote"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:drawableLeft="@drawable/ic_adicionar_sublote"
+        android:onClick="chamarMainTab"
+        android:text="@string/menu_adicionar_sublote"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/botaoExcluirImovel"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:drawableLeft="@drawable/ic_excluir_imovel"
+        android:onClick="chamarMainTab"
+        android:text="@string/menu_excluir_imovel"
+        android:textSize="20sp" />
+
+</LinearLayout>

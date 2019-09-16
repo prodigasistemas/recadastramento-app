@@ -109,10 +109,10 @@ public class Imovel extends Model {
 		observacao="";
 	}
 
-	public void setOperacoTipo(int operacaoTipo) {
-		this.operacaoTipo = operacaoTipo;
+	public void setOperacoTipo(String operacaoTipo) {
+		this.operacaoTipo = Util.verificarNuloInt(operacaoTipo);
 	}
-
+		
 	public void setEntrevistado(String entrevistado) {
 		this.entrevistado = entrevistado;
 	}
@@ -331,6 +331,10 @@ public class Imovel extends Model {
 		return this.enderecoImovel;
 	}
 
+	public void setEnderecoImovel(Endereco enderecoImovel) {
+		this.enderecoImovel = enderecoImovel;
+	}
+
 	public Categoria getCategoriaResidencial() {
 		return this.categoriaResidencial;
 	}
@@ -490,5 +494,13 @@ public class Imovel extends Model {
 
 	public void setInconsistencias(String inconsistencias) {
 		this.inconsistencias = inconsistencias;
+	}
+	
+	public boolean isExcluido() {
+		return operacaoTipo == Constantes.OPERACAO_CADASTRO_EXCLUIDO;
+	}
+	
+	public boolean isInformativo() {
+		return imovelStatus == Constantes.IMOVEL_INFORMATIVO;
 	}
 }

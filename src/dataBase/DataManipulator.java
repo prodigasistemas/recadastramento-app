@@ -274,9 +274,9 @@ public List<String> selectEnderecoImoveis(String condition){
 
 		Cursor cursor;
 		if (condicao == null) {
-			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status, imovel_enviado" }, null, null, null, null, "inscricao asc");
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status, imovel_enviado, tipo_operacao" }, null, null, null, null, "inscricao asc");
 		} else {
-			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado" }, condicao, null, null, null, "inscricao asc");
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado, tipo_operacao" }, condicao, null, null, null, "inscricao asc");
 		}
 
 		if (cursor.moveToFirst()) {
@@ -284,6 +284,7 @@ public List<String> selectEnderecoImoveis(String condition){
 				Imovel imovel = new Imovel();
 				imovel.setImovelStatus(cursor.getString(0));
 				imovel.setImovelEnviado(cursor.getString(1));
+				imovel.setOperacoTipo(cursor.getString(2));
 				imoveis.add(imovel);
 			} while (cursor.moveToNext());
 		}
@@ -633,8 +634,6 @@ public List<String> selectEnderecoImoveis(String condition){
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		cursor.close();
-
 	}
    
 	public void selectServico(long id){
@@ -1164,76 +1163,76 @@ public List<String> selectEnderecoImoveis(String condition){
 		return tamanho;
 	}
 
-	public long insertImovel(String linhaArquivo){
+	public long insertImovel(String linhaArquivo) {
 		ParserUtil parser = new ParserUtil(linhaArquivo);
-    	parser.obterDadoParser(2);
-    	
-	   ContentValues initialValues = new ContentValues();
-	   initialValues.put("matricula", String.valueOf(Integer.parseInt(parser.obterDadoParser(9))));
-	   initialValues.put("codigo_cliente", parser.obterDadoParser(30));
-	   initialValues.put("inscricao", parser.obterDadoParser(17));
-	   initialValues.put("rota", parser.obterDadoParser(2));
-	   initialValues.put("face", parser.obterDadoParser(2));
-	   initialValues.put("codigo_municipio", parser.obterDadoParser(8));
-	   initialValues.put("numero_iptu", parser.obterDadoParser(31));
-	   initialValues.put("numero_celpa", parser.obterDadoParser(20));
-	   initialValues.put("numero_pontos_uteis", parser.obterDadoParser(5));
-	   initialValues.put("numero_ocupantes", parser.obterDadoParser(5));
-	   
-	   initialValues.put("tipo_logradouro_imovel", parser.obterDadoParser(2));
-	   initialValues.put("logradouro_imovel", parser.obterDadoParser(40));
-	   initialValues.put("numero_imovel", parser.obterDadoParser(5));
-	   initialValues.put("complemento_imovel", parser.obterDadoParser(25));
-	   initialValues.put("bairro_imovel", parser.obterDadoParser(20));
-	   initialValues.put("cep_imovel", parser.obterDadoParser(8));
-	   initialValues.put("municipio_imovel", parser.obterDadoParser(15));
-	   initialValues.put("codigo_logradouro_imovel", parser.obterDadoParser(9));
+		parser.obterDadoParser(2);
 
-	   initialValues.put("sub_categoria_residencial_1", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_residencial_2", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_residencial_3", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_residencial_4", parser.obterDadoParser(3));
-	   
-	   initialValues.put("sub_categoria_comercial_1", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_comercial_2", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_comercial_3", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_comercial_4", parser.obterDadoParser(3));
-	   
-	   initialValues.put("sub_categoria_publica_1", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_publica_2", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_publica_3", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_publica_4", parser.obterDadoParser(3));
-	   
-	   initialValues.put("sub_categoria_industrial_1", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_industrial_2", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_industrial_3", parser.obterDadoParser(3));
-	   initialValues.put("sub_categoria_industrial_4", parser.obterDadoParser(3));
-	   initialValues.put("tipo_fonte_abastecimento", parser.obterDadoParser(2));
-	   
-	   initialValues.put("area_construida", parser.obterDadoParser(10));
-	   initialValues.put("classe_social", parser.obterDadoParser(1));
-	   initialValues.put("numero_animais", parser.obterDadoParser(4));
-	   
-	   initialValues.put("volume_cisterna", parser.obterDadoParser(7));
-	   initialValues.put("volume_piscina", parser.obterDadoParser(7));
-	   initialValues.put("volume_caixa_dagua", parser.obterDadoParser(7));
-	   
-	   initialValues.put("tipo_uso", parser.obterDadoParser(1));
-	   initialValues.put("acesso_hidrometro", parser.obterDadoParser(1));
-	   
-	   initialValues.put("numero_criancas", parser.obterDadoParser(4));
-	   initialValues.put("numero_adultos", parser.obterDadoParser(4));
-	   initialValues.put("numero_idosos", parser.obterDadoParser(4));
-	   initialValues.put("numero_empregados", parser.obterDadoParser(4));
-	   initialValues.put("numero_alunos", parser.obterDadoParser(4));
-	   initialValues.put("numero_caes", parser.obterDadoParser(4));
-	   initialValues.put("numero_outros", parser.obterDadoParser(4));
-	   
-	   initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
-	   initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
+		ContentValues initialValues = new ContentValues();
+		initialValues.put("matricula", String.valueOf(Integer.parseInt(parser.obterDadoParser(9))));
+		initialValues.put("codigo_cliente", parser.obterDadoParser(30));
+		initialValues.put("inscricao", parser.obterDadoParser(17));
+		initialValues.put("rota", parser.obterDadoParser(2));
+		initialValues.put("face", parser.obterDadoParser(2));
+		initialValues.put("codigo_municipio", parser.obterDadoParser(8));
+		initialValues.put("numero_iptu", parser.obterDadoParser(31));
+		initialValues.put("numero_celpa", parser.obterDadoParser(20));
+		initialValues.put("numero_pontos_uteis", parser.obterDadoParser(5));
+		initialValues.put("numero_ocupantes", parser.obterDadoParser(5));
 
-	   initialValues.put("percentual_abastecimento", parser.obterDadoParser(3) != null ? parser.getConteudo() : "000");
-	   
+		initialValues.put("tipo_logradouro_imovel", parser.obterDadoParser(2));
+		initialValues.put("logradouro_imovel", parser.obterDadoParser(40));
+		initialValues.put("numero_imovel", parser.obterDadoParser(5));
+		initialValues.put("complemento_imovel", parser.obterDadoParser(25));
+		initialValues.put("bairro_imovel", parser.obterDadoParser(20));
+		initialValues.put("cep_imovel", parser.obterDadoParser(8));
+		initialValues.put("municipio_imovel", parser.obterDadoParser(15));
+		initialValues.put("codigo_logradouro_imovel", parser.obterDadoParser(9));
+
+		initialValues.put("sub_categoria_residencial_1", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_residencial_2", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_residencial_3", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_residencial_4", parser.obterDadoParser(3));
+
+		initialValues.put("sub_categoria_comercial_1", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_comercial_2", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_comercial_3", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_comercial_4", parser.obterDadoParser(3));
+
+		initialValues.put("sub_categoria_publica_1", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_publica_2", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_publica_3", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_publica_4", parser.obterDadoParser(3));
+
+		initialValues.put("sub_categoria_industrial_1", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_industrial_2", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_industrial_3", parser.obterDadoParser(3));
+		initialValues.put("sub_categoria_industrial_4", parser.obterDadoParser(3));
+		initialValues.put("tipo_fonte_abastecimento", parser.obterDadoParser(2));
+
+		initialValues.put("area_construida", parser.obterDadoParser(10));
+		initialValues.put("classe_social", parser.obterDadoParser(1));
+		initialValues.put("numero_animais", parser.obterDadoParser(4));
+
+		initialValues.put("volume_cisterna", parser.obterDadoParser(7));
+		initialValues.put("volume_piscina", parser.obterDadoParser(7));
+		initialValues.put("volume_caixa_dagua", parser.obterDadoParser(7));
+
+		initialValues.put("tipo_uso", parser.obterDadoParser(1));
+		initialValues.put("acesso_hidrometro", parser.obterDadoParser(1));
+
+		initialValues.put("numero_criancas", parser.obterDadoParser(4));
+		initialValues.put("numero_adultos", parser.obterDadoParser(4));
+		initialValues.put("numero_idosos", parser.obterDadoParser(4));
+		initialValues.put("numero_empregados", parser.obterDadoParser(4));
+		initialValues.put("numero_alunos", parser.obterDadoParser(4));
+		initialValues.put("numero_caes", parser.obterDadoParser(4));
+		initialValues.put("numero_outros", parser.obterDadoParser(4));
+
+		initialValues.put("quantidade_economias_social", parser.obterDadoParser(3));
+		initialValues.put("quantidade_economias_outros", parser.obterDadoParser(3));
+
+		initialValues.put("percentual_abastecimento", parser.obterDadoParser(3) != null ? parser.getConteudo() : "000");
+
 		String informativo = parser.obterDadoParser(1);
 		String status = null;
 		if (informativo.length() > 0 && Integer.valueOf(informativo) == Constantes.SIM) {
@@ -1243,15 +1242,15 @@ public List<String> selectEnderecoImoveis(String condition){
 		}
 
 		initialValues.put("imovel_status", status);
-       
-	   initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
-	   initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
-	   initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
-   	   initialValues.put("data", "");
-   	   initialValues.put("entrevistado", "");
-   	   initialValues.put("tipo_operacao", Constantes.OPERACAO_CADASTRO_ALTERADO);
-	   
-	   return db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
+
+		initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
+		initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
+		initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
+		initialValues.put("data", "");
+		initialValues.put("entrevistado", "");
+		initialValues.put("tipo_operacao", Constantes.OPERACAO_CADASTRO_ALTERADO);
+
+		return db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
 	}
 
 	public long insertAnormalidadeImovel(String linhaArquivo) {
@@ -1945,7 +1944,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		imovel.setLongitude(getValorColuna(cursor, "longitude"));
 		imovel.setData(getValorColuna(cursor, "data"));
 		imovel.setEntrevistado(getValorColuna(cursor, "entrevistado"));
-		imovel.setOperacoTipo(Integer.valueOf(getValorColuna(cursor, "tipo_operacao")));
+		imovel.setOperacoTipo(getValorColuna(cursor, "tipo_operacao"));
 
 		imovel.setListaRamoAtividade(selectRamoAtividadeImovel(id));
 

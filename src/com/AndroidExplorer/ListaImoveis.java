@@ -5,9 +5,13 @@ import java.util.List;
 
 import model.Imovel;
 import util.Constantes;
+import util.Util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -15,72 +19,130 @@ import android.graphics.drawable.GradientDrawable.Orientation;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import business.Controlador;
+import dataBase.DataManipulator;
 
 public class ListaImoveis extends ListActivity {
 
+	private Controlador controlador;
+	private DataManipulator manipulator;
+
 	private ListaImoveisAdapter adapter;
 	private List<Imovel> imoveis;
+	private AlertDialog dialog;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.imoveislist);
-		this.getListView().setCacheColorHint(Color.TRANSPARENT);
 
+		this.controlador = Controlador.getInstancia();
+		this.manipulator = controlador.getCadastroDataManipulator();
+
+		setContentView(R.layout.lista_imoveis);
+
+		ListView view = getListView();
 		int[] colors = { 0x12121212, 0xFFFFFFFF, 0x12121212 };
-		this.getListView().setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
-		this.getListView().setDividerHeight(1);
+		view.setDivider(new GradientDrawable(Orientation.RIGHT_LEFT, colors));
+		view.setDividerHeight(1);
+		view.setCacheColorHint(Color.TRANSPARENT);
+		view.setClickable(true);
+		view.setOnItemClickListener(click);
+		view.setLongClickable(true);
+		view.setOnItemLongClickListener(longClick);
 	}
-
+	
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
+
 		carregarEnderecos();
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		carregarEnderecos();
+	}
+
+	public void chamarMainTab(View view) {
+		controlador.setCadastroSelecionadoByListPosition(adapter.getPosicaoSelecionada());
+		controlador.setMenuSelecionado(view.getId());
+		dialog.dismiss();
+		startActivityForResult(new Intent(getApplicationContext(), MainTab.class), 0);
+	}
+	
 	private void carregarEnderecos() {
 
-		if (Controlador.getInstancia().getCadastroDataManipulator() != null) {
+		if (manipulator != null) {
 
-			imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().selectStatusImoveis(null);
-			List<String> enderecos = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectEnderecoImoveis(null);
+			imoveis = (List<Imovel>) manipulator.selectStatusImoveis(null);
+			List<String> enderecos = (ArrayList<String>) manipulator.selectEnderecoImoveis(null);
 
 			if (enderecos != null && enderecos.size() > 0) {
 				adapter = new ListaImoveisAdapter(this, enderecos);
 				setListAdapter(adapter);
 
-				if (Controlador.getInstancia().getPosicaoListaImoveis() > -1) {
-					this.setSelection(Controlador.getInstancia().getPosicaoListaImoveis());
-					adapter.setSelectedPosition(Controlador.getInstancia().getPosicaoListaImoveis());
+				if (controlador.getPosicaoListaImoveis() > -1) {
+					this.setSelection(controlador.getPosicaoListaImoveis());
+					adapter.setPosicaoSelecionada(controlador.getPosicaoListaImoveis());
 				}
 			}
 		}
 	}
 
-	@Override
-	protected void onListItemClick(ListView l, View view, int position, long id) {
-		adapter.setSelectedPosition(position);
+	private OnItemClickListener click = new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			
+			if (permiteCadastro(position)) {
+				adapter.setPosicaoSelecionada(position);
+				controlador.setCadastroSelecionadoByListPosition(position);
+				startActivityForResult(new Intent(getApplicationContext(), MainTab.class), 0);
+			}
+		}
+	};
+	
+	private OnItemLongClickListener longClick = new OnItemLongClickListener() {
+		
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-		Imovel imovel = imoveis.get(position);
-		int status = imovel.getImovelStatus();
-
-		if (status != Constantes.IMOVEL_INFORMATIVO) {
-			Controlador.getInstancia().setCadastroSelecionadoByListPosition(position);
-			Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-			startActivityForResult(myIntent, 0);
+			if (permiteCadastro(position)) {
+				adapter.setPosicaoSelecionada(position);
+				final View layout = getLayoutInflater().inflate(R.layout.menu_lista_imoveis, (ViewGroup) findViewById(R.id.layout_menu_lista_imoveis));
+				dialog = Util.criarDialog(layout.getContext(), layout, "Selecione uma Ação", null, -1, null, cancelar);
+				dialog.show();
+			}
+			
+			return true;
+		}
+	};
+	
+	private boolean permiteCadastro(int posicao) {
+		if (imoveis.get(posicao).isInformativo()) {
+			Toast.makeText(ListaImoveis.this, "Não é possível selecionar imóvel Informativo", Toast.LENGTH_LONG).show();
+			return false;
+		} else {
+			return true;
 		}
 	}
 
-	public class ListaImoveisAdapter extends ArrayAdapter<String> {
+	private OnClickListener cancelar = new OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {}
+	};
+	
+	private class ListaImoveisAdapter extends ArrayAdapter<String> {
 		private final Activity context;
 		private final List<String> enderecos;
 
-		private int selectedPosition = -1;
+		private int posicaoSelecionada = -1;
 
 		public ListaImoveisAdapter(Activity context, List<String> enderecos) {
 			super(context, R.layout.rowimovel, enderecos);
@@ -88,13 +150,13 @@ public class ListaImoveis extends ListActivity {
 			this.enderecos = enderecos;
 		}
 
-		public void setSelectedPosition(int pos) {
-			selectedPosition = pos;
-			notifyDataSetChanged();
+		public int getPosicaoSelecionada() {
+			return posicaoSelecionada;
 		}
 
-		public int getSelectedPosition() {
-			return selectedPosition;
+		public void setPosicaoSelecionada(int posicao) {
+			posicaoSelecionada = posicao;
+			notifyDataSetChanged();
 		}
 
 		@SuppressLint({ "ViewHolder", "InflateParams" })
@@ -108,12 +170,8 @@ public class ListaImoveis extends ListActivity {
 			return rowView;
 		}
 
-		public String getListElementName(int element) {
-			return enderecos.get(element);
-		}
-
 		private void configurarSelecionado(int position, View rowView) {
-			if (selectedPosition == position) {
+			if (posicaoSelecionada == position) {
 				rowView.setBackgroundColor(Color.argb(70, 255, 255, 255));
 			} else {
 				rowView.setBackgroundColor(Color.TRANSPARENT);
@@ -137,6 +195,8 @@ public class ListaImoveis extends ListActivity {
 
 				if (imovel.isEnviado()) {
 					imageView.setImageResource(R.drawable.salvo_enviado);
+				} else if (imovel.isExcluido()) {
+					imageView.setImageResource(R.drawable.excluido);
 				} else {
 					imageView.setImageResource(R.drawable.salvo);
 				}
@@ -150,6 +210,7 @@ public class ListaImoveis extends ListActivity {
 				} else {
 					imageView.setImageResource(R.drawable.salvo_anormalidade);
 				}
+
 				break;
 
 			case Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA:
@@ -163,7 +224,7 @@ public class ListaImoveis extends ListActivity {
 			case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
 				imageView.setImageResource(R.drawable.novo_anormalidade);
 				break;
-				
+
 			case Constantes.IMOVEL_INFORMATIVO:
 				imageView.setImageResource(R.drawable.informativo);
 				break;
@@ -172,11 +233,5 @@ public class ListaImoveis extends ListActivity {
 				break;
 			}
 		}
-	}
-
-	@Override
-	protected void onResume() {
-		carregarEnderecos();
-		super.onResume();
 	}
 }

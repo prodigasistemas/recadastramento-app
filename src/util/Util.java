@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import model.Imovel;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -1019,9 +1020,14 @@ public class Util {
     
 	public static boolean allowPopulateDados() {
 		boolean result = false;
-		if ((Controlador.getInstancia().getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO || Controlador.getInstancia()
-				.getImovelSelecionado().getImovelStatus() == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE)
-				|| (Controlador.getInstancia().getImovelSelecionado().isTabSaved())) {
+		
+		Imovel imovel = Controlador.getInstancia().getImovelSelecionado();
+		int status = imovel.getImovelStatus();
+		
+		if ((status == Constantes.IMOVEL_SALVO || 
+			 status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) || 
+			 
+			(imovel.isTabSaved())) {
 
 			result = true;
 		}
@@ -1085,32 +1091,34 @@ public class Util {
 	public static AlertDialog criarDialog(Context context, View layout, String title, String message, int iconId, 
 			OnClickListener positiveListener, OnClickListener negativeListener) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		
+		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+
 		if (title != null && !title.equals("")) {
-			builder.setTitle(title);
-		}
-		
-		if (message != null && !message.equals("")) {
-			builder.setMessage(message);
-		}
-		
-		if (iconId != -1) {
-			builder.setIcon(iconId);
-		}
-		
-		if (layout != null) {
-			builder.setView(layout);
-		}
-		
-		builder.setPositiveButton(android.R.string.ok, positiveListener);
-		
-		if (negativeListener == null) {
-			builder.setCancelable(false);
-		} else {
-			builder.setNegativeButton(android.R.string.cancel, negativeListener);
+			dialog.setTitle(title);
 		}
 
-		return builder.create();
+		if (message != null && !message.equals("")) {
+			dialog.setMessage(message);
+		}
+
+		if (iconId != -1) {
+			dialog.setIcon(iconId);
+		}
+
+		if (layout != null) {
+			dialog.setView(layout);
+		}
+
+		if (positiveListener != null) {
+			dialog.setPositiveButton(android.R.string.ok, positiveListener);
+		}
+
+		if (negativeListener == null) {
+			dialog.setCancelable(false);
+		} else {
+			dialog.setNegativeButton(android.R.string.cancel, negativeListener);
+		}
+
+		return dialog.create();
 	}
 }

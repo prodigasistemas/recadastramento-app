@@ -226,14 +226,6 @@ public class MenuPrincipal extends FragmentActivity {
 		Util.criarDialog(MenuPrincipal.this, null, "Alerta", mensagem, R.drawable.aviso, confirmar, getListenerCancelar()).show();
 	}
 
-	private OnClickListener getListenerCancelar() {
-		OnClickListener cancelar = new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {}
-		};
-		
-		return cancelar;
-	}
-
 	private String getMensagemLimparTudo(int qtdNaoTransmitidos) {
 		String mensagemQtd = null;
 		if (qtdNaoTransmitidos == 1) {
@@ -263,5 +255,13 @@ public class MenuPrincipal extends FragmentActivity {
 		};
 
 		Util.criarDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, confirmar, getListenerCancelar()).show();
+	}
+	
+	private OnClickListener getListenerCancelar() {
+		OnClickListener cancelar = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {}
+		};
+
+		return cancelar;
 	}
 }

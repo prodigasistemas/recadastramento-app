@@ -324,7 +324,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 
 	private void finalizar() {
-		((MainTab) getActivity()).setTabColor();
+		((MainTab) getActivity()).configurarCor();
 		anormalidadeImovel.setTabSaved(true);
 
 		new TransmitirImovelTask(getActivity()).execute(imovel);
@@ -363,9 +363,9 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 
 	private void setOperacaoTipo() {
 		if (imovel.isImovelNovo()) {
-			imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_NOVO);
+			imovel.setOperacoTipo(""+Constantes.OPERACAO_CADASTRO_NOVO);
 		} else {
-			imovel.setOperacoTipo(Constantes.OPERACAO_CADASTRO_ALTERADO);
+			imovel.setOperacoTipo(""+Constantes.OPERACAO_CADASTRO_ALTERADO);
 		}
 	}
 

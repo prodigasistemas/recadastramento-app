@@ -40,6 +40,7 @@ public class Controlador {
 
 	private static long idCadastroSelecionado = 0;
 	private static int posicaoListaImoveis = -1;
+	private static int menuSelecionado = -1;
 
 	private DataManipulator manipulator;
 
@@ -263,11 +264,19 @@ public class Controlador {
 	public int getPosicaoListaImoveis() {
 		return posicaoListaImoveis;
 	}
-
+	
 	@SuppressWarnings("static-access")
 	public void setPosicaoListaImoveis(int posicao) {
 		this.posicaoListaImoveis = posicao;
 		manipulator.updateConfiguracao("posicao_cadastro_selecionado", posicao);
+	}
+
+	public int getMenuSelecionado() {
+		return menuSelecionado;
+	}
+
+	public void setMenuSelecionado(int menuSelecionado) {
+		Controlador.menuSelecionado = menuSelecionado;
 	}
 
 	public boolean databaseExists() {

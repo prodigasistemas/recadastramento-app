@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/textViewUser"
-        android:text="Para continuar digite a senha:"
+        android:text="Para continuar digite a senha padrão:"
         android:textStyle="bold" />
 
     <EditText

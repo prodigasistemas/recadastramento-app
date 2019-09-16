@@ -1,5 +1,6 @@
 package com.AndroidExplorer;
 
+import util.Constantes;
 import util.Util;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -68,7 +69,7 @@ public class MenuPrincipal extends FragmentActivity {
 		configurar();
 	}
 
-	public void configurar() {
+	private void configurar() {
 		GridView gridView = (GridView) findViewById(R.id.gridview);
 		gridView.setAdapter(new ImageAdapter(this));
 
@@ -115,13 +116,13 @@ public class MenuPrincipal extends FragmentActivity {
 
 				case MENU_LIMPAR_TUDO:
 					
-					limparTudo();
+					configurarLimparTudo();
 					
 					break;
 
 				case MENU_EXPORTAR_BD:
 					
-					exportarBanco();
+					configurarExportarBanco();
 					
 					break;
 
@@ -175,33 +176,80 @@ public class MenuPrincipal extends FragmentActivity {
 		}
 	}
 
-	private void limparTudo() {
+	private void configurarLimparTudo() {
 
 		final View view = getLayoutInflater().inflate(R.layout.confirmation_dialog_limpar_tudo, (ViewGroup) findViewById(R.id.root));
 
-		OnClickListener listener = new OnClickListener() {
+		OnClickListener confirmar = new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				
+
+				int qtdNaoTransmitidos = getQtdNaoTransmitidos();
+
 				String senha = ((EditText) view.findViewById(R.id.txtSenha)).getText().toString();
 
 				if (senha.equals("apagar")) {
-					controlador.deleteDatabase();
-					Toast.makeText(getBaseContext(), "Todas as informações foram apagadas com sucesso", Toast.LENGTH_LONG).show();
-					startActivity(new Intent(view.getContext(), Fachada.class));
+					if (qtdNaoTransmitidos > 0) {
+						confirmarLimparTudo(view, qtdNaoTransmitidos);
+					} else {
+						limparTudo(view);
+					}
 				} else {
 					Util.exibirDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
 				}
 			}
 		};
 
-		Util.exibirDialog(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, listener, null);
+		Util.exibirDialog(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, confirmar, getListenerCancelar());
 	}
 	
-	private void exportarBanco() {
+	private int getQtdNaoTransmitidos() {
+		String condicoes = "imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")";
+		condicoes += " AND imovel_enviado = " + Constantes.NAO;
+
+		return controlador.getCadastroDataManipulator().selectIdImoveis(condicoes).size();
+	}
+	
+	private void limparTudo(final View view) {
+		controlador.deleteDatabase();
+		Toast.makeText(getBaseContext(), "Todas as informações foram apagadas com sucesso", Toast.LENGTH_LONG).show();
+		startActivity(new Intent(view.getContext(), Fachada.class));
+	}
+	
+	private void confirmarLimparTudo(final View view, int qtdNaoTransmitidos) {
+		OnClickListener confirmar = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				limparTudo(view);
+			}
+		};
+
+		String mensagem = getMensagemLimparTudo(qtdNaoTransmitidos);
+		Util.exibirDialog(MenuPrincipal.this, null, "Alerta", mensagem, R.drawable.aviso, confirmar, getListenerCancelar());
+	}
+
+	private OnClickListener getListenerCancelar() {
+		OnClickListener cancelar = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {}
+		};
+		
+		return cancelar;
+	}
+
+	private String getMensagemLimparTudo(int qtdNaoTransmitidos) {
+		String mensagemQtd = null;
+		if (qtdNaoTransmitidos == 1) {
+			mensagemQtd = "existe 1 imóvel para ser transmitido.";
+		} else {
+			mensagemQtd = "existem " + qtdNaoTransmitidos + " imóveis para serem transmitidos.";
+		}
+
+		return "Ainda " + mensagemQtd + " Deseja continuar?";
+	}
+	
+	private void configurarExportarBanco() {
 
 		final View view = getLayoutInflater().inflate(R.layout.confirmation_dialog_exportar_banco, (ViewGroup) findViewById(R.id.root));
 
-		OnClickListener listener = new OnClickListener() {
+		OnClickListener confirmar = new OnClickListener() {
 			public void onClick(DialogInterface arg0, int arg1) {
 
 				String senha = ((EditText) view.findViewById(R.id.exportSenha)).getText().toString();
@@ -214,6 +262,6 @@ public class MenuPrincipal extends FragmentActivity {
 			}
 		};
 
-		Util.exibirDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, listener, null);
+		Util.exibirDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, confirmar, getListenerCancelar());
 	}
 }

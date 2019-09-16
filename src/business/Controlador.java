@@ -284,13 +284,16 @@ public class Controlador {
 	}
 
 	public void deleteDatabase() {
-		String strDBFilePath = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
-		File file = new File(strDBFilePath);
+		finalizeDataManipulator();
+		setPermissionGranted(false);
+		
+		String path = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
+		File file = new File(path);
 		file.delete();
 	}
 
 	@SuppressWarnings("resource")
-	public void exportDB(Context context) {
+	public void exportarBanco(Context context) {
 		try {
 			File sd = Environment.getExternalStorageDirectory();
 
@@ -322,7 +325,7 @@ public class Controlador {
 	}
 
 	@SuppressWarnings("resource")
-	public void importDB(Context context) {
+	public void importarBanco(Context context) {
 		try {
 			File sd = Environment.getExternalStorageDirectory();
 

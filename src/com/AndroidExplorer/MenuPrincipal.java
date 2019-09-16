@@ -1,11 +1,10 @@
 package com.AndroidExplorer;
 
-import util.Constantes;
+import util.Util;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -36,6 +35,8 @@ public class MenuPrincipal extends FragmentActivity {
 	private static final int MENU_LIMPAR_TUDO = 6;
 	private static final int MENU_EXPORTAR_BD = 7;
 
+	private Controlador controlador;
+	
 	Integer[] imageIDs = { 
 			R.drawable.menu_cadastros, 
 			R.drawable.menu_info, 
@@ -59,52 +60,69 @@ public class MenuPrincipal extends FragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		this.controlador = Controlador.getInstancia();
+		
 		setContentView(R.layout.mainmenu);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-		instanciate();
+		configurar();
 	}
 
-	public void instanciate() {
+	public void configurar() {
 		GridView gridView = (GridView) findViewById(R.id.gridview);
 		gridView.setAdapter(new ImageAdapter(this));
 
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 
-			@SuppressWarnings("deprecation")
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
 				switch (position) {
 				case MENU_LISTA_CADASTROS:
+					
 					startActivity(new Intent(getApplicationContext(), ListaImoveis.class));
+					
 					break;
 
 				case MENU_INFO:
+					
 					startActivity(new Intent(getApplicationContext(), TelaInformacoes.class));
+					
 					break;
 
 				case MENU_CONSULTA:
+					
 					startActivity(new Intent(getApplicationContext(), Consulta.class));
+					
 					break;
 
 				case MENU_ARQUIVO_RETORNO:
+					
 					new ArquivoRetornoTask(MenuPrincipal.this).execute();
+					
 					break;
 
 				case MENU_TRANSMITIR_FINALIZADOS:
+					
 					new TransmitirFinalizadosTask(MenuPrincipal.this).execute();
+					
 					break;
 
 				case MENU_RELATORIO:
+					
 					startActivity(new Intent(getApplicationContext(), TelaRelatorio.class));
+					
 					break;
 
 				case MENU_LIMPAR_TUDO:
-					showDialog(Constantes.DIALOG_ID_LIMPAR_TUDO);
+					
+					limparTudo();
+					
 					break;
 
 				case MENU_EXPORTAR_BD:
-					configurarExportarBD();
+					
+					exportarBanco();
+					
 					break;
 
 				default:
@@ -114,64 +132,6 @@ public class MenuPrincipal extends FragmentActivity {
 		});
 	}
 	
-	@Override
-	@SuppressWarnings("deprecation")
-	protected Dialog onCreateDialog(final int id) {
-
-		if (id == Constantes.DIALOG_ID_LIMPAR_TUDO) {
-			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			final View layoutConfirmationDialog = inflater.inflate(R.layout.confirmation_dialog_limpar_tudo, (ViewGroup) findViewById(R.id.root));
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Limpar Tudo");
-			builder.setView(layoutConfirmationDialog);
-
-			builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int whichButton) {
-					removeDialog(id);
-				}
-			});
-
-			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-				public void onClick(DialogInterface dialog, int which) {
-					EditText senha = (EditText) layoutConfirmationDialog.findViewById(R.id.txtSenha);
-					if (senha.getText().toString().equals("apagar")) {
-
-						removeDialog(id);
-						Controlador.getInstancia().finalizeDataManipulator();
-						Controlador.getInstancia().deleteDatabase();
-						Controlador.getInstancia().setPermissionGranted(false);
-						Controlador.getInstancia().initiateDataManipulator(layoutConfirmationDialog.getContext());
-
-						Toast.makeText(getBaseContext(), "Todas as informações foram apagadas com sucesso.", Toast.LENGTH_LONG).show();
-
-						Intent myIntent = new Intent(layoutConfirmationDialog.getContext(), Fachada.class);
-						startActivity(myIntent);
-					} else {
-						AlertDialog.Builder builder = new AlertDialog.Builder(MenuPrincipal.this);
-						builder.setTitle("Atenção");
-						builder.setMessage("Senha inválida");
-
-						builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-							}
-						});
-
-						builder.show();
-
-					}
-				}
-			});
-
-			AlertDialog passwordDialog = builder.create();
-			return passwordDialog;
-
-		}
-		
-		return null;
-	}
-
 	@SuppressLint("InflateParams")
 	public class ImageAdapter extends BaseAdapter {
 
@@ -215,32 +175,45 @@ public class MenuPrincipal extends FragmentActivity {
 		}
 	}
 
-	@SuppressLint("InflateParams")
-	private void configurarExportarBD() {
-		LayoutInflater inflater = getLayoutInflater();
+	private void limparTudo() {
 
-		final View viewExport = inflater.inflate(R.layout.confirmation_dialog_exportar_banco, null);
+		final View view = getLayoutInflater().inflate(R.layout.confirmation_dialog_limpar_tudo, (ViewGroup) findViewById(R.id.root));
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Exportando Banco de Dados");
-		builder.setView(viewExport);
+		OnClickListener listener = new OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				
+				String senha = ((EditText) view.findViewById(R.id.txtSenha)).getText().toString();
 
-		builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface arg0, int arg1) {
-				EditText senha = (EditText) viewExport.findViewById(R.id.exportSenha);
-				if (senha.getText().toString().equalsIgnoreCase("exportar")) {
-					Controlador.getInstancia().exportDB(MenuPrincipal.this);
+				if (senha.equals("apagar")) {
+					controlador.deleteDatabase();
+					Toast.makeText(getBaseContext(), "Todas as informações foram apagadas com sucesso", Toast.LENGTH_LONG).show();
+					startActivity(new Intent(view.getContext(), Fachada.class));
 				} else {
-					Toast.makeText(MenuPrincipal.this, "Senha incorreta", Toast.LENGTH_SHORT).show();
+					Util.exibirDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
 				}
 			}
-		});
+		};
 
-		builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
+		Util.exibirDialog(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, listener, null);
+	}
+	
+	private void exportarBanco() {
+
+		final View view = getLayoutInflater().inflate(R.layout.confirmation_dialog_exportar_banco, (ViewGroup) findViewById(R.id.root));
+
+		OnClickListener listener = new OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+
+				String senha = ((EditText) view.findViewById(R.id.exportSenha)).getText().toString();
+
+				if (senha.equals("exportar")) {
+					controlador.exportarBanco(MenuPrincipal.this);
+				} else {
+					Util.exibirDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
+				}
 			}
-		});
+		};
 
-		builder.show();
+		Util.exibirDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, listener, null);
 	}
 }

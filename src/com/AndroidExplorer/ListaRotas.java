@@ -184,9 +184,8 @@ public class ListaRotas extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.importarBanco:
-			Controlador.getInstancia().importDB(ListaRotas.this);
-			Intent intent = new Intent(ListaRotas.this, MenuPrincipal.class);
-			startActivity(intent);
+			Controlador.getInstancia().importarBanco(ListaRotas.this);
+			startActivity(new Intent(ListaRotas.this, MenuPrincipal.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

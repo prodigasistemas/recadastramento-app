@@ -9,11 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface.OnClickListener;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import business.Controlador;
 
@@ -1081,13 +1082,27 @@ public class Util {
 		return valor.trim().replaceFirst("^0+(?!$)", "");
 	}
 	
-	public static void exibirMensagem(Activity context, String title, String message, int iconId, 
+	public static void exibirDialog(Context context, View layout, String title, String message, int iconId, 
 			OnClickListener positiveListener, OnClickListener negativeListener) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(title);
-		builder.setMessage(message);
-		builder.setIcon(iconId);
+		
+		if (title != null && !title.equals("")) {
+			builder.setTitle(title);
+		}
+		
+		if (message != null && !message.equals("")) {
+			builder.setMessage(message);
+		}
+		
+		if (iconId != -1) {
+			builder.setIcon(iconId);
+		}
+		
+		if (layout != null) {
+			builder.setView(layout);
+		}
+		
 		builder.setPositiveButton(android.R.string.ok, positiveListener);
 		
 		if (negativeListener == null) {
@@ -1096,7 +1111,6 @@ public class Util {
 			builder.setNegativeButton(android.R.string.cancel, negativeListener);
 		}
 
-		AlertDialog alert = builder.create();
-		alert.show();
+		builder.create().show();
 	}
 }

@@ -30,7 +30,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 		imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().pesquisarImoveisFinalizados();
 
 		if (imoveis.isEmpty()) {
-			Util.exibirMensagem(activity, "Alerta", "Não há nenhum imóvel para ser transmitido ao servidor", R.drawable.aviso, null, null);
+			Util.exibirDialog(activity, null, "Alerta", "Não há nenhum imóvel para ser transmitido ao servidor", R.drawable.aviso, null, null);
 		} else {
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setCancelable(false);
@@ -63,7 +63,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 
 		if (dialog.isShowing()) {
 			dialog.dismiss();
-			Util.exibirMensagem(activity, "Sucesso", "Imóveis transmitidos com sucesso para o servidor", R.drawable.save, null, null);
+			Util.exibirDialog(activity, null, "Sucesso", "Imóveis transmitidos com sucesso para o servidor", R.drawable.save, null, null);
 		}
 	}
 }

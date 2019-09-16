@@ -5,17 +5,12 @@ import java.util.List;
 import java.util.Properties;
 
 import model.Usuario;
-import util.Constantes;
 import util.Criptografia;
 import util.Util;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -34,8 +29,6 @@ public class Fachada extends FragmentActivity {
 	private Controlador controlador;
 	private DataManipulator manipulator;
 
-	private AlertDialog.Builder builder;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,7 +43,6 @@ public class Fachada extends FragmentActivity {
 		final Animation animation = configurarAnimacaoBotaoIniciar();
 		final Button botaoIniciar = (Button) findViewById(R.id.buttonStart);
 		botaoIniciar.startAnimation(animation);
-
 		botaoIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				v.clearAnimation();
@@ -58,7 +50,7 @@ public class Fachada extends FragmentActivity {
 				configurarUrlServidor();
 
 				if (permiteLogin()) {
-					configurarDialogLogin(findViewById(R.id.buttonStart));
+					configurarLogin(findViewById(R.id.buttonStart));
 				} else {
 					startActivityForResult(new Intent(getBaseContext(), ListaRotas.class), 1);
 				}
@@ -77,7 +69,7 @@ public class Fachada extends FragmentActivity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (permiteLogin()) {
-			configurarDialogLogin(findViewById(R.id.buttonStart));
+			configurarLogin(findViewById(R.id.buttonStart));
 		}
 	}
 
@@ -85,79 +77,47 @@ public class Fachada extends FragmentActivity {
 		return controlador.databaseExists() && controlador.rotaCarregada();
 	}
 
-	@SuppressWarnings("deprecation")
-	public void configurarDialogLogin(View view) {
+	public void configurarLogin(View view) {
 		if (!controlador.isPermissionGranted() && validar()) {
 			manipulator.selectGeral();
-			showDialog(Constantes.DIALOG_ID_PASSWORD);
-		} else {
-			Intent intent = new Intent(view.getContext(), MenuPrincipal.class);
-			startActivity(intent);
-		}
-	}
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-
-		case Constantes.DIALOG_ID_PASSWORD:
-			LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-			final View layout = inflater.inflate(R.layout.login, (ViewGroup) findViewById(R.id.root));
+			
+			final View layout = getLayoutInflater().inflate(R.layout.login, (ViewGroup) findViewById(R.id.root));
 			final EditText campoLogin = (EditText) layout.findViewById(R.id.EditText_User);
 			final EditText campoSenha = (EditText) layout.findViewById(R.id.EditText_Password);
 
-			builder = new AlertDialog.Builder(this);
-			builder.setTitle("Autenticação");
-			builder.setView(layout);
+			DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
 
-			cancelarLogin();
+				public void onClick(DialogInterface dialog, int which) {
+					String login = campoLogin.getText().toString();
+					String senha = campoSenha.getText().toString();
 
-			confirmarLogin(layout, campoLogin, campoSenha);
+					Usuario usuario = manipulator.selectUsuario(login);
 
-			return builder.create();
-
-		default:
-			return null;
-		}
-	}
-
-	private void confirmarLogin(final View layout, final EditText campoLogin, final EditText campoSenha) {
-
-		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-
-			public void onClick(DialogInterface dialog, int which) {
-				String login = campoLogin.getText().toString();
-				String senha = campoSenha.getText().toString();
-
-				Usuario usuario = manipulator.selectUsuario(login);
-
-				if (usuario != null) {
-					if (Criptografia.encode(senha).equals(usuario.getSenha())) {
-						efetuarLogin(layout);
+					if (usuario != null) {
+						if (Criptografia.encode(senha).equals(usuario.getSenha())) {
+							efetuarLogin();
+						} else {
+							Util.exibirDialog(Fachada.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
+						}
 					} else {
-						Util.exibirMensagem(Fachada.this, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
+						Util.exibirDialog(Fachada.this, null, "Alerta", "Login inválido", R.drawable.aviso, null, null);
 					}
-				} else {
-					Util.exibirMensagem(Fachada.this, "Alerta", "Login inválido", R.drawable.aviso, null, null);
+
+					campoLogin.setFocusable(true);
+					campoLogin.getText().clear();
+					campoSenha.getText().clear();
 				}
-
-				campoLogin.setFocusable(true);
-				campoLogin.getText().clear();
-				campoSenha.getText().clear();
-			}
-		});
-	}
-
-	private void cancelarLogin() {
-		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-
-			@SuppressWarnings("deprecation")
-			public void onClick(DialogInterface dialog, int whichButton) {
-				removeDialog(Constantes.DIALOG_ID_PASSWORD);
-				controlador.setPermissionGranted(false);
-			}
-		});
+			};
+			
+			DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {}
+			};
+			
+			Util.exibirDialog(layout.getContext(), layout, "Autenticação", null, -1, positiveListener, negativeListener);
+			
+		} else {
+			startActivity(new Intent(view.getContext(), MenuPrincipal.class));
+		}
 	}
 
 	@Override
@@ -165,13 +125,9 @@ public class Fachada extends FragmentActivity {
 		super.onDestroy();
 	}
 
-	@SuppressWarnings("deprecation")
-	private void efetuarLogin(final View layout) {
+	private void efetuarLogin() {
 		controlador.setPermissionGranted(true);
-		removeDialog(Constantes.DIALOG_ID_PASSWORD);
-
-		Intent intent = new Intent(layout.getContext(), MenuPrincipal.class);
-		startActivity(intent);
+		startActivity(new Intent(Fachada.this, MenuPrincipal.class));
 	}
 
 	private boolean validar() {

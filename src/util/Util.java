@@ -1082,7 +1082,7 @@ public class Util {
 		return valor.trim().replaceFirst("^0+(?!$)", "");
 	}
 	
-	public static void exibirDialog(Context context, View layout, String title, String message, int iconId, 
+	public static AlertDialog criarDialog(Context context, View layout, String title, String message, int iconId, 
 			OnClickListener positiveListener, OnClickListener negativeListener) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -1111,6 +1111,6 @@ public class Util {
 			builder.setNegativeButton(android.R.string.cancel, negativeListener);
 		}
 
-		builder.create().show();
+		return builder.create();
 	}
 }

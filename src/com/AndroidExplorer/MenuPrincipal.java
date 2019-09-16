@@ -194,12 +194,12 @@ public class MenuPrincipal extends FragmentActivity {
 						limparTudo(view);
 					}
 				} else {
-					Util.exibirDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
+					Util.criarDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null).show();
 				}
 			}
 		};
 
-		Util.exibirDialog(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, confirmar, getListenerCancelar());
+		Util.criarDialog(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, confirmar, getListenerCancelar()).show();
 	}
 	
 	private int getQtdNaoTransmitidos() {
@@ -223,7 +223,7 @@ public class MenuPrincipal extends FragmentActivity {
 		};
 
 		String mensagem = getMensagemLimparTudo(qtdNaoTransmitidos);
-		Util.exibirDialog(MenuPrincipal.this, null, "Alerta", mensagem, R.drawable.aviso, confirmar, getListenerCancelar());
+		Util.criarDialog(MenuPrincipal.this, null, "Alerta", mensagem, R.drawable.aviso, confirmar, getListenerCancelar()).show();
 	}
 
 	private OnClickListener getListenerCancelar() {
@@ -257,11 +257,11 @@ public class MenuPrincipal extends FragmentActivity {
 				if (senha.equals("exportar")) {
 					controlador.exportarBanco(MenuPrincipal.this);
 				} else {
-					Util.exibirDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
+					Util.criarDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null).show();
 				}
 			}
 		};
 
-		Util.exibirDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, confirmar, getListenerCancelar());
+		Util.criarDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, confirmar, getListenerCancelar()).show();
 	}
 }

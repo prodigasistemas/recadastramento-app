@@ -97,10 +97,10 @@ public class Fachada extends FragmentActivity {
 						if (Criptografia.encode(senha).equals(usuario.getSenha())) {
 							efetuarLogin();
 						} else {
-							Util.exibirDialog(Fachada.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null);
+							Util.criarDialog(Fachada.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null).show();
 						}
 					} else {
-						Util.exibirDialog(Fachada.this, null, "Alerta", "Login inválido", R.drawable.aviso, null, null);
+						Util.criarDialog(Fachada.this, null, "Alerta", "Login inválido", R.drawable.aviso, null, null).show();
 					}
 
 					campoLogin.setFocusable(true);
@@ -113,7 +113,7 @@ public class Fachada extends FragmentActivity {
 				public void onClick(DialogInterface dialog, int which) {}
 			};
 			
-			Util.exibirDialog(layout.getContext(), layout, "Autenticação", null, -1, positiveListener, negativeListener);
+			Util.criarDialog(layout.getContext(), layout, "Autenticação", null, -1, positiveListener, negativeListener).show();
 			
 		} else {
 			startActivity(new Intent(view.getContext(), MenuPrincipal.class));

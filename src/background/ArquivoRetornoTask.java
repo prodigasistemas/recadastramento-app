@@ -46,7 +46,7 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 		imoveis = (List<String>) manipulator.selectIdImoveis("imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		if (imoveis.isEmpty()) {
-			Util.exibirDialog(activity, null, "Atenção", "Não há nenhum imóvel finalizado para geração do arquivo de retorno", R.drawable.aviso, null, null);
+			Util.criarDialog(activity, null, "Atenção", "Não há nenhum imóvel finalizado para geração do arquivo de retorno", R.drawable.aviso, null, null).show();
 		} else {
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setCancelable(false);
@@ -116,9 +116,9 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 			dialog.dismiss();
 			
 			if (arquivo != null) {
-				Util.exibirDialog(activity, null, "Sucesso", "Arquivo de retorno gerado com sucesso", R.drawable.save, null, null);
+				Util.criarDialog(activity, null, "Sucesso", "Arquivo de retorno gerado com sucesso", R.drawable.save, null, null).show();
 			} else {
-				Util.exibirDialog(activity, null, "Atenção", "Não foi possível gerar o arquivo de retorno", R.drawable.aviso, null, null);
+				Util.criarDialog(activity, null, "Atenção", "Não foi possível gerar o arquivo de retorno", R.drawable.aviso, null, null).show();
 			}
 		}
 

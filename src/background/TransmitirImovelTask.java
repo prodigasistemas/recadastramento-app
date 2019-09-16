@@ -60,7 +60,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 			dialog.dismiss();
 		}
 
-		Util.exibirDialog(activity, null, "Sucesso", getMensagem(), R.drawable.save, getListener(), null);
+		Util.criarDialog(activity, null, "Sucesso", getMensagem(), R.drawable.save, getListener(), null).show();
 	}
 
 	private String getMensagem() {

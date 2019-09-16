@@ -226,6 +226,6 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 			}
 		};
 
-		Util.exibirDialog(activity, null, "Alerta", "As versões do aplicativo e do arquivo são incompatíveis", R.drawable.aviso, listener, null);
+		Util.criarDialog(activity, null, "Alerta", "As versões do aplicativo e do arquivo são incompatíveis", R.drawable.aviso, listener, null).show();
 	}
 }

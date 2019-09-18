@@ -1,7 +1,6 @@
 package com.AndroidExplorer;
 
 import util.Constantes;
-import util.Util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -194,12 +193,12 @@ public class MenuPrincipal extends FragmentActivity {
 						limparTudo(view);
 					}
 				} else {
-					Util.criarDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null).show();
+					CustomDialog.criar(MenuPrincipal.this, "Alerta", "Senha inválida", R.drawable.aviso).show();
 				}
 			}
 		};
 
-		Util.criarDialog(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, confirmar, getListenerCancelar()).show();
+		CustomDialog.criar(MenuPrincipal.this, view, "Limpar Tudo", null, R.drawable.aviso, confirmar).show();
 	}
 	
 	private int getQtdNaoTransmitidos() {
@@ -223,7 +222,7 @@ public class MenuPrincipal extends FragmentActivity {
 		};
 
 		String mensagem = getMensagemLimparTudo(qtdNaoTransmitidos);
-		Util.criarDialog(MenuPrincipal.this, null, "Alerta", mensagem, R.drawable.aviso, confirmar, getListenerCancelar()).show();
+		CustomDialog.criar(MenuPrincipal.this, "Alerta", mensagem, R.drawable.aviso, confirmar, true).show();
 	}
 
 	private String getMensagemLimparTudo(int qtdNaoTransmitidos) {
@@ -249,19 +248,11 @@ public class MenuPrincipal extends FragmentActivity {
 				if (senha.equals("exportar")) {
 					controlador.exportarBanco(MenuPrincipal.this);
 				} else {
-					Util.criarDialog(MenuPrincipal.this, null, "Alerta", "Senha inválida", R.drawable.aviso, null, null).show();
+					CustomDialog.criar(MenuPrincipal.this, "Alerta", "Senha inválida", R.drawable.aviso).show();
 				}
 			}
 		};
 
-		Util.criarDialog(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, confirmar, getListenerCancelar()).show();
-	}
-	
-	private OnClickListener getListenerCancelar() {
-		OnClickListener cancelar = new OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {}
-		};
-
-		return cancelar;
+		CustomDialog.criar(MenuPrincipal.this, view, "Exportando Banco de Dados", null, R.drawable.aviso, confirmar).show();
 	}
 }

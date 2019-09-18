@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import business.Controlador;
 
+import com.AndroidExplorer.CustomDialog;
 import com.AndroidExplorer.R;
 
 import dataBase.DataManipulator;
@@ -46,7 +47,7 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 		imoveis = (List<String>) manipulator.selectIdImoveis("imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		if (imoveis.isEmpty()) {
-			Util.criarDialog(activity, null, "Atenção", "Não há nenhum imóvel finalizado para geração do arquivo de retorno", R.drawable.aviso, null, null).show();
+			CustomDialog.criar(activity, "Atenção", "Não há nenhum imóvel finalizado para geração do arquivo de retorno", R.drawable.aviso).show();
 		} else {
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setCancelable(false);
@@ -116,9 +117,9 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 			dialog.dismiss();
 			
 			if (arquivo != null) {
-				Util.criarDialog(activity, null, "Sucesso", "Arquivo de retorno gerado com sucesso", R.drawable.save, null, null).show();
+				CustomDialog.criar(activity, "Sucesso", "Arquivo de retorno gerado com sucesso", R.drawable.save).show();
 			} else {
-				Util.criarDialog(activity, null, "Atenção", "Não foi possível gerar o arquivo de retorno", R.drawable.aviso, null, null).show();
+				CustomDialog.criar(activity, "Atenção", "Não foi possível gerar o arquivo de retorno", R.drawable.aviso).show();
 			}
 		}
 

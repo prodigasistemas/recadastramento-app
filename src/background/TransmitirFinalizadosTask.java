@@ -4,12 +4,12 @@ import java.util.List;
 
 import model.Imovel;
 import ui.ArquivoRetorno;
-import util.Util;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import business.Controlador;
 
+import com.AndroidExplorer.CustomDialog;
 import com.AndroidExplorer.R;
 
 public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> {
@@ -30,7 +30,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 		imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().pesquisarImoveisFinalizados();
 
 		if (imoveis.isEmpty()) {
-			Util.criarDialog(activity, null, "Alerta", "Não há nenhum imóvel para ser transmitido ao servidor", R.drawable.aviso, null, null).show();
+			CustomDialog.criar(activity, "Alerta", "Não há nenhum imóvel para ser transmitido ao servidor", R.drawable.aviso).show();
 		} else {
 			dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			dialog.setCancelable(false);
@@ -63,7 +63,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 
 		if (dialog.isShowing()) {
 			dialog.dismiss();
-			Util.criarDialog(activity, null, "Sucesso", "Imóveis transmitidos com sucesso para o servidor", R.drawable.save, null, null).show();
+			CustomDialog.criar(activity, "Sucesso", "Imóveis transmitidos com sucesso para o servidor", R.drawable.save).show();
 		}
 	}
 }

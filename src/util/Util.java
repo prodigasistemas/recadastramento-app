@@ -10,12 +10,8 @@ import java.util.Date;
 
 import model.Imovel;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface.OnClickListener;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import business.Controlador;
 
@@ -1086,39 +1082,5 @@ public class Util {
 	
 	public static String removerZerosAEsquerda(String valor) {
 		return valor.trim().replaceFirst("^0+(?!$)", "");
-	}
-	
-	public static AlertDialog criarDialog(Context context, View layout, String title, String message, int iconId, 
-			OnClickListener positiveListener, OnClickListener negativeListener) {
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-
-		if (title != null && !title.equals("")) {
-			dialog.setTitle(title);
-		}
-
-		if (message != null && !message.equals("")) {
-			dialog.setMessage(message);
-		}
-
-		if (iconId != -1) {
-			dialog.setIcon(iconId);
-		}
-
-		if (layout != null) {
-			dialog.setView(layout);
-		}
-
-		if (positiveListener != null) {
-			dialog.setPositiveButton(android.R.string.ok, positiveListener);
-		}
-
-		if (negativeListener == null) {
-			dialog.setCancelable(false);
-		} else {
-			dialog.setNegativeButton(android.R.string.cancel, negativeListener);
-		}
-
-		return dialog.create();
 	}
 }

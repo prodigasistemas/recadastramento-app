@@ -5,13 +5,10 @@ import java.util.List;
 
 import model.Imovel;
 import util.Constantes;
-import util.Util;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -117,7 +114,7 @@ public class ListaImoveis extends ListActivity {
 			if (permiteCadastro(position)) {
 				adapter.setPosicaoSelecionada(position);
 				final View layout = getLayoutInflater().inflate(R.layout.menu_lista_imoveis, (ViewGroup) findViewById(R.id.layout_menu_lista_imoveis));
-				dialog = Util.criarDialog(layout.getContext(), layout, "Selecione uma Ação", null, -1, null, cancelar);
+				dialog = CustomDialog.criar(layout.getContext(), layout, "Selecione uma Ação", null, -1, null, CustomDialog.DEFAULT_LISTENER);
 				dialog.show();
 			}
 			
@@ -133,10 +130,6 @@ public class ListaImoveis extends ListActivity {
 			return true;
 		}
 	}
-
-	private OnClickListener cancelar = new OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {}
-	};
 	
 	private class ListaImoveisAdapter extends ArrayAdapter<String> {
 		private final Activity context;

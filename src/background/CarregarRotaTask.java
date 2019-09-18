@@ -18,6 +18,7 @@ import android.os.Build;
 import android.widget.Toast;
 import business.Controlador;
 
+import com.AndroidExplorer.CustomDialog;
 import com.AndroidExplorer.Fachada;
 import com.AndroidExplorer.R;
 
@@ -226,6 +227,6 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 			}
 		};
 
-		Util.criarDialog(activity, null, "Alerta", "As versões do aplicativo e do arquivo são incompatíveis", R.drawable.aviso, listener, null).show();
+		CustomDialog.criar(activity, "Alerta", "As versões do aplicativo e do arquivo são incompatíveis", R.drawable.aviso, listener).show();
 	}
 }

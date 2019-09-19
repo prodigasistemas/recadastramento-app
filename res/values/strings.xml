@@ -11,11 +11,14 @@
     <color name="colorbege2">#E09639</color>
     <color name="white">#FFFFFF</color>
 
+    <string name="app_titulo">Sistema de Recadastramento de Imóveis</string>
     <string name="app_name">Cadastro</string>
     <string name="app_versao">1.6.1</string>
-    <string name="user">Usuário</string>
-    <string name="password">Senha</string>
-    <string name="auth_problem">Dados Incorretos</string>
+    
+	<string name="versao">"Versão: "</string>
+    <string name="login">Login</string>
+    <string name="senha">Senha</string>
+    
     <string name="menu_cadastros">Lista de Cadastros</string>
     <string name="menu_info">Informações do Roteiro</string>
     <string name="menu_consulta">Consultar Cadastro</string>
@@ -25,15 +28,11 @@
     <string name="menu_arquivo_retorno">Arquivo de Retorno</string>
     <string name="menu_exportar_banco">Exportar Banco de Dados</string>
 
-    <string-array name="statusImovel">
-        <item>Salvo</item>
-        <item>SalvoComAnormalidade</item>
-        <item>ASalvar</item>
-    </string-array>
     <string-array name="sexo">
         <item>Masculino</item>
         <item>Feminino</item>
     </string-array>
+    
     <string-array name="consulta">
         <item>Todos</item>
         <item>Matrícula</item>
@@ -41,6 +40,7 @@
         <item>CNPJ</item>
         <item>Número da residência</item>
     </string-array>
+    
     <string-array name="filtro">
         <item>Todos</item>
         <item>Visitados com Sucesso</item>
@@ -50,10 +50,12 @@
         <item>Transmitidos</item>
         <item>Não Transmitidos</item>
     </string-array>
+    
     <string-array name="tipoPessoa">
         <item>Física</item>
         <item>Jurídica</item>
     </string-array>
+    
     <string-array name="listaUF">
         <item>AC</item>
         <item>AM</item>
@@ -83,11 +85,13 @@
         <item>SP</item>
         <item>TO</item>
     </string-array>
+    
     <string-array name="listaResponsavel">
         <item>Usuário</item>
         <item>Proprietário</item>
         <item>Outro</item>
     </string-array>
+    
     <string-array name="listaEntrevistado">
         <item>Usuário</item>
         <item>Proprietário</item>
@@ -104,7 +108,6 @@
     <string name="options_proximo">Próximo Imóvel</string>
     <string name="options_anterior">Imóvel Anterior</string>
     <string name="options_sair">Sair</string>
-    <string name="app_titulo">Sistema de Recadastramento de Imóveis</string>
 
     <string-array name="listaPercentualAbastecimento">
         <item>25</item>

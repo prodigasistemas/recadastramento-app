@@ -40,7 +40,7 @@ public class TelaInicial extends FragmentActivity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		final Animation animation = configurarAnimacaoBotaoIniciar();
-		final Button botaoIniciar = (Button) findViewById(R.id.buttonStart);
+		final Button botaoIniciar = (Button) findViewById(R.id.botaoIniciar);
 		botaoIniciar.startAnimation(animation);
 		botaoIniciar.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -49,7 +49,7 @@ public class TelaInicial extends FragmentActivity {
 				configurarUrlServidor();
 
 				if (permiteLogin()) {
-					configurarLogin(findViewById(R.id.buttonStart));
+					configurarLogin(findViewById(R.id.botaoIniciar));
 				} else {
 					startActivityForResult(new Intent(getBaseContext(), ListaRotas.class), 1);
 				}
@@ -68,7 +68,7 @@ public class TelaInicial extends FragmentActivity {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (permiteLogin()) {
-			configurarLogin(findViewById(R.id.buttonStart));
+			configurarLogin(findViewById(R.id.botaoIniciar));
 		}
 	}
 
@@ -81,8 +81,8 @@ public class TelaInicial extends FragmentActivity {
 			manipulator.selectGeral();
 			
 			final View layout = getLayoutInflater().inflate(R.layout.login, (ViewGroup) findViewById(R.id.root));
-			final EditText campoLogin = (EditText) layout.findViewById(R.id.EditText_User);
-			final EditText campoSenha = (EditText) layout.findViewById(R.id.EditText_Password);
+			final EditText campoLogin = (EditText) layout.findViewById(R.id.campoLogin);
+			final EditText campoSenha = (EditText) layout.findViewById(R.id.campoSenha);
 
 			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
@@ -102,7 +102,6 @@ public class TelaInicial extends FragmentActivity {
 						CustomDialog.criar(TelaInicial.this, "Alerta", "Login inválido", R.drawable.aviso).show();
 					}
 
-					campoLogin.setFocusable(true);
 					campoLogin.getText().clear();
 					campoSenha.getText().clear();
 				}

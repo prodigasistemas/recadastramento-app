@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -7,24 +6,21 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/titulo"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="0.56"
         android:gravity="center"
         android:text="@string/app_titulo"
         android:textColor="@color/textColor"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:typeface="serif" />
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/empty"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -32,7 +28,7 @@
         </TextView>
 
         <Button
-            android:id="@+id/buttonStart"
+            android:id="@+id/botaoIniciar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -51,15 +47,15 @@
             android:id="@+id/txtVersao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Versão: "
-            android:textSize="22dp" />
+            android:text="@string/versao"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/versao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/app_versao"
-            android:textSize="22dp" />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <ListView

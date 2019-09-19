@@ -10,7 +10,6 @@
         android:id="@+id/botaoNovoImovel"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        android:drawableLeft="@drawable/ic_novo_imovel"
         android:onClick="chamarMainTab"
         android:text="@string/menu_novo_imovel"
         android:textSize="20sp" />
@@ -19,7 +18,6 @@
         android:id="@+id/botaoAdicionarSublote"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        android:drawableLeft="@drawable/ic_adicionar_sublote"
         android:onClick="chamarMainTab"
         android:text="@string/menu_adicionar_sublote"
         android:textSize="20sp" />
@@ -28,7 +26,6 @@
         android:id="@+id/botaoExcluirImovel"
         android:layout_width="250dp"
         android:layout_height="60dp"
-        android:drawableLeft="@drawable/ic_excluir_imovel"
         android:onClick="chamarMainTab"
         android:text="@string/menu_excluir_imovel"
         android:textSize="20sp" />

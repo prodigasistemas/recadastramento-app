@@ -32,10 +32,7 @@ public class CompleteAlertDialogFragment extends DialogFragment {
 					public void onClick(DialogInterface dialog, int whichButton) {
 
 						switch (messageType) {
-						case Constantes.DIALOG_ID_CONFIRMA_VOLTAR:
-							MainTab.indiceNovoImovel = null;
-							getActivity().finish();
-							break;
+						
 						case Constantes.DIALOG_ID_CONFIRMA_MUDANCA:
 							if (getTargetRequestCode() == Constantes.FRAGMENT_ID_SERVICOS) {
 								ServicosTab.setChangesConfirmed();
@@ -44,9 +41,6 @@ public class CompleteAlertDialogFragment extends DialogFragment {
 							} else if (getTargetRequestCode() == Constantes.FRAGMENT_ID_IMOVEL) {
 								ImovelTab.setChangesConfirmed();
 							}
-							break;
-						case Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO:
-							((MainTab) getActivity()).excluirImovel();
 							break;
 						}
 					}

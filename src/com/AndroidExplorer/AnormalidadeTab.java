@@ -9,6 +9,7 @@ import model.Imovel;
 import util.Constantes;
 import util.Util;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.location.Criteria;
@@ -23,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.telephony.CellLocation;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import background.TransmitirImovelTask;
 import business.Controlador;
+import dataBase.DataManipulator;
 
 public class AnormalidadeTab extends Fragment implements LocationListener {
 
@@ -48,6 +49,9 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	
 	private static boolean existeAnormalidade;
 
+	private Controlador controlador;
+	private DataManipulator manipulator;
+	
 	private Imovel imovel;
 	private AnormalidadeImovel anormalidadeImovel;
 	
@@ -60,14 +64,17 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		this.controlador = Controlador.getInstancia();
+		this.manipulator = controlador.getCadastroDataManipulator();
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.anormalidadetab, container, false);
 
-		definirImagemFundo();
-		instanciate();
+		definirBackground();
+		configurar();
 
 		return view;
 	}
@@ -93,7 +100,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		return Integer.valueOf(((EditText) view.findViewById(R.id.codigoAnormalidade)).getText().toString());
 	}
 	
-	private void definirImagemFundo() {
+	private void definirBackground() {
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 			view.setBackgroundResource(R.drawable.fundocadastro);
 		} else {
@@ -101,9 +108,9 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		}
 	}
 	
-	private void instanciate() {
-		imovel = Controlador.getInstancia().getImovelSelecionado();
-		anormalidadeImovel = Controlador.getInstancia().getAnormalidadeImovelSelecionado();
+	private void configurar() {
+		imovel = controlador.getImovelSelecionado();
+		anormalidadeImovel = controlador.getAnormalidadeImovelSelecionado();
 		
 		configurarLocalizacaoGeografica();
 		obterUltimaLocalizacao();
@@ -122,7 +129,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 
 	private void configurarListaInconsistencias() {
-		String[] inconsistencias = Controlador.getInstancia().getCadastroDataManipulator().pesquisarInconsistencias(imovel.getMatricula());
+		String[] inconsistencias = manipulator.pesquisarInconsistencias(imovel.getMatricula());
 		
 		if (inconsistencias.length > 0) {
 			String listaFormatada = "";
@@ -147,7 +154,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 				((ImageView) view.findViewById(R.id.foto2)).invalidate();
 			}
 		} else {
-			Toast.makeText(getActivity(), "Não foi possível armazenar as imagens.", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Não foi possível armazenar as imagens", Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -174,21 +181,21 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		codigoAnormalidade = (EditText) view.findViewById(R.id.codigoAnormalidade);
 		codigoAnormalidade.addTextChangedListener(new TextWatcher() {
 
-			public void beforeTextChanged(CharSequence valor, int start, int count, int after) {}
+			public void beforeTextChanged(CharSequence valor, int start, int count, int after) {
+			}
 
 			public void onTextChanged(CharSequence valor, int start, int before, int after) {
 
-				// Quando o texto é alterado o onTextChange é chamado. Essa flag evita a chamada infinita desse método
+				// Flag para evitar a chamada infinita do método quando o texto é alterado
 				if (existeAnormalidade) {
 					existeAnormalidade = false;
 					return;
 				}
 
-				String descricao = Controlador.getInstancia().getCadastroDataManipulator().selectDescricaoByCodigoFromTable(
-						Constantes.TABLE_ANORMALIDADE, valor.toString());
-				
+				String descricao = manipulator.selectDescricaoByCodigoFromTable(Constantes.TABLE_ANORMALIDADE, valor.toString());
+
 				Spinner spinner = (Spinner) (view.findViewById(R.id.spinnerTipoAnormalidade));
-				
+
 				if (descricao != null) {
 					for (int i = 0; i < anormalidades.size(); i++) {
 						if (anormalidades.get(i).equalsIgnoreCase(descricao)) {
@@ -201,15 +208,14 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 				}
 			}
 
-			public void afterTextChanged(Editable s) {
-			}
+			public void afterTextChanged(Editable s) {}
 		});
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void configurarListaAnormalidades() {
 		Spinner spinner = (Spinner) view.findViewById(R.id.spinnerTipoAnormalidade);
-		anormalidades = Controlador.getInstancia().getCadastroDataManipulator().selectAnormalidades();
+		anormalidades = manipulator.selectAnormalidades();
 
 		ArrayAdapter<CharSequence> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, anormalidades);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -220,8 +226,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 				String anormalidadeSelecionada = ((Spinner) view.findViewById(R.id.spinnerTipoAnormalidade)).getSelectedItem().toString();
 				String codigoAnormalidadeSelecionada = ((EditText) view.findViewById(R.id.codigoAnormalidade)).getText().toString();
 
-				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(
-						Constantes.TABLE_ANORMALIDADE, anormalidadeSelecionada);
+				String codigo = manipulator.selectCodigoByDescricaoFromTable(Constantes.TABLE_ANORMALIDADE, anormalidadeSelecionada);
 
 				if (codigo.compareTo(codigoAnormalidadeSelecionada) != 0) {
 					existeAnormalidade = true;
@@ -294,33 +299,31 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 					}
 				} else if (imovel.getImovelStatus() != Constantes.IMOVEL_A_SALVAR) {
 					verificarImovel();
-					
-					Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
-					Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
-					
+
+					manipulator.salvarAnormalidadeImovel();
+					manipulator.salvarImovel();
+
 					finalizar();
 				} else {
-					verificarAbasFinalizadas();
+					exibirMensagemAbaPendente();
 				}
 			}
-
-			
 		});
 	}
 	
-	private void verificarAbasFinalizadas() {
-		String mensagem = null;
-		if (!Controlador.getInstancia().getClienteSelecionado().isTabSaved()) {
-			mensagem = " Atualize os dados do cliente antes de finalizar. ";
+	private void exibirMensagemAbaPendente() {
+		String aba = null;
+		if (!controlador.getClienteSelecionado().isTabSaved()) {
+			aba = "Cliente";
 		} else if (!imovel.isTabSaved()) {
-			mensagem = " Atualize os dados do imóvel antes de finalizar. ";
-		} else if (!Controlador.getInstancia().getServicosSelecionado().isTabSaved()) {
-			mensagem = " Atualize os dados de serviço antes de finalizar. ";
-		} else if (!Controlador.getInstancia().getMedidorSelecionado().isTabSaved()) {
-			mensagem = " Atualize os dados do medidor antes de finalizar. ";
+			aba = "Imóvel";
+		} else if (!controlador.getServicosSelecionado().isTabSaved()) {
+			aba = "Serviço";
+		} else if (!controlador.getMedidorSelecionado().isTabSaved()) {
+			aba = "Medidor";
 		}
 
-		showNotifyDialog(R.drawable.aviso, "Mensagem:", mensagem, Constantes.DIALOG_ID_ERRO);
+		CustomDialog.criar(getActivity(), "Alerta", "Atualize os dados de " + aba + " antes de finalizar", R.drawable.aviso).show();
 	}
 
 	private void finalizar() {
@@ -333,11 +336,11 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	private void salvar() {
 		imovel.setImovelEnviado(String.valueOf(Constantes.NAO));
 		
-		Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
-		Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
-		Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
-		Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
-		Controlador.getInstancia().getCadastroDataManipulator().salvarAnormalidadeImovel();
+		manipulator.salvarCliente();
+		manipulator.salvarImovel();
+		manipulator.salvarServico();
+		manipulator.salvarMedidor();
+		manipulator.salvarAnormalidadeImovel();
 	}
 	
 	private void verificarImovel() {
@@ -363,14 +366,13 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 
 	private void setOperacaoTipo() {
 		if (imovel.isImovelNovo()) {
-			imovel.setOperacoTipo(""+Constantes.OPERACAO_CADASTRO_NOVO);
+			imovel.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 		} else {
-			imovel.setOperacoTipo(""+Constantes.OPERACAO_CADASTRO_ALTERADO);
+			imovel.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_ALTERADO));
 		}
 	}
 
 	private void iniciarCamera(int fotoId) {
-		Log.d("CAMERA", "Iniciando câmera...");
 		Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
 
@@ -431,7 +433,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 		}
 
 		anormalidadeImovel.setData(Util.formatarData(Calendar.getInstance().getTime()));
-		anormalidadeImovel.setLoginUsuario(Controlador.getInstancia().getCadastroDataManipulator().getUsuario().getLogin());
+		anormalidadeImovel.setLoginUsuario(manipulator.getUsuario().getLogin());
 	}
 
 	private boolean abasFinalizadas() {
@@ -439,9 +441,9 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 
 		if (anormalidade == Constantes.SEM_OCORRENCIA) {
 			if (!imovel.isTabSaved() || 
-				!Controlador.getInstancia().getClienteSelecionado().isTabSaved() || 
-				!Controlador.getInstancia().getServicosSelecionado().isTabSaved() || 
-				!Controlador.getInstancia().getMedidorSelecionado().isTabSaved()) {
+				!controlador.getClienteSelecionado().isTabSaved() || 
+				!controlador.getServicosSelecionado().isTabSaved() || 
+				!controlador.getMedidorSelecionado().isTabSaved()) {
 
 				return false;
 			}
@@ -451,19 +453,18 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 
 	private boolean localizacaoValida() {
-		boolean habilitado = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+		boolean ligado = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-		if (!habilitado) {
-			showNotifyDialog(R.drawable.aviso, "Alerta!", "GPS está desligado. Por favor, ligue-o para finalizar o cadastro.",
-					Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+		if (!ligado) {
+			CustomDialog.criar(getActivity(), "Alerta", "Para continuar, habilite a função de GPS.", R.drawable.aviso, configurarGPS).show();
 		}
 
-		return habilitado;
+		return ligado;
 	}
-
-	private void showNotifyDialog(int iconId, String title, String message, int messageType) {
-		NotifyAlertDialogFragment newFragment = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
-		newFragment.setTargetFragment(this, Constantes.FRAGMENT_ID_ANORMALIDADE);
-		newFragment.show(getActivity().getSupportFragmentManager(), "dialog");
-	}
+	
+	private DialogInterface.OnClickListener configurarGPS = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			((MainTab) getActivity()).chamarConfiguracaoGPS();
+		}
+	};
 }

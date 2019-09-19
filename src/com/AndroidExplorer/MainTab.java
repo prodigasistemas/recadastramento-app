@@ -94,7 +94,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			showCompleteDialog(R.drawable.aviso, "Atenção.", "Deseja voltar para a lista de cadastros?", Constantes.DIALOG_ID_CONFIRMA_VOLTAR);
+			CustomDialog.criar(this, "Atenção", "Deseja voltar para a lista de cadastros?", R.drawable.aviso, voltar, true).show();
 			return true;
 		} else {
 			return super.onKeyDown(keyCode, event);
@@ -133,9 +133,8 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		return anormalidadeTab.getCodigoAnormalidade();
 	}
 
-	public void doGpsDesligado() {
-		Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-		startActivity(intent);
+	public void chamarConfiguracaoGPS() {
+		startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
 	}
 
 	public void chamarProximoImovel() {
@@ -201,8 +200,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	}
 
 	public void onProviderDisabled(String provider) {
-		showNotifyDialog(R.drawable.aviso, "Alerta.", "O GPS está desligado. Por favor, ligue-o para continuar o cadastro.",
-				Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+		CustomDialog.criar(this, "Alerta", "Para continuar, habilite a função de GPS.", R.drawable.aviso, configurarGPS).show();
 	}
 
 	public void onProviderEnabled(String provider) {
@@ -223,8 +221,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 		boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 		if (!enabled) {
-			showNotifyDialog(R.drawable.aviso, "Alerta", "O GPS está desligado. Por favor, ligue-o para continuar o cadastro.",
-					Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
+			CustomDialog.criar(this, "Alerta", "Para continuar, habilite a função de GPS.", R.drawable.aviso, configurarGPS).show();
 		}
 
 		Criteria criteria = new Criteria();
@@ -296,68 +293,59 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		configurarCor();
 	}
 
-	private void showNotifyDialog(int iconId, String title, String message, int messageType) {
-		NotifyAlertDialogFragment dialog = NotifyAlertDialogFragment.newInstance(iconId, title, message, messageType);
-		dialog.show(getSupportFragmentManager(), "dialog");
-	}
-
-	private void showCompleteDialog(int iconId, String title, String message, int messageType) {
-		CompleteAlertDialogFragment dialog = CompleteAlertDialogFragment.newInstance(iconId, title, message, messageType);
-		dialog.show(getSupportFragmentManager(), "dialog");
-	}
-	
 	private void configurarMenu() {
 
 		final int menu = controlador.getMenuSelecionado();
 		final int posicao = controlador.getPosicaoListaImoveis();
-		
+
 		switch (menu) {
 		case R.id.botaoNovoImovel:
-			
-			final Imovel imovelSelecionado = controlador.getImovelSelecionado();
+
+			Imovel imovelSelecionado = controlador.getImovelSelecionado();
 			List<Imovel> imoveis = manipulator.selectEnderecoImovel(null);
 
-			final Imovel imovelAnterior = imoveis.get(posicao - 1);
-			final Imovel imovelPosterior = imoveis.get(posicao + 1);
-			
+			Imovel imovelAnterior = null;
+			Imovel imovelPosterior = null;
 			String enderecoAnterior = "";
 			String enderecoPosterior = "";
 
 			if (!isInicioLista(posicao)) {
+				imovelAnterior = imoveis.get(posicao - 1);
 				enderecoAnterior = montarEndereco(imovelAnterior);
 			}
 
 			if (!isFimLista(posicao)) {
+				imovelPosterior = imoveis.get(posicao + 1);
 				enderecoPosterior = montarEndereco(imovelPosterior);
 			}
 
 			Imovel imovelAtual = imoveis.get(posicao);
 			String enderecoAtual = montarEndereco(imovelAtual);
 
-			final View view = getViewDialogImovelNovo();
-			final AlertDialog dialog = configurarDialogImovelNovo(view, posicao, enderecoAnterior, enderecoPosterior, enderecoAtual);
+			View view = getViewDialogImovelNovo();
+			AlertDialog dialog = configurarDialogImovelNovo(view, posicao, enderecoAnterior, enderecoPosterior, enderecoAtual);
 
 			configurarBotaoInserirImovelNovoAntes(posicao, imovelSelecionado, imovelAnterior, view, dialog);
 			configurarBotaoInserirImovelNovoDepois(posicao, imovelSelecionado, imovelPosterior, view, dialog);
-			
+
 			break;
 
 		case R.id.botaoAdicionarSublote:
 			indiceNovoImovel = posicao + 1;
 			montarImovelNovoSublote();
-			
+
 			break;
 
 		case R.id.botaoExcluirImovel:
 
-			showCompleteDialog(R.drawable.aviso, "Atenção", "Confirma exclusão deste imóvel?", Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
+			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir).show();
 
 			break;
 
 		default:
 			break;
 		}
-		
+
 		controlador.setMenuSelecionado(-1);
 	}
 
@@ -388,15 +376,21 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		dialog.setView(view);
 		dialog.show();
 
-		if (posicao >= 1) {
-			((TextView) view.findViewById(R.id.txtImovelAnterior)).setText(enderecoAnterior);
-		}
-
-		if (posicao <= manipulator.getNumeroImoveis()) {
-			((TextView) view.findViewById(R.id.txtImovelPosterior)).setText(enderecoPosterior);
+		TextView anterior = ((TextView) view.findViewById(R.id.txtImovelAnterior));
+		if (isInicioLista(posicao)) {
+			anterior.setVisibility(View.GONE);
+		} else {
+			anterior.setText(enderecoAnterior);
 		}
 
 		((TextView) view.findViewById(R.id.txtImovelAtual)).setText(enderecoAtual);
+
+		TextView posterior = ((TextView) view.findViewById(R.id.txtImovelPosterior));
+		if (isFimLista(posicao)) {
+			posterior.setVisibility(View.GONE);
+		} else {
+			posterior.setText(enderecoPosterior);
+		}
 
 		return dialog;
 	}
@@ -696,12 +690,12 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		return String.valueOf(Integer.parseInt(ultimoSublote) + 1);
 	}
 	
-	public void excluirImovel() {
+	private void excluirImovel() {
 		Imovel imovelSelecionado = controlador.getImovelSelecionado();
 		imovelSelecionado.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_EXCLUIDO));
 		imovelSelecionado.setImovelStatus(String.valueOf(Constantes.IMOVEL_EXCLUIDO));
 		imovelSelecionado.setData(Util.formatarData(Calendar.getInstance().getTime()));
-		imovelSelecionado.setImovelEnviado(String.valueOf(Constantes.NAO)); // TODO - TRANSMISTIR?
+		imovelSelecionado.setImovelEnviado(String.valueOf(Constantes.NAO));
 
 		manipulator.getClienteSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
 		manipulator.getServicosSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
@@ -715,7 +709,26 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		manipulator.salvarAnormalidadeImovel();
 
 		configurarCor();
-		
-		showNotifyDialog(R.drawable.save, "Sucesso", "Imovel excluído com sucesso", Constantes.DIALOG_ID_CONFIRMA_EXCLUSAO);
+
+		CustomDialog.criar(this, "Sucesso", "Imovel excluído com sucesso", R.drawable.save).show();
 	}
+	
+	private DialogInterface.OnClickListener configurarGPS = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			chamarConfiguracaoGPS();
+		}
+	};
+	
+	private DialogInterface.OnClickListener excluir = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			excluirImovel();
+		}
+	};
+
+	private DialogInterface.OnClickListener voltar = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			MainTab.indiceNovoImovel = null;
+			finish();
+		}
+	};
 }

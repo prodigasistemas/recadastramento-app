@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
     <TextView
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:id="@+id/TextView_User"
-        android:text="@string/user"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
         android:textStyle="bold" />
+
     <EditText
-        android:layout_height="wrap_content"
+        android:id="@+id/campoLogin"
         android:layout_width="fill_parent"
-        android:id="@+id/EditText_User"
-        android:inputType="text"
-         />
-    <TextView
         android:layout_height="wrap_content"
+        android:inputType="text" />
+
+    <TextView
         android:layout_width="wrap_content"
-        android:id="@+id/TextView_Password"
-        android:text="@string/password"
+        android:layout_height="wrap_content"
+        android:text="@string/senha"
         android:textStyle="bold" />
+
     <EditText
-        android:layout_height="wrap_content"
+        android:id="@+id/campoSenha"
         android:layout_width="fill_parent"
-        android:id="@+id/EditText_Password"
-        android:inputType="textPassword"
-         />
+        android:layout_height="wrap_content"
+        android:inputType="textPassword" />
+
     <TextView
-        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:id="@+id/TextView_PwdProblem"
-        android:textStyle="bold"
-        android:gravity="center" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold" />
+
 </LinearLayout>

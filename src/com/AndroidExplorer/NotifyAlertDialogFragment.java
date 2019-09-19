@@ -37,7 +37,7 @@ public class NotifyAlertDialogFragment extends DialogFragment {
 						switch (messageType) {
 						
 						case Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO:
-							((MainTab) getActivity()).doGpsDesligado();
+							((MainTab) getActivity()).chamarConfiguracaoGPS();
 							break;
 
 						default:

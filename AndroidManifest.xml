@@ -17,7 +17,7 @@
  	<uses-feature android:name="android.hardware.camera.autofocus" />
     
     <application android:icon="@drawable/gsan" android:label="Cadastro" android:allowTaskReparenting="true">
-        <activity android:name=".Fachada" android:theme="@android:style/Theme.NoTitleBar">
+        <activity android:name=".TelaInicial" android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

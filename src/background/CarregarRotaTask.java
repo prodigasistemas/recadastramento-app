@@ -19,7 +19,7 @@ import android.widget.Toast;
 import business.Controlador;
 
 import com.AndroidExplorer.CustomDialog;
-import com.AndroidExplorer.Fachada;
+import com.AndroidExplorer.TelaInicial;
 import com.AndroidExplorer.R;
 
 import dataBase.DataManipulator;
@@ -201,7 +201,7 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 			Toast.makeText(activity.getBaseContext(), "Arquivo de rota carregado com sucesso", Toast.LENGTH_LONG).show();
 
 			activity.finish();
-			activity.startActivity(new Intent(activity, Fachada.class));
+			activity.startActivity(new Intent(activity, TelaInicial.class));
 		} else {
 			apagarBancoDeDados();
 		}

@@ -127,7 +127,7 @@ public final class R {
         public static final int buttonConsulta=0x7f090053;
         public static final int buttonRemoveRamoAtividade=0x7f09015a;
         public static final int buttonSave=0x7f090048;
-        public static final int buttonStart=0x7f09018d;
+        public static final int buttonStart=0x7f09018c;
         public static final int celularProprietario=0x7f090071;
         public static final int celularResponsavel=0x7f09009b;
         public static final int celularUsuario=0x7f090035;
@@ -173,7 +173,7 @@ public final class R {
         public static final int emailProprietario=0x7f090073;
         public static final int emailResponsavel=0x7f09009d;
         public static final int emailUsuario=0x7f090037;
-        public static final int empty=0x7f09018c;
+        public static final int empty=0x7f09018b;
         public static final int exportSenha=0x7f09004b;
         public static final int face=0x7f0900c6;
         public static final int foneProprietario=0x7f090070;
@@ -189,8 +189,7 @@ public final class R {
         public static final int icon_text=0x7f0900b4;
         public static final int imageDialog=0x7f090055;
         public static final int imageLogo=0x7f09015f;
-        public static final int imageView1=0x7f09018b;
-        public static final int importarBanco=0x7f090190;
+        public static final int importarBanco=0x7f09018f;
         public static final int info=0x7f090160;
         public static final int iptu=0x7f0900e2;
         public static final int layoutInconsistencias=0x7f09000b;
@@ -485,7 +484,7 @@ public final class R {
         public static final int txtUsuarioEProprietario=0x7f090039;
         public static final int txtValorLatitude=0x7f090007;
         public static final int txtValorLongitude=0x7f09000a;
-        public static final int txtVersao=0x7f09018e;
+        public static final int txtVersao=0x7f09018d;
         public static final int txtVisitados=0x7f090170;
         public static final int txtVisitadosAnormalidade=0x7f090173;
         public static final int txtVolumeCaixaDagua=0x7f09011d;
@@ -503,7 +502,7 @@ public final class R {
         public static final int valorTipoArquivo=0x7f09016b;
         public static final int valorTotalImoveis=0x7f090165;
         public static final int valorUsuario=0x7f090166;
-        public static final int versao=0x7f09018f;
+        public static final int versao=0x7f09018e;
         public static final int volumeCaixaDagua=0x7f090120;
         public static final int volumeCisterna=0x7f09011e;
         public static final int volumePiscina=0x7f09011f;
@@ -542,7 +541,7 @@ public final class R {
         public static final int rowroteiro=0x7f03001a;
         public static final int rowtab=0x7f03001b;
         public static final int servicotab=0x7f03001c;
-        public static final int welcome=0x7f03001d;
+        public static final int tela_inicial=0x7f03001d;
     }
     public static final class menu {
         public static final int menu_importar_banco=0x7f080000;

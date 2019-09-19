@@ -23,7 +23,7 @@ import business.Controlador;
 import business.ControladorAcessoOnline;
 import dataBase.DataManipulator;
 
-public class Fachada extends FragmentActivity {
+public class TelaInicial extends FragmentActivity {
 
 	private Controlador controlador;
 	private DataManipulator manipulator;
@@ -36,7 +36,7 @@ public class Fachada extends FragmentActivity {
 		controlador.initiateDataManipulator(getBaseContext());
 		manipulator = controlador.getCadastroDataManipulator();
 
-		setContentView(R.layout.welcome);
+		setContentView(R.layout.tela_inicial);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		final Animation animation = configurarAnimacaoBotaoIniciar();
@@ -96,10 +96,10 @@ public class Fachada extends FragmentActivity {
 						if (Criptografia.encode(senha).equals(usuario.getSenha())) {
 							efetuarLogin();
 						} else {
-							CustomDialog.criar(Fachada.this, "Alerta", "Senha inválida", R.drawable.aviso).show();
+							CustomDialog.criar(TelaInicial.this, "Alerta", "Senha inválida", R.drawable.aviso).show();
 						}
 					} else {
-						CustomDialog.criar(Fachada.this, "Alerta", "Login inválido", R.drawable.aviso).show();
+						CustomDialog.criar(TelaInicial.this, "Alerta", "Login inválido", R.drawable.aviso).show();
 					}
 
 					campoLogin.setFocusable(true);
@@ -122,7 +122,7 @@ public class Fachada extends FragmentActivity {
 
 	private void efetuarLogin() {
 		controlador.setPermissionGranted(true);
-		startActivity(new Intent(Fachada.this, MenuPrincipal.class));
+		startActivity(new Intent(TelaInicial.this, MenuPrincipal.class));
 	}
 
 	private boolean validar() {
@@ -139,7 +139,7 @@ public class Fachada extends FragmentActivity {
 	private void configurarUrlServidor() {
 		Properties prop = new Properties();
 		try {
-			InputStream is = Fachada.this.getAssets().open("app.properties");
+			InputStream is = TelaInicial.this.getAssets().open("app.properties");
 			prop.load(is);
 			ControladorAcessoOnline.getInstancia().setURL(prop.getProperty("url"));
 		} catch (Exception e) {

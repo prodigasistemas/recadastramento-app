@@ -19,7 +19,7 @@
     <string name="menu_cadastros">Lista de Cadastros</string>
     <string name="menu_info">Informações do Roteiro</string>
     <string name="menu_consulta">Consultar Cadastro</string>
-    <string name="menu_relatorio">Relatórios</string>
+    <string name="menu_relatorio">Relatório</string>
     <string name="menu_transmitir_finalizados">Transmitir Finalizados</string>
     <string name="menu_novo_roteiro">Limpar Tudo</string>
     <string name="menu_arquivo_retorno">Arquivo de Retorno</string>
@@ -118,5 +118,18 @@
     <string name="menu_novo_imovel">Novo Imóvel</string>
     <string name="menu_adicionar_sublote">Adicionar Sublote</string>
     <string name="menu_excluir_imovel">Excluir Imóvel</string>
+    
+    <string name="relatorio_do_arquivo">Relatório</string>
+    <string name="relatorio_total">Total do Arquivo</string>
+    <string name="relatorio_informativos">Informativos</string>
+    <string name="relatorio_pendentes">Pendentes</string>
+    <string name="relatorio_total_finalizados">Total de Finalizados</string>
+    <string name="relatorio_finalizados">Finalizados sem Ocorrência</string>
+    <string name="relatorio_finalizados_anormalidade">Finalizados com Ocorrência</string>
+    <string name="relatorio_novos">Novos</string>
+    <string name="relatorio_excluidos">Excluídos</string>
+    <string name="relatorio_nao_transmitidos">Não Transmitidos</string>
+    <string name="relatorio_transmitidos">Transmitidos</string>
+    <string name="relatorio_transmitidos_inconsistencia">Transmitidos com Inconsistência</string>
 
 </resources>

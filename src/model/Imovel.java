@@ -497,7 +497,7 @@ public class Imovel extends Model {
 	}
 	
 	public boolean isExcluido() {
-		return operacaoTipo == Constantes.OPERACAO_CADASTRO_EXCLUIDO;
+		return imovelStatus == Constantes.IMOVEL_EXCLUIDO;
 	}
 	
 	public boolean isInformativo() {

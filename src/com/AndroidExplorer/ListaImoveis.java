@@ -188,8 +188,6 @@ public class ListaImoveis extends ListActivity {
 
 				if (imovel.isEnviado()) {
 					imageView.setImageResource(R.drawable.salvo_enviado);
-				} else if (imovel.isExcluido()) {
-					imageView.setImageResource(R.drawable.excluido);
 				} else {
 					imageView.setImageResource(R.drawable.salvo);
 				}
@@ -217,7 +215,11 @@ public class ListaImoveis extends ListActivity {
 			case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
 				imageView.setImageResource(R.drawable.novo_anormalidade);
 				break;
-
+				
+			case Constantes.IMOVEL_EXCLUIDO:
+				imageView.setImageResource(R.drawable.excluido);
+				break;
+				
 			case Constantes.IMOVEL_INFORMATIVO:
 				imageView.setImageResource(R.drawable.informativo);
 				break;

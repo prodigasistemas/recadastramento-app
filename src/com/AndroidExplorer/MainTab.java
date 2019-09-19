@@ -109,7 +109,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		for (int i = 0; i < tabWidget.getChildCount(); i++) {
 			View child = tabWidget.getChildAt(i);
 
-			if (status == Constantes.IMOVEL_SALVO && !imovel.isExcluido()) {
+			if (status == Constantes.IMOVEL_SALVO) {
 				child.setBackgroundResource(R.drawable.tab_custom_green);
 
 			} else if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) {
@@ -699,7 +699,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	public void excluirImovel() {
 		Imovel imovelSelecionado = controlador.getImovelSelecionado();
 		imovelSelecionado.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_EXCLUIDO));
-		imovelSelecionado.setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO));
+		imovelSelecionado.setImovelStatus(String.valueOf(Constantes.IMOVEL_EXCLUIDO));
 		imovelSelecionado.setData(Util.formatarData(Calendar.getInstance().getTime()));
 		imovelSelecionado.setImovelEnviado(String.valueOf(Constantes.NAO)); // TODO - TRANSMISTIR?
 

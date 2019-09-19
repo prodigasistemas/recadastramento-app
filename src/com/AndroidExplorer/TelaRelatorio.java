@@ -1,50 +1,65 @@
 package com.AndroidExplorer;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import business.Controlador;
+import dataBase.DataManipulator;
 
 public class TelaRelatorio extends FragmentActivity {
+
+	private static final int POSICAO_TOTAL = 0;
+	private static final int POSICAO_INFORMATIVOS = 1;
+	private static final int POSICAO_PENDENTES = 2;
+
+	private static final int POSICAO_TOTAL_FINALIZADOS = 3;
+	private static final int POSICAO_FINALIZADOS = 4;
+	private static final int POSICAO_FINALIZADOS_ANORMALIDADE = 5;
+	private static final int POSICAO_NOVOS = 6;
+	private static final int POSICAO_EXCLUIDOS = 7;
+
+	private static final int POSICAO_NAO_TRANSMITIDOS = 8;
+	private static final int POSICAO_TRANSMITIDOS = 9;
+	private static final int POSICAO_TRANSMITIDOS_INCONSISTENCIA = 10;
+
+	private List<Integer> dados;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.roteirorelatorio);
 
-		int total = Controlador.getInstancia().getCadastroDataManipulator().getNumeroImoveis();
-		ArrayList<Integer> lista = (ArrayList<Integer>) Controlador.getInstancia().getCadastroDataManipulator().selectNumeroTodosStatusImoveis();
+		setContentView(R.layout.tela_relatorio);
+		DataManipulator manipulator = Controlador.getInstancia().getCadastroDataManipulator();
 
-		((ProgressBar) findViewById(R.id.progressVisitados)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressVisitados)).setProgress(lista.get(0));
-		((TextView) findViewById(R.id.txtNumeroVisitados)).setText(String.valueOf(lista.get(0)));
+		dados = (List<Integer>) manipulator.obterDadosRelatorio();
 
-		((ProgressBar) findViewById(R.id.progressNaoVisitados)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressNaoVisitados)).setProgress(lista.get(1));
-		((TextView) findViewById(R.id.txtNumeroNaoVisitados)).setText(String.valueOf(lista.get(1)));
+		configurarItem(R.id.progressTotal, R.id.valorTotal, POSICAO_TOTAL);
+		configurarItem(R.id.progressInformativos, R.id.valorInformativos, POSICAO_INFORMATIVOS);
+		configurarItem(R.id.progressPendentes, R.id.valorPendentes, POSICAO_PENDENTES);
 
-		((ProgressBar) findViewById(R.id.progressVisitadosAnormalidade)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressVisitadosAnormalidade)).setProgress(lista.get(2));
-		((TextView) findViewById(R.id.txtNumeroVisitadosAnormalidade)).setText(String.valueOf(lista.get(2)));
+		int totalFinalizados = dados.get(POSICAO_TOTAL_FINALIZADOS);
 
-		((ProgressBar) findViewById(R.id.progressNovos)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressNovos)).setProgress(lista.get(3));
-		((TextView) findViewById(R.id.txtNumeroNovos)).setText(String.valueOf(lista.get(3)));
+		configurarItem(R.id.progressTotalFinalizados, R.id.valorTotalFinalizados, totalFinalizados, POSICAO_TOTAL_FINALIZADOS);
+		configurarItem(R.id.progressFinalizados, R.id.valorFinalizados, totalFinalizados, POSICAO_FINALIZADOS);
+		configurarItem(R.id.progressFinalizadosAnormalidade, R.id.valorFinalizadosAnormalidade, totalFinalizados, POSICAO_FINALIZADOS_ANORMALIDADE);
+		configurarItem(R.id.progressNovos, R.id.valorNovos, totalFinalizados, POSICAO_NOVOS);
+		configurarItem(R.id.progressExcluidos, R.id.valorExcluidos, totalFinalizados, POSICAO_EXCLUIDOS);
 
-		((ProgressBar) findViewById(R.id.progressTransmitidos)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressTransmitidos)).setProgress(lista.get(4));
-		((TextView) findViewById(R.id.txtNumeroTransmitidos)).setText(String.valueOf(lista.get(4)));
-		
-		((ProgressBar) findViewById(R.id.progressInconsistencias)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressInconsistencias)).setProgress(lista.get(5));
-		((TextView) findViewById(R.id.txtNumeroInconsistencias)).setText(String.valueOf(lista.get(5)));
+		configurarItem(R.id.progressNaoTransmitidos, R.id.valorNaoTransmitidos, totalFinalizados, POSICAO_NAO_TRANSMITIDOS);
+		configurarItem(R.id.progressTransmitidos, R.id.valorTransmitidos, totalFinalizados, POSICAO_TRANSMITIDOS);
+		configurarItem(R.id.progressTransmitidosInconsistencia, R.id.valorTransmitidosInconsistencia, totalFinalizados, POSICAO_TRANSMITIDOS_INCONSISTENCIA);
+	}
 
-		((ProgressBar) findViewById(R.id.progressNaoTransmitidos)).setMax(total);
-		((ProgressBar) findViewById(R.id.progressNaoTransmitidos)).setProgress(lista.get(6));
-		((TextView) findViewById(R.id.txtNumeroNaoTransmitidos)).setText(String.valueOf(lista.get(6)));
+	private void configurarItem(int progressBar, int textView, int total, int posicao) {
+		((ProgressBar) findViewById(progressBar)).setMax(total);
+		((ProgressBar) findViewById(progressBar)).setProgress(dados.get(posicao));
+		((TextView) findViewById(textView)).setText(String.valueOf(dados.get(posicao)));
+	}
 
+	private void configurarItem(int progressBar, int textView, int posicao) {
+		configurarItem(progressBar, textView, dados.get(POSICAO_TOTAL), posicao);
 	}
 }

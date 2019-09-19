@@ -296,67 +296,95 @@ public List<String> selectEnderecoImoveis(String condition){
 		return imoveis;
 	}
 
-	public List<Integer> selectNumeroTodosStatusImoveis() {
+	public List<Integer> obterDadosRelatorio() {
+		List<Integer> lista = new ArrayList<Integer>();
 
-		ArrayList<Integer> lista = new ArrayList<Integer>();
+		int total = 0;
+		int informativos = 0;
+		int pendentes = 0;
 
-		int visitados = 0;
-		int naoVisitados = 0;
-		int visitadosAnormalidade = 0;
+		int totalFinalizados = 0;
+		int finalizados = 0;
+		int finalizadosAnormalidade = 0;
 		int novos = 0;
-		int transmitidos = 0;
+		int excluidos = 0;
+
 		int naoTransmitidos = 0;
-		int inconsistencias = 0;
+		int transmitidos = 0;
+		int transmitidosInconsistencia = 0;
 
 		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado" }, null, null, null, null, "inscricao asc");
-		
+
 		if (cursor.moveToFirst()) {
+
+			total = cursor.getCount();
+
 			do {
-				int imovelStatus = Integer.parseInt(cursor.getString(0));
+				int status = Integer.parseInt(cursor.getString(0));
+				int enviado = Integer.parseInt(cursor.getString(1));
 
-				if (imovelStatus == Constantes.IMOVEL_SALVO) {
-					visitados++;
-					
-				} else if (imovelStatus == Constantes.IMOVEL_A_SALVAR) {
-					naoVisitados++;
-					
-				} else if (imovelStatus == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) {
-					visitadosAnormalidade++;
+				if (status == Constantes.IMOVEL_A_SALVAR) {
+					pendentes++;
 				}
 
-				if (imovelStatus == Constantes.IMOVEL_NOVO || imovelStatus == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE) {
+				if (status == Constantes.IMOVEL_SALVO) {
+					totalFinalizados++;
+					finalizados++;
+				}
+
+				if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) {
+					totalFinalizados++;
+					finalizadosAnormalidade++;
+				}
+
+				if (status == Constantes.IMOVEL_NOVO || status == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE) {
+					totalFinalizados++;
 					novos++;
+					total--;
+				}
+
+				if (status == Constantes.IMOVEL_EXCLUIDO) {
+					totalFinalizados++;
+					excluidos++;
 				}
 				
-				int imovelEnviado = Integer.parseInt(cursor.getString(1));
-				
-				if (imovelEnviado == Constantes.SIM) {
-					transmitidos++;
-				} else if (imovelEnviado == Constantes.NAO) {
-					if (imovelStatus == Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA) {
-						inconsistencias++;
+				if (status == Constantes.IMOVEL_INFORMATIVO) {
+					informativos++;
+				} else {
+					if (enviado == Constantes.SIM) {
+						transmitidos++;
 					} else {
-						naoTransmitidos++;
+						if (status == Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA) {
+							transmitidosInconsistencia++;
+						} else {
+							if (status != Constantes.IMOVEL_A_SALVAR) {
+								naoTransmitidos++;
+							}
+						}
 					}
 				}
 
 			} while (cursor.moveToNext());
 
-			lista.add(visitados);
-			lista.add(naoVisitados);
-			lista.add(visitadosAnormalidade);
+			lista.add(total);
+			lista.add(informativos);
+			lista.add(pendentes);
+
+			lista.add(totalFinalizados);
+			lista.add(finalizados);
+			lista.add(finalizadosAnormalidade);
 			lista.add(novos);
-			lista.add(transmitidos);
-			lista.add(inconsistencias);
+			lista.add(excluidos);
+
 			lista.add(naoTransmitidos);
+			lista.add(transmitidos);
+			lista.add(transmitidosInconsistencia);
 		}
-		
+
 		if (cursor != null && !cursor.isClosed()) {
 			cursor.close();
 		}
-		
-		cursor.close();
-		
+
 		return lista;
 	}
 

@@ -44,7 +44,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 	@Override
 	protected Void doInBackground(Imovel... params) {
 		for (int i = 0; i < imoveis.size(); i++) {
-			new ArquivoRetorno().gerarPorImovel(imoveis.get(i), activity);
+			new ArquivoRetorno(activity.getBaseContext()).gerarPorImovel(imoveis.get(i));
 			publishProgress(i + 1);
 		}
 

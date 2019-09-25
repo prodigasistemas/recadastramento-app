@@ -179,7 +179,7 @@ public class ServicosTab extends Fragment {
                 if (ligacaoAguaOk){
                     updateServicoSelecionado();
                     getServicos().setTabSaved(true);
-                    Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Dados do Serviço atualizados com sucesso", Toast.LENGTH_SHORT).show();
                     
                     if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
     					Controlador.getInstancia().getCadastroDataManipulator().salvarServico();
@@ -187,6 +187,12 @@ public class ServicosTab extends Fragment {
                 }
             }
         });
+		
+        if (Controlador.getInstancia().getImovelSelecionado().isInformativo()) {
+        	buttonSave.setVisibility(View.GONE);
+        } else {
+        	buttonSave.setVisibility(View.VISIBLE);
+        }
 	}
 
 	public boolean checkChangeLigacaoAgua() {

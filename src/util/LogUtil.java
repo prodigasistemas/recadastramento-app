@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import android.util.Log;
 import business.Controlador;
 
 public class LogUtil {
@@ -21,6 +22,7 @@ public class LogUtil {
 
 			if (erro != null) {
 				fw.write(escreverErro(erro) + "\n");
+				Log.e(classe.getName(), mensagem, erro);
 			}
 
 			fw.flush();

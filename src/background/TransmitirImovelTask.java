@@ -40,7 +40,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 	@Override
 	protected Void doInBackground(Imovel... params) {
 		imovel = params[0];
-		new ArquivoRetorno().gerarPorImovel(imovel, activity);
+		new ArquivoRetorno(activity.getBaseContext()).gerarPorImovel(imovel);
 		publishProgress(1);
 
 		return null;
@@ -82,7 +82,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 			break;
 
 		case Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA:
-			mensagem = "Imóvel finalizado e transmitido com inconsistências. Verifique a lista na aba de Anormalidade.";
+			mensagem = "Imóvel finalizado e transmitido com inconsistência. Verifique a lista na aba de Anormalidade.";
 			break;
 
 		case Constantes.IMOVEL_NOVO:
@@ -90,7 +90,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 			break;
 
 		case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
-			mensagem = "Imóvel novo criado com anormalidade" + transmitido + " com sucesso.";
+			mensagem = "Imóvel novo com anormalidade criado" + transmitido + " com sucesso.";
 			break;
 
 		default:

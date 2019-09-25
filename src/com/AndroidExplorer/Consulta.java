@@ -194,7 +194,7 @@ public class Consulta extends ListActivity {
 		adapter.setSelectedPosition(position);
 
 		if (!imoveis.get(position).isInformativo()) {
-			Controlador.getInstancia().setCadastroSelecionadoByListPositionInConsulta(position, filtroCondicoes);
+			Controlador.getInstancia().setSelecionadoPorPosicao(position, filtroCondicoes);
 			startActivityForResult(new Intent(getApplicationContext(), MainTab.class), 0);
 		}
 	}

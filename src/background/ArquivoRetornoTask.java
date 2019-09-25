@@ -63,12 +63,12 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 		StringBuffer arquivo = null;
 
 		try {
-			ArquivoRetorno arquivoRetorno = new ArquivoRetorno();
+			ArquivoRetorno arquivoRetorno = new ArquivoRetorno(activity.getBaseContext());
 
 			if (!imoveis.isEmpty()) {
 				criarDiretorio();
 
-				arquivo = new StringBuffer(arquivoRetorno.gerarHeader(activity));
+				arquivo = new StringBuffer(arquivoRetorno.gerarHeader());
 
 				for (int i = 0; i < imoveis.size(); i++) {
 					long idImovel = Long.parseLong(imoveis.get(i));
@@ -79,14 +79,14 @@ public class ArquivoRetornoTask extends AsyncTask<Integer, Integer, StringBuffer
 					if (cadastroInvalido())
 						continue;
 
-					manipulator.selectServico(idImovel);
+					manipulator.selectServicos(idImovel);
 					manipulator.selectMedidor(idImovel);
-					manipulator.selectAnormalidadeImovel(String.valueOf(getImovel().getMatricula()));
+					manipulator.selectAnormalidadeImovel(idImovel);
 
 					arquivo.append(arquivoRetorno.gerarLinhaCliente(getCliente()));
 					arquivo.append(arquivoRetorno.gerarLinhaImovel(getImovel()));
 					arquivo.append(arquivoRetorno.gerarLinhasRamoAtividade(getImovel()));
-					arquivo.append(arquivoRetorno.gerarLinhaServico(getImovel(), getServicos()));
+					arquivo.append(arquivoRetorno.gerarLinhaServicos(getImovel(), getServicos()));
 					arquivo.append(arquivoRetorno.gerarLinhaMedidor(getImovel(), getMedidor()));
 					arquivo.append(arquivoRetorno.gerarLinhaAnormalidade(getImovel(), getAnormalidade()));
 

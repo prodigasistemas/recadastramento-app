@@ -198,12 +198,12 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 		}
 
 		if (versoesCompativeis()) {
-			Toast.makeText(activity.getBaseContext(), "Arquivo de rota carregado com sucesso", Toast.LENGTH_LONG).show();
+			Toast.makeText(activity.getBaseContext(), "Arquivo de rota carregado com sucesso", Toast.LENGTH_SHORT).show();
 
 			activity.finish();
 			activity.startActivity(new Intent(activity, TelaInicial.class));
 		} else {
-			apagarBancoDeDados();
+			apagar();
 		}
 	}
 
@@ -217,9 +217,8 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void apagarBancoDeDados() {
-		controlador.finalizeDataManipulator();
-		controlador.deleteDatabase();
+	private void apagar() {
+		controlador.apagarBancoDeDados();
 
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {

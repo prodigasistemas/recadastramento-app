@@ -543,7 +543,7 @@ public class ImovelTab extends Fragment implements LocationListener {
                 				updateImovelSelecionado();
                 				
                 				getImovel().setTabSaved(true);
-                				Toast.makeText(getActivity(), "Dados do Imovel atualizados com sucesso.", 5).show();
+                				Toast.makeText(getActivity(), "Dados do Imovel atualizados com sucesso", Toast.LENGTH_SHORT).show();
                 				
                 				if(getImovel().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
                 					Controlador.getInstancia().getCadastroDataManipulator().salvarImovel();
@@ -554,6 +554,12 @@ public class ImovelTab extends Fragment implements LocationListener {
             	}
             }
         });
+        
+        if (Controlador.getInstancia().getImovelSelecionado().isInformativo()) {
+        	buttonSave.setVisibility(View.GONE);
+        } else {
+        	buttonSave.setVisibility(View.VISIBLE);
+        }
 	}
 	
 	public boolean isRamoAtividadeOk(){

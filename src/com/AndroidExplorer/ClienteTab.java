@@ -62,17 +62,18 @@ public class ClienteTab extends Fragment implements LocationListener {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		
-		view = inflater.inflate(R.layout.clientetab, container, false);
-		
-		// Define a imagem de fundo de acordo com a orientacao do dispositivo
-	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-	    	view.setBackgroundResource(R.drawable.fundocadastro);
-	    else
-	    	view.setBackgroundResource(R.drawable.fundocadastro);
 
-        instanciate();
-        return view;
+		view = inflater.inflate(R.layout.clientetab, container, false);
+
+		// Define a imagem de fundo de acordo com a orientacao do dispositivo
+		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			view.setBackgroundResource(R.drawable.fundocadastro);
+		} else {
+			view.setBackgroundResource(R.drawable.fundocadastro);
+		}
+
+		instanciate();
+		return view;
 	}
 
 	public void instanciate(){
@@ -182,7 +183,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 	            	if (areCamposObrigatoriosOk()){
 	
 	            		getCliente().setTabSaved(true);
-	            		Toast.makeText(getActivity(), "Dados do Cliente atualizados com sucesso.", 5).show();
+	            		Toast.makeText(getActivity(), "Dados do Cliente atualizados com sucesso", Toast.LENGTH_SHORT).show();
 	            		
 	            		if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
         					Controlador.getInstancia().getCadastroDataManipulator().salvarCliente();
@@ -191,6 +192,12 @@ public class ClienteTab extends Fragment implements LocationListener {
             	}
         	}
         });
+        
+        if (Controlador.getInstancia().getImovelSelecionado().isInformativo()) {
+        	buttonSave.setVisibility(View.GONE);
+        } else {
+        	buttonSave.setVisibility(View.VISIBLE);
+        }
         
         checkedNovoUsuario();
 	}

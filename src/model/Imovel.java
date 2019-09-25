@@ -485,7 +485,7 @@ public class Imovel extends Model {
 	}
 	
 	public boolean isImovelNovo() {
-		return imovelStatus == Constantes.IMOVEL_NOVO;
+		return imovelStatus == Constantes.IMOVEL_NOVO || imovelStatus == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE;
 	}
 
 	public String getInconsistencias() {
@@ -502,5 +502,9 @@ public class Imovel extends Model {
 	
 	public boolean isInformativo() {
 		return imovelStatus == Constantes.IMOVEL_INFORMATIVO;
+	}
+	
+	public boolean possueRamoAtividade() {
+		return listaRamoAtividade != null && listaRamoAtividade.size() > 0;
 	}
 }

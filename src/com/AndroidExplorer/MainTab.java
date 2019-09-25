@@ -49,8 +49,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	private static final int IMOVEL_ANTERIOR = 0;
 	private static final int IMOVEL_POSTERIOR = 1;
 	
-	public static Integer indiceNovoImovel;
-	
 	private Controlador controlador;
 	private DataManipulator manipulator;
 	
@@ -68,8 +66,9 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	private MedidorTab medidorTab = new MedidorTab();
 	private AnormalidadeTab anormalidadeTab = new AnormalidadeTab();
 	
+	private static Integer posicaoNovo;
 	private boolean loteInvalido = false;
-
+	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -78,7 +77,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		this.controlador = Controlador.getInstancia();
 		this.manipulator = controlador.getCadastroDataManipulator();
 
-		if (controlador.getImovelSelecionado().isInformativo()) {
+		if (naoPermiteCadastro()) {
 			chamarProximoImovel();
 		}
 		
@@ -109,10 +108,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		for (int i = 0; i < tabWidget.getChildCount(); i++) {
 			View child = tabWidget.getChildAt(i);
 
-			if (status == Constantes.IMOVEL_SALVO) {
+			if (status == Constantes.IMOVEL_SALVO || status == Constantes.IMOVEL_NOVO) {
 				child.setBackgroundResource(R.drawable.tab_custom_green);
 
-			} else if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE) {
+			} else if (status == Constantes.IMOVEL_SALVO_COM_ANORMALIDADE || status == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE) {
 				child.setBackgroundResource(R.drawable.tab_custom_red);
 
 			} else if (status == Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA) {
@@ -128,7 +127,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	protected void onResume() {
 		super.onResume();
 	}
-
+	
 	public int getCodigoAnormalidade() {
 		return anormalidadeTab.getCodigoAnormalidade();
 	}
@@ -138,17 +137,16 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	}
 
 	public void chamarProximoImovel() {
-		controlador.isCadastroAlterado();
+		controlador.isCadastroAlterado(); // TODO - Verificar necessidade
 
 		if (controlador.getPosicaoListaImoveis() == (manipulator.getNumeroImoveis()) - 1) {
-			controlador.setCadastroSelecionadoByListPosition(0);
+			controlador.setSelecionadoPorPosicao(0);
 		} else {
-			controlador.setCadastroSelecionadoByListPosition(controlador.getPosicaoListaImoveis() + 1);
+			controlador.setSelecionadoPorPosicao(controlador.getPosicaoListaImoveis() + 1);
 		}
 
 		finish();
-		Intent intent = new Intent(this, MainTab.class);
-		startActivity(intent);
+		startActivity(new Intent(this, MainTab.class));
 	}
 
 	public void onTabChanged(String tabId) {
@@ -295,10 +293,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	private void configurarMenu() {
 
-		final int menu = controlador.getMenuSelecionado();
 		final int posicao = controlador.getPosicaoListaImoveis();
 
-		switch (menu) {
+		switch (controlador.getMenuSelecionado()) {
+		
 		case R.id.botaoNovoImovel:
 
 			Imovel imovelSelecionado = controlador.getImovelSelecionado();
@@ -330,17 +328,17 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 			break;
 
-		case R.id.botaoAdicionarSublote:
-			indiceNovoImovel = posicao + 1;
-			montarImovelNovoSublote();
-
-			break;
-
-		case R.id.botaoExcluirImovel:
-
-			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir).show();
-
-			break;
+//		case R.id.botaoAdicionarSublote:
+//			posicaoNovo = posicao + 1;
+//			montarImovelNovoSublote();
+//
+//			break;
+//
+//		case R.id.botaoExcluirImovel:
+//
+//			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir, true).show();
+//
+//			break;
 
 		default:
 			break;
@@ -404,11 +402,9 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 			public void onClick(View v) {
 				dialog.dismiss();
 
-				Controlador.getInstancia().setPosicaoListaImoveis(posicao); // TODO - Necessário?
-				
 				if (isInicioLista(posicao)) {
 
-					indiceNovoImovel = posicao + 1;
+					posicaoNovo = 0;
 
 					int lote = Integer.parseInt(imovelSelecionado.getLote()) / 2;
 
@@ -420,26 +416,28 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 				} else if (isFimLista(posicao)) {
 
-					indiceNovoImovel = 0;
+					posicaoNovo = posicao;
 
 					int lote = verificarLoteInvalido(imovelSelecionado, imovelAnterior);
 
 					montarImovelNovo(imovelSelecionado, lote);
 
-				} else if (isMesmoEndereco(imovelAnterior, imovelSelecionado)) {
+				} else if (isMesmoLogradouro(imovelAnterior, imovelSelecionado)) {
 
-					indiceNovoImovel = posicao + 1;
+					posicaoNovo = posicao;
 
 					int lote = verificarLoteInvalido(imovelSelecionado, imovelAnterior);
 
 					montarImovelNovo(imovelAnterior, lote);
 
-				} else if (!isMesmoEndereco(imovelAnterior, imovelSelecionado)) {
+				} else if (!isMesmoLogradouro(imovelAnterior, imovelSelecionado)) {
 
-					indiceNovoImovel = posicao + 1;
+					posicaoNovo = posicao;
 					
 					configurarDialogFace(imovelSelecionado, imovelAnterior, IMOVEL_ANTERIOR);
 				}
+				
+				controlador.setPosicaoListaImoveis(posicaoNovo);
 			}
 		});
 	}
@@ -453,11 +451,9 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 			public void onClick(View v) {
 				dialog.dismiss();
 
-				Controlador.getInstancia().setPosicaoListaImoveis(posicao); // TODO - Necessário???
-
+				posicaoNovo = posicao + 1;
+				
 				if (manipulator.getNumeroImoveis() == 1) {
-
-					indiceNovoImovel = 0;
 
 					int lote = Integer.parseInt(imovelSelecionado.getLote()) + 4;
 
@@ -465,34 +461,28 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 				} else if (isInicioLista(posicao)) {
 
-					indiceNovoImovel = posicao + 2;
-
 					int lote = verificarLoteInvalido(imovelSelecionado, imovelPosterior);
 
 					montarImovelNovo(imovelSelecionado, lote);
 
 				} else if (isFimLista(posicao)) {
 
-					indiceNovoImovel = 0;
-
 					int lote = Integer.parseInt(imovelSelecionado.getLote()) + 4;
 
 					montarImovelNovo(imovelSelecionado, lote);
 
-				} else if (isMesmoEndereco(imovelSelecionado, imovelPosterior)) {
-
-					indiceNovoImovel = posicao + 2;
+				} else if (isMesmoLogradouro(imovelSelecionado, imovelPosterior)) {
 
 					int lote = verificarLoteInvalido(imovelSelecionado, imovelPosterior);
 
 					montarImovelNovo(imovelPosterior, lote);
 
-				} else if (!isMesmoEndereco(imovelPosterior, imovelSelecionado)) {
+				} else if (!isMesmoLogradouro(imovelPosterior, imovelSelecionado)) {
 
-					indiceNovoImovel = posicao + 2;
-					
 					configurarDialogFace(imovelSelecionado, imovelPosterior, IMOVEL_POSTERIOR);
 				}
+				
+				controlador.setPosicaoListaImoveis(posicaoNovo);
 			}
 		});
 	}
@@ -511,27 +501,30 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	}
 	
 	private void montarImovelNovo(Imovel imovelReferencia, int lote) {
-		controlador.setCadastroSelecionadoNovoImovel();
+		controlador.setNovoCadastro();
 
-		int qtdImoveisNovos = manipulator.getQtdImoveisNovo();
+		int matricula = (manipulator.getQtdImoveisNovo() + 1) * -1;
 
 		Imovel imovel = new Imovel();
-		imovel.setMatricula("" + (++qtdImoveisNovos));
+		imovel.setMatricula(String.valueOf(matricula));
+		
+		imovel.getEnderecoImovel().setTipoLogradouro(String.valueOf(imovelReferencia.getEnderecoImovel().getTipoLogradouro()));
 		imovel.getEnderecoImovel().setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
 		imovel.getEnderecoImovel().setBairro(imovelReferencia.getEnderecoImovel().getBairro());
 		imovel.getEnderecoImovel().setCep(imovelReferencia.getEnderecoImovel().getCep());
 		imovel.getEnderecoImovel().setMunicipio(imovelReferencia.getEnderecoImovel().getMunicipio());
+		
 		imovel.setRota(imovelReferencia.getRota());
 		imovel.setFace(imovelReferencia.getFace());
-		imovel.setCodigoMunicipio("" + imovelReferencia.getCodigoMunicipio());
+		imovel.setCodigoMunicipio(String.valueOf(imovelReferencia.getCodigoMunicipio()));
 		imovel.setSubLote("000");
 		imovel.setLote(Util.adicionarZerosEsquerdaNumero(4, String.valueOf(lote)));
-		imovel.setCodigoLogradouro("" + imovelReferencia.getCodigoLogradouro());
+		imovel.setCodigoLogradouro(String.valueOf(imovelReferencia.getCodigoLogradouro()));
 		imovel.setLocalidade(imovelReferencia.getLocalidade());
 		imovel.setSetor(imovelReferencia.getSetor());
 		imovel.setQuadra(imovelReferencia.getQuadra());
-		imovel.setImovelStatus("" + Constantes.IMOVEL_NOVO);
-		imovel.setOperacoTipo("" + Constantes.OPERACAO_CADASTRO_NOVO);
+		imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO));
+		imovel.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 		imovel.setNovoRegistro(true);
 
 		controlador.setImovelSelecionado(imovel);
@@ -547,21 +540,19 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 			dialog.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					finish();
-					Intent myIntent = new Intent(getApplicationContext(), MainTab.class);
-					startActivity(myIntent);
+					startActivity(new Intent(getApplicationContext(), MainTab.class));
 				}
 			});
 
 			dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-
 				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-					if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK)
-							&& (event.getRepeatCount() == 0)) {
+					if ((keyCode == KeyEvent.KEYCODE_SEARCH || 
+						 keyCode == KeyEvent.KEYCODE_HOME || 
+						 keyCode == KeyEvent.KEYCODE_BACK) && (event.getRepeatCount() == 0)) {
 
-						return true; // Pretend we processed it
+						return true;
 					}
-					return false; // Any other keys are still processed as
-									// normal
+					return false;
 				}
 			});
 
@@ -572,7 +563,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		}
 	}
 
-	private boolean isMesmoEndereco(Imovel imovelAnterior, Imovel imovelSelecionado) {
+	private boolean isMesmoLogradouro(Imovel imovelAnterior, Imovel imovelSelecionado) {
 		return imovelAnterior.getEnderecoImovel().getLogradouro().trim().equals(imovelSelecionado.getEnderecoImovel().getLogradouro().trim());
 	}
 	
@@ -637,19 +628,20 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		});
 	}
 	
+	@SuppressWarnings("unused")
 	private void montarImovelNovoSublote() {
 		Imovel imovelReferencia = controlador.getImovelSelecionado();
 		
-		controlador.setCadastroSelecionadoNovoImovel();
+		controlador.setNovoCadastro();
 
 		List<String> inscricoes = manipulator.selectSubLotesImovel(imovelReferencia.getLocalidade() + imovelReferencia.getSetor()
 				+ imovelReferencia.getQuadra() + imovelReferencia.getLote());
 
-		int quantidadeImoveisNovos = manipulator.getQtdImoveisNovo() + 1;
+		int matricula = (manipulator.getQtdImoveisNovo() + 1) * -1;
 
 		Imovel imovel = new Imovel();
+		imovel.setMatricula(String.valueOf(matricula));
 		imovel.setSubLote(Util.adicionarZerosEsquerdaNumero(3, getNovoSublote(inscricoes)));
-		imovel.setMatricula(String.valueOf((quantidadeImoveisNovos)));
 		imovel.setLocalidade(imovelReferencia.getLocalidade());
 		imovel.setSetor(imovelReferencia.getSetor());
 		imovel.setQuadra(imovelReferencia.getQuadra());
@@ -719,6 +711,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		}
 	};
 	
+	@SuppressWarnings("unused")
 	private DialogInterface.OnClickListener excluir = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			excluirImovel();
@@ -727,8 +720,12 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 	private DialogInterface.OnClickListener voltar = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
-			MainTab.indiceNovoImovel = null;
+			MainTab.posicaoNovo = null;
 			finish();
 		}
 	};
+	
+	private boolean naoPermiteCadastro() {
+		return controlador.getImovelSelecionado().isInformativo() && controlador.getMenuSelecionado() != R.id.botaoNovoImovel;
+	}
 }

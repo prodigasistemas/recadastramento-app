@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import business.Controlador;
 import business.ControladorAcessoOnline;
 import dataBase.DataManipulator;
@@ -77,7 +78,7 @@ public class TelaInicial extends FragmentActivity {
 	}
 
 	public void configurarLogin(View view) {
-		if (!controlador.isPermissionGranted() && validar()) {
+		if (!controlador.isLogado() && validar()) {
 			manipulator.selectGeral();
 			
 			final View layout = getLayoutInflater().inflate(R.layout.login, (ViewGroup) findViewById(R.id.root));
@@ -120,7 +121,8 @@ public class TelaInicial extends FragmentActivity {
 	}
 
 	private void efetuarLogin() {
-		controlador.setPermissionGranted(true);
+		controlador.setLogado(true);
+		Toast.makeText(this, "Login efetuado com sucesso", Toast.LENGTH_SHORT).show();
 		startActivity(new Intent(TelaInicial.this, MenuPrincipal.class));
 	}
 

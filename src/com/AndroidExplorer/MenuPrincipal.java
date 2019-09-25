@@ -209,7 +209,8 @@ public class MenuPrincipal extends FragmentActivity {
 	}
 	
 	private void limparTudo(final View view) {
-		controlador.deleteDatabase();
+		controlador.apagarBancoDeDados();
+		controlador = null;
 		Toast.makeText(getBaseContext(), "Todas as informações foram apagadas com sucesso", Toast.LENGTH_LONG).show();
 		startActivity(new Intent(view.getContext(), TelaInicial.class));
 	}

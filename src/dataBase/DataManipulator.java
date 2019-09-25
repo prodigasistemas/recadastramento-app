@@ -90,10 +90,6 @@ public class DataManipulator
         db.delete(tableName, null, null);
    }
     
-    public void deleteRamosAtividadeImovel(long idImovel) {
-        db.delete(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, "id_imovel=?", new String []{String.valueOf(idImovel)});
-   }
-    
     public int getPosicaoImovelLista(Imovel imovel) {
     	Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "matricula" }, null, null, null, null,  "inscricao asc");
     	int i = 0;
@@ -110,35 +106,44 @@ public class DataManipulator
     }
     
     
-public List<String> selectEnderecoImoveis(String condition){
-    	
-    	ArrayList<String> list = new ArrayList<String>();
-    	Cursor cursor;
-        
-   		cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "id",
-   																  "matricula",
-   																  "logradouro_imovel",
-   																  "numero_imovel",
-   																  "complemento_imovel",
-   																  "bairro_imovel",
-   																  "cep_imovel", 
-   																  "municipio_imovel" }, condition, null, null, null,  "inscricao asc");
+	public List<String> selectEnderecoImoveis(String condition) {
 
-        int x=0;
-        if (cursor.moveToFirst()) {
-           do {
-                String b1= "(" + (x+1) + ") " + String.valueOf(Integer.parseInt(cursor.getString(1))) + " - " + cursor.getString(2).trim() + ", n°" + cursor.getString(3).trim() + " " + cursor.getString(4).trim() + " " +  cursor.getString(5).trim() + " " + cursor.getString(6).trim() + " " + cursor.getString(7).trim();
-//                b1 = Util.capitalizarString(b1);
-                list.add(b1);
-                x=x+1;
-           } while (cursor.moveToNext());
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        return list;
-   }
+		List<String> enderecos = new ArrayList<String>();
+
+		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { 
+				"matricula", 
+				"logradouro_imovel", 
+				"numero_imovel", 
+				"complemento_imovel",
+				"bairro_imovel", 
+				"cep_imovel", 
+				"municipio_imovel" }, 
+				condition, null, null, null, "inscricao asc");
+
+		int contador = 0;
+		if (cursor.moveToFirst()) {
+			do {
+				int matricula = Integer.parseInt(cursor.getString(0));
+				
+				String endereco = "(" + (++contador) + ") " +
+								  (matricula > 0 ? matricula : "NOVO") + " - " + 
+								  cursor.getString(1).trim() + ", n°" + 
+								  cursor.getString(2).trim() + " " + 
+								  cursor.getString(3).trim() + " " + 
+								  cursor.getString(4).trim() + " " + 
+								  cursor.getString(5).trim() + " " + 
+								  cursor.getString(6).trim();
+				
+				enderecos.add(endereco);
+			} while (cursor.moveToNext());
+		}
+		
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		
+		return enderecos;
+	}
 
 	public List<String> selectSubLotesImovel(String localidadeSetorQuadraLote) {
 	
@@ -207,33 +212,28 @@ public List<String> selectEnderecoImoveis(String condition){
 	    return imoveis;
 }
     
-    public List<String> selectIdImoveis(String condition){
-    	
-    	ArrayList<String> list = new ArrayList<String>();
-    	Cursor cursor;
-    	
-    	if (condition == Constantes.NULO_STRING  || condition == null){
+	public List<String> selectIdImoveis(String condition) {
 
-            cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "id"}, null, null, null, null,  "inscricao asc");
+		List<String> ids = new ArrayList<String>();
+		
+		Cursor cursor;
+		if (condition == Constantes.NULO_STRING || condition == null) {
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "id" }, null, null, null, null, "inscricao asc");
+		} else {
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "id" }, condition, null, null, null, "inscricao asc");
+		}
 
-    	}else{
-    		
-            cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "id"}, condition, null, null, null,  "inscricao asc");
-    	}
-
-        int x=0;
-        if (cursor.moveToFirst()) {
-           do {
-                String b1= cursor.getString(0);
-                list.add(b1);
-                x=x+1;
-           } while (cursor.moveToNext());
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        return list;
+		if (cursor.moveToFirst()) {
+			do {
+				ids.add(cursor.getString(0));
+			} while (cursor.moveToNext());
+		}
+		
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		
+		return ids;
 	}
     
     public List<String> selectIdClientes(String condition){
@@ -388,272 +388,162 @@ public List<String> selectEnderecoImoveis(String condition){
 		return lista;
 	}
 
-    public void selectCliente(long id){
-    	
-        Cursor cursor = db.query(Constantes.TABLE_CLIENTE, new String[] {"matricula",
-														        		"gerencia", 
-														        		"tipo_endereco_proprietario", 
-														        		"tipo_endereco_responsavel", 
-														        		"usuario_proprietario", 
-														        		"tipo_responsavel", 
+	public void selectCliente(long id) {
+		Cursor cursor = getCursorCliente("id = " + id);
 
-														        		"matricula_usuario", 
-														        		"nome_usuario", 
-														        		"tipo_pessoa_usuario", 
-														        		"cpf_cnpj_usuario", 
-														        		"rg_usuario", 
-														        		"uf_usuario", 
-														        		"tipo_sexo_usuario", 
-														        		"telefone_usuario",
-														        		"celular_usuario", 
-														        		"email_usuario",
-														        		
-														        		"matricula_proprietario",
-														        		"nome_proprietario",
-														        		"tipo_pessoa_proprietario", 
-														        		"cpf_cnpj_proprietario", 
-														        		"rg_proprietario", 
-														        		"uf_proprietario", 
-														        		"tipo_sexo_proprietario", 
-														        		"telefone_proprietario",
-														        		"celular_proprietario",
-														        		"email_proprietario",
-														        		"tipo_logradouro_proprietario",
-														        		"logradouro_proprietario",
-														        		"numero_proprietario",
-														        		"complemento_proprietario", 
-														        		"bairro_proprietario", 
-														        		"cep_proprietario", 
-														        		"municipio_proprietario",
-														
-														        		"matricula_responsavel", 
-														        		"nome_responsavel", 
-														        		"tipo_pessoa_responsavel", 
-														        		"cpf_cnpj_responsavel", 
-														        		"rg_responsavel", 
-														        		"uf_responsavel", 
-														        		"tipo_sexo_responsavel", 
-														        		"telefone_responsavel", 
-														        		"celular_responsavel", 
-														        		"email_responsavel",
-														        		"tipo_logradouro_responsavel",
-														        		"logradouro_responsavel",
-														        		"numero_responsavel",
-														        		"complemento_responsavel", 
-														        		"bairro_responsavel", 
-														        		"cep_responsavel", 
-														        		"municipio_responsavel",
-														        		"latitude",
-														        		"longitude",
-														        		"data",
-														        		"matricula_usuario",
-														        		"matricula_responsavel",
-														        		"matricula_proprietario"}, "id = " + id, null, null, null,  "id asc");
-        
-        if (cursor.moveToFirst()) {
-        	
-        	getClienteSelecionado().setMatricula(cursor.getString(0));
-        	getClienteSelecionado().setNomeGerenciaRegional(cursor.getString(1));
-        	getClienteSelecionado().setTipoEnderecoProprietario(cursor.getString(2));
-        	getClienteSelecionado().setTipoEnderecoResponsavel(cursor.getString(3));
-        	getClienteSelecionado().setUsuarioEProprietario(cursor.getString(4));
-        	getClienteSelecionado().setTipoResponsavel(cursor.getString(5));
-        	
-        	getClienteSelecionado().getUsuario().setMatricula(cursor.getString(6));
-        	getClienteSelecionado().getUsuario().setNome(cursor.getString(7));
-        	getClienteSelecionado().getUsuario().setTipoPessoa(cursor.getString(8));
-        	getClienteSelecionado().getUsuario().setCpfCnpj(cursor.getString(9));
-        	getClienteSelecionado().getUsuario().setRg(cursor.getString(10));
-        	getClienteSelecionado().getUsuario().setUf(cursor.getString(11));
-        	getClienteSelecionado().getUsuario().setTipoSexo(cursor.getString(12));
-        	getClienteSelecionado().getUsuario().setTelefone(cursor.getString(13));
-        	getClienteSelecionado().getUsuario().setCelular(cursor.getString(14));
-        	getClienteSelecionado().getUsuario().setEmail(cursor.getString(15));
-        	
-        	getClienteSelecionado().getProprietario().setMatricula(cursor.getString(16));
-        	getClienteSelecionado().getProprietario().setNome(cursor.getString(17));
-        	getClienteSelecionado().getProprietario().setTipoPessoa(cursor.getString(18));
-        	getClienteSelecionado().getProprietario().setCpfCnpj(cursor.getString(19));
-        	getClienteSelecionado().getProprietario().setRg(cursor.getString(20));
-        	getClienteSelecionado().getProprietario().setUf(cursor.getString(21));
-        	getClienteSelecionado().getProprietario().setTipoSexo(cursor.getString(22));
-        	getClienteSelecionado().getProprietario().setTelefone(cursor.getString(23));
-        	getClienteSelecionado().getProprietario().setCelular(cursor.getString(24));
-        	getClienteSelecionado().getProprietario().setEmail(cursor.getString(25));
-        	getClienteSelecionado().getEnderecoProprietario().setTipoLogradouro(cursor.getString(26));
-        	getClienteSelecionado().getEnderecoProprietario().setLogradouro(cursor.getString(27));
-        	getClienteSelecionado().getEnderecoProprietario().setNumero(cursor.getString(28));
-        	getClienteSelecionado().getEnderecoProprietario().setComplemento(cursor.getString(29));
-        	getClienteSelecionado().getEnderecoProprietario().setBairro(cursor.getString(30));
-        	getClienteSelecionado().getEnderecoProprietario().setCep(cursor.getString(31));
-        	getClienteSelecionado().getEnderecoProprietario().setMunicipio(cursor.getString(32));
-
-        	getClienteSelecionado().getResponsavel().setMatricula(cursor.getString(33));
-        	getClienteSelecionado().getResponsavel().setNome(cursor.getString(34));
-        	getClienteSelecionado().getResponsavel().setTipoPessoa(cursor.getString(35));
-        	getClienteSelecionado().getResponsavel().setCpfCnpj(cursor.getString(36));
-        	getClienteSelecionado().getResponsavel().setRg(cursor.getString(37));
-        	getClienteSelecionado().getResponsavel().setUf(cursor.getString(38));
-        	getClienteSelecionado().getResponsavel().setTipoSexo(cursor.getString(39));
-        	getClienteSelecionado().getResponsavel().setTelefone(cursor.getString(40));
-        	getClienteSelecionado().getResponsavel().setCelular(cursor.getString(41));
-        	getClienteSelecionado().getResponsavel().setEmail(cursor.getString(42));
-        	
-        	getClienteSelecionado().getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
-        	getClienteSelecionado().getEnderecoResponsavel().setLogradouro(cursor.getString(44));
-        	getClienteSelecionado().getEnderecoResponsavel().setNumero(cursor.getString(45));
-        	getClienteSelecionado().getEnderecoResponsavel().setComplemento(cursor.getString(46));
-        	getClienteSelecionado().getEnderecoResponsavel().setBairro(cursor.getString(47));
-        	getClienteSelecionado().getEnderecoResponsavel().setCep(cursor.getString(48));
-        	getClienteSelecionado().getEnderecoResponsavel().setMunicipio(cursor.getString(49));
-
-        	getClienteSelecionado().setLatitude(cursor.getString(50));
-        	getClienteSelecionado().setLongitude(cursor.getString(51));
-        	getClienteSelecionado().setData(cursor.getString(52));
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-   }
+		if (cursor.moveToFirst()) {
+			montarCliente(cursor, getClienteSelecionado());
+		}
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+	}
     
-    public Cliente selectClientePorId(long id) {
-    	
-        Cursor cursor = db.query(Constantes.TABLE_CLIENTE, new String[] {"matricula",
-														        		"gerencia", 
-														        		"tipo_endereco_proprietario", 
-														        		"tipo_endereco_responsavel", 
-														        		"usuario_proprietario", 
-														        		"tipo_responsavel", 
+	public Cliente selectCliente(String condicao) {
+		Cursor cursor = getCursorCliente(condicao);
 
-														        		"matricula_usuario", 
-														        		"nome_usuario", 
-														        		"tipo_pessoa_usuario", 
-														        		"cpf_cnpj_usuario", 
-														        		"rg_usuario", 
-														        		"uf_usuario", 
-														        		"tipo_sexo_usuario", 
-														        		"telefone_usuario",
-														        		"celular_usuario", 
-														        		"email_usuario",
-														        		
-														        		"matricula_proprietario",
-														        		"nome_proprietario",
-														        		"tipo_pessoa_proprietario", 
-														        		"cpf_cnpj_proprietario", 
-														        		"rg_proprietario", 
-														        		"uf_proprietario", 
-														        		"tipo_sexo_proprietario", 
-														        		"telefone_proprietario",
-														        		"celular_proprietario",
-														        		"email_proprietario",
-														        		"tipo_logradouro_proprietario",
-														        		"logradouro_proprietario",
-														        		"numero_proprietario",
-														        		"complemento_proprietario", 
-														        		"bairro_proprietario", 
-														        		"cep_proprietario", 
-														        		"municipio_proprietario",
-														
-														        		"matricula_responsavel", 
-														        		"nome_responsavel", 
-														        		"tipo_pessoa_responsavel", 
-														        		"cpf_cnpj_responsavel", 
-														        		"rg_responsavel", 
-														        		"uf_responsavel", 
-														        		"tipo_sexo_responsavel", 
-														        		"telefone_responsavel", 
-														        		"celular_responsavel", 
-														        		"email_responsavel",
-														        		"tipo_logradouro_responsavel",
-														        		"logradouro_responsavel",
-														        		"numero_responsavel",
-														        		"complemento_responsavel", 
-														        		"bairro_responsavel", 
-														        		"cep_responsavel", 
-														        		"municipio_responsavel",
-														        		"latitude",
-														        		"longitude",
-														        		"data",
-														        		"matricula_usuario",
-														        		"matricula_responsavel",
-														        		"matricula_proprietario"}, "id = " + id, null, null, null,  "id asc");
-        
-        Cliente cliente = null;
-        
-        if (cursor.moveToFirst()) {
-        	cliente = new Cliente();
-        	
-        	cliente.setMatricula(cursor.getString(0));
-        	cliente.setNomeGerenciaRegional(cursor.getString(1));
-        	cliente.setTipoEnderecoProprietario(cursor.getString(2));
-        	cliente.setTipoEnderecoResponsavel(cursor.getString(3));
-        	cliente.setUsuarioEProprietario(cursor.getString(4));
-        	cliente.setTipoResponsavel(cursor.getString(5));
-        	
-        	cliente.getUsuario().setMatricula(cursor.getString(6));
-        	cliente.getUsuario().setNome(cursor.getString(7));
-        	cliente.getUsuario().setTipoPessoa(cursor.getString(8));
-        	cliente.getUsuario().setCpfCnpj(cursor.getString(9));
-        	cliente.getUsuario().setRg(cursor.getString(10));
-        	cliente.getUsuario().setUf(cursor.getString(11));
-        	cliente.getUsuario().setTipoSexo(cursor.getString(12));
-        	cliente.getUsuario().setTelefone(cursor.getString(13));
-        	cliente.getUsuario().setCelular(cursor.getString(14));
-        	cliente.getUsuario().setEmail(cursor.getString(15));
-        	
-        	cliente.getProprietario().setMatricula(cursor.getString(16));
-        	cliente.getProprietario().setNome(cursor.getString(17));
-        	cliente.getProprietario().setTipoPessoa(cursor.getString(18));
-        	cliente.getProprietario().setCpfCnpj(cursor.getString(19));
-        	cliente.getProprietario().setRg(cursor.getString(20));
-        	cliente.getProprietario().setUf(cursor.getString(21));
-        	cliente.getProprietario().setTipoSexo(cursor.getString(22));
-        	cliente.getProprietario().setTelefone(cursor.getString(23));
-        	cliente.getProprietario().setCelular(cursor.getString(24));
-        	cliente.getProprietario().setEmail(cursor.getString(25));
-        	cliente.getEnderecoProprietario().setTipoLogradouro(cursor.getString(26));
-        	cliente.getEnderecoProprietario().setLogradouro(cursor.getString(27));
-        	cliente.getEnderecoProprietario().setNumero(cursor.getString(28));
-        	cliente.getEnderecoProprietario().setComplemento(cursor.getString(29));
-        	cliente.getEnderecoProprietario().setBairro(cursor.getString(30));
-        	cliente.getEnderecoProprietario().setCep(cursor.getString(31));
-        	cliente.getEnderecoProprietario().setMunicipio(cursor.getString(32));
+		Cliente cliente = null;
+		if (cursor.moveToFirst()) {
+			cliente = new Cliente();
+			montarCliente(cursor, cliente);
+		}
+		
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
 
-        	cliente.getResponsavel().setMatricula(cursor.getString(33));
-        	cliente.getResponsavel().setNome(cursor.getString(34));
-        	cliente.getResponsavel().setTipoPessoa(cursor.getString(35));
-        	cliente.getResponsavel().setCpfCnpj(cursor.getString(36));
-        	cliente.getResponsavel().setRg(cursor.getString(37));
-        	cliente.getResponsavel().setUf(cursor.getString(38));
-        	cliente.getResponsavel().setTipoSexo(cursor.getString(39));
-        	cliente.getResponsavel().setTelefone(cursor.getString(40));
-        	cliente.getResponsavel().setCelular(cursor.getString(41));
-        	cliente.getResponsavel().setEmail(cursor.getString(42));
-        	
-        	cliente.getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
-        	cliente.getEnderecoResponsavel().setLogradouro(cursor.getString(44));
-        	cliente.getEnderecoResponsavel().setNumero(cursor.getString(45));
-        	cliente.getEnderecoResponsavel().setComplemento(cursor.getString(46));
-        	cliente.getEnderecoResponsavel().setBairro(cursor.getString(47));
-        	cliente.getEnderecoResponsavel().setCep(cursor.getString(48));
-        	cliente.getEnderecoResponsavel().setMunicipio(cursor.getString(49));
+		return cliente;
+	}
 
-        	cliente.setLatitude(cursor.getString(50));
-        	cliente.setLongitude(cursor.getString(51));
-        	cliente.setData(cursor.getString(52));
-        }
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        
-        return cliente;
-   }
+	private Cursor getCursorCliente(String condicao) {
+		Cursor cursor = db.query(Constantes.TABLE_CLIENTE, new String[] { 
+		        "matricula", 
+		        "gerencia", 
+		        "tipo_endereco_proprietario", 
+		        "tipo_endereco_responsavel",
+		        "usuario_proprietario", 
+		        "tipo_responsavel",
+		        "matricula_usuario",
+		        "nome_usuario",
+		        "tipo_pessoa_usuario",
+		        "cpf_cnpj_usuario",
+		        "rg_usuario",
+		        "uf_usuario",
+		        "tipo_sexo_usuario",
+		        "telefone_usuario",
+		        "celular_usuario",
+		        "email_usuario",
+		        "matricula_proprietario",
+		        "nome_proprietario",
+		        "tipo_pessoa_proprietario",
+		        "cpf_cnpj_proprietario",
+		        "rg_proprietario",
+		        "uf_proprietario",
+		        "tipo_sexo_proprietario",
+		        "telefone_proprietario",
+		        "celular_proprietario",
+		        "email_proprietario",
+		        "tipo_logradouro_proprietario",
+		        "logradouro_proprietario",
+		        "numero_proprietario",
+		        "complemento_proprietario",
+		        "bairro_proprietario",
+		        "cep_proprietario",
+		        "municipio_proprietario",
+		        "matricula_responsavel",
+		        "nome_responsavel",
+		        "tipo_pessoa_responsavel",
+		        "cpf_cnpj_responsavel",
+		        "rg_responsavel",
+		        "uf_responsavel",
+		        "tipo_sexo_responsavel",
+		        "telefone_responsavel",
+		        "celular_responsavel",
+		        "email_responsavel",
+		        "tipo_logradouro_responsavel",
+		        "logradouro_responsavel",
+		        "numero_responsavel",
+		        "complemento_responsavel",
+		        "bairro_responsavel",
+		        "cep_responsavel",
+		        "municipio_responsavel",
+		        "latitude",
+		        "longitude",
+		        "data",
+		        "matricula_usuario",
+		        "matricula_responsavel",
+		        "matricula_proprietario" },
+		        
+		        condicao,
+		        null, null, null,
+		        "id asc");
+		
+		return cursor;
+	}
     
+	private void montarCliente(Cursor cursor, Cliente cliente) {
+		cliente.setMatricula(cursor.getString(0));
+		cliente.setNomeGerenciaRegional(cursor.getString(1));
+		cliente.setTipoEnderecoProprietario(cursor.getString(2));
+		cliente.setTipoEnderecoResponsavel(cursor.getString(3));
+		cliente.setUsuarioEProprietario(cursor.getString(4));
+		cliente.setTipoResponsavel(cursor.getString(5));
+
+		cliente.getUsuario().setMatricula(cursor.getString(6));
+		cliente.getUsuario().setNome(cursor.getString(7));
+		cliente.getUsuario().setTipoPessoa(cursor.getString(8));
+		cliente.getUsuario().setCpfCnpj(cursor.getString(9));
+		cliente.getUsuario().setRg(cursor.getString(10));
+		cliente.getUsuario().setUf(cursor.getString(11));
+		cliente.getUsuario().setTipoSexo(cursor.getString(12));
+		cliente.getUsuario().setTelefone(cursor.getString(13));
+		cliente.getUsuario().setCelular(cursor.getString(14));
+		cliente.getUsuario().setEmail(cursor.getString(15));
+
+		cliente.getProprietario().setMatricula(cursor.getString(16));
+		cliente.getProprietario().setNome(cursor.getString(17));
+		cliente.getProprietario().setTipoPessoa(cursor.getString(18));
+		cliente.getProprietario().setCpfCnpj(cursor.getString(19));
+		cliente.getProprietario().setRg(cursor.getString(20));
+		cliente.getProprietario().setUf(cursor.getString(21));
+		cliente.getProprietario().setTipoSexo(cursor.getString(22));
+		cliente.getProprietario().setTelefone(cursor.getString(23));
+		cliente.getProprietario().setCelular(cursor.getString(24));
+		cliente.getProprietario().setEmail(cursor.getString(25));
+		cliente.getEnderecoProprietario().setTipoLogradouro(cursor.getString(26));
+		cliente.getEnderecoProprietario().setLogradouro(cursor.getString(27));
+		cliente.getEnderecoProprietario().setNumero(cursor.getString(28));
+		cliente.getEnderecoProprietario().setComplemento(cursor.getString(29));
+		cliente.getEnderecoProprietario().setBairro(cursor.getString(30));
+		cliente.getEnderecoProprietario().setCep(cursor.getString(31));
+		cliente.getEnderecoProprietario().setMunicipio(cursor.getString(32));
+
+		cliente.getResponsavel().setMatricula(cursor.getString(33));
+		cliente.getResponsavel().setNome(cursor.getString(34));
+		cliente.getResponsavel().setTipoPessoa(cursor.getString(35));
+		cliente.getResponsavel().setCpfCnpj(cursor.getString(36));
+		cliente.getResponsavel().setRg(cursor.getString(37));
+		cliente.getResponsavel().setUf(cursor.getString(38));
+		cliente.getResponsavel().setTipoSexo(cursor.getString(39));
+		cliente.getResponsavel().setTelefone(cursor.getString(40));
+		cliente.getResponsavel().setCelular(cursor.getString(41));
+		cliente.getResponsavel().setEmail(cursor.getString(42));
+
+		cliente.getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
+		cliente.getEnderecoResponsavel().setLogradouro(cursor.getString(44));
+		cliente.getEnderecoResponsavel().setNumero(cursor.getString(45));
+		cliente.getEnderecoResponsavel().setComplemento(cursor.getString(46));
+		cliente.getEnderecoResponsavel().setBairro(cursor.getString(47));
+		cliente.getEnderecoResponsavel().setCep(cursor.getString(48));
+		cliente.getEnderecoResponsavel().setMunicipio(cursor.getString(49));
+
+		cliente.setLatitude(cursor.getString(50));
+		cliente.setLongitude(cursor.getString(51));
+		cliente.setData(cursor.getString(52));
+	}
+	
 	public void selectImovel(long id) {
-
-		Cursor cursor = getCursorTabelaImovel("id = " + id);
+		Cursor cursor = getCursorImovel("id = " + id);
 
 		if (cursor.moveToFirst()) {
 			montarImovel(cursor, id, getImovelSelecionado());
@@ -664,149 +554,154 @@ public List<String> selectEnderecoImoveis(String condition){
 		}
 	}
    
-	public void selectServico(long id){
-		Cursor cursor = db.query(Constantes.TABLE_SERVICO, new String[] {"tipo_ligacao_agua",
-    														        	"tipo_ligacao_esgoto",
-    														        	"local_instalacao_ramal",
-    														        	"latitude",
-    														        	"longitude",
-    														        	"data"}, "id = " + id, null, null, null,  "id asc");
-        if (cursor.moveToFirst()) {
-        	getServicosSelecionado().setTipoLigacaoAgua(cursor.getString(0));
-        	getServicosSelecionado().setTipoLigacaoEsgoto(cursor.getString(1));
-        	getServicosSelecionado().setLocalInstalacaoRamal(cursor.getString(2));
-        	getServicosSelecionado().setLatitude(cursor.getString(3));
-        	getServicosSelecionado().setLongitude(cursor.getString(4));
-        	getServicosSelecionado().setData(cursor.getString(5));
-        }
+	public void selectServicos(long id) {
+		Cursor cursor = getCursorServicos("id = " + id);
 
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
+		if (cursor.moveToFirst()) {
+			montarServicos(cursor, getServicosSelecionado());
+		}
 
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+	}
+
+	public Servicos selectServicos(String condicao) {
+		Cursor cursor = getCursorServicos(condicao);
+
+		Servicos servicos = null;
+
+		if (cursor.moveToFirst()) {
+			servicos = new Servicos();
+			servicos.setTipoLigacaoAgua(cursor.getString(0));
+			servicos.setTipoLigacaoEsgoto(cursor.getString(1));
+			servicos.setLocalInstalacaoRamal(cursor.getString(2));
+			servicos.setLatitude(cursor.getString(3));
+			servicos.setLongitude(cursor.getString(4));
+			servicos.setData(cursor.getString(5));
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+		cursor.close();
+
+		return servicos;
 	}
 	
-	public Servicos selectServicos(long id){
-		Cursor cursor = db.query(Constantes.TABLE_SERVICO, new String[] {"tipo_ligacao_agua",
-    														        	"tipo_ligacao_esgoto",
-    														        	"local_instalacao_ramal",
-    														        	"latitude",
-    														        	"longitude",
-    														        	"data"}, "id = " + id, null, null, null,  "id asc");
-		Servicos servico = null;
+	private Cursor getCursorServicos(String condicao) {
+		Cursor cursor = db.query(Constantes.TABLE_SERVICO, new String[] { 
+				"tipo_ligacao_agua", 
+				"tipo_ligacao_esgoto", 
+				"local_instalacao_ramal", 
+				"latitude",
+				"longitude", "data" }, 
+				
+				condicao, 
+				
+				null, null, null, "id asc");
 		
-        if (cursor.moveToFirst()) {
-        	servico = new Servicos();
-        	servico.setTipoLigacaoAgua(cursor.getString(0));
-        	servico.setTipoLigacaoEsgoto(cursor.getString(1));
-        	servico.setLocalInstalacaoRamal(cursor.getString(2));
-        	servico.setLatitude(cursor.getString(3));
-        	servico.setLongitude(cursor.getString(4));
-        	servico.setData(cursor.getString(5));
-        }
-
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-
-        return servico;
+		return cursor;
+	}
+	
+	private void montarServicos(Cursor cursor, Servicos servicos) {
+		servicos.setTipoLigacaoAgua(cursor.getString(0));
+		servicos.setTipoLigacaoEsgoto(cursor.getString(1));
+		servicos.setLocalInstalacaoRamal(cursor.getString(2));
+		servicos.setLatitude(cursor.getString(3));
+		servicos.setLongitude(cursor.getString(4));
+		servicos.setData(cursor.getString(5));
 	}
             
-	public void selectMedidor(long id){
-		Cursor cursor = db.query(Constantes.TABLE_MEDIDOR, new String[] {"possui_medidor",
-        														        "numero_hidrometro",
-        														        "marca",
-        														        "capacidade",
-        														        "tipo_caixa_protecao",
-        														        "latitude",
-														        		"longitude",
-														        		"data"}, "id = " + id, null, null, null,  "id asc");
-        if (cursor.moveToFirst()) {
-    		getMedidorSelecionado().setPossuiMedidor(cursor.getString(0));
-    		getMedidorSelecionado().setNumeroHidrometro(cursor.getString(1));
-    		getMedidorSelecionado().setMarca(cursor.getString(2));
-    		getMedidorSelecionado().setCapacidade(cursor.getString(3));
-    		getMedidorSelecionado().setTipoCaixaProtecao(cursor.getString(4)); 
-    		getMedidorSelecionado().setLatitude(cursor.getString(5));
-    		getMedidorSelecionado().setLongitude(cursor.getString(6));
-    		getMedidorSelecionado().setData(cursor.getString(7));
-        }
+	public void selectMedidor(long id) {
+		Cursor cursor = getCursorMedidor("id = " + id);
+		
+		if (cursor.moveToFirst()) {
+			montarDadosMedidor(cursor, getMedidorSelecionado());
+		}
 
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
 	}
 	
-	public Medidor selectMedidorPorId(long id) {
-		Cursor cursor = db.query(Constantes.TABLE_MEDIDOR, new String[] {"possui_medidor",
-        														        "numero_hidrometro",
-        														        "marca",
-        														        "capacidade",
-        														        "tipo_caixa_protecao",
-        														        "latitude",
-														        		"longitude",
-														        		"data"}, "id = " + id, null, null, null,  "id asc");
-		
-		Medidor medidor = null;
-        if (cursor.moveToFirst()) {
-        	medidor = new Medidor();
-    		medidor.setPossuiMedidor(cursor.getString(0));
-    		medidor.setNumeroHidrometro(cursor.getString(1));
-    		medidor.setMarca(cursor.getString(2));
-    		medidor.setCapacidade(cursor.getString(3));
-    		medidor.setTipoCaixaProtecao(cursor.getString(4)); 
-    		medidor.setLatitude(cursor.getString(5));
-    		medidor.setLongitude(cursor.getString(6));
-    		medidor.setData(cursor.getString(7));
-        }
+	public Medidor selectMedidor(String condicao) {
+		Cursor cursor = getCursorMedidor(condicao);
 
-        if (cursor != null && !cursor.isClosed()) {
-           cursor.close();
-        }
-        cursor.close();
-        
-        return medidor;
+		Medidor medidor = null;
+		if (cursor.moveToFirst()) {
+			medidor = new Medidor();
+			montarDadosMedidor(cursor, medidor);
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		return medidor;
+	}
+
+	private Cursor getCursorMedidor(String condicao) {
+		Cursor cursor = db.query(Constantes.TABLE_MEDIDOR, new String[] { 
+				"possui_medidor", 
+				"numero_hidrometro", 
+				"marca", "capacidade", 
+				"tipo_caixa_protecao",
+				"latitude", 
+				"longitude", 
+				"data" }, 
+				
+				condicao, 
+				
+				null, null, null, "id asc");
+		
+		return cursor;
+	}
+
+	private void montarDadosMedidor(Cursor cursor, Medidor medidor) {
+		medidor.setPossuiMedidor(cursor.getString(0));
+		medidor.setNumeroHidrometro(cursor.getString(1));
+		medidor.setMarca(cursor.getString(2));
+		medidor.setCapacidade(cursor.getString(3));
+		medidor.setTipoCaixaProtecao(cursor.getString(4));
+		medidor.setLatitude(cursor.getString(5));
+		medidor.setLongitude(cursor.getString(6));
+		medidor.setData(cursor.getString(7));
 	}
                 
-	public void selectAnormalidadeImovel(long id){
-		Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] {"latitude", 
-				 																	 "longitude", 
-				 																	 "codigo_anormalidade", 
-																					 "comentario", 
-																					 "path_image_1", 
-																					 "path_image_2", 
-																					 "data"}, "id=?", new String[] {String.valueOf(id)}, null, null,  "codigo_anormalidade asc");
-        
-		if (cursor != null){
-        	
-			if (cursor.moveToFirst()) {
-	    		getAnormalidadeImovelSelecionado().setLatitude(cursor.getString(0));
-	    		getAnormalidadeImovelSelecionado().setLongitude(cursor.getString(1));
-	    		getAnormalidadeImovelSelecionado().setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
-	    		getAnormalidadeImovelSelecionado().setComentario(cursor.getString(3));
-	    		getAnormalidadeImovelSelecionado().setFoto1(cursor.getString(4));
-	    		getAnormalidadeImovelSelecionado().setFoto2(cursor.getString(5));
-	    		getAnormalidadeImovelSelecionado().setData(cursor.getString(6));
-	        }
-	
-	        if (cursor != null && !cursor.isClosed()) {
-	           cursor.close();
-	        }
-	        cursor.close();
-        
-		}else{
-    		getAnormalidadeImovelSelecionado().setCodigoAnormalidade(0);
-    		getAnormalidadeImovelSelecionado().setComentario("");
-        }
+	public void selectAnormalidadeImovel(long id) {
+		Cursor cursor = getCursorAnormalidadeImovel("id = " + id);
+
+		if (cursor != null && cursor.moveToFirst()) {
+			montarAnormalidadeImovel(cursor, getAnormalidadeImovelSelecionado());
+		} else {
+			getAnormalidadeImovelSelecionado().setCodigoAnormalidade(0);
+			getAnormalidadeImovelSelecionado().setComentario("");
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
 	}
 	
-	public AnormalidadeImovel selectAnormalidadeImovel(String matricula) {
+	public AnormalidadeImovel selectAnormalidadeImovel(String condicao) {
+		Cursor cursor = getCursorAnormalidadeImovel(condicao);
 
-		AnormalidadeImovel anormalidadeImovel = new AnormalidadeImovel();
+		AnormalidadeImovel anormalidade = null;
+		if (cursor != null && cursor.moveToFirst()) {
+			anormalidade = new AnormalidadeImovel();
+			montarAnormalidadeImovel(cursor, anormalidade);
+			Controlador.getInstancia().setAnormalidadeImovelSelecionado(anormalidade);
+		}
 
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		return anormalidade;
+	}
+
+	private Cursor getCursorAnormalidadeImovel(String condicao) {
 		Cursor cursor = db.query(Constantes.TABLE_ANORMALIDADE_IMOVEL, new String[] { 
 				"latitude", 
 				"longitude", 
@@ -816,33 +711,24 @@ public List<String> selectEnderecoImoveis(String condition){
 				"path_image_2", 
 				"data", 
 				"matricula", 
-				"login_usuario"}, 
-				"matricula=?", new String[] { matricula }, null, null, "codigo_anormalidade asc");
+				"login_usuario" }, 
+				
+				condicao, 
+				
+				null, null, null, "codigo_anormalidade asc");
+		return cursor;
+	}
 
-		if (cursor != null) {
-
-			if (cursor.moveToFirst()) {
-				anormalidadeImovel.setLatitude(cursor.getString(0));
-				anormalidadeImovel.setLongitude(cursor.getString(1));
-				anormalidadeImovel.setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
-				anormalidadeImovel.setComentario(cursor.getString(3));
-				anormalidadeImovel.setFoto1(cursor.getString(4));
-				anormalidadeImovel.setFoto2(cursor.getString(5));
-				anormalidadeImovel.setData(cursor.getString(6));
-				anormalidadeImovel.setMatricula(Integer.parseInt(cursor.getString(7)));
-				anormalidadeImovel.setLoginUsuario(cursor.getString(8));
-
-				Controlador.getInstancia().setAnormalidadeImovelSelecionado(anormalidadeImovel);
-			}
-
-			if (cursor != null && !cursor.isClosed()) {
-				cursor.close();
-			}
-			
-			cursor.close();
-		}
-
-		return anormalidadeImovel;
+	private void montarAnormalidadeImovel(Cursor cursor, AnormalidadeImovel anormalidade) {
+		anormalidade.setLatitude(cursor.getString(0));
+		anormalidade.setLongitude(cursor.getString(1));
+		anormalidade.setCodigoAnormalidade(Integer.parseInt(cursor.getString(2)));
+		anormalidade.setComentario(cursor.getString(3));
+		anormalidade.setFoto1(cursor.getString(4));
+		anormalidade.setFoto2(cursor.getString(5));
+		anormalidade.setData(cursor.getString(6));
+		anormalidade.setMatricula(Integer.parseInt(cursor.getString(7)));
+		anormalidade.setLoginUsuario(cursor.getString(8));
 	}
                 
 	public void selectGeral() {
@@ -1082,79 +968,80 @@ public List<String> selectEnderecoImoveis(String condition){
 
 		ParserUtil parser = new ParserUtil(linhaArquivo);
 		parser.obterDadoParser(2);
-		ContentValues initialValues = new ContentValues();
+		
+		ContentValues values = new ContentValues();
 
-		initialValues.put("matricula", parser.obterDadoParser(9));
-		initialValues.put("gerencia", parser.obterDadoParser(25));
-		initialValues.put("tipo_endereco_proprietario", parser.obterDadoParser(1));
-		initialValues.put("tipo_endereco_responsavel", parser.obterDadoParser(1));
-		initialValues.put("usuario_proprietario", parser.obterDadoParser(1));
-		initialValues.put("tipo_responsavel", parser.obterDadoParser(1));
+		values.put("matricula", String.valueOf(Integer.parseInt(parser.obterDadoParser(9))));
+		values.put("gerencia", parser.obterDadoParser(25));
+		values.put("tipo_endereco_proprietario", parser.obterDadoParser(1));
+		values.put("tipo_endereco_responsavel", parser.obterDadoParser(1));
+		values.put("usuario_proprietario", parser.obterDadoParser(1));
+		values.put("tipo_responsavel", parser.obterDadoParser(1));
 
 		int tamanhoTelefoneUsuario = getTamanhoTelefone(tamanhoLinha);
 		int tamanhoCelularUsuario = getTamanhoCelularUsuario(tamanhoLinha);
 
-		initialValues.put("matricula_usuario", parser.obterDadoParser(9));
-		initialValues.put("nome_usuario", parser.obterDadoParser(50));
-		initialValues.put("tipo_pessoa_usuario", parser.obterDadoParser(1));
-		initialValues.put("cpf_cnpj_usuario", parser.obterDadoParser(14).trim());
-		initialValues.put("rg_usuario", parser.obterDadoParser(13).trim());
-		initialValues.put("uf_usuario", parser.obterDadoParser(2));
-		initialValues.put("tipo_sexo_usuario", parser.obterDadoParser(1));
-		initialValues.put("telefone_usuario", parser.obterDadoParser(tamanhoTelefoneUsuario));
-		initialValues.put("celular_usuario", parser.obterDadoParser(tamanhoCelularUsuario));
-		initialValues.put("email_usuario", parser.obterDadoParser(30));
+		values.put("matricula_usuario", parser.obterDadoParser(9));
+		values.put("nome_usuario", parser.obterDadoParser(50));
+		values.put("tipo_pessoa_usuario", parser.obterDadoParser(1));
+		values.put("cpf_cnpj_usuario", parser.obterDadoParser(14).trim());
+		values.put("rg_usuario", parser.obterDadoParser(13).trim());
+		values.put("uf_usuario", parser.obterDadoParser(2));
+		values.put("tipo_sexo_usuario", parser.obterDadoParser(1));
+		values.put("telefone_usuario", parser.obterDadoParser(tamanhoTelefoneUsuario));
+		values.put("celular_usuario", parser.obterDadoParser(tamanhoCelularUsuario));
+		values.put("email_usuario", parser.obterDadoParser(30));
 
 		String matriculaProprietario = parser.obterDadoParser(9);
 
 		int tamanhoTelefoneProprietario = getTamanhoTelefone(tamanhoLinha);
 		int tamanhoCelularProprietario = getTamanhoCelularProprietarioOuResponsavel(tamanhoLinha, matriculaProprietario);
 
-		initialValues.put("matricula_proprietario", matriculaProprietario);
-		initialValues.put("nome_proprietario", parser.obterDadoParser(50));
-		initialValues.put("tipo_pessoa_proprietario", parser.obterDadoParser(1));
-		initialValues.put("cpf_cnpj_proprietario", parser.obterDadoParser(14).trim());
-		initialValues.put("rg_proprietario", parser.obterDadoParser(13).trim());
-		initialValues.put("uf_proprietario", parser.obterDadoParser(2));
-		initialValues.put("tipo_sexo_proprietario", parser.obterDadoParser(1));
-		initialValues.put("telefone_proprietario", parser.obterDadoParser(tamanhoTelefoneProprietario));
-		initialValues.put("celular_proprietario", parser.obterDadoParser(tamanhoCelularProprietario));
-		initialValues.put("email_proprietario", parser.obterDadoParser(30));
-		initialValues.put("tipo_logradouro_proprietario", parser.obterDadoParser(2));
-		initialValues.put("logradouro_proprietario", parser.obterDadoParser(40));
-		initialValues.put("numero_proprietario", parser.obterDadoParser(5));
-		initialValues.put("complemento_proprietario", parser.obterDadoParser(25));
-		initialValues.put("bairro_proprietario", parser.obterDadoParser(20));
-		initialValues.put("cep_proprietario", parser.obterDadoParser(8));
-		initialValues.put("municipio_proprietario", parser.obterDadoParser(15));
+		values.put("matricula_proprietario", matriculaProprietario);
+		values.put("nome_proprietario", parser.obterDadoParser(50));
+		values.put("tipo_pessoa_proprietario", parser.obterDadoParser(1));
+		values.put("cpf_cnpj_proprietario", parser.obterDadoParser(14).trim());
+		values.put("rg_proprietario", parser.obterDadoParser(13).trim());
+		values.put("uf_proprietario", parser.obterDadoParser(2));
+		values.put("tipo_sexo_proprietario", parser.obterDadoParser(1));
+		values.put("telefone_proprietario", parser.obterDadoParser(tamanhoTelefoneProprietario));
+		values.put("celular_proprietario", parser.obterDadoParser(tamanhoCelularProprietario));
+		values.put("email_proprietario", parser.obterDadoParser(30));
+		values.put("tipo_logradouro_proprietario", parser.obterDadoParser(2));
+		values.put("logradouro_proprietario", parser.obterDadoParser(40));
+		values.put("numero_proprietario", parser.obterDadoParser(5));
+		values.put("complemento_proprietario", parser.obterDadoParser(25));
+		values.put("bairro_proprietario", parser.obterDadoParser(20));
+		values.put("cep_proprietario", parser.obterDadoParser(8));
+		values.put("municipio_proprietario", parser.obterDadoParser(15));
 
 		String matriculaResponsavel = parser.obterDadoParser(9);
 
 		int tamanhoTelefoneResponsavel = getTamanhoTelefone(tamanhoLinha);
 		int tamanhoCelularResponsavel = getTamanhoCelularProprietarioOuResponsavel(tamanhoLinha, matriculaResponsavel);
 
-		initialValues.put("matricula_responsavel", matriculaResponsavel);
-		initialValues.put("nome_responsavel", parser.obterDadoParser(50));
-		initialValues.put("tipo_pessoa_responsavel", parser.obterDadoParser(1));
-		initialValues.put("cpf_cnpj_responsavel", parser.obterDadoParser(14).trim());
-		initialValues.put("rg_responsavel", parser.obterDadoParser(13).trim());
-		initialValues.put("uf_responsavel", parser.obterDadoParser(2));
-		initialValues.put("tipo_sexo_responsavel", parser.obterDadoParser(1));
-		initialValues.put("telefone_responsavel", parser.obterDadoParser(tamanhoTelefoneResponsavel));
-		initialValues.put("celular_responsavel", parser.obterDadoParser(tamanhoCelularResponsavel));
-		initialValues.put("email_responsavel", parser.obterDadoParser(30));
-		initialValues.put("tipo_logradouro_responsavel", parser.obterDadoParser(2));
-		initialValues.put("logradouro_responsavel", parser.obterDadoParser(40));
-		initialValues.put("numero_responsavel", parser.obterDadoParser(5));
-		initialValues.put("complemento_responsavel", parser.obterDadoParser(25));
-		initialValues.put("bairro_responsavel", parser.obterDadoParser(20));
-		initialValues.put("cep_responsavel", parser.obterDadoParser(8));
-		initialValues.put("municipio_responsavel", parser.obterDadoParser(15));
-		initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
-		initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
-		initialValues.put("data", "");
+		values.put("matricula_responsavel", matriculaResponsavel);
+		values.put("nome_responsavel", parser.obterDadoParser(50));
+		values.put("tipo_pessoa_responsavel", parser.obterDadoParser(1));
+		values.put("cpf_cnpj_responsavel", parser.obterDadoParser(14).trim());
+		values.put("rg_responsavel", parser.obterDadoParser(13).trim());
+		values.put("uf_responsavel", parser.obterDadoParser(2));
+		values.put("tipo_sexo_responsavel", parser.obterDadoParser(1));
+		values.put("telefone_responsavel", parser.obterDadoParser(tamanhoTelefoneResponsavel));
+		values.put("celular_responsavel", parser.obterDadoParser(tamanhoCelularResponsavel));
+		values.put("email_responsavel", parser.obterDadoParser(30));
+		values.put("tipo_logradouro_responsavel", parser.obterDadoParser(2));
+		values.put("logradouro_responsavel", parser.obterDadoParser(40));
+		values.put("numero_responsavel", parser.obterDadoParser(5));
+		values.put("complemento_responsavel", parser.obterDadoParser(25));
+		values.put("bairro_responsavel", parser.obterDadoParser(20));
+		values.put("cep_responsavel", parser.obterDadoParser(8));
+		values.put("municipio_responsavel", parser.obterDadoParser(15));
+		values.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
+		values.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
+		values.put("data", "");
 
-		return db.insert(Constantes.TABLE_CLIENTE, null, initialValues);
+		return db.insert(Constantes.TABLE_CLIENTE, null, values);
 	}
 
 	private int getTamanhoTelefone(int tamanhoLinha) {
@@ -1300,29 +1187,29 @@ public List<String> selectEnderecoImoveis(String condition){
 		return db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues);
 	}
 
-	public long insertRamosAtividadeImovel(String linhaArquivo){
+	public long insertRamosAtividadeImovel(String linhaArquivo) {
 
-		   ParserUtil parser = new ParserUtil(linhaArquivo);
-		   parser.obterDadoParser(2);
-		   ContentValues initialValues = new ContentValues();
-		   
-		   initialValues.put("matricula", parser.obterDadoParser(9));
-		   initialValues.put("id_imovel", selectIdImoveis(null).size());
-		   initialValues.put("codigo", parser.obterDadoParser(3));
+		ParserUtil parser = new ParserUtil(linhaArquivo);
+		parser.obterDadoParser(2);
+		
+		ContentValues values = new ContentValues();
 
-		   return db.insert(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, null, initialValues);
-		}
+		values.put("matricula", String.valueOf(Integer.parseInt(parser.obterDadoParser(9))));
+		values.put("id_imovel", selectIdImoveis(null).size());
+		values.put("codigo", parser.obterDadoParser(3));
 
-	public long insertRamosAtividadeImovel(String matricula, long idImovel, String codigo){
+		return db.insert(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, null, values);
+	}
 
-		   ContentValues initialValues = new ContentValues();
-		   
-		   initialValues.put("matricula", matricula);
-		   initialValues.put("id_imovel", idImovel);
-		   initialValues.put("codigo", codigo);
+	private long inserirRamoAtividadeImovel(String codigo) {
+		ContentValues values = new ContentValues();
 
-		   return db.insert(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, null, initialValues);
-		}
+		values.put("matricula", getImovelSelecionado().getMatricula());
+		values.put("id_imovel", getImovelSelecionado().getImovelId());
+		values.put("codigo", codigo);
+
+		return db.insert(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, null, values);
+	}
 
 	public long insertServico(String linhaArquivo){
 
@@ -1526,181 +1413,169 @@ public List<String> selectEnderecoImoveis(String condition){
 		return db.insert(Constantes.TABLE_USUARIO, null, initialValues);
 	}
 	
-	public void salvarCliente(){
+	public void salvarCliente() {
 
-	   ContentValues initialValues = new ContentValues();
-	   initialValues.put("matricula", getImovelSelecionado().getMatricula());
-	   initialValues.put("gerencia", getClienteSelecionado().getNomeGerenciaRegional());
-	   initialValues.put("tipo_endereco_proprietario", String.valueOf(getClienteSelecionado().getTipoEnderecoProprietario())); 
-	   initialValues.put("tipo_endereco_responsavel", String.valueOf(getClienteSelecionado().getTipoEnderecoResponsavel())); 
-	   initialValues.put("usuario_proprietario", String.valueOf(getClienteSelecionado().isUsuarioProprietario()));
-	   initialValues.put("tipo_responsavel", String.valueOf(getClienteSelecionado().getTipoResponsavel()));
+		ContentValues values = new ContentValues();
+		values.put("matricula", getImovelSelecionado().getMatricula());
+		values.put("gerencia", getClienteSelecionado().getNomeGerenciaRegional());
+		values.put("tipo_endereco_proprietario", String.valueOf(getClienteSelecionado().getTipoEnderecoProprietario()));
+		values.put("tipo_endereco_responsavel", String.valueOf(getClienteSelecionado().getTipoEnderecoResponsavel()));
+		values.put("usuario_proprietario", String.valueOf(getClienteSelecionado().isUsuarioProprietario()));
+		values.put("tipo_responsavel", String.valueOf(getClienteSelecionado().getTipoResponsavel()));
 
-	   if (getClienteSelecionado().isNovoUsuario())
-		   initialValues.put("matricula_usuario", "0");
-	   
-	   initialValues.put("nome_usuario", getClienteSelecionado().getUsuario().getNome());
-	   initialValues.put("tipo_pessoa_usuario", String.valueOf(getClienteSelecionado().getUsuario().getTipoPessoa()));
-	   initialValues.put("cpf_cnpj_usuario", getClienteSelecionado().getUsuario().getCpfCnpj());
-	   initialValues.put("rg_usuario", getClienteSelecionado().getUsuario().getRg());
-	   initialValues.put("uf_usuario", getClienteSelecionado().getUsuario().getUf());
-	   initialValues.put("tipo_sexo_usuario", getClienteSelecionado().getUsuario().getTipoSexo());
-	   initialValues.put("telefone_usuario", getClienteSelecionado().getUsuario().getTelefone());
-	   initialValues.put("celular_usuario", getClienteSelecionado().getUsuario().getCelular()); 
-	   initialValues.put("email_usuario", getClienteSelecionado().getUsuario().getEmail());
-	   
-	   if (getClienteSelecionado().isNovoProprietario())
-		   initialValues.put("matricula_proprietario", "0");
-	   
-	   initialValues.put("nome_proprietario", getClienteSelecionado().getProprietario().getNome());
-	   initialValues.put("tipo_pessoa_proprietario", String.valueOf(getClienteSelecionado().getProprietario().getTipoPessoa()));
-	   initialValues.put("cpf_cnpj_proprietario", getClienteSelecionado().getProprietario().getCpfCnpj());
-	   initialValues.put("rg_proprietario", getClienteSelecionado().getProprietario().getRg());
-	   initialValues.put("uf_proprietario", getClienteSelecionado().getProprietario().getUf());
-	   initialValues.put("tipo_sexo_proprietario", getClienteSelecionado().getProprietario().getTipoSexo());
-	   initialValues.put("telefone_proprietario", getClienteSelecionado().getProprietario().getTelefone());
-	   initialValues.put("celular_proprietario", getClienteSelecionado().getProprietario().getCelular());
-	   initialValues.put("email_proprietario", getClienteSelecionado().getProprietario().getEmail());
-	   initialValues.put("tipo_logradouro_proprietario", getClienteSelecionado().getEnderecoProprietario().getTipoLogradouro());
-	   initialValues.put("logradouro_proprietario", getClienteSelecionado().getEnderecoProprietario().getLogradouro());
-	   initialValues.put("numero_proprietario", getClienteSelecionado().getEnderecoProprietario().getNumero());
-	   initialValues.put("complemento_proprietario", getClienteSelecionado().getEnderecoProprietario().getComplemento());
-	   initialValues.put("bairro_proprietario", getClienteSelecionado().getEnderecoProprietario().getBairro());
-	   initialValues.put("cep_proprietario", getClienteSelecionado().getEnderecoProprietario().getCep());
-	   initialValues.put("municipio_proprietario", getClienteSelecionado().getEnderecoProprietario().getMunicipio());
-	   
-	   if (getClienteSelecionado().isNovoResponsavel())
-		   initialValues.put("matricula_responsavel", "0");
-	   
-	   initialValues.put("nome_responsavel", getClienteSelecionado().getResponsavel().getNome());
-	   initialValues.put("tipo_pessoa_responsavel", String.valueOf(getClienteSelecionado().getResponsavel().getTipoPessoa()));
-	   initialValues.put("cpf_cnpj_responsavel", getClienteSelecionado().getResponsavel().getCpfCnpj());
-	   initialValues.put("rg_responsavel", getClienteSelecionado().getResponsavel().getRg());
-	   initialValues.put("uf_responsavel", getClienteSelecionado().getResponsavel().getUf());
-	   initialValues.put("tipo_sexo_responsavel", getClienteSelecionado().getResponsavel().getTipoSexo());
-	   initialValues.put("telefone_responsavel", getClienteSelecionado().getResponsavel().getTelefone());
-	   initialValues.put("celular_responsavel", getClienteSelecionado().getResponsavel().getCelular());
-	   initialValues.put("email_responsavel", getClienteSelecionado().getResponsavel().getEmail()); 
-	   initialValues.put("tipo_logradouro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getTipoLogradouro());
-	   initialValues.put("logradouro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getLogradouro());
-	   initialValues.put("numero_responsavel", getClienteSelecionado().getEnderecoResponsavel().getNumero());
-	   initialValues.put("complemento_responsavel", getClienteSelecionado().getEnderecoResponsavel().getComplemento());
-	   initialValues.put("bairro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getBairro());
-	   initialValues.put("cep_responsavel", getClienteSelecionado().getEnderecoResponsavel().getCep());
-	   initialValues.put("municipio_responsavel", getClienteSelecionado().getEnderecoResponsavel().getMunicipio());
+		if (getClienteSelecionado().isNovoUsuario())
+			values.put("matricula_usuario", "0");
 
-	   initialValues.put("latitude", getClienteSelecionado().getLatitude());
-	   initialValues.put("longitude", getClienteSelecionado().getLongitude());
-   	   initialValues.put("data", getClienteSelecionado().getData());
+		values.put("nome_usuario", getClienteSelecionado().getUsuario().getNome());
+		values.put("tipo_pessoa_usuario", String.valueOf(getClienteSelecionado().getUsuario().getTipoPessoa()));
+		values.put("cpf_cnpj_usuario", getClienteSelecionado().getUsuario().getCpfCnpj());
+		values.put("rg_usuario", getClienteSelecionado().getUsuario().getRg());
+		values.put("uf_usuario", getClienteSelecionado().getUsuario().getUf());
+		values.put("tipo_sexo_usuario", getClienteSelecionado().getUsuario().getTipoSexo());
+		values.put("telefone_usuario", getClienteSelecionado().getUsuario().getTelefone());
+		values.put("celular_usuario", getClienteSelecionado().getUsuario().getCelular());
+		values.put("email_usuario", getClienteSelecionado().getUsuario().getEmail());
 
-	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getClienteSelecionado().isNovoRegistro()){
-		   db.insert(Constantes.TABLE_CLIENTE, null, initialValues);
-		   Controlador.getInstancia().getClienteSelecionado().setNovoRegistro(false);
-	   }else{
-		   db.update(Constantes.TABLE_CLIENTE, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-	   }
+		if (getClienteSelecionado().isNovoProprietario())
+			values.put("matricula_proprietario", "0");
+
+		values.put("nome_proprietario", getClienteSelecionado().getProprietario().getNome());
+		values.put("tipo_pessoa_proprietario", String.valueOf(getClienteSelecionado().getProprietario().getTipoPessoa()));
+		values.put("cpf_cnpj_proprietario", getClienteSelecionado().getProprietario().getCpfCnpj());
+		values.put("rg_proprietario", getClienteSelecionado().getProprietario().getRg());
+		values.put("uf_proprietario", getClienteSelecionado().getProprietario().getUf());
+		values.put("tipo_sexo_proprietario", getClienteSelecionado().getProprietario().getTipoSexo());
+		values.put("telefone_proprietario", getClienteSelecionado().getProprietario().getTelefone());
+		values.put("celular_proprietario", getClienteSelecionado().getProprietario().getCelular());
+		values.put("email_proprietario", getClienteSelecionado().getProprietario().getEmail());
+		values.put("tipo_logradouro_proprietario", getClienteSelecionado().getEnderecoProprietario().getTipoLogradouro());
+		values.put("logradouro_proprietario", getClienteSelecionado().getEnderecoProprietario().getLogradouro());
+		values.put("numero_proprietario", getClienteSelecionado().getEnderecoProprietario().getNumero());
+		values.put("complemento_proprietario", getClienteSelecionado().getEnderecoProprietario().getComplemento());
+		values.put("bairro_proprietario", getClienteSelecionado().getEnderecoProprietario().getBairro());
+		values.put("cep_proprietario", getClienteSelecionado().getEnderecoProprietario().getCep());
+		values.put("municipio_proprietario", getClienteSelecionado().getEnderecoProprietario().getMunicipio());
+
+		if (getClienteSelecionado().isNovoResponsavel())
+			values.put("matricula_responsavel", "0");
+
+		values.put("nome_responsavel", getClienteSelecionado().getResponsavel().getNome());
+		values.put("tipo_pessoa_responsavel", String.valueOf(getClienteSelecionado().getResponsavel().getTipoPessoa()));
+		values.put("cpf_cnpj_responsavel", getClienteSelecionado().getResponsavel().getCpfCnpj());
+		values.put("rg_responsavel", getClienteSelecionado().getResponsavel().getRg());
+		values.put("uf_responsavel", getClienteSelecionado().getResponsavel().getUf());
+		values.put("tipo_sexo_responsavel", getClienteSelecionado().getResponsavel().getTipoSexo());
+		values.put("telefone_responsavel", getClienteSelecionado().getResponsavel().getTelefone());
+		values.put("celular_responsavel", getClienteSelecionado().getResponsavel().getCelular());
+		values.put("email_responsavel", getClienteSelecionado().getResponsavel().getEmail());
+		values.put("tipo_logradouro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getTipoLogradouro());
+		values.put("logradouro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getLogradouro());
+		values.put("numero_responsavel", getClienteSelecionado().getEnderecoResponsavel().getNumero());
+		values.put("complemento_responsavel", getClienteSelecionado().getEnderecoResponsavel().getComplemento());
+		values.put("bairro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getBairro());
+		values.put("cep_responsavel", getClienteSelecionado().getEnderecoResponsavel().getCep());
+		values.put("municipio_responsavel", getClienteSelecionado().getEnderecoResponsavel().getMunicipio());
+
+		values.put("latitude", getClienteSelecionado().getLatitude());
+		values.put("longitude", getClienteSelecionado().getLongitude());
+		values.put("data", getClienteSelecionado().getData());
+
+		if (Controlador.getInstancia().getClienteSelecionado().isNovoRegistro()) {
+			db.insert(Constantes.TABLE_CLIENTE, null, values);
+			Controlador.getInstancia().getClienteSelecionado().setNovoRegistro(false);
+		} else {
+			db.update(Constantes.TABLE_CLIENTE, values, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
+		}
 	}
 
-	public void salvarImovel(){
+	public void salvarImovel() {
+		ContentValues values = new ContentValues();
 		
-		if (getImovelSelecionado().getMatricula() < 1000) {
-			salvarQtdImoveisNovos(getImovelSelecionado().getMatricula());
+		values.put("matricula", getImovelSelecionado().getMatricula());
+		values.put("codigo_cliente", getImovelSelecionado().getCodigoCliente());
+		values.put("inscricao", getImovelSelecionado().getInscricao());
+		values.put("rota", getImovelSelecionado().getRota());
+		values.put("face", getImovelSelecionado().getFace());
+		values.put("codigo_municipio", getImovelSelecionado().getCodigoMunicipio());
+		values.put("numero_iptu", getImovelSelecionado().getIptu());
+		values.put("numero_celpa", getImovelSelecionado().getNumeroCelpa());
+		values.put("numero_pontos_uteis", getImovelSelecionado().getNumeroPontosUteis());
+		values.put("numero_ocupantes", getImovelSelecionado().getNumeroOcupantes());
+		values.put("tipo_logradouro_imovel", getImovelSelecionado().getEnderecoImovel().getTipoLogradouro());
+		values.put("logradouro_imovel", getImovelSelecionado().getEnderecoImovel().getLogradouro());
+		values.put("numero_imovel", getImovelSelecionado().getEnderecoImovel().getNumero());
+		values.put("complemento_imovel", getImovelSelecionado().getEnderecoImovel().getComplemento());
+
+		values.put("bairro_imovel", getImovelSelecionado().getEnderecoImovel().getBairro());
+		values.put("cep_imovel", getImovelSelecionado().getEnderecoImovel().getCep());
+		values.put("municipio_imovel", getImovelSelecionado().getEnderecoImovel().getMunicipio());
+		values.put("codigo_logradouro_imovel", getImovelSelecionado().getCodigoLogradouro());
+		values.put("sub_categoria_residencial_1", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria1()));
+		values.put("sub_categoria_residencial_2", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria2()));
+		values.put("sub_categoria_residencial_3", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria3()));
+		values.put("sub_categoria_residencial_4", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria4()));
+
+		values.put("sub_categoria_comercial_1", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria1()));
+		values.put("sub_categoria_comercial_2", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria2()));
+		values.put("sub_categoria_comercial_3", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria3()));
+		values.put("sub_categoria_comercial_4", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria4()));
+
+		values.put("sub_categoria_publica_1", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria1()));
+		values.put("sub_categoria_publica_2", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria2()));
+		values.put("sub_categoria_publica_3", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria3()));
+		values.put("sub_categoria_publica_4", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria4()));
+
+		values.put("sub_categoria_industrial_1", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria1()));
+		values.put("sub_categoria_industrial_2", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria2()));
+		values.put("sub_categoria_industrial_3", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria3()));
+		values.put("sub_categoria_industrial_4", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4()));
+		values.put("tipo_fonte_abastecimento", String.valueOf(getImovelSelecionado().getTipoFonteAbastecimento()));
+		values.put("imovel_status", String.valueOf(getImovelSelecionado().getImovelStatus()));
+		values.put("imovel_enviado", String.valueOf(getImovelSelecionado().getImovelEnviado()));
+
+		values.put("latitude", getImovelSelecionado().getLatitude());
+		values.put("longitude", getImovelSelecionado().getLongitude());
+		values.put("data", getImovelSelecionado().getData());
+		values.put("entrevistado", getImovelSelecionado().getEntrevistado());
+		values.put("tipo_operacao", getImovelSelecionado().getOperacaoTipo());
+
+		values.put("area_construida", getImovelSelecionado().getAreaConstruida());
+		values.put("classe_social", getImovelSelecionado().getClasseSocial());
+		values.put("numero_animais", getImovelSelecionado().getNumeroAnimais());
+		values.put("volume_piscina", getImovelSelecionado().getVolumePiscina());
+		values.put("volume_cisterna", getImovelSelecionado().getVolumeCisterna());
+		values.put("volume_caixa_dagua", getImovelSelecionado().getVolumeCaixaDagua());
+		values.put("tipo_uso", getImovelSelecionado().getTipoUso());
+		values.put("acesso_hidrometro", getImovelSelecionado().getAcessoHidrometro());
+
+		values.put("numero_criancas", getImovelSelecionado().getOcupacaoImovel().getCriancas());
+		values.put("numero_adultos", getImovelSelecionado().getOcupacaoImovel().getAdultos());
+		values.put("numero_alunos", getImovelSelecionado().getOcupacaoImovel().getAlunos());
+		values.put("numero_caes", getImovelSelecionado().getOcupacaoImovel().getCaes());
+		values.put("numero_idosos", getImovelSelecionado().getOcupacaoImovel().getIdosos());
+		values.put("numero_empregados", getImovelSelecionado().getOcupacaoImovel().getEmpregados());
+		values.put("numero_outros", getImovelSelecionado().getOcupacaoImovel().getOutros());
+
+		values.put("quantidade_economias_social", getImovelSelecionado().getQuantidadeEconomiasSocial());
+		values.put("quantidade_economias_outros", getImovelSelecionado().getQuantidadeEconomiasOutros());
+
+		values.put("observacao", getImovelSelecionado().getObservacao());
+
+		values.put("percentual_abastecimento", getImovelSelecionado().getPercentualAbastecimento());
+
+		if (Controlador.getInstancia().getImovelSelecionado().isNovoRegistro()) {
+			db.insert(Constantes.TABLE_IMOVEL, null, values);
+			Controlador.getInstancia().getImovelSelecionado().setNovoRegistro(false);
+		} else {
+			db.update(Constantes.TABLE_IMOVEL, values, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
+			db.delete(Constantes.TABLE_RAMO_ATIVIDADE_IMOVEL, "id_imovel=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
 		}
-
-	   ContentValues initialValues = new ContentValues();
-	   initialValues.put("matricula", getImovelSelecionado().getMatricula());
-	   initialValues.put("codigo_cliente", getImovelSelecionado().getCodigoCliente());
-	   initialValues.put("inscricao", getImovelSelecionado().getInscricao());
-	   initialValues.put("rota", getImovelSelecionado().getRota());
-	   initialValues.put("face", getImovelSelecionado().getFace());
-	   initialValues.put("codigo_municipio", getImovelSelecionado().getCodigoMunicipio());
-	   initialValues.put("numero_iptu", getImovelSelecionado().getIptu());
-	   initialValues.put("numero_celpa", getImovelSelecionado().getNumeroCelpa());
-	   initialValues.put("numero_pontos_uteis", getImovelSelecionado().getNumeroPontosUteis());
-	   initialValues.put("numero_ocupantes", getImovelSelecionado().getNumeroOcupantes());
-	   initialValues.put("tipo_logradouro_imovel", getImovelSelecionado().getEnderecoImovel().getTipoLogradouro());
-	   initialValues.put("logradouro_imovel", getImovelSelecionado().getEnderecoImovel().getLogradouro());
-	   initialValues.put("numero_imovel", getImovelSelecionado().getEnderecoImovel().getNumero());
-	   initialValues.put("complemento_imovel", getImovelSelecionado().getEnderecoImovel().getComplemento());
-
-	   initialValues.put("bairro_imovel", getImovelSelecionado().getEnderecoImovel().getBairro());
-	   initialValues.put("cep_imovel", getImovelSelecionado().getEnderecoImovel().getCep());
-	   initialValues.put("municipio_imovel", getImovelSelecionado().getEnderecoImovel().getMunicipio());
-	   initialValues.put("codigo_logradouro_imovel", getImovelSelecionado().getCodigoLogradouro()); 
-	   initialValues.put("sub_categoria_residencial_1", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria1()));
-	   initialValues.put("sub_categoria_residencial_2", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria2()));
-	   initialValues.put("sub_categoria_residencial_3", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria3()));
-	   initialValues.put("sub_categoria_residencial_4", String.valueOf(getImovelSelecionado().getCategoriaResidencial().getEconomiasSubCategoria4()));
-	   
-	   initialValues.put("sub_categoria_comercial_1", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria1()));
-	   initialValues.put("sub_categoria_comercial_2", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria2()));
-	   initialValues.put("sub_categoria_comercial_3", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria3()));
-	   initialValues.put("sub_categoria_comercial_4", String.valueOf(getImovelSelecionado().getCategoriaComercial().getEconomiasSubCategoria4()));
-	   
-	   initialValues.put("sub_categoria_publica_1", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria1()));
-	   initialValues.put("sub_categoria_publica_2", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria2()));
-	   initialValues.put("sub_categoria_publica_3", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria3()));
-	   initialValues.put("sub_categoria_publica_4", String.valueOf(getImovelSelecionado().getCategoriaPublica().getEconomiasSubCategoria4()));
-	   
-	   initialValues.put("sub_categoria_industrial_1", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria1()));
-	   initialValues.put("sub_categoria_industrial_2", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria2()));
-	   initialValues.put("sub_categoria_industrial_3", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria3()));
-	   initialValues.put("sub_categoria_industrial_4", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4()));
-	   initialValues.put("tipo_fonte_abastecimento", String.valueOf(getImovelSelecionado().getTipoFonteAbastecimento()));
-	   initialValues.put("imovel_status", String.valueOf(getImovelSelecionado().getImovelStatus()));
-	   initialValues.put("imovel_enviado", String.valueOf(getImovelSelecionado().getImovelEnviado()));
-	   
-	   initialValues.put("latitude", getImovelSelecionado().getLatitude());
-	   initialValues.put("longitude", getImovelSelecionado().getLongitude());
-   	   initialValues.put("data", getImovelSelecionado().getData());
-   	   initialValues.put("entrevistado", getImovelSelecionado().getEntrevistado());
-   	   initialValues.put("tipo_operacao", getImovelSelecionado().getOperacaoTipo());
-   	   
-   	   //novos campos de cadastramento
-   	   initialValues.put("area_construida", getImovelSelecionado().getAreaConstruida());
-   	   initialValues.put("classe_social", getImovelSelecionado().getClasseSocial());
-   	   initialValues.put("numero_animais", getImovelSelecionado().getNumeroAnimais());
-	   initialValues.put("volume_piscina", getImovelSelecionado().getVolumePiscina());
-	   initialValues.put("volume_cisterna", getImovelSelecionado().getVolumeCisterna());
-	   initialValues.put("volume_caixa_dagua", getImovelSelecionado().getVolumeCaixaDagua());
-	   initialValues.put("tipo_uso", getImovelSelecionado().getTipoUso());
-	   initialValues.put("acesso_hidrometro", getImovelSelecionado().getAcessoHidrometro());
-	   
-	   initialValues.put("numero_criancas", getImovelSelecionado().getOcupacaoImovel().getCriancas());
-	   initialValues.put("numero_adultos", getImovelSelecionado().getOcupacaoImovel().getAdultos());
-	   initialValues.put("numero_alunos", getImovelSelecionado().getOcupacaoImovel().getAlunos());
-	   initialValues.put("numero_caes", getImovelSelecionado().getOcupacaoImovel().getCaes());
-	   initialValues.put("numero_idosos", getImovelSelecionado().getOcupacaoImovel().getIdosos());
-	   initialValues.put("numero_empregados", getImovelSelecionado().getOcupacaoImovel().getEmpregados());
-	   initialValues.put("numero_outros", getImovelSelecionado().getOcupacaoImovel().getOutros());
-	   
-	   initialValues.put("quantidade_economias_social", getImovelSelecionado().getQuantidadeEconomiasSocial());
-	   initialValues.put("quantidade_economias_outros", getImovelSelecionado().getQuantidadeEconomiasOutros());
-	   
-	   initialValues.put("observacao", getImovelSelecionado().getObservacao());
-	   
-	   initialValues.put("percentual_abastecimento", getImovelSelecionado().getPercentualAbastecimento());
-
-   	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getImovelSelecionado().isNovoRegistro()){
-		   db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
-		   Controlador.getInstancia().getImovelSelecionado().setNovoRegistro(false);
-	   }else{
-		   db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-   		   
-   		// deve-se agora substituir os ramos de atividade so imovel. 
-   		// Removendo
-		deleteRamosAtividadeImovel(Controlador.getInstancia().getIdCadastroSelecionado());
-   		
-   		// Inserindo
-   		if (getImovelSelecionado().getListaRamoAtividade() != null && getImovelSelecionado().getListaRamoAtividade().size() > 0 ){
-   			for (int i = 0; i < getImovelSelecionado().getListaRamoAtividade().size(); i++){
-   				insertRamosAtividadeImovel(String.valueOf(getImovelSelecionado().getMatricula()), getImovelSelecionado().getImovelId(), getImovelSelecionado().getListaRamoAtividade().get(i));
-   			}
-   		}
-
-	   }
+		
+		if (getImovelSelecionado().possueRamoAtividade()) {
+			for (int i = 0; i < getImovelSelecionado().getListaRamoAtividade().size(); i++) {
+				inserirRamoAtividadeImovel(getImovelSelecionado().getListaRamoAtividade().get(i));
+			}
+		}
 	}
 	
 	public void salvarStatusImovel(Imovel imovel) {
@@ -1708,99 +1583,85 @@ public List<String> selectEnderecoImoveis(String condition){
 		initialValues.put("imovel_status", imovel.getImovelStatus());
 		initialValues.put("imovel_enviado", imovel.getImovelEnviado());
 
-		db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String[] { String.valueOf(imovel.getImovelId()) });
+		db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
 	}
 
-	public void salvarServico(){
+	public void salvarServico() {
 
-	   ContentValues initialValues = new ContentValues();
-	   initialValues.put("matricula", getImovelSelecionado().getMatricula());
-	   initialValues.put("tipo_ligacao_agua", String.valueOf(getServicosSelecionado().getTipoLigacaoAgua()));
-	   initialValues.put("tipo_ligacao_esgoto", String.valueOf(getServicosSelecionado().getTipoLigacaoEsgoto())); 
-	   initialValues.put("local_instalacao_ramal", String.valueOf(getServicosSelecionado().getLocalInstalacaoRamal())); 
-	   initialValues.put("latitude", String.valueOf(getServicosSelecionado().getLatitude())); 
-	   initialValues.put("longitude", String.valueOf(getServicosSelecionado().getLongitude())); 
-   	   initialValues.put("data", getServicosSelecionado().getData());
+		ContentValues values = new ContentValues();
+		values.put("matricula", getImovelSelecionado().getMatricula());
+		values.put("tipo_ligacao_agua", String.valueOf(getServicosSelecionado().getTipoLigacaoAgua()));
+		values.put("tipo_ligacao_esgoto", String.valueOf(getServicosSelecionado().getTipoLigacaoEsgoto()));
+		values.put("local_instalacao_ramal", String.valueOf(getServicosSelecionado().getLocalInstalacaoRamal()));
+		values.put("latitude", String.valueOf(getServicosSelecionado().getLatitude()));
+		values.put("longitude", String.valueOf(getServicosSelecionado().getLongitude()));
+		values.put("data", getServicosSelecionado().getData());
 
-	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getServicosSelecionado().isNovoRegistro()){
-		   db.insert(Constantes.TABLE_SERVICO, null, initialValues);
-		   Controlador.getInstancia().getServicosSelecionado().setNovoRegistro(false);
-	   }else{
-		   db.update(Constantes.TABLE_SERVICO, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-	   }
+		if (Controlador.getInstancia().getServicosSelecionado().isNovoRegistro()) {
+			db.insert(Constantes.TABLE_SERVICO, null, values);
+			Controlador.getInstancia().getServicosSelecionado().setNovoRegistro(false);
+		} else {
+			db.update(Constantes.TABLE_SERVICO, values, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
+		}
 	}
 
-	public void salvarMedidor(){
+	public void salvarMedidor() {
 
-	   ContentValues initialValues = new ContentValues();
-	   initialValues.put("matricula", getImovelSelecionado().getMatricula());
-	   initialValues.put("possui_medidor", String.valueOf(getMedidorSelecionado().getPossuiMedidor()));
-	   initialValues.put("numero_hidrometro", getMedidorSelecionado().getNumeroHidrometro());
-	   initialValues.put("marca", getMedidorSelecionado().getMarca());
-	   initialValues.put("capacidade", getMedidorSelecionado().getCapacidade());
-	   initialValues.put("tipo_caixa_protecao", String.valueOf(getMedidorSelecionado().getTipoCaixaProtecao())); 
-	   initialValues.put("latitude", getMedidorSelecionado().getLatitude());
-	   initialValues.put("longitude", getMedidorSelecionado().getLongitude());
-   	   initialValues.put("data", getMedidorSelecionado().getData());
+		ContentValues values = new ContentValues();
+		values.put("matricula", getImovelSelecionado().getMatricula());
+		values.put("possui_medidor", String.valueOf(getMedidorSelecionado().getPossuiMedidor()));
+		values.put("numero_hidrometro", getMedidorSelecionado().getNumeroHidrometro());
+		values.put("marca", getMedidorSelecionado().getMarca());
+		values.put("capacidade", getMedidorSelecionado().getCapacidade());
+		values.put("tipo_caixa_protecao", String.valueOf(getMedidorSelecionado().getTipoCaixaProtecao()));
+		values.put("latitude", getMedidorSelecionado().getLatitude());
+		values.put("longitude", getMedidorSelecionado().getLongitude());
+		values.put("data", getMedidorSelecionado().getData());
 
-	   //Verifica se deve atualizar ou inserir um novo elemento na tabela
-	   if (Controlador.getInstancia().getMedidorSelecionado().isNovoRegistro()){
-		   db.insert(Constantes.TABLE_MEDIDOR, null, initialValues);
-		   Controlador.getInstancia().getMedidorSelecionado().setNovoRegistro(false);
-	   }else{
-		   db.update(Constantes.TABLE_MEDIDOR, initialValues, "id=?", new String []{String.valueOf(Controlador.getInstancia().getIdCadastroSelecionado())});
-	   }
+		if (Controlador.getInstancia().getMedidorSelecionado().isNovoRegistro()) {
+			db.insert(Constantes.TABLE_MEDIDOR, null, values);
+			Controlador.getInstancia().getMedidorSelecionado().setNovoRegistro(false);
+		} else {
+			db.update(Constantes.TABLE_MEDIDOR, values, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
+		}
 	}
 
 	public void salvarAnormalidadeImovel() {
-		ContentValues initialValues = new ContentValues();
-		
-		initialValues.put("matricula", getImovelSelecionado().getMatricula());
-		initialValues.put("codigo_anormalidade", String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()));
-		initialValues.put("comentario", getAnormalidadeImovelSelecionado().getComentario());
-		initialValues.put("path_image_1", getAnormalidadeImovelSelecionado().getFoto1());
-		initialValues.put("path_image_2", getAnormalidadeImovelSelecionado().getFoto2());
-		initialValues.put("latitude", getAnormalidadeImovelSelecionado().getLatitude());
-		initialValues.put("longitude", getAnormalidadeImovelSelecionado().getLongitude());
-		initialValues.put("data", getAnormalidadeImovelSelecionado().getData());
-		initialValues.put("login_usuario", getAnormalidadeImovelSelecionado().getLoginUsuario());
+		ContentValues values = new ContentValues();
 
-		AnormalidadeImovel anormalidadeImovel = selectAnormalidadeImovel(String.valueOf(getImovelSelecionado().getMatricula()));
+		values.put("matricula", getImovelSelecionado().getMatricula());
+		values.put("codigo_anormalidade", String.valueOf(getAnormalidadeImovelSelecionado().getCodigoAnormalidade()));
+		values.put("comentario", getAnormalidadeImovelSelecionado().getComentario());
+		values.put("path_image_1", getAnormalidadeImovelSelecionado().getFoto1());
+		values.put("path_image_2", getAnormalidadeImovelSelecionado().getFoto2());
+		values.put("latitude", getAnormalidadeImovelSelecionado().getLatitude());
+		values.put("longitude", getAnormalidadeImovelSelecionado().getLongitude());
+		values.put("data", getAnormalidadeImovelSelecionado().getData());
+		values.put("login_usuario", getAnormalidadeImovelSelecionado().getLoginUsuario());
 
-		if (anormalidadeImovel.getMatricula() == getImovelSelecionado().getMatricula()) {
-			db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, initialValues, "matricula=?", new String[] { String.valueOf(anormalidadeImovel.getMatricula()) });
-
+		if (Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()) {
+			db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, values);
+			Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(false);
 		} else {
-			if (Controlador.getInstancia().getAnormalidadeImovelSelecionado().isNovoRegistro()) {
-				Controlador.getInstancia().setCadastroSelecionado(db.insert(Constantes.TABLE_ANORMALIDADE_IMOVEL, null, initialValues));
-				Controlador.getInstancia().getAnormalidadeImovelSelecionado().setNovoRegistro(false);
-			}
+			db.update(Constantes.TABLE_ANORMALIDADE_IMOVEL, values, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
 		}
-	}
-	
-	public void salvarConfiguracaoElement(String parametroName, int value){
-		ContentValues initialValues = new ContentValues();
-		initialValues.put("rota_carregada", value);
-
-		db.update(Constantes.TABLE_CONFIGURACAO, initialValues, "id=?", new String []{String.valueOf(1)});
 	}
 	
 	public int getQtdImoveisNovo() {
 		Cursor cursor = db.query(Constantes.TABLE_GERAL, new String[] { "qtd_imoveis_novos" }, null, null, null, null, null);
-    	int i = 0;
-    	 if (cursor.moveToFirst()) {
-    		 i = cursor.getInt(0);
-    	 }
-    	 
-    	 return i;
+		int qtd = 0;
+		if (cursor.moveToFirst()) {
+			qtd = cursor.getInt(0);
+		}
+
+		return qtd;
 	}
 	
-	public void salvarQtdImoveisNovos(int qtsImoveisNovos) {
-		ContentValues initialValues = new ContentValues();
-		initialValues.put("qtd_imoveis_novos", qtsImoveisNovos);
+	public void salvarQtdImoveisNovos() {
+		ContentValues values = new ContentValues();
+		values.put("qtd_imoveis_novos", getQtdImoveisNovo() + 1);
 
-		db.update(Constantes.TABLE_GERAL, initialValues, "id=?", new String []{String.valueOf(1)});
+		db.update(Constantes.TABLE_GERAL, values, "id=?", new String[] { String.valueOf(1) });
 	}
 	
 	public void inserirInconsistenciaImovel(int matricula, String inconsistencia) {
@@ -1833,7 +1694,7 @@ public List<String> selectEnderecoImoveis(String condition){
 	
 	public List<Imovel> pesquisarImoveisFinalizados() {
 
-		Cursor cursor = getCursorTabelaImovel("imovel_enviado = " + Constantes.NAO + 
+		Cursor cursor = getCursorImovel("imovel_enviado = " + Constantes.NAO + 
 				" AND imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		List<Imovel> imoveis = new ArrayList<Imovel>();
@@ -1844,7 +1705,6 @@ public List<String> selectEnderecoImoveis(String condition){
 
 				Imovel imovel = new Imovel();
 				montarImovel(cursor, id, imovel);
-
 				imoveis.add(imovel);
 			} while (cursor.moveToNext());
 		}
@@ -1856,7 +1716,7 @@ public List<String> selectEnderecoImoveis(String condition){
 		return imoveis;
 	}
 
-	private Cursor getCursorTabelaImovel(String condicao) {
+	private Cursor getCursorImovel(String condicao) {
 		
 		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { 
 				"id", 

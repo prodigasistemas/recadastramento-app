@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
+import java.util.List;
 
 import model.AnormalidadeImovel;
 import model.Cliente;
@@ -26,7 +26,8 @@ import dataBase.DataManipulator;
 public class Controlador {
 
 	public static Controlador instancia;
-	private boolean permissionGranted = false;
+	
+	private boolean logado = false;
 
 	private static Cliente clienteSelecionado = new Cliente();
 	private static Imovel imovelSelecionado = new Imovel();
@@ -38,12 +39,12 @@ public class Controlador {
 	private static Registro ramosAtividade = new Registro();
 	private static Usuario usuario = new Usuario();
 
-	private static long idCadastroSelecionado = 0;
+	private static long idSelecionado = 0;
 	private static int posicaoListaImoveis = -1;
 	private static int menuSelecionado = -1;
 
 	private DataManipulator manipulator;
-
+	
 	public static Controlador getInstancia() {
 		if (Controlador.instancia == null) {
 			Controlador.instancia = new Controlador();
@@ -124,42 +125,32 @@ public class Controlador {
 		Controlador.usuario = usuario;
 	}
 
-	public void setCadastroSelecionadoByListPosition(int posicao) {
+	public void setSelecionadoPorPosicao(int posicao) {
 		iniciarTabs();
 		setPosicaoListaImoveis(posicao);
-		idCadastroSelecionado = getIdCadastroSelecionado(posicao, null);
-		manipulator.selectCliente(idCadastroSelecionado);
-		manipulator.selectImovel(idCadastroSelecionado);
-		manipulator.selectServico(idCadastroSelecionado);
-		manipulator.selectMedidor(idCadastroSelecionado);
-		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+		idSelecionado = getIdSelecionado(posicao, null);
+		manipulator.selectCliente(idSelecionado);
+		manipulator.selectImovel(idSelecionado);
+		manipulator.selectServicos(idSelecionado);
+		manipulator.selectMedidor(idSelecionado);
+		manipulator.selectAnormalidadeImovel(idSelecionado);
 	}
 
-	public void setCadastroSelecionadoByListPositionInConsulta(int listPositionInConsulta, String condition) {
+	public void setSelecionadoPorPosicao(int posicao, String condicao) {
 		iniciarTabs();
-		idCadastroSelecionado = getIdCadastroSelecionado(listPositionInConsulta, condition);
-		setPosicaoListaImoveis(getCadastroListPositionById(idCadastroSelecionado));
+		idSelecionado = getIdSelecionado(posicao, condicao);
+		setPosicaoListaImoveis(getPosicaoPorId(idSelecionado));
 
-		manipulator.selectCliente(idCadastroSelecionado);
-		manipulator.selectImovel(idCadastroSelecionado);
-		manipulator.selectServico(idCadastroSelecionado);
-		manipulator.selectMedidor(idCadastroSelecionado);
-		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+		manipulator.selectCliente(idSelecionado);
+		manipulator.selectImovel(idSelecionado);
+		manipulator.selectServicos(idSelecionado);
+		manipulator.selectMedidor(idSelecionado);
+		manipulator.selectAnormalidadeImovel(idSelecionado);
 	}
 
-	public void setCadastroSelecionado(long id) {
+	public void setNovoCadastro() {
 		iniciarTabs();
-		idCadastroSelecionado = id;
-		manipulator.selectCliente(idCadastroSelecionado);
-		manipulator.selectImovel(idCadastroSelecionado);
-		manipulator.selectServico(idCadastroSelecionado);
-		manipulator.selectMedidor(idCadastroSelecionado);
-		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
-	}
-
-	public void setCadastroSelecionadoNovoImovel() {
-		iniciarTabs();
-		idCadastroSelecionado = -1;
+		idSelecionado = -1;
 	}
 
 	public void iniciarTabs() {
@@ -170,21 +161,20 @@ public class Controlador {
 		anormalidadeImovelSelecionado = new AnormalidadeImovel();
 	}
 
-	public int getIdCadastroSelecionado(int listPosition, String condition) {
-		if (listPosition == -1) {
+	public int getIdSelecionado(int posicao, String condicao) {
+		if (posicao == -1) {
 			return 0;
-
 		} else {
-			return Integer.parseInt(Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(condition).get(listPosition));
+			return Integer.parseInt(Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(condicao).get(posicao));
 		}
 	}
 
-	public int getCadastroListPositionById(long id) {
+	public int getPosicaoPorId(long id) {
 		int position = 0;
-		ArrayList<String> listIds = (ArrayList<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
+		List<String> ids = (List<String>) Controlador.getInstancia().getCadastroDataManipulator().selectIdImoveis(null);
 
-		for (int i = 0; i < listIds.size(); i++) {
-			if (id == Long.parseLong(listIds.get(i))) {
+		for (int i = 0; i < ids.size(); i++) {
+			if (id == Long.parseLong(ids.get(i))) {
 				position = i;
 				break;
 			}
@@ -202,11 +192,11 @@ public class Controlador {
 		Medidor medidorEditado = medidorSelecionado;
 		AnormalidadeImovel anormalidadeImovelEditado = anormalidadeImovelSelecionado;
 
-		manipulator.selectCliente(idCadastroSelecionado);
-		manipulator.selectImovel(idCadastroSelecionado);
-		manipulator.selectServico(idCadastroSelecionado);
-		manipulator.selectMedidor(idCadastroSelecionado);
-		manipulator.selectAnormalidadeImovel(idCadastroSelecionado);
+		manipulator.selectCliente(idSelecionado);
+		manipulator.selectImovel(idSelecionado);
+		manipulator.selectServicos(idSelecionado);
+		manipulator.selectMedidor(idSelecionado);
+		manipulator.selectAnormalidadeImovel(idSelecionado);
 
 		if (clienteEditado != clienteSelecionado) {
 			result = true;
@@ -231,12 +221,12 @@ public class Controlador {
 		return result;
 	}
 
-	public void setPermissionGranted(boolean state) {
-		this.permissionGranted = state;
+	public void setLogado(boolean logado) {
+		this.logado = logado;
 	}
 
-	public boolean isPermissionGranted() {
-		return this.permissionGranted;
+	public boolean isLogado() {
+		return logado;
 	}
 
 	public void initiateDataManipulator(Context context) {
@@ -255,10 +245,6 @@ public class Controlador {
 
 	public DataManipulator getCadastroDataManipulator() {
 		return manipulator;
-	}
-
-	public long getIdCadastroSelecionado() {
-		return idCadastroSelecionado;
 	}
 
 	public int getPosicaoListaImoveis() {
@@ -292,9 +278,9 @@ public class Controlador {
 		}
 	}
 
-	public void deleteDatabase() {
+	public void apagarBancoDeDados() {
 		finalizeDataManipulator();
-		setPermissionGranted(false);
+		setLogado(false);
 		
 		String path = Constantes.DATABASE_PATH + Constantes.DATABASE_NAME;
 		File file = new File(path);

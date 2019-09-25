@@ -71,7 +71,7 @@ public class ListaImoveis extends ListActivity {
 	}
 
 	public void chamarMainTab(View view) {
-		controlador.setCadastroSelecionadoByListPosition(adapter.getPosicaoSelecionada());
+		controlador.setSelecionadoPorPosicao(adapter.getPosicaoSelecionada());
 		controlador.setMenuSelecionado(view.getId());
 		dialog.dismiss();
 		startActivityForResult(new Intent(getApplicationContext(), MainTab.class), 0);
@@ -101,7 +101,7 @@ public class ListaImoveis extends ListActivity {
 			
 			if (permiteCadastro(position)) {
 				adapter.setPosicaoSelecionada(position);
-				controlador.setCadastroSelecionadoByListPosition(position);
+				controlador.setSelecionadoPorPosicao(position);
 				startActivityForResult(new Intent(getApplicationContext(), MainTab.class), 0);
 			}
 		}
@@ -110,14 +110,13 @@ public class ListaImoveis extends ListActivity {
 	private OnItemLongClickListener longClick = new OnItemLongClickListener() {
 		
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-			if (permiteCadastro(position)) {
-				adapter.setPosicaoSelecionada(position);
-				final View layout = getLayoutInflater().inflate(R.layout.menu_lista_imoveis, (ViewGroup) findViewById(R.id.layout_menu_lista_imoveis));
-				dialog = CustomDialog.criar(layout.getContext(), layout, "Selecione uma Ação", null, -1, null, CustomDialog.DEFAULT_LISTENER);
-				dialog.show();
-			}
+			adapter.setPosicaoSelecionada(position);
 			
+			final View layout = getLayoutInflater().inflate(R.layout.menu_lista_imoveis, (ViewGroup) findViewById(R.id.layout_menu_lista_imoveis));
+			
+			dialog = CustomDialog.criar(layout.getContext(), layout, "Selecione uma ação", null, -1, null, CustomDialog.DEFAULT_LISTENER);
+			dialog.show();
+
 			return true;
 		}
 	};

@@ -28,6 +28,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 import business.Controlador;
+import dataBase.DataManipulator;
  
 public class MedidorTab extends Fragment {
 	
@@ -127,7 +128,7 @@ public class MedidorTab extends Fragment {
 		            	updateMedidorSelecionado();
 		            	
 		         		getMedidor().setTabSaved(true);
-		         		Toast.makeText(getActivity(), "Dados do Medidor atualizados com sucesso.", 5).show();
+		         		Toast.makeText(getActivity(), "Dados do Medidor atualizados com sucesso", Toast.LENGTH_SHORT).show();
 		         		
 		         		if(Controlador.getInstancia().getImovelSelecionado().getImovelStatus() != Constantes.IMOVEL_A_SALVAR){
         					Controlador.getInstancia().getCadastroDataManipulator().salvarMedidor();
@@ -136,6 +137,12 @@ public class MedidorTab extends Fragment {
             	}
             }
         });
+        
+        if (Controlador.getInstancia().getImovelSelecionado().isInformativo()) {
+        	buttonSave.setVisibility(View.GONE);
+        } else {
+        	buttonSave.setVisibility(View.VISIBLE);
+        }
 	}
 	
 	public boolean isNumeroMedidorValido() {
@@ -163,34 +170,41 @@ public class MedidorTab extends Fragment {
 		return result;
 	}
 
-	public void updateMedidorSelecionado(){
-		
-		if ( ((RadioGroup)view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioNao){
+	public void updateMedidorSelecionado() {
+
+		if (((RadioGroup) view.findViewById(R.id.radioGroupPossuiHidrometro)).getCheckedRadioButtonId() == R.id.tipoMedicaoRadioNao) {
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.NAO));
-        	getMedidor().setNumeroHidrometro("");
-        	getMedidor().setCapacidade(String.valueOf("00"));
-        	getMedidor().setMarca(String.valueOf("00"));
-        	getMedidor().setTipoCaixaProtecao(String.valueOf("00"));
-        	
-		}else{
+			getMedidor().setNumeroHidrometro("");
+			getMedidor().setCapacidade(String.valueOf("00"));
+			getMedidor().setMarca(String.valueOf("00"));
+			getMedidor().setTipoCaixaProtecao(String.valueOf("00"));
+
+		} else {
+			DataManipulator manipulator = Controlador.getInstancia().getCadastroDataManipulator();
+
 			getMedidor().setPossuiMedidor(String.valueOf(Constantes.SIM));
-			getMedidor().setNumeroHidrometro(((EditText)view.findViewById(R.id.numeroHidrometro)).getText().toString());
-			
-			String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO, ((Spinner)view.findViewById(R.id.spinnerCapacidadeHidrometro)).getSelectedItem().toString());
+			getMedidor().setNumeroHidrometro(((EditText) view.findViewById(R.id.numeroHidrometro)).getText().toString());
+
+			String codigo = manipulator.selectCodigoByDescricaoFromTable(Constantes.TABLE_CAPACIDADE_HIDROMETRO,
+					((Spinner) view.findViewById(R.id.spinnerCapacidadeHidrometro)).getSelectedItem().toString());
 			getMedidor().setCapacidade(codigo);
 
-			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_MARCA_HIDROMETRO, ((Spinner)view.findViewById(R.id.spinnerMarcaHidrometro)).getSelectedItem().toString());
+			codigo = manipulator.selectCodigoByDescricaoFromTable(Constantes.TABLE_MARCA_HIDROMETRO, ((Spinner) view.findViewById(R.id.spinnerMarcaHidrometro))
+					.getSelectedItem().toString());
 			getMedidor().setMarca(codigo);
-			
-			codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_PROTECAO_HIDROMETRO, ((Spinner)view.findViewById(R.id.spinnerCaixaProtecao)).getSelectedItem().toString());
+
+			codigo = manipulator.selectCodigoByDescricaoFromTable(Constantes.TABLE_PROTECAO_HIDROMETRO,
+					((Spinner) view.findViewById(R.id.spinnerCaixaProtecao)).getSelectedItem().toString());
 			getMedidor().setTipoCaixaProtecao(codigo);
 
-	        if (lastKnownLocation != null) {
-				getMedidor().setLatitude(String.valueOf(lastKnownLocation.getLatitude()));
-				getMedidor().setLongitude(String.valueOf(lastKnownLocation.getLongitude()));
-	        }
-			getMedidor().setData(Util.formatarData(Calendar.getInstance().getTime()));
 		}
+
+		if (lastKnownLocation != null) {
+			getMedidor().setLatitude(String.valueOf(lastKnownLocation.getLatitude()));
+			getMedidor().setLongitude(String.valueOf(lastKnownLocation.getLongitude()));
+		}
+		
+		getMedidor().setData(Util.formatarData(Calendar.getInstance().getTime()));
 	}
 	
 	public void possuiHidrometroOnCheckedChangeListener (RadioGroup radioGroupPossuiHidrometro){

@@ -257,8 +257,8 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 
 	private void configurarBotaoAtualizar() {
-		final Button botaoAtualizar = (Button) view.findViewById(R.id.botaoAtualizar);
-		botaoAtualizar.setOnClickListener(new OnClickListener() {
+		final Button botao = (Button) view.findViewById(R.id.botaoAtualizar);
+		botao.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				obterUltimaLocalizacao();
 				configurarCoordenadas();
@@ -285,8 +285,8 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 
 	private void configurarBotaoFinalizar() {
-		final Button botaoFinalizar = (Button) view.findViewById(R.id.botaoFinalizar);
-		botaoFinalizar.setOnClickListener(new OnClickListener() {
+		final Button botao = (Button) view.findViewById(R.id.botaoFinalizar);
+		botao.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				atualizar();
@@ -309,6 +309,12 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 				}
 			}
 		});
+		
+        if (Controlador.getInstancia().getImovelSelecionado().isInformativo()) {
+        	botao.setVisibility(View.GONE);
+        } else {
+        	botao.setVisibility(View.VISIBLE);
+        }
 	}
 	
 	private void exibirMensagemAbaPendente() {
@@ -335,12 +341,16 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	
 	private void salvar() {
 		imovel.setImovelEnviado(String.valueOf(Constantes.NAO));
-		
+
 		manipulator.salvarCliente();
 		manipulator.salvarImovel();
 		manipulator.salvarServico();
 		manipulator.salvarMedidor();
 		manipulator.salvarAnormalidadeImovel();
+
+		if (imovel.isImovelNovo()) {
+			manipulator.salvarQtdImoveisNovos();
+		}
 	}
 	
 	private void verificarImovel() {

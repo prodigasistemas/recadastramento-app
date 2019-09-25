@@ -291,43 +291,44 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		configurarCor();
 	}
 
+	// TODO - Desfazer comentários para a versão 1.6.2
 	private void configurarMenu() {
 
-		final int posicao = controlador.getPosicaoListaImoveis();
-
-		switch (controlador.getMenuSelecionado()) {
-		
-		case R.id.botaoNovoImovel:
-
-			Imovel imovelSelecionado = controlador.getImovelSelecionado();
-			List<Imovel> imoveis = manipulator.selectEnderecoImovel(null);
-
-			Imovel imovelAnterior = null;
-			Imovel imovelPosterior = null;
-			String enderecoAnterior = "";
-			String enderecoPosterior = "";
-
-			if (!isInicioLista(posicao)) {
-				imovelAnterior = imoveis.get(posicao - 1);
-				enderecoAnterior = montarEndereco(imovelAnterior);
-			}
-
-			if (!isFimLista(posicao)) {
-				imovelPosterior = imoveis.get(posicao + 1);
-				enderecoPosterior = montarEndereco(imovelPosterior);
-			}
-
-			Imovel imovelAtual = imoveis.get(posicao);
-			String enderecoAtual = montarEndereco(imovelAtual);
-
-			View view = getViewDialogImovelNovo();
-			AlertDialog dialog = configurarDialogImovelNovo(view, posicao, enderecoAnterior, enderecoPosterior, enderecoAtual);
-
-			configurarBotaoInserirImovelNovoAntes(posicao, imovelSelecionado, imovelAnterior, view, dialog);
-			configurarBotaoInserirImovelNovoDepois(posicao, imovelSelecionado, imovelPosterior, view, dialog);
-
-			break;
-
+//		final int posicao = controlador.getPosicaoListaImoveis();
+//
+//		switch (controlador.getMenuSelecionado()) {
+//		
+//		case R.id.botaoNovoImovel:
+//
+//			Imovel imovelSelecionado = controlador.getImovelSelecionado();
+//			List<Imovel> imoveis = manipulator.selectEnderecoImovel(null);
+//
+//			Imovel imovelAnterior = null;
+//			Imovel imovelPosterior = null;
+//			String enderecoAnterior = "";
+//			String enderecoPosterior = "";
+//
+//			if (!isInicioLista(posicao)) {
+//				imovelAnterior = imoveis.get(posicao - 1);
+//				enderecoAnterior = montarEndereco(imovelAnterior);
+//			}
+//
+//			if (!isFimLista(posicao)) {
+//				imovelPosterior = imoveis.get(posicao + 1);
+//				enderecoPosterior = montarEndereco(imovelPosterior);
+//			}
+//
+//			Imovel imovelAtual = imoveis.get(posicao);
+//			String enderecoAtual = montarEndereco(imovelAtual);
+//
+//			View view = getViewDialogImovelNovo();
+//			AlertDialog dialog = configurarDialogImovelNovo(view, posicao, enderecoAnterior, enderecoPosterior, enderecoAtual);
+//
+//			configurarBotaoInserirImovelNovoAntes(posicao, imovelSelecionado, imovelAnterior, view, dialog);
+//			configurarBotaoInserirImovelNovoDepois(posicao, imovelSelecionado, imovelPosterior, view, dialog);
+//
+//			break;
+//
 //		case R.id.botaoAdicionarSublote:
 //			posicaoNovo = posicao + 1;
 //			montarImovelNovoSublote();
@@ -339,10 +340,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 //			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir, true).show();
 //
 //			break;
-
-		default:
-			break;
-		}
+//
+//		default:
+//			break;
+//		}
 
 		controlador.setMenuSelecionado(-1);
 	}
@@ -628,7 +629,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		});
 	}
 	
-	@SuppressWarnings("unused")
 	private void montarImovelNovoSublote() {
 		Imovel imovelReferencia = controlador.getImovelSelecionado();
 		
@@ -711,7 +711,6 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		}
 	};
 	
-	@SuppressWarnings("unused")
 	private DialogInterface.OnClickListener excluir = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			excluirImovel();
@@ -725,7 +724,8 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		}
 	};
 	
+	// TODO - Desfazer comentários para a versão 1.6.2
 	private boolean naoPermiteCadastro() {
-		return controlador.getImovelSelecionado().isInformativo() && controlador.getMenuSelecionado() != R.id.botaoNovoImovel;
+		return controlador.getImovelSelecionado().isInformativo(); //&& controlador.getMenuSelecionado() != R.id.botaoNovoImovel;
 	}
 }

@@ -40,7 +40,7 @@ public class MessageDispatcher {
 		return instancia;
 	}
 
-	public void enviarMensagem() {
+	public void enviar() {
 
 		synchronized (mensagem) {
 			try {

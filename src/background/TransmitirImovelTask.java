@@ -67,7 +67,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 		String mensagem = "";
 		String transmitido = "";
 
-		if (imovel.getImovelEnviado() == Constantes.SIM) {
+		if (imovel.isTransmitido()) {
 			transmitido = " e transmitido";
 		}
 

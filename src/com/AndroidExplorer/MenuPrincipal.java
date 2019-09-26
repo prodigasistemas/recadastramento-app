@@ -203,7 +203,7 @@ public class MenuPrincipal extends FragmentActivity {
 	
 	private int getQtdNaoTransmitidos() {
 		String condicoes = "imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")";
-		condicoes += " AND imovel_enviado = " + Constantes.NAO;
+		condicoes += " AND imovel_transmitido = " + Constantes.NAO;
 
 		return controlador.getCadastroDataManipulator().selectIdImoveis(condicoes).size();
 	}

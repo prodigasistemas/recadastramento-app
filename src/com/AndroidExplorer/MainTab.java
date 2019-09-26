@@ -524,7 +524,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		imovel.setSetor(imovelReferencia.getSetor());
 		imovel.setQuadra(imovelReferencia.getQuadra());
 		imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO));
-		imovel.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
+		imovel.setTipoOperacao(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 		imovel.setNovoRegistro(true);
 
 		controlador.setImovelSelecionado(imovel);
@@ -660,7 +660,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		imovel.setCodigoMunicipio(String.valueOf(imovelReferencia.getCodigoMunicipio()));
 		imovel.setCodigoLogradouro(String.valueOf(imovelReferencia.getCodigoLogradouro()));
 		imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_NOVO));
-		imovel.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
+		imovel.setTipoOperacao(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 
 		controlador.setImovelSelecionado(imovel);
 
@@ -683,10 +683,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	
 	private void excluirImovel() {
 		Imovel imovelSelecionado = controlador.getImovelSelecionado();
-		imovelSelecionado.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_EXCLUIDO));
+		imovelSelecionado.setTipoOperacao(String.valueOf(Constantes.OPERACAO_CADASTRO_EXCLUIDO));
 		imovelSelecionado.setImovelStatus(String.valueOf(Constantes.IMOVEL_EXCLUIDO));
 		imovelSelecionado.setData(Util.formatarData(Calendar.getInstance().getTime()));
-		imovelSelecionado.setImovelEnviado(String.valueOf(Constantes.NAO));
+		imovelSelecionado.setImovelTransmitido(String.valueOf(Constantes.NAO));
 
 		manipulator.getClienteSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));
 		manipulator.getServicosSelecionado().setData(Util.formatarData(Calendar.getInstance().getTime()));

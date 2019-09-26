@@ -56,9 +56,9 @@ public class ArquivoRetorno {
 	
 	private void verificarStatus(Imovel imovel) {
 		if (ControladorAcessoOnline.getInstancia().isImovelTransmitido()) {
-			imovel.setImovelEnviado(String.valueOf(Constantes.SIM));
+			imovel.setImovelTransmitido(String.valueOf(Constantes.SIM));
 		} else {
-			imovel.setImovelEnviado(String.valueOf(Constantes.NAO));
+			imovel.setImovelTransmitido(String.valueOf(Constantes.NAO));
 
 			if (MessageDispatcher.isRespostaInconsistencia()) {
 				imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA));
@@ -181,7 +181,7 @@ public class ArquivoRetorno {
 		
 		try {
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
-			linha.append(String.valueOf(imovel.getOperacaoTipo()));
+			linha.append(String.valueOf(imovel.getTipoOperacao()));
 			linha.append(Util.adicionarCharDireita(30, String.valueOf(imovel.getCodigoCliente()), ' '));
 			linha.append(Util.adicionarCharDireita(17, imovel.getInscricao(), ' '));
 			linha.append(Util.adicionarZerosEsquerdaNumero(2, imovel.getRota()));

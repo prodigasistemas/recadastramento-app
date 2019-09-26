@@ -34,13 +34,13 @@ public class Imovel extends Model {
 	private int numeroOcupantes;
 	private int tipoFonteAbastecimento;
 	private int imovelStatus;
-	private int imovelEnviado;
+	private int imovelTransmitido;
 	private boolean tabSaved;
 	private ArrayList<String> listaRamoAtividade;
 	private double latitude;
 	private double longitude;
 	private String data;
-	private int operacaoTipo;
+	private int tipoOperacao;
 	private String entrevistado;
 
 	private String areaConstruida;
@@ -60,7 +60,7 @@ public class Imovel extends Model {
 	private String inconsistencias;
 	
 	public Imovel() {
-		operacaoTipo = Constantes.OPERACAO_CADASTRO_ALTERADO;
+		tipoOperacao = Constantes.OPERACAO_CADASTRO_ALTERADO;
 		imovelId = 0;
 		codigoCliente = 0;
 		matricula = 0;
@@ -80,7 +80,7 @@ public class Imovel extends Model {
 		numeroOcupantes = 0;
 		tipoFonteAbastecimento = 0;
 		imovelStatus = 0;
-		imovelEnviado = 0;
+		imovelTransmitido = 0;
 		listaRamoAtividade = new ArrayList<String>();
 
 		enderecoImovel = new Endereco();
@@ -109,8 +109,8 @@ public class Imovel extends Model {
 		observacao="";
 	}
 
-	public void setOperacaoTipo(String operacaoTipo) {
-		this.operacaoTipo = Util.verificarNuloInt(operacaoTipo);
+	public void setTipoOperacao(String tipoOperacao) {
+		this.tipoOperacao = Util.verificarNuloInt(tipoOperacao);
 	}
 		
 	public void setEntrevistado(String entrevistado) {
@@ -210,8 +210,8 @@ public class Imovel extends Model {
 		this.imovelStatus = Util.verificarNuloInt(imovelStatus);
 	}
 
-	public void setImovelEnviado(String imovelEnviado) {
-		this.imovelEnviado = Util.verificarNuloInt(imovelEnviado);
+	public void setImovelTransmitido(String imovelTransmitido) {
+		this.imovelTransmitido = Util.verificarNuloInt(imovelTransmitido);
 	}
 
 	public void setLatitude(String latitude) {
@@ -234,8 +234,8 @@ public class Imovel extends Model {
 		this.listaRamoAtividade = listaRamoAtividade;
 	}
 
-	public int getOperacaoTipo() {
-		return this.operacaoTipo;
+	public int getTipoOperacao() {
+		return this.tipoOperacao;
 	}
 
 	public String getEntrevistado() {
@@ -323,8 +323,8 @@ public class Imovel extends Model {
 		return this.imovelStatus;
 	}
 
-	public int getImovelEnviado() {
-		return this.imovelEnviado;
+	public int getImovelTransmitido() {
+		return this.imovelTransmitido;
 	}
 
 	public Endereco getEnderecoImovel() {
@@ -480,8 +480,8 @@ public class Imovel extends Model {
 		return this.observacao;
 	}
 	
-	public boolean isEnviado() {
-		return imovelEnviado == Constantes.SIM;
+	public boolean isTransmitido() {
+		return imovelTransmitido == Constantes.SIM;
 	}
 	
 	public boolean isImovelNovo() {

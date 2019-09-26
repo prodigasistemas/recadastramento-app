@@ -340,7 +340,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	}
 	
 	private void salvar() {
-		imovel.setImovelEnviado(String.valueOf(Constantes.NAO));
+		imovel.setImovelTransmitido(String.valueOf(Constantes.NAO));
 
 		manipulator.salvarCliente();
 		manipulator.salvarImovel();
@@ -376,9 +376,9 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 
 	private void setOperacaoTipo() {
 		if (imovel.isImovelNovo()) {
-			imovel.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
+			imovel.setTipoOperacao(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 		} else {
-			imovel.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_ALTERADO));
+			imovel.setTipoOperacao(String.valueOf(Constantes.OPERACAO_CADASTRO_ALTERADO));
 		}
 	}
 

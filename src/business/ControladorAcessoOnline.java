@@ -40,7 +40,7 @@ public class ControladorAcessoOnline {
 	 */
 	public void enviar(Vector<Object> parametros) {
 		dispatcher.setMensagem(empacotarParametros(parametros));
-		dispatcher.enviarMensagem();
+		dispatcher.enviar();
 		
 		imovelTransmitido = MessageDispatcher.getRespostaServidor().equals(MessageDispatcher.RESPOSTA_SUCESSO);
 	}

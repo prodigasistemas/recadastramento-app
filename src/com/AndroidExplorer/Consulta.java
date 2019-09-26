@@ -84,9 +84,9 @@ public class Consulta extends ListActivity {
 				} else if (filtroBusca == Constantes.FILTRO_BUSCA_NOVOS) {
 					buscaCondicoes = "(imovel_status = " + Constantes.IMOVEL_NOVO + ")";
 				} else if (filtroBusca == Constantes.FILTRO_BUSCA_TRANSMITIDOS) {
-					buscaCondicoes = "(imovel_enviado = " + Constantes.SIM + ")";
+					buscaCondicoes = "(imovel_transmitido = " + Constantes.SIM + ")";
 				} else if (filtroBusca == Constantes.FILTRO_BUSCA_NAO_TRANSMITIDOS) {
-					buscaCondicoes = "(imovel_enviado = " + Constantes.NAO + ")";
+					buscaCondicoes = "(imovel_transmitido = " + Constantes.NAO + ")";
 				}
 
 				// Verifica Método de Busca
@@ -254,46 +254,66 @@ public class Consulta extends ListActivity {
 
 			switch (status) {
 			case Constantes.IMOVEL_A_SALVAR:
-				imageView.setImageResource(R.drawable.a_salvar);
+				
+				imageView.setImageResource(R.drawable.status_a_salvar);
+				
 				break;
 
 			case Constantes.IMOVEL_SALVO:
 
-				if (imovel.isEnviado()) {
-					imageView.setImageResource(R.drawable.salvo_enviado);
+				if (imovel.isTransmitido()) {
+					imageView.setImageResource(R.drawable.status_salvo_transmitido);
 				} else {
-					imageView.setImageResource(R.drawable.salvo);
+					imageView.setImageResource(R.drawable.status_salvo);
 				}
 
 				break;
 
 			case Constantes.IMOVEL_SALVO_COM_ANORMALIDADE:
 
-				if (imovel.isEnviado()) {
-					imageView.setImageResource(R.drawable.salvo_anormalidade_enviado);
+				if (imovel.isTransmitido()) {
+					imageView.setImageResource(R.drawable.status_salvo_anormalidade_transmitido);
 				} else {
-					imageView.setImageResource(R.drawable.salvo_anormalidade);
+					imageView.setImageResource(R.drawable.status_salvo_anormalidade);
 				}
 				break;
 
 			case Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA:
-				imageView.setImageResource(R.drawable.salvo_inconsistencia);
+				
+				imageView.setImageResource(R.drawable.status_salvo_inconsistencia);
+				
 				break;
 
 			case Constantes.IMOVEL_NOVO:
-				imageView.setImageResource(R.drawable.novo);
+				
+				if (imovel.isTransmitido()) {
+					imageView.setImageResource(R.drawable.status_novo_transmitido);
+				} else {
+					imageView.setImageResource(R.drawable.status_novo);
+				}
+				
 				break;
 
 			case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
-				imageView.setImageResource(R.drawable.novo_anormalidade);
+				
+				if (imovel.isTransmitido()) {
+					imageView.setImageResource(R.drawable.status_novo_anormalidade_transmitido);
+				} else {
+					imageView.setImageResource(R.drawable.status_novo_anormalidade);
+				}
+				
 				break;
 				
 			case Constantes.IMOVEL_EXCLUIDO:
-				imageView.setImageResource(R.drawable.excluido);
+				
+				imageView.setImageResource(R.drawable.status_excluido);
+				
 				break;
 
 			case Constantes.IMOVEL_INFORMATIVO:
-				imageView.setImageResource(R.drawable.informativo);
+				
+				imageView.setImageResource(R.drawable.status_informativo);
+				
 				break;
 
 			default:

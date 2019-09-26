@@ -274,17 +274,17 @@ public class DataManipulator
 
 		Cursor cursor;
 		if (condicao == null) {
-			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status, imovel_enviado, tipo_operacao" }, null, null, null, null, "inscricao asc");
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status, imovel_transmitido, tipo_operacao" }, null, null, null, null, "inscricao asc");
 		} else {
-			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado, tipo_operacao" }, condicao, null, null, null, "inscricao asc");
+			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_transmitido, tipo_operacao" }, condicao, null, null, null, "inscricao asc");
 		}
 
 		if (cursor.moveToFirst()) {
 			do {
 				Imovel imovel = new Imovel();
 				imovel.setImovelStatus(cursor.getString(0));
-				imovel.setImovelEnviado(cursor.getString(1));
-				imovel.setOperacaoTipo(cursor.getString(2));
+				imovel.setImovelTransmitido(cursor.getString(1));
+				imovel.setTipoOperacao(cursor.getString(2));
 				imoveis.add(imovel);
 			} while (cursor.moveToNext());
 		}
@@ -313,7 +313,7 @@ public class DataManipulator
 		int transmitidos = 0;
 		int transmitidosInconsistencia = 0;
 
-		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_enviado" }, null, null, null, null, "inscricao asc");
+		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "imovel_status", "imovel_transmitido" }, null, null, null, null, "inscricao asc");
 
 		if (cursor.moveToFirst()) {
 
@@ -1158,7 +1158,7 @@ public class DataManipulator
 
 		initialValues.put("imovel_status", status);
 
-		initialValues.put("imovel_enviado", String.valueOf(Constantes.NAO));
+		initialValues.put("imovel_transmitido", String.valueOf(Constantes.NAO));
 		initialValues.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
 		initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
 		initialValues.put("data", "");
@@ -1531,13 +1531,13 @@ public class DataManipulator
 		values.put("sub_categoria_industrial_4", String.valueOf(getImovelSelecionado().getCategoriaIndustrial().getEconomiasSubCategoria4()));
 		values.put("tipo_fonte_abastecimento", String.valueOf(getImovelSelecionado().getTipoFonteAbastecimento()));
 		values.put("imovel_status", String.valueOf(getImovelSelecionado().getImovelStatus()));
-		values.put("imovel_enviado", String.valueOf(getImovelSelecionado().getImovelEnviado()));
+		values.put("imovel_transmitido", String.valueOf(getImovelSelecionado().getImovelTransmitido()));
 
 		values.put("latitude", getImovelSelecionado().getLatitude());
 		values.put("longitude", getImovelSelecionado().getLongitude());
 		values.put("data", getImovelSelecionado().getData());
 		values.put("entrevistado", getImovelSelecionado().getEntrevistado());
-		values.put("tipo_operacao", getImovelSelecionado().getOperacaoTipo());
+		values.put("tipo_operacao", getImovelSelecionado().getTipoOperacao());
 
 		values.put("area_construida", getImovelSelecionado().getAreaConstruida());
 		values.put("classe_social", getImovelSelecionado().getClasseSocial());
@@ -1581,7 +1581,7 @@ public class DataManipulator
 	public void salvarStatusImovel(Imovel imovel) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put("imovel_status", imovel.getImovelStatus());
-		initialValues.put("imovel_enviado", imovel.getImovelEnviado());
+		initialValues.put("imovel_transmitido", imovel.getImovelTransmitido());
 
 		db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
 	}
@@ -1694,7 +1694,7 @@ public class DataManipulator
 	
 	public List<Imovel> pesquisarImoveisFinalizados() {
 
-		Cursor cursor = getCursorImovel("imovel_enviado = " + Constantes.NAO + 
+		Cursor cursor = getCursorImovel("imovel_transmitido = " + Constantes.NAO + 
 				" AND imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		List<Imovel> imoveis = new ArrayList<Imovel>();
@@ -1756,7 +1756,7 @@ public class DataManipulator
 				"tipo_fonte_abastecimento", 
 				"matricula", 
 				"imovel_status", 
-				"imovel_enviado", 
+				"imovel_transmitido", 
 				"latitude", 
 				"longitude", 
 				"data",
@@ -1827,12 +1827,12 @@ public class DataManipulator
 		imovel.setTipoFonteAbastecimento(getValorColuna(cursor, "tipo_fonte_abastecimento"));
 		imovel.setMatricula(getValorColuna(cursor, "matricula"));
 		imovel.setImovelStatus(getValorColuna(cursor, "imovel_status"));
-		imovel.setImovelEnviado(getValorColuna(cursor, "imovel_enviado"));
+		imovel.setImovelTransmitido(getValorColuna(cursor, "imovel_transmitido"));
 		imovel.setLatitude(getValorColuna(cursor, "latitude"));
 		imovel.setLongitude(getValorColuna(cursor, "longitude"));
 		imovel.setData(getValorColuna(cursor, "data"));
 		imovel.setEntrevistado(getValorColuna(cursor, "entrevistado"));
-		imovel.setOperacaoTipo(getValorColuna(cursor, "tipo_operacao"));
+		imovel.setTipoOperacao(getValorColuna(cursor, "tipo_operacao"));
 
 		imovel.setListaRamoAtividade(selectRamoAtividadeImovel(id));
 

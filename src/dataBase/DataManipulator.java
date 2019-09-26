@@ -284,7 +284,7 @@ public class DataManipulator
 				Imovel imovel = new Imovel();
 				imovel.setImovelStatus(cursor.getString(0));
 				imovel.setImovelEnviado(cursor.getString(1));
-				imovel.setOperacoTipo(cursor.getString(2));
+				imovel.setOperacaoTipo(cursor.getString(2));
 				imoveis.add(imovel);
 			} while (cursor.moveToNext());
 		}
@@ -1832,7 +1832,7 @@ public class DataManipulator
 		imovel.setLongitude(getValorColuna(cursor, "longitude"));
 		imovel.setData(getValorColuna(cursor, "data"));
 		imovel.setEntrevistado(getValorColuna(cursor, "entrevistado"));
-		imovel.setOperacoTipo(getValorColuna(cursor, "tipo_operacao"));
+		imovel.setOperacaoTipo(getValorColuna(cursor, "tipo_operacao"));
 
 		imovel.setListaRamoAtividade(selectRamoAtividadeImovel(id));
 

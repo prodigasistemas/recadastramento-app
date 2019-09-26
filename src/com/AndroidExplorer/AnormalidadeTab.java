@@ -376,9 +376,9 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 
 	private void setOperacaoTipo() {
 		if (imovel.isImovelNovo()) {
-			imovel.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
+			imovel.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 		} else {
-			imovel.setOperacoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_ALTERADO));
+			imovel.setOperacaoTipo(String.valueOf(Constantes.OPERACAO_CADASTRO_ALTERADO));
 		}
 	}
 

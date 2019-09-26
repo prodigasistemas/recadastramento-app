@@ -109,7 +109,7 @@ public class Imovel extends Model {
 		observacao="";
 	}
 
-	public void setOperacoTipo(String operacaoTipo) {
+	public void setOperacaoTipo(String operacaoTipo) {
 		this.operacaoTipo = Util.verificarNuloInt(operacaoTipo);
 	}
 		

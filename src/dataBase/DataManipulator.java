@@ -1163,6 +1163,7 @@ public class DataManipulator
 		initialValues.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
 		initialValues.put("data", "");
 		initialValues.put("entrevistado", "");
+		initialValues.put("observacao", "");
 		initialValues.put("tipo_operacao", Constantes.OPERACAO_CADASTRO_ALTERADO);
 
 		return db.insert(Constantes.TABLE_IMOVEL, null, initialValues);

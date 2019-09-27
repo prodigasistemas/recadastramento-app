@@ -248,9 +248,7 @@ public class ArquivoRetorno {
 			linha.append(Util.adicionarCharDireita(20, String.valueOf(imovel.getLongitude() != Constantes.NULO_DOUBLE ? imovel.getLongitude() : " "), ' '));
 			linha.append(Util.adicionarCharEsquerda(26, imovel.getData(), ' '));
 			
-			if (imovel.getObservacao() != null) {
-				linha.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(imovel.getObservacao().toUpperCase())).replaceAll("\n", " "), ' '));
-			}
+			linha.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(imovel.getObservacao().toUpperCase())).replaceAll("\n", " "), ' '));
 			
 			linha.append("\n");
 		} catch (Exception e) {

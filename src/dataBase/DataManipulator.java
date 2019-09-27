@@ -1579,11 +1579,11 @@ public class DataManipulator
 	}
 	
 	public void salvarStatusImovel(Imovel imovel) {
-		ContentValues initialValues = new ContentValues();
-		initialValues.put("imovel_status", imovel.getImovelStatus());
-		initialValues.put("imovel_transmitido", imovel.getImovelTransmitido());
+		ContentValues values = new ContentValues();
+		values.put("imovel_status", imovel.getImovelStatus());
+		values.put("imovel_transmitido", imovel.getImovelTransmitido());
 
-		db.update(Constantes.TABLE_IMOVEL, initialValues, "id=?", new String[] { String.valueOf(getImovelSelecionado().getImovelId()) });
+		db.update(Constantes.TABLE_IMOVEL, values, "matricula=?", new String[] { String.valueOf(getImovelSelecionado().getMatricula()) });
 	}
 
 	public void salvarServico() {

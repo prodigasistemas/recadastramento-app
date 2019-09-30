@@ -485,7 +485,7 @@ public class Imovel extends Model {
 	}
 	
 	public boolean isImovelNovo() {
-		return imovelStatus == Constantes.IMOVEL_NOVO || imovelStatus == Constantes.IMOVEL_NOVO_COM_ANORMALIDADE;
+		return tipoOperacao == Constantes.OPERACAO_CADASTRO_NOVO;
 	}
 
 	public String getInconsistencias() {

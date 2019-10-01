@@ -62,18 +62,20 @@ public class ArquivoRetorno {
 
 			if (MessageDispatcher.isRespostaInconsistencia()) {
 				imovel.setImovelStatus(String.valueOf(Constantes.IMOVEL_SALVO_COM_INCONSISTENCIA));
-				inserirInconsistencias(imovel);
+				inserirInconsistencias(imovel.getMatricula());
 			}
 		}
 		
 		manipulator.salvarStatusImovel(imovel);
 	}
 
-	private void inserirInconsistencias(Imovel imovel) {
+	private void inserirInconsistencias(int matricula) {
+		manipulator.apagarInconsistenciaImovel(matricula);
+
 		String[] inconsistencias = MessageDispatcher.getInconsistencias().replace("[", "").replace("]", "").split(",");
 
 		for (String inconsistencia : inconsistencias) {
-			manipulator.inserirInconsistenciaImovel(imovel.getMatricula(), inconsistencia);
+			manipulator.inserirInconsistenciaImovel(matricula, inconsistencia);
 		}
 	}
 	

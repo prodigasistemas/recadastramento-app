@@ -1665,11 +1665,15 @@ public class DataManipulator
 		db.update(Constantes.TABLE_GERAL, values, "id=?", new String[] { String.valueOf(1) });
 	}
 	
+	public void apagarInconsistenciaImovel(int matricula) {
+		db.delete(Constantes.TABLE_INCONSISTENCIA_IMOVEL, "matricula=?", new String[] { String.valueOf(matricula) });
+	}
+	
 	public void inserirInconsistenciaImovel(int matricula, String inconsistencia) {
 		ContentValues valores = new ContentValues();
 		valores.put("matricula", matricula);
 		valores.put("inconsistencia", inconsistencia);
-		
+
 		db.insert(Constantes.TABLE_INCONSISTENCIA_IMOVEL, null, valores);
 	}
 	

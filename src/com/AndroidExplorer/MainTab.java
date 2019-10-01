@@ -300,7 +300,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		case R.id.botaoNovoImovel:
 
 			Imovel imovelSelecionado = controlador.getImovelSelecionado();
-			List<Imovel> imoveis = manipulator.selectEnderecoImovel(null);
+			List<Imovel> imoveis = manipulator.selectEnderecoImovel();
 
 			Imovel imovelAnterior = null;
 			Imovel imovelPosterior = null;
@@ -309,16 +309,16 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 			if (!isInicioLista(posicao)) {
 				imovelAnterior = imoveis.get(posicao - 1);
-				enderecoAnterior = montarEndereco(imovelAnterior);
+				enderecoAnterior = montarEndereco(imovelAnterior.getEnderecoImovel());
 			}
 
 			if (!isFimLista(posicao)) {
 				imovelPosterior = imoveis.get(posicao + 1);
-				enderecoPosterior = montarEndereco(imovelPosterior);
+				enderecoPosterior = montarEndereco(imovelPosterior.getEnderecoImovel());
 			}
 
 			Imovel imovelAtual = imoveis.get(posicao);
-			String enderecoAtual = montarEndereco(imovelAtual);
+			String enderecoAtual = montarEndereco(imovelAtual.getEnderecoImovel());
 
 			View view = getViewDialogImovelNovo();
 			AlertDialog dialog = configurarDialogImovelNovo(view, posicao, enderecoAnterior, enderecoPosterior, enderecoAtual);
@@ -355,11 +355,10 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		return id == manipulator.getNumeroImoveis() - 1;
 	}
 	
-	private String montarEndereco(Imovel imovel) {
-		return Util.capitalizarString(
-				imovel.getEnderecoImovel().getLogradouro() + ", nº " + 
-		        imovel.getEnderecoImovel().getNumero() + " " + 
-				imovel.getEnderecoImovel().getComplemento());
+	private String montarEndereco(Endereco endereco) {
+		String numero = endereco.getNumero();
+		String enderecoFormatado = endereco.getLogradouro() + (Util.isStringNula(numero) ? "" : ", nº " + numero) + " " + endereco.getComplemento();
+		return Util.capitalizarString(enderecoFormatado);
 	}
 	
 	private View getViewDialogImovelNovo() {

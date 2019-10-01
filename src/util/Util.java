@@ -785,11 +785,15 @@ public class Util {
      * @return
      */
     public static String verificarNuloString(String valor) {
-		if (valor == null || valor.trim().equals(Constantes.NULO_STRING) || valor.trim().equals("null")) {
+		if (isStringNula(valor)) {
 		    return Constantes.NULO_STRING;
 		} else {
 		    return valor.trim();
 		}
+    }
+    
+    public static boolean isStringNula(String valor) {
+    	return valor == null || valor.trim().equals(Constantes.NULO_STRING) || valor.trim().equals("null");
     }
 
     /**

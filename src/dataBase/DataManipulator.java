@@ -168,49 +168,53 @@ public class DataManipulator
 		return list;
 	}
 
-	public List<Imovel> selectEnderecoImovel(String condition){
-	
-		Cursor cursor;
+	public List<Imovel> selectEnderecoImovel() {
+
 		List<Imovel> imoveis = null;
-	    
-			cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { "inscricao",
-														        		"rota",
-														        		"face",
-														        		"codigo_municipio",
-														        		"logradouro_imovel",
-														        		"bairro_imovel",
-														        		"cep_imovel",
-														        		"municipio_imovel",
-														        		"codigo_logradouro_imovel", "numero_imovel", "complemento_imovel" }, 
-														        		condition, null, null, null,  "inscricao asc");
-		Imovel imovel = null;
-	    if (cursor.moveToFirst()) {
-	    	imoveis = new ArrayList<Imovel>();
-	    	do {
-				imovel = new Imovel();
+
+		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { 
+				"inscricao", 
+				"rota", 
+				"face", 
+				"codigo_municipio", 
+				"municipio_imovel", 
+				"tipo_logradouro_imovel",
+				"codigo_logradouro_imovel", 
+				"logradouro_imovel", 
+				"bairro_imovel",
+				"cep_imovel", 
+				"numero_imovel", 
+				"complemento_imovel" }, 
+				null, null, null, null, "inscricao asc");
+
+		if (cursor.moveToFirst()) {
+			imoveis = new ArrayList<Imovel>();
+			
+			do {
+				Imovel imovel = new Imovel();
 				imovel.setInscricao(cursor.getString(0));
 				imovel.setRota(cursor.getString(1));
 				imovel.setFace(cursor.getString(2));
 				imovel.setCodigoMunicipio(cursor.getString(3));
-				imovel.getEnderecoImovel().setLogradouro(cursor.getString(4));
-				imovel.getEnderecoImovel().setBairro(cursor.getString(5));
-				imovel.getEnderecoImovel().setCep(cursor.getString(6));
-				imovel.getEnderecoImovel().setMunicipio(cursor.getString(7));
-				imovel.setCodigoLogradouro(cursor.getString(8));
-				imovel.getEnderecoImovel().setNumero(cursor.getString(9));
-				imovel.getEnderecoImovel().setComplemento(cursor.getString(10));
-				
-				imoveis.add(imovel);
-	    	} while (cursor.moveToNext());
-	    }
+				imovel.getEnderecoImovel().setMunicipio(cursor.getString(4));
+				imovel.getEnderecoImovel().setTipoLogradouro(cursor.getString(5));
+				imovel.setCodigoLogradouro(cursor.getString(6));
+				imovel.getEnderecoImovel().setLogradouro(cursor.getString(7));
+				imovel.getEnderecoImovel().setBairro(cursor.getString(8));
+				imovel.getEnderecoImovel().setCep(cursor.getString(9));
+				imovel.getEnderecoImovel().setNumero(cursor.getString(10));
+				imovel.getEnderecoImovel().setComplemento(cursor.getString(11));
 
-	    if (cursor != null && !cursor.isClosed()) {
-	       cursor.close();
-	    }
-	    cursor.close();
-	    
-	    return imoveis;
-}
+				imoveis.add(imovel);
+			} while (cursor.moveToNext());
+		}
+
+		if (cursor != null && !cursor.isClosed()) {
+			cursor.close();
+		}
+
+		return imoveis;
+	}
     
 	public List<String> selectIdImoveis(String condition) {
 

@@ -41,6 +41,7 @@ import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
+import background.TransmitirImovelTask;
 import business.Controlador;
 import dataBase.DataManipulator;
 
@@ -333,12 +334,12 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 //			montarImovelNovoSublote();
 //
 //			break;
-//
-//		case R.id.botaoExcluirImovel:
-//
-//			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir, true).show();
-//
-//			break;
+
+		case R.id.botaoExcluirImovel:
+
+			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir, true).show();
+
+			break;
 
 		default:
 			break;
@@ -700,7 +701,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 		configurarCor();
 
-		CustomDialog.criar(this, "Sucesso", "Imovel excluído com sucesso", R.drawable.save).show();
+		new TransmitirImovelTask(MainTab.this).execute(imovelSelecionado);
 	}
 	
 	private DialogInterface.OnClickListener configurarGPS = new DialogInterface.OnClickListener() {

@@ -70,7 +70,7 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 		if (imovel.isTransmitido()) {
 			transmitido = " e transmitido";
 		}
-
+				
 		switch (imovel.getImovelStatus()) {
 
 		case Constantes.IMOVEL_SALVO:
@@ -91,6 +91,10 @@ public class TransmitirImovelTask extends AsyncTask<Imovel, Integer, Void> {
 
 		case Constantes.IMOVEL_NOVO_COM_ANORMALIDADE:
 			mensagem = "Imóvel novo com anormalidade criado" + transmitido + " com sucesso.";
+			break;
+
+		case Constantes.IMOVEL_EXCLUIDO:
+			mensagem = "Imóvel excluido" + transmitido + " com sucesso.";
 			break;
 
 		default:

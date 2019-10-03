@@ -933,6 +933,10 @@ public class ImovelTab extends Fragment implements LocationListener {
     	getImovel().setVolumeCisterna(Util.removeDecimalChar(((EditText)view.findViewById(R.id.volumeCisterna)).getText().toString()));
     	getImovel().setVolumeCaixaDagua(Util.removeDecimalChar(((EditText)view.findViewById(R.id.volumeCaixaDagua)).getText().toString()));
     	
+    	getImovel().setQuantidadeNosFundos(((EditText)view.findViewById(R.id.qtdNosFundos)).getText().toString());
+    	getImovel().setQuantidadeNosAltos(((EditText)view.findViewById(R.id.qtdNosAltos)).getText().toString());
+    	getImovel().setIndividualizacao(((EditText)view.findViewById(R.id.individualizacao)).getText().toString());
+    	
     	getImovel().getOcupacaoImovel().setCriancas(((EditText)view.findViewById(R.id.numCriancas)).getText().toString());
     	getImovel().getOcupacaoImovel().setAdultos(((EditText)view.findViewById(R.id.numAdultos)).getText().toString());
     	getImovel().getOcupacaoImovel().setAlunos(((EditText)view.findViewById(R.id.numAlunos)).getText().toString());
@@ -1142,6 +1146,19 @@ public class ImovelTab extends Fragment implements LocationListener {
         ((EditText)(view.findViewById(R.id.volumeCisterna))).setText(Util.verificarNuloString(getImovel().getVolumeCisterna()));
         ((EditText)(view.findViewById(R.id.volumePiscina))).setText(Util.verificarNuloString(getImovel().getVolumePiscina()));
         ((EditText)(view.findViewById(R.id.volumeCaixaDagua))).setText(Util.verificarNuloString(getImovel().getVolumeCaixaDagua()));
+        
+        // Quantidade de imovel nos fundos
+        if (getImovel().getQuantidadeNosFundos() != Constantes.NULO_INT){
+        	((EditText) view.findViewById(R.id.qtdNosFundos)).setText(String.valueOf(getImovel().getQuantidadeNosFundos()));
+        }
+        // Quantidade de imovel nos altos
+        if (getImovel().getQuantidadeNosAltos() != Constantes.NULO_INT){
+        	((EditText) view.findViewById(R.id.qtdNosAltos)).setText(String.valueOf(getImovel().getQuantidadeNosAltos()));
+        }
+        // Individualização
+        if (getImovel().getIndividualizacao() != Constantes.NULO_INT){
+        	((EditText) view.findViewById(R.id.individualizacao)).setText(String.valueOf(getImovel().getIndividualizacao()));
+        }
         
         // Numero de criancas
         if (getImovel().getOcupacaoImovel().getCriancas() != Constantes.NULO_INT){

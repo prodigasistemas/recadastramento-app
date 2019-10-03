@@ -49,6 +49,7 @@ public class Imovel extends Model {
 	private String volumeCisterna;
 	private String volumePiscina;
 	private String volumeCaixaDagua;
+
 	private int tipoUso;
 	private int acessoHidrometro;
 
@@ -58,6 +59,10 @@ public class Imovel extends Model {
 	private int percentualAbastecimento;
 
 	private String inconsistencias;
+	
+	private int quantidadeNosFundos;
+	private int quantidadeNosAltos;
+	private int individualizacao;
 	
 	public Imovel() {
 		tipoOperacao = Constantes.OPERACAO_CADASTRO_ALTERADO;
@@ -107,6 +112,10 @@ public class Imovel extends Model {
 		quantidadeEconomiasOutros = 0;
 		
 		observacao="";
+		
+		quantidadeNosFundos = 0;
+		quantidadeNosAltos = 0;
+		individualizacao = 0;
 	}
 
 	public void setTipoOperacao(String tipoOperacao) {
@@ -232,6 +241,30 @@ public class Imovel extends Model {
 
 	public void setListaRamoAtividade(ArrayList<String> listaRamoAtividade) {
 		this.listaRamoAtividade = listaRamoAtividade;
+	}
+	
+	public int getQuantidadeNosFundos() {
+		return quantidadeNosFundos;
+	}
+
+	public void setQuantidadeNosFundos(String quantidadeNosFundos) {
+		this.quantidadeNosFundos = Util.verificarNuloIntParaZero(quantidadeNosFundos);
+	}
+	
+	public int getQuantidadeNosAltos() {
+		return quantidadeNosAltos;
+	}
+
+	public void setQuantidadeNosAltos(String quantidadeNosAltos) {
+		this.quantidadeNosAltos = Util.verificarNuloIntParaZero(quantidadeNosAltos);
+	}
+
+	public int getIndividualizacao() {
+		return individualizacao;
+	}
+
+	public void setIndividualizacao(String individualizacao) {
+		this.individualizacao = Util.verificarNuloIntParaZero(individualizacao);
 	}
 
 	public int getTipoOperacao() {

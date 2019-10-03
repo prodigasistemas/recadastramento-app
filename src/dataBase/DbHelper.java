@@ -51,7 +51,7 @@ public class DbHelper extends SQLiteOpenHelper {
     	"volume_piscina TEXT, volume_cisterna TEXT, volume_caixa_dagua TEXT, "+
     	"tipo_uso TEXT, acesso_hidrometro TEXT, "+
     	"numero_criancas INTEGER, numero_adultos INTEGER, numero_alunos INTEGER, numero_caes INTEGER, numero_idosos INTEGER, numero_empregados INTEGER, numero_outros INTEGER, " +
-    	"quantidade_economias_social INTEGER, quantidade_economias_outros INTEGER, observacao TEXT )";
+    	"quantidade_economias_social INTEGER, quantidade_economias_outros INTEGER, observacao TEXT , quantidade_nos_fundos INTEGER, quantidade_nos_altos INTEGER, individualizacao INTEGER )";
 
     private static final String DATABASE_RAMO_ATIVIDADE_IMOVEL_QUERY =
     	"CREATE TABLE ramo_atividade_imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, id_imovel INTEGER, codigo INTEGER)";

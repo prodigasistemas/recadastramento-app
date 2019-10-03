@@ -1152,6 +1152,10 @@ public class DataManipulator
 
 		initialValues.put("percentual_abastecimento", parser.obterDadoParser(3) != null ? parser.getConteudo() : "000");
 
+	   initialValues.put("quantidade_nos_fundos", parser.obterDadoParser(3));
+	   initialValues.put("quantidade_nos_altos", parser.obterDadoParser(3));
+	   initialValues.put("individualizacao", parser.obterDadoParser(3));
+
 		String informativo = parser.obterDadoParser(1);
 		String status = null;
 		if (informativo.length() > 0 && Integer.valueOf(informativo) == Constantes.SIM) {
@@ -1171,6 +1175,7 @@ public class DataManipulator
 		initialValues.put("tipo_operacao", Constantes.OPERACAO_CADASTRO_ALTERADO);
 
 		return db.insert(Constantes.TABLE_IMOVEL, null, initialValues);
+
 	}
 
 	public long insertAnormalidadeImovel(String linhaArquivo) {
@@ -1567,6 +1572,10 @@ public class DataManipulator
 		values.put("observacao", getImovelSelecionado().getObservacao());
 
 		values.put("percentual_abastecimento", getImovelSelecionado().getPercentualAbastecimento());
+		
+		values.put("quantidade_nos_fundos", getImovelSelecionado().getQuantidadeNosFundos());
+		values.put("quantidade_nos_altos", getImovelSelecionado().getQuantidadeNosAltos());
+		values.put("individualizacao", getImovelSelecionado().getIndividualizacao());
 
 		if (Controlador.getInstancia().getImovelSelecionado().isNovoRegistro()) {
 			db.insert(Constantes.TABLE_IMOVEL, null, values);
@@ -1866,6 +1875,11 @@ public class DataManipulator
 		imovel.setQuantidadeEconomiasOutros(getValorColuna(cursor, "quantidade_economias_outros"));
 		imovel.setObservacao(getValorColuna(cursor, "observacao"));
 		imovel.setPercentualAbastecimento(getValorColuna(cursor, "percentual_abastecimento"));
+		
+		imovel.setQuantidadeNosFundos(getValorColuna(cursor, "quantidade_nos_fundos"));
+		imovel.setQuantidadeNosAltos(getValorColuna(cursor, "quantidade_nos_altos"));
+		imovel.setIndividualizacao(getValorColuna(cursor, "individualizacao"));
+		
 	}
 	
 	private String getValorColuna(Cursor cursor, String coluna) {

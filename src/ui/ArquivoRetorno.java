@@ -252,12 +252,16 @@ public class ArquivoRetorno {
 			
 			linha.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(imovel.getObservacao().toUpperCase())).replaceAll("\n", " "), ' '));
 			
+			linha.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getQuantidadeNosFundos())));
+			linha.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getQuantidadeNosAltos())));
+			linha.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getIndividualizacao())));
+			
 			linha.append("\n");
+			
 		} catch (Exception e) {
 			LogUtil.salvar(getClass(), "Erro ao gerar linha de Imóvel", e);
 		}
-
-
+		
 		return Util.removerCaractereEspecial(linha.toString());
 	}
 
@@ -343,3 +347,4 @@ public class ArquivoRetorno {
 		return linha.toString();
 	}
 }
+

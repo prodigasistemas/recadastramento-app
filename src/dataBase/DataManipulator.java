@@ -1798,7 +1798,10 @@ public class DataManipulator
 				"quantidade_economias_social", 
 				"quantidade_economias_outros", 
 				"observacao", 
-				"percentual_abastecimento" },
+				"percentual_abastecimento",
+				"quantidade_nos_fundos",
+				"quantidade_nos_altos",
+				"individualizacao"},
 				condicao, null, null, null, "inscricao asc");
 		
 		return cursor;

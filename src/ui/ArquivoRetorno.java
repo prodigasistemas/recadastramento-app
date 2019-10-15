@@ -2,6 +2,7 @@ package ui;
 
 import model.AnormalidadeImovel;
 import model.Cliente;
+import model.DadosGerais;
 import model.Imovel;
 import model.Medidor;
 import model.Servicos;
@@ -35,12 +36,12 @@ public class ArquivoRetorno {
 		this.manipulator = Controlador.getInstancia().getCadastroDataManipulator();
 
 		String condicao = "matricula = " + imovel.getMatricula();
-		
+				
 		Cliente cliente = manipulator.selectCliente(condicao);
 		Servicos servicos = manipulator.selectServicos(condicao);
 		Medidor medidor = manipulator.selectMedidor(condicao);
 		AnormalidadeImovel anormalidade = manipulator.selectAnormalidadeImovel(condicao);
-
+		
 		StringBuffer conteudo = new StringBuffer(gerarHeader());
 		conteudo.append(gerarLinhaCliente(cliente));
 		conteudo.append(gerarLinhaImovel(imovel));
@@ -80,8 +81,10 @@ public class ArquivoRetorno {
 	}
 	
 	public String gerarHeader() {
-		linha = new StringBuffer("00");
 		
+		linha = new StringBuffer("00");
+		Controlador.getInstancia().getCadastroDataManipulator().selectGeral();
+				
 		try {
 			linha.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getLocalidade()));
 			linha.append(Util.adicionarZerosEsquerdaNumero(3, Controlador.getInstancia().getDadosGerais().getSetor()));
@@ -99,7 +102,7 @@ public class ArquivoRetorno {
 
 	public String gerarLinhaCliente(Cliente cliente) {
 		linha = new StringBuffer("01");
-		
+						
 		try {
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, cliente.getMatricula() == null ? "0" : cliente.getMatricula()));
 			linha.append(Util.adicionarCharDireita(25, cliente.getNomeGerenciaRegional(), ' '));

@@ -92,6 +92,7 @@ public class ArquivoRetorno {
 			linha.append(Util.adicionarZerosEsquerdaNumero(4, Controlador.getInstancia().getDadosGerais().getIdRota()));
 			linha.append(Util.adicionarZerosEsquerdaNumero(10, context.getString(R.string.app_versao)));
 			linha.append(Util.adicionarCharDireita(1, Controlador.getInstancia().getDadosGerais().getTipoArquivo(), ' '));
+			linha.append(Util.adicionarZerosEsquerdaNumero(11, Controlador.getInstancia().getDadosGerais().getIdArquivo()));
 			linha.append("\n");
 		} catch (Exception e) {
 			LogUtil.salvar(getClass(), "Erro ao gerar linha de Header", e);

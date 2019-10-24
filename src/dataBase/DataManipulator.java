@@ -1502,7 +1502,6 @@ public class DataManipulator
 		ContentValues values = new ContentValues();
 		
 		values.put("matricula", getImovelSelecionado().getMatricula());
-		values.put("codigo_cliente", getImovelSelecionado().getCodigoCliente());
 		values.put("inscricao", getImovelSelecionado().getInscricao());
 		values.put("rota", getImovelSelecionado().getRota());
 		values.put("face", getImovelSelecionado().getFace());
@@ -1738,7 +1737,6 @@ public class DataManipulator
 		
 		Cursor cursor = db.query(Constantes.TABLE_IMOVEL, new String[] { 
 				"id", 
-				"codigo_cliente", 
 				"inscricao", 
 				"rota", 
 				"face", 
@@ -1809,7 +1807,6 @@ public class DataManipulator
 	
 	private void montarImovel(Cursor cursor, long id, Imovel imovel) {
 		imovel.setImovelId(id);
-		imovel.setCodigoCliente(getValorColuna(cursor, "codigo_cliente"));
 		imovel.setInscricao(getValorColuna(cursor, "inscricao"));
 		imovel.setRota(getValorColuna(cursor, "rota"));
 		imovel.setFace(getValorColuna(cursor, "face"));

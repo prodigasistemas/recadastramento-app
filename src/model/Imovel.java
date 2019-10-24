@@ -15,7 +15,6 @@ public class Imovel extends Model {
 	private Endereco enderecoImovel;
 	private Ocupacao ocupacaoImovel;
 
-	private int codigoCliente;
 	private int matricula;
 	private String localidade;
 	private String setor;
@@ -67,7 +66,6 @@ public class Imovel extends Model {
 	public Imovel() {
 		tipoOperacao = Constantes.OPERACAO_CADASTRO_ALTERADO;
 		imovelId = 0;
-		codigoCliente = 0;
 		matricula = 0;
 		localidade = "";
 		setor = "";
@@ -128,10 +126,6 @@ public class Imovel extends Model {
 
 	public void setImovelId(long id) {
 		this.imovelId = id;
-	}
-
-	public void setCodigoCliente(String codigoCliente) {
-		this.codigoCliente = Util.verificarNuloInt(codigoCliente);
 	}
 
 	public void setMatricula(String matricula) {
@@ -277,10 +271,6 @@ public class Imovel extends Model {
 
 	public long getImovelId() {
 		return this.imovelId;
-	}
-
-	public int getCodigoCliente() {
-		return this.codigoCliente;
 	}
 
 	public int getMatricula() {

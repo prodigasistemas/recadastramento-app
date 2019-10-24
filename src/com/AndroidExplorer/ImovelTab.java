@@ -9,7 +9,6 @@ import util.Constantes;
 import util.Util;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -57,7 +56,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 	private String dialogMessage = null;
 	public LocationManager mLocManager;
 	Location lastKnownLocation;
-	private String provider;
 	
 	private Spinner spinnerClasseSocial;
 	private Spinner spinnerTipoUso;
@@ -108,10 +106,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 	        showNotifyDialog(R.drawable.aviso, "Alerta!", dialogMessage, Constantes.DIALOG_ID_ERRO_GPS_DESLIGADO);
         }
         
-		Criteria criteria = new Criteria();
-		provider = mLocManager.getBestProvider(criteria, false);
-		Location location = mLocManager.getLastKnownLocation(provider);
-
         lastKnownLocation = mLocManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     	CellLocation.requestLocationUpdate();
 
@@ -235,7 +229,7 @@ public class ImovelTab extends Fragment implements LocationListener {
         spinnerDescricaoRamoAtividade.setOnItemSelectedListener(new OnItemSelectedListener () {
 
         	
-			public void onItemSelected(AdapterView parent, View v, int position, long id){
+			public void onItemSelected(AdapterView<?> parent, View v, int position, long id){
  				String codigo = Controlador.getInstancia().getCadastroDataManipulator().selectCodigoByDescricaoFromTable(Constantes.TABLE_RAMO_ATIVIDADE, ((Spinner)view.findViewById(R.id.spinnerDescricaoRamoAtividade)).getSelectedItem().toString());
  				
  				if (codigo.compareTo(((EditText)view.findViewById(R.id.codigoRamoAtividade)).getText().toString()) != 0 &&
@@ -842,7 +836,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 			getImovel().setMatricula(((EditText)view.findViewById(R.id.matricula)).getText().toString());
 		}
 		
-		getImovel().setCodigoCliente(((EditText)view.findViewById(R.id.codCliente)).getText().toString());
 		getImovel().setLocalidade(Util.adicionarZerosEsquerdaNumero(3, ((EditText)view.findViewById(R.id.localidade)).getText().toString()));
 		getImovel().setSetor(Util.adicionarZerosEsquerdaNumero(3, ((EditText)view.findViewById(R.id.setor)).getText().toString()));
 		getImovel().setQuadra(Util.adicionarZerosEsquerdaNumero(4, ((EditText)view.findViewById(R.id.quadra)).getText().toString()));
@@ -1023,11 +1016,6 @@ public class ImovelTab extends Fragment implements LocationListener {
 	
 	public void populateImovel(){
 		
-        // Código do Cliente
-        if (getImovel().getCodigoCliente() != Constantes.NULO_INT){
-        	((EditText)view.findViewById(R.id.codCliente)).setText(String.valueOf(getImovel().getCodigoCliente()));
-        }
-        
 		// Matricula
         if (getImovel().getMatricula() != Constantes.NULO_INT){
         	((EditText)view.findViewById(R.id.matricula)).setText(String.valueOf(getImovel().getMatricula()));

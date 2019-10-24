@@ -187,7 +187,7 @@ public class ArquivoRetorno {
 		try {
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
 			linha.append(String.valueOf(imovel.getTipoOperacao()));
-			linha.append(Util.adicionarCharDireita(30, String.valueOf(imovel.getCodigoCliente()), ' '));
+			linha.append(Util.adicionarCharDireita(30, "", ' '));
 			linha.append(Util.adicionarCharDireita(17, imovel.getInscricao(), ' '));
 			linha.append(Util.adicionarZerosEsquerdaNumero(2, imovel.getRota()));
 			linha.append(Util.adicionarZerosEsquerdaNumero(2, imovel.getFace()));

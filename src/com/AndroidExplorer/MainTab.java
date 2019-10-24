@@ -138,7 +138,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 	}
 
 	public void chamarProximoImovel() {
-		controlador.isCadastroAlterado(); // TODO - Verificar necessidade
+		controlador.isCadastroAlterado();
 
 		if (controlador.getPosicaoListaImoveis() == (manipulator.getNumeroImoveis()) - 1) {
 			controlador.setSelecionadoPorPosicao(0);
@@ -335,11 +335,11 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 //
 //			break;
 
-		case R.id.botaoExcluirImovel:
-
-			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir, true).show();
-
-			break;
+//		case R.id.botaoExcluirImovel:
+//
+//			CustomDialog.criar(this, "Atenção", "Confirma exclusão deste imóvel?", R.drawable.aviso, excluir, true).show();
+//
+//			break;
 
 		default:
 			break;

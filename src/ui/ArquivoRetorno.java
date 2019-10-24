@@ -2,7 +2,6 @@ package ui;
 
 import model.AnormalidadeImovel;
 import model.Cliente;
-import model.DadosGerais;
 import model.Imovel;
 import model.Medidor;
 import model.Servicos;

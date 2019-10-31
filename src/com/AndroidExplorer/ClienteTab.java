@@ -219,9 +219,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 				
 				if (checked) {
 					limparDadosUsuario();
+					cpfCnpjOriginalUsuario = "";
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(true);
 				} else {
 					populateUsuario();
+					cpfCnpjOriginalUsuario = getCliente().getUsuario().getCpfCnpj();
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(false);
 				}
 				
@@ -253,9 +255,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 				getCliente().setNovoProprietario(checked);
 				if (checked) {
 					limparDadosProprietario();
+					cpfCnpjOriginalProprietario = "";
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setClickable(true);
 				} else {
 					populateProprietario();
+					cpfCnpjOriginalProprietario = getCliente().getProprietario().getCpfCnpj();
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setClickable(false);
 				}
 				
@@ -292,9 +296,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 				getCliente().setNovoResponsavel(checked);
 				if (checked) {
 					limparDadosResponsavel();
+					cpfCnpjOriginalResponsavel = "";
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaResponsavel))).setClickable(true);
 				} else {
 					populateResponsavel();
+					cpfCnpjOriginalResponsavel = getCliente().getResponsavel().getCpfCnpj();
 					((Spinner) (view.findViewById(R.id.spinnerTipoPessoaResponsavel))).setClickable(false);
 				}
 				
@@ -382,92 +388,112 @@ public class ClienteTab extends Fragment implements LocationListener {
 		boolean result = true;
 		
 		// Nome do Usuario
-		if (  Util.isValidText( ((EditText)view.findViewById(R.id.nomeUsuario)).getText().toString() ) ){
-			dialogMessage = "Nome do usuário inválido. Não é permitido números, abreviações nem caracteres especiais";
+		if (  Util.isValidText( ((EditText)view.findViewById(R.id.nomeUsuario)).getText().toString()) || ((EditText)view.findViewById(R.id.nomeUsuario)).getText().toString().trim().compareTo("") == 0 ){
+			dialogMessage = "Nome do usuário inválido. Não é permitido nome vazio, números, abreviações nem caracteres especiais.";
             showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 			return false;
 		}
 		
 		// CPF ou CNPJ do usuario
-		if (isUsuarioCpfSelected){
-			if( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
-				!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
-				//(!Util.getCpfUsuarioOk() || )
-					
-				dialogMessage = "CPF do usuário inválido.";
-                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-				return false;
+		if (isUsuarioCpfSelected){ 
+			
+			if((((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalUsuario.equals("") ){
+				if( !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString()) && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").compareTo("") != 7 ))
+				{
+					dialogMessage = "CPF do usuário inválido.";
+					showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
+				}	
+			
+			}else if(!cpfCnpjOriginalUsuario.equals("") && !cpfCnpjOriginalUsuario.substring(0,7).equals(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
 				
-			}else if(!cpfCnpjOriginalUsuario.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
-				
-				dialogMessage = "Valide CPF do usuário.";
-                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-                return false;
-				
-			}
+				if(!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())){
+			
+					dialogMessage = "CPF do usuário inválido.";
+	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+	                return false;
+				}
+			
+			}			
 		}else{
 			
-			if( (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && 
-				!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())){
-				//(!Util.getCnpjUsuarioOk() || )
-					
-				dialogMessage = "CNPJ do usuário inválido.";
-                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-				return false;
+			if((((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalUsuario.equals("")){
 				
-			}else if(!cpfCnpjOriginalUsuario.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") == 0)){
+				if( !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())
+					&& (((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").compareTo("") != 7 ))
+				{
+					dialogMessage = "CNPJ do usuário inválido.";
+	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
+				}	
 				
-				dialogMessage = "Valide CNPJ do usuário.";
-                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-                return false;
-				
+			}else if(!cpfCnpjOriginalUsuario.equals("") && !cpfCnpjOriginalUsuario.substring(0,7).equals(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
+			
+					if(!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())){
+	
+						dialogMessage = "CNPJ do usuário inválido.";
+		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+		                return false;
+					}
+			
+				}
 			}
-		}
 		
 		// Dados do Responsavel, se existir.
 		if ( ((Spinner)view.findViewById(R.id.spinnerDefineResponsavel)).getSelectedItemPosition() > 1){
 			
 			// Nome do Responsavel
-			if (  Util.isValidText( ((EditText)view.findViewById(R.id.nomeResponsavel)).getText().toString() ) ){
+			if (  Util.isValidText(((EditText)view.findViewById(R.id.nomeResponsavel)).getText().toString()) || ((EditText)view.findViewById(R.id.nomeResponsavel)).getText().toString().trim().compareTo("") == 0 ){
 				
-				dialogMessage = "Nome do responsável inválido. Não é permitido abreviações nem caracteres especiais";
+				dialogMessage = "Nome do responsável inválido. Não é permitido nome vazio, número, abreviações nem caracteres especiais.";
                 showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 				return false;
 			}
 			
 			// CPF ou CNPJ do Responsavel
-			if (isResponsavelCpfSelected){
-						
-				if( (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) &&
-					(!Util.getCpfResponsavelOk() || !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ){
+			if (isResponsavelCpfSelected){ 
+				
+				if((((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalResponsavel.equals("") ){
+					if( !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString()) && (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").compareTo("") != 7 ))
+					{
+						dialogMessage = "CPF do responsável inválido.";
+						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+						return false;
+					}	
+				
+				}else if(!cpfCnpjOriginalResponsavel.equals("") && !cpfCnpjOriginalResponsavel.substring(0,7).equals(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
 					
-					dialogMessage = "CPF do responsável inválido.";
-                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-					return false;
-					
-				}else if(!cpfCnpjOriginalResponsavel.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") == 0)){
-					
-					dialogMessage = "Valide CPF do responsável.";
-	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-	                return false;
-					
-				}
-			
+					if(!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString())){
+				
+						dialogMessage = "CPF do responsável inválido.";
+		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+		                return false;
+					}
+				
+				}			
 			}else{
-				if( (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) &&
-					(!Util.getCnpjResponsavelOk() || !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString())) ){
+				
+				if((((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalResponsavel.equals("")){
 					
-					dialogMessage = "CNPJ do responsável inválido.";
-                    showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-					return false;
+					if( !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString())
+						&& (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").compareTo("") != 7 ))
+					{
+						dialogMessage = "CNPJ do responsável inválido.";
+		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+						return false;
+					}	
 					
-				}else if(!cpfCnpjOriginalResponsavel.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjResponsavel)).getText().toString().trim().compareTo("") == 0)){
+				}else if(!cpfCnpjOriginalResponsavel.equals("") && !cpfCnpjOriginalResponsavel.substring(0,7).equals(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
+				
+						if(!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString())){
+		
+							dialogMessage = "CNPJ do responsável inválido.";
+			                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+			                return false;
+						}
+				
+					}
 					
-					dialogMessage = "Valide CNPJ do responsável.";
-	                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-	                return false;
-					
-				}
 			}
 		}
 		// Dados do Proprietario, se existir.
@@ -484,55 +510,64 @@ public class ClienteTab extends Fragment implements LocationListener {
 			}
 			
 				// Nome do Proprietario
-				if (Util.isValidText( ((EditText)view.findViewById(R.id.nomeProprietario)).getText().toString() ) ){
+				if (Util.isValidText( ((EditText)view.findViewById(R.id.nomeProprietario)).getText().toString()) || ((EditText)view.findViewById(R.id.nomeProprietario)).getText().toString().trim().compareTo("") == 0){
 					
-					dialogMessage = "Nome do proprietário inválido. Não é permitido abreviações nem caracteres especiais";
+					dialogMessage = "Nome do proprietário inválido. Não é permitido nome vazio, número, abreviações nem caracteres especiais.";
 					showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 					return false;
 				}
 				
 				// CPF ou CNPJ do Proprietario
 				if (isProprietarioCpfSelected){
-									
-					if( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
-							!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
-						
-						dialogMessage = "CPF do proprietário inválido.";
-						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-						
-					}else if(!cpfCnpjOriginalProprietario.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0)){
-						
-						dialogMessage = "Valide CPF do proprietário.";
-		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-		                return false;
-						
-					}
 					
+					if((((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalProprietario.equals("") ){
+						if( !Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString()) && (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").compareTo("") != 7 ))
+						{
+							dialogMessage = "CPF do proprietário inválido.";
+							showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+							return false;
+						}	
+					
+					}else if(!cpfCnpjOriginalProprietario.equals("") && !cpfCnpjOriginalProprietario.substring(0,7).equals(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
+						
+						if(!Util.validateCpf(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString())){
+					
+							dialogMessage = "CPF do proprietário inválido.";
+			                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+			                return false;
+						}
+					
+					}			
 				}else{
-									
-					if( ( (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && 
-							!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))) ) {
-						
-						dialogMessage = "CNPJ do proprietário inválido.";
-						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-						
-					}else if(!cpfCnpjOriginalProprietario.equals("") && (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") == 0)){
-						
-						dialogMessage = "Valide CNPJ do proprietário.";
-		                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-		                return false;
-						
-					}
 					
-					// CEP do Proprietario
-					if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
+					if((((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalProprietario.equals("")){
 						
-						dialogMessage = "CEP do Proprietário deve ser informado.";
-						showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
-						return false;
-					}
+						if( !Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString())
+							&& (((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", "").compareTo("") != 7 ))
+						{
+							dialogMessage = "CNPJ do proprietário inválido.";
+			                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+							return false;
+						}	
+						
+					}else if(!cpfCnpjOriginalProprietario.equals("") && !cpfCnpjOriginalProprietario.substring(0,7).equals(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString().replaceAll("[-]", "").replaceAll("[.]", ""))){
+					
+							if(!Util.validateCnpj(((EditText)view.findViewById(R.id.cpfCnpjProprietario)).getText().toString())){
+			
+								dialogMessage = "CNPJ do proprietário inválido.";
+				                showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+				                return false;
+							}
+					
+						}
+				
+				}
+				// CEP do Proprietario
+				if( (((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().trim().compareTo("") == 0)){
+					
+					dialogMessage = "CEP do Proprietário deve ser informado.";
+					showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
 				}
 			
 			

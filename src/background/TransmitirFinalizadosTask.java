@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.Imovel;
 import ui.ArquivoRetorno;
+import util.Constantes;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -27,7 +28,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 	protected void onPreExecute() {
 		super.onPreExecute();
 
-		imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().pesquisarImoveisFinalizados();
+		imoveis = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().pesquisarImoveisFinalizados(Constantes.NAO);
 
 		if (imoveis.isEmpty()) {
 			CustomDialog.criar(activity, "Alerta", "Não há nenhum imóvel para ser transmitido ao servidor", R.drawable.aviso).show();
@@ -46,6 +47,7 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 		for (int i = 0; i < imoveis.size(); i++) {
 			new ArquivoRetorno(activity.getBaseContext()).gerarPorImovel(imoveis.get(i));
 			publishProgress(i + 1);
+		
 		}
 
 		return null;
@@ -63,7 +65,18 @@ public class TransmitirFinalizadosTask extends AsyncTask<Imovel, Integer, Void> 
 
 		if (dialog.isShowing()) {
 			dialog.dismiss();
-			CustomDialog.criar(activity, "Sucesso", "Imóveis transmitidos com sucesso para o servidor", R.drawable.save).show();
+			
+			List<Imovel> transmitidos = (List<Imovel>) Controlador.getInstancia().getCadastroDataManipulator().pesquisarImoveisFinalizados(Constantes.SIM);
+
+			if (imoveis.size() == transmitidos.size()) {
+				CustomDialog.criar(activity, "Sucesso", "Todos os imóveis foram transmitidos com sucesso para o servidor.", R.drawable.save).show();
+			} else if (transmitidos.size() > 0) {
+				CustomDialog.criar(activity, "Alerta", "Foram transmitidos " + transmitidos.size() + " de " + imoveis.size() + " imóveis para o servidor. " +
+						"Verifique na lista os imóveis que faltam.", R.drawable.aviso).show();
+			} else {
+				CustomDialog.criar(activity, "Alerta", "Não foi possível transmitir os imóveis para o servidor. " +
+						"Verifique sua conexão com a internet.", R.drawable.aviso).show();
+			}
 		}
 	}
 }

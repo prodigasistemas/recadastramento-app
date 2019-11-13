@@ -1596,7 +1596,7 @@ public class DataManipulator
 		values.put("imovel_status", imovel.getImovelStatus());
 		values.put("imovel_transmitido", imovel.getImovelTransmitido());
 
-		db.update(Constantes.TABLE_IMOVEL, values, "matricula=?", new String[] { String.valueOf(getImovelSelecionado().getMatricula()) });
+		db.update(Constantes.TABLE_IMOVEL, values, "matricula=?", new String[] { String.valueOf(imovel.getMatricula()) });
 	}
 
 	public void salvarServico() {
@@ -1709,9 +1709,9 @@ public class DataManipulator
 		return inconsistencias;
 	}
 	
-	public List<Imovel> pesquisarImoveisFinalizados() {
+	public List<Imovel> pesquisarImoveisFinalizados(int transmitido) {
 
-		Cursor cursor = getCursorImovel("imovel_transmitido = " + Constantes.NAO + 
+		Cursor cursor = getCursorImovel("imovel_transmitido = " + transmitido + 
 				" AND imovel_status NOT IN (" + Constantes.IMOVEL_A_SALVAR + "," + Constantes.IMOVEL_INFORMATIVO + ")");
 
 		List<Imovel> imoveis = new ArrayList<Imovel>();

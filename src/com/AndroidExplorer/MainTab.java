@@ -329,11 +329,11 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 
 			break;
 
-//		case R.id.botaoAdicionarSublote:
-//			posicaoNovo = posicao + 1;
-//			montarImovelNovoSublote();
-//
-//			break;
+		case R.id.botaoAdicionarSublote:
+			posicaoNovo = posicao + 1;
+			montarImovelNovoSublote();
+
+			break;
 
 //		case R.id.botaoExcluirImovel:
 //
@@ -648,7 +648,8 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		imovel.setRota(imovelReferencia.getRota());
 		imovel.setCodigoLogradouro(String.valueOf(imovelReferencia.getCodigoLogradouro()));
 		imovel.setFace(imovelReferencia.getFace());
-		
+		imovel.setNovoRegistro(true);
+				
 		Endereco endereco = new Endereco();
 		endereco.setTipoLogradouro(String.valueOf(imovelReferencia.getEnderecoImovel().getTipoLogradouro()));
 		endereco.setLogradouro(imovelReferencia.getEnderecoImovel().getLogradouro());
@@ -663,9 +664,14 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 		imovel.setTipoOperacao(String.valueOf(Constantes.OPERACAO_CADASTRO_NOVO));
 
 		controlador.setImovelSelecionado(imovel);
+		controlador.getClienteSelecionado().setNovoRegistro(true);
+		controlador.getServicosSelecionado().setNovoRegistro(true);
+		controlador.getMedidorSelecionado().setNovoRegistro(true);
+		controlador.getAnormalidadeImovelSelecionado().setNovoRegistro(true);
 
-		finish();
+		//finish();
 		startActivity(new Intent(getApplicationContext(), MainTab.class));
+		
 	}
 
 	private String getNovoSublote(List<String> inscricoes) {
@@ -678,8 +684,7 @@ public class MainTab extends FragmentActivity implements TabHost.OnTabChangeList
 			ultimoSublote = ultimaInscricao.substring(14, 17);
 		}
 
-		return String.valueOf(Integer.parseInt(ultimoSublote) + 1);
-	}
+		return String.valueOf(Integer.parseInt(ultimoSublote) + 1);	}
 	
 	private void excluirImovel() {
 		Imovel imovelSelecionado = controlador.getImovelSelecionado();

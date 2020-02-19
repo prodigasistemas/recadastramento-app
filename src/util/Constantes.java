@@ -138,7 +138,8 @@ public class Constantes {
     public static final int OPERACAO_CADASTRO_ALTERADO = 1;
     public static final int OPERACAO_CADASTRO_NOVO = 2;
     public static final int OPERACAO_CADASTRO_EXCLUIDO = 3;
-
+    
+    public static final int INDEFINIDA = 0;
     public static final int SEM_OCORRENCIA = 1;
     public static final int ANORMALIDADE_HIDR_NAO_LOCALIZADO = 34;
     public static final int ANORMALIDADE_HIDR_SEM_IDENTIFICACAO = 35;

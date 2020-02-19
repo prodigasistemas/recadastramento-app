@@ -297,7 +297,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 						salvar();
 						finalizar();
 					}
-				} else if (imovel.getImovelStatus() != Constantes.IMOVEL_A_SALVAR) {
+				} else if (imovel.getImovelStatus() != Constantes.IMOVEL_A_SALVAR && imovel.getImovelStatus() != Constantes.IMOVEL_NOVO ) {
 					verificarImovel();
 
 					manipulator.salvarAnormalidadeImovel();
@@ -319,17 +319,24 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	
 	private void exibirMensagemAbaPendente() {
 		String aba = null;
-		if (!controlador.getClienteSelecionado().isTabSaved()) {
-			aba = "Cliente";
-		} else if (!imovel.isTabSaved()) {
-			aba = "Imóvel";
-		} else if (!controlador.getServicosSelecionado().isTabSaved()) {
-			aba = "Serviço";
-		} else if (!controlador.getMedidorSelecionado().isTabSaved()) {
-			aba = "Medidor";
+		
+		if(anormalidadeImovel.getCodigoAnormalidade()  == Constantes.INDEFINIDA) {
+			
+			CustomDialog.criar(getActivity(), "Alerta", "Informe uma ocorrência para o imovél.", R.drawable.aviso).show();
+		}else{
+			
+			if (!controlador.getClienteSelecionado().isTabSaved()) {
+				aba = "Cliente";
+			} else if (!imovel.isTabSaved()) {
+				aba = "Imóvel";
+			} else if (!controlador.getServicosSelecionado().isTabSaved()) {
+				aba = "Serviço";
+			} else if (!controlador.getMedidorSelecionado().isTabSaved()) {
+				aba = "Medidor";
+			}
+	
+			CustomDialog.criar(getActivity(), "Alerta", "Atualize os dados de " + aba + " antes de finalizar", R.drawable.aviso).show();
 		}
-
-		CustomDialog.criar(getActivity(), "Alerta", "Atualize os dados de " + aba + " antes de finalizar", R.drawable.aviso).show();
 	}
 
 	private void finalizar() {
@@ -449,7 +456,7 @@ public class AnormalidadeTab extends Fragment implements LocationListener {
 	private boolean abasFinalizadas() {
 		int anormalidade = ((Spinner) (view.findViewById(R.id.spinnerTipoAnormalidade))).getSelectedItemPosition();
 
-		if (anormalidade == Constantes.SEM_OCORRENCIA) {
+		if (anormalidade == Constantes.SEM_OCORRENCIA || anormalidade == Constantes.INDEFINIDA) {
 			if (!imovel.isTabSaved() || 
 				!controlador.getClienteSelecionado().isTabSaved() || 
 				!controlador.getServicosSelecionado().isTabSaved() || 

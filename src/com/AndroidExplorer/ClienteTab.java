@@ -205,6 +205,7 @@ public class ClienteTab extends Fragment implements LocationListener {
         }
         
         checkedNovoUsuario();
+        
 	}
 
 	private void checkedNovoUsuario() {
@@ -414,7 +415,13 @@ public class ClienteTab extends Fragment implements LocationListener {
 	                return false;
 				}
 			
-			}			
+			}else if( cpfCnpjOriginalUsuario.equals("") &&  getCliente().isNovoUsuario() ){
+				
+					dialogMessage = "Informe o CPF/CNPJ do novo usuário.";
+					showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+					return false;
+				
+				}			
 		}else{
 			
 			if((((EditText)view.findViewById(R.id.cpfCnpjUsuario)).getText().toString().trim().compareTo("") != 0) && cpfCnpjOriginalUsuario.equals("")){

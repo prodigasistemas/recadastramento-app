@@ -689,6 +689,8 @@ public class ClienteTab extends Fragment implements LocationListener {
 		// Tipo de Pessoa do Proprietario
 		if (getCliente().getProprietario().getTipoPessoa() != Constantes.NULO_INT) {
 			((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setSelection(getCliente().getProprietario().getTipoPessoa() - 1);
+		} else {
+			((Spinner) (view.findViewById(R.id.spinnerTipoPessoaProprietario))).setSelection(0);
 		}
 
 		// UF do Proprietario
@@ -773,9 +775,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 		((EditText) (view.findViewById(R.id.nomeUsuario))).setText(getCliente().getUsuario().getNome());
 
 		// Tipo de Pessoa do Usuario
-		((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(getCliente().getUsuario().getTipoPessoa() - 1);
-		//((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setClickable(false);
-		
+		if(getCliente().getUsuario().getTipoPessoa() != Constantes.NULO_INT) {
+			((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(getCliente().getUsuario().getTipoPessoa() - 1);
+		} else {
+			((Spinner) (view.findViewById(R.id.spinnerTipoPessoaUsuario))).setSelection(0);
+		}
 
 		// UF do Usuario
 		if (getCliente().getUsuario().getUf() != Constantes.NULO_STRING) {
@@ -833,7 +837,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 			// Tipo de Pessoa do Responsavel
 			if (getCliente().getResponsavel().getTipoPessoa() != Constantes.NULO_INT) {
 				((Spinner) (view.findViewById(R.id.spinnerTipoPessoaResponsavel))).setSelection(getCliente().getResponsavel().getTipoPessoa() - 1);
+			} else {
+				((Spinner) (view.findViewById(R.id.spinnerTipoPessoaResponsavel))).setSelection(0);
 			}
+			
 			// UF do Responsavel
 			if (getCliente().getResponsavel().getUf() != Constantes.NULO_STRING) {
 				((EditText) (view.findViewById(R.id.ufResponsavel))).setText(getCliente().getResponsavel().getUf());
@@ -1035,11 +1042,6 @@ public class ClienteTab extends Fragment implements LocationListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoPessoaProprietario.setAdapter(adapter);
         spinnerTipoPessoaProprietario.setClickable(false);
-        // Populate Tipo de Pessoa do Proprietario
-        if (getCliente().getProprietario().getTipoPessoa() != Constantes.NULO_INT){
-            spinnerTipoPessoaProprietario.setSelection(getCliente().getProprietario().getTipoPessoa() - 1);
-        }
-
         tipoPessoaProprietarioOnItemSelectedListener(spinnerTipoPessoaProprietario);
         
         // Spinner Sexo Proprietario
@@ -1090,17 +1092,12 @@ public class ClienteTab extends Fragment implements LocationListener {
 		Util.addTextChangedListenerPhoneMask((EditText)view.findViewById(R.id.celularResponsavel));
 		Util.addTextChangedListenerCpfCnpjVerifierAndMask((EditText)view.findViewById(R.id.cpfCnpjResponsavel), Constantes.PESSOA_RESPONSAVEL);
 
-   ;
 	    // Spinner Tipo Pessoa Responsavel
 	    Spinner spinnerTipoPessoaResponsavel = (Spinner) view.findViewById(R.id.spinnerTipoPessoaResponsavel);
 	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.tipoPessoa, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    spinnerTipoPessoaResponsavel.setAdapter(adapter);
 	    spinnerTipoPessoaResponsavel.setClickable(false);
-        // Populate Tipo de Pessoa do Responsavel
-        if (getCliente().getResponsavel().getTipoPessoa() != Constantes.NULO_INT){
-        	spinnerTipoPessoaResponsavel.setSelection(getCliente().getResponsavel().getTipoPessoa() - 1);
-        }
 	    tipoPessoaResponsavelOnItemSelectedListener(spinnerTipoPessoaResponsavel);
 	    
         // Spinner Sexo Responsavel

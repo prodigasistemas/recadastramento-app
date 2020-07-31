@@ -1066,12 +1066,6 @@ public class Util {
 	@SuppressLint("NewApi") 
 	public static String removerCaractereEspecial(String valor) {
 		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
-		return temp.replaceAll("[^\\p{ASCII}]", " ");
-	}
-	
-	@SuppressLint("NewApi")
-	public static String removerCaractereEspecialNovo(String valor) {
-		String temp = Normalizer.normalize(valor, java.text.Normalizer.Form.NFD);
 		return temp.replaceAll("[^\\p{ASCII}]", "");
 	}
 	

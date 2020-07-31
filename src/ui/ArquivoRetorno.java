@@ -253,7 +253,7 @@ public class ArquivoRetorno {
 			linha.append(Util.adicionarCharDireita(20, String.valueOf(imovel.getLongitude() != Constantes.NULO_DOUBLE ? imovel.getLongitude() : " "), ' '));
 			linha.append(Util.adicionarCharEsquerda(26, imovel.getData(), ' '));
 			
-			linha.append(Util.adicionarCharDireita(100, (Util.removerCaractereEspecialNovo(imovel.getObservacao().toUpperCase())).replaceAll("\n", " "), ' '));
+			linha.append(Util.adicionarCharDireita(100, imovel.getObservacao().toUpperCase().replaceAll("\n", " "), ' '));
 			
 			linha.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getQuantidadeNosFundos())));
 			linha.append(Util.adicionarZerosEsquerdaNumero(3, String.valueOf(imovel.getQuantidadeNosAltos())));
@@ -334,20 +334,20 @@ public class ArquivoRetorno {
 		try {
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
 			linha.append(Util.adicionarCharDireita(3, String.valueOf(anormalidade.getCodigoAnormalidade()), ' '));
-			linha.append(Util.adicionarCharDireita(200, (Util.removerCaractereEspecialNovo(anormalidade.getComentario().toUpperCase())).replaceAll("\n", " "), ' '));
+			linha.append(Util.adicionarCharDireita(200, anormalidade.getComentario().toUpperCase().replaceAll("\n", " "), ' '));
 			linha.append(Util.adicionarCharDireita(30, anormalidade.getFoto1(), ' '));
 			linha.append(Util.adicionarCharDireita(30, anormalidade.getFoto2(), ' '));
 			linha.append(Util.adicionarCharDireita(20, String.valueOf(anormalidade.getLatitude() != Constantes.NULO_DOUBLE ? anormalidade.getLatitude() : " "), ' '));
 			linha.append(Util.adicionarCharDireita(20, String.valueOf(anormalidade.getLongitude() != Constantes.NULO_DOUBLE ? anormalidade.getLongitude() : " "), ' '));
 			linha.append(Util.adicionarCharEsquerda(26, anormalidade.getData(), ' '));
-			linha.append(Util.adicionarCharEsquerda(20, (Util.removerCaractereEspecialNovo(imovel.getEntrevistado().toUpperCase())), ' '));
+			linha.append(Util.adicionarCharEsquerda(20, imovel.getEntrevistado().toUpperCase(), ' '));
 			linha.append(Util.adicionarCharEsquerda(11, anormalidade.getLoginUsuario(), ' '));
 			linha.append("\n");
 		} catch (Exception e) {
 			LogUtil.salvar(getClass(), "Erro ao gerar linha de Anormalidade", e);
 		}
 
-		return linha.toString();
+		return Util.removerCaractereEspecial(linha.toString());
 	}
 }
 

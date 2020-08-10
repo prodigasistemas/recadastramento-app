@@ -6,7 +6,6 @@ import java.io.IOException;
 import ui.FileManager;
 import util.Constantes;
 import util.LogUtil;
-import util.Util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,8 +18,8 @@ import android.widget.Toast;
 import business.Controlador;
 
 import com.AndroidExplorer.CustomDialog;
-import com.AndroidExplorer.TelaInicial;
 import com.AndroidExplorer.R;
+import com.AndroidExplorer.TelaInicial;
 
 import dataBase.DataManipulator;
 
@@ -78,7 +77,6 @@ public class CarregarRotaTask extends AsyncTask<Void, Integer, Void> {
 			try {
 				int contador = 0;
 				while ((linha = reader.readLine()) != null) {
-					linha = Util.removerCaractereEspecial(linha);
 					lerLinha();
 					publishProgress(++contador);
 				}

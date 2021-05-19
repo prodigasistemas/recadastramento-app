@@ -13,7 +13,7 @@
 
     <string name="app_titulo">Sistema de Recadastramento de Imóveis</string>
     <string name="app_name">Cadastro</string>
-    <string name="app_versao">1.6.7</string>
+    <string name="app_versao">1.6.8</string>
     
 	<string name="versao">"Versão: "</string>
     <string name="login">Login</string>

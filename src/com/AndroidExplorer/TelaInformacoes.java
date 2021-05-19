@@ -37,6 +37,8 @@ public class TelaInformacoes extends FragmentActivity {
 			return "FISCALIZAÇÃO";
 		} else if (tipo.equals("V")) {
 			return "REVISITA";
+		} else if (tipo.equals("T")) {
+			return "TODOS";
 		} else {
 			return "";
 		}

@@ -1,0 +1,8 @@
+com.AndroidExplorer-debug-0 /home/kurt/StudioProjects/recadastramento-android/build-types/debug/res
+com.AndroidExplorer-pngs-1 /home/kurt/StudioProjects/recadastramento-android/build/generated/res/pngs/debug
+com.AndroidExplorer-resValues-2 /home/kurt/StudioProjects/recadastramento-android/build/generated/res/resValues/debug
+com.AndroidExplorer-rs-3 /home/kurt/StudioProjects/recadastramento-android/build/generated/res/rs/debug
+com.AndroidExplorer-mergeDebugResources-4 /home/kurt/StudioProjects/recadastramento-android/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
+com.AndroidExplorer-mergeDebugResources-5 /home/kurt/StudioProjects/recadastramento-android/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+com.AndroidExplorer-merged_res-6 /home/kurt/StudioProjects/recadastramento-android/build/intermediates/merged_res/debug
+com.AndroidExplorer-recadastramento-android-7 /home/kurt/StudioProjects/recadastramento-android/res

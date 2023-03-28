@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="consulta">
+        <item>Todos</item>
+        <item>Matrícula</item>
+        <item>CPF</item>
+        <item>CNPJ</item>
+        <item>Número da residência</item>
+    </string-array>
+    <string-array name="filtro">
+        <item>Todos</item>
+        <item>Visitados com Sucesso</item>
+        <item>Visitados com Anormalidade</item>
+        <item>Não Visitados</item>
+        <item>Novos Cadastros</item>
+        <item>Transmitidos</item>
+        <item>Não Transmitidos</item>
+    </string-array>
+    <string-array name="listaEntrevistado">
+        <item>Usuário</item>
+        <item>Proprietário</item>
+        <item>Responsável</item>
+        <item>Parente</item>
+        <item>Funcionário</item>
+    </string-array>
+    <string-array name="listaPercentualAbastecimento">
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+    </string-array>
+    <string-array name="listaResponsavel">
+        <item>Usuário</item>
+        <item>Proprietário</item>
+        <item>Outro</item>
+    </string-array>
+    <string-array name="listaUF">
+        <item>AC</item>
+        <item>AM</item>
+        <item>AL</item>
+        <item>AP</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MG</item>
+        <item>MT</item>
+        <item>MS</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>PR</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>RS</item>
+        <item>SC</item>
+        <item>SE</item>
+        <item>SP</item>
+        <item>TO</item>
+    </string-array>
+    <string-array name="sexo">
+        <item>Masculino</item>
+        <item>Feminino</item>
+    </string-array>
+    <string-array name="tipoPessoa">
+        <item>Física</item>
+        <item>Jurídica</item>
+    </string-array>
+    <color name="adicionalColor">#FFF4A1</color>
+    <color name="colorBege1">#FFBB59</color>
+    <color name="colorbege2">#E09639</color>
+    <color name="myColor">#45A1C0</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="textColorYellowBackground">#001A5C</color>
+    <color name="transparent">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <integer name="valor">2</integer>
+    <string name="app_name">Cadastro</string>
+    <string name="app_titulo">Sistema de Recadastramento de Imóveis</string>
+    <string name="app_versao">1.6.8</string>
+    <string name="finalizar">Finalizar</string>
+    <string name="login">Login</string>
+    <string name="menu_adicionar_sublote">Adicionar Sublote</string>
+    <string name="menu_arquivo_retorno">Arquivo de Retorno</string>
+    <string name="menu_cadastros">Lista de Cadastros</string>
+    <string name="menu_consulta">Consultar Cadastro</string>
+    <string name="menu_excluir_imovel">Excluir Imóvel</string>
+    <string name="menu_exportar_banco">Exportar Banco de Dados</string>
+    <string name="menu_info">Informações do Roteiro</string>
+    <string name="menu_novo_imovel">Novo Imóvel</string>
+    <string name="menu_novo_roteiro">Limpar Tudo</string>
+    <string name="menu_relatorio">Relatório</string>
+    <string name="menu_transmitir_finalizados">Transmitir Finalizados</string>
+    <string name="options_adicionar_sublote">Adicionar Sublote</string>
+    <string name="options_anterior">Imóvel Anterior</string>
+    <string name="options_excluir_imovel">Excluir Imóvel</string>
+    <string name="options_lista_cadastro">Lista de Cadastros</string>
+    <string name="options_menu_principal">Menu Principal</string>
+    <string name="options_novo_imovel">Novo Imóvel</string>
+    <string name="options_proximo">Próximo Imóvel</string>
+    <string name="options_sair">Sair</string>
+    <string name="relatorio_do_arquivo">Relatório</string>
+    <string name="relatorio_excluidos">Excluídos</string>
+    <string name="relatorio_finalizados">Finalizados sem Ocorrência</string>
+    <string name="relatorio_finalizados_anormalidade">Finalizados com Ocorrência</string>
+    <string name="relatorio_informativos">Informativos</string>
+    <string name="relatorio_nao_transmitidos">Não Transmitidos</string>
+    <string name="relatorio_novos">Novos</string>
+    <string name="relatorio_pendentes">Pendentes</string>
+    <string name="relatorio_total">Total do Arquivo</string>
+    <string name="relatorio_total_finalizados">Total de Finalizados</string>
+    <string name="relatorio_transmitidos">Transmitidos</string>
+    <string name="relatorio_transmitidos_inconsistencia">Transmitidos com Inconsistência</string>
+    <string name="senha">Senha</string>
+    <string name="versao">"Versão: "</string>
+</resources>

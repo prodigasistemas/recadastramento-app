@@ -1,0 +1,5 @@
+com.AndroidExplorer.test-androidTest-0 /home/kurt/StudioProjects/recadastramento-android/build/generated/res/resValues/androidTest/debug
+com.AndroidExplorer.test-androidTest-1 /home/kurt/StudioProjects/recadastramento-android/build/generated/res/rs/androidTest/debug
+com.AndroidExplorer.test-mergeDebugAndroidTestResources-2 /home/kurt/StudioProjects/recadastramento-android/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.AndroidExplorer.test-mergeDebugAndroidTestResources-3 /home/kurt/StudioProjects/recadastramento-android/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.AndroidExplorer.test-merged_res-4 /home/kurt/StudioProjects/recadastramento-android/build/intermediates/merged_res/debugAndroidTest

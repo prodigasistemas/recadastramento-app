@@ -15,6 +15,7 @@ public class Pessoa {
 	private String telefone;
 	private String celular;
 	private String eMail;
+	private String numeroNIS;
 
 	public Pessoa() {
 		nome = "";
@@ -26,6 +27,7 @@ public class Pessoa {
 		telefone = "";
 		celular = "";
 		eMail = "";
+		numeroNIS = "";
 	}
 
 	public int getMatricula() {
@@ -72,6 +74,8 @@ public class Pessoa {
 		this.eMail = Util.verificarNuloString(eMail);
 	}
 
+	public void setNumeroNIS(String numeroNIS) { this.numeroNIS = Util.verificarNuloString(numeroNIS); }
+
 	public String getNome() {
 		return this.nome;
 	}
@@ -107,4 +111,7 @@ public class Pessoa {
 	public String getEmail() {
 		return this.eMail;
 	}
+
+	public String getNumeroNIS() { return this.numeroNIS; }
+
 }

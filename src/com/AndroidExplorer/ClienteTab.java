@@ -629,6 +629,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			getCliente().getEnderecoProprietario().setBairro(((EditText)view.findViewById(R.id.bairroProprietario)).getText().toString());
 			getCliente().getEnderecoProprietario().setCep(((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().replaceAll("[-]", ""));
 			getCliente().getEnderecoProprietario().setMunicipio(((EditText)view.findViewById(R.id.municipioProprietario)).getText().toString());
+			getCliente().getProprietario().setNumeroNIS(validarNumeroNIS(((EditText)view.findViewById(R.id.municipioProprietario)).getText().toString()));
 		}
 
 		getCliente().setTipoResponsavel(String.valueOf(((Spinner)view.findViewById(R.id.spinnerDefineResponsavel)).getSelectedItemPosition()));
@@ -669,6 +670,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		getCliente().getUsuario().setTelefone(((EditText)view.findViewById(R.id.foneUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 		getCliente().getUsuario().setCelular(((EditText)view.findViewById(R.id.celularUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 		getCliente().getUsuario().setEmail(((EditText)view.findViewById(R.id.emailUsuario)).getText().toString());
+
 				   
         if (lastKnownLocation != null){
             getCliente().setLatitude(String.valueOf(lastKnownLocation.getLatitude()));
@@ -680,7 +682,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 		if(getCliente().isNovoProprietario()) getCliente().getProprietario().setMatricula("0");
 		if(getCliente().isNovoResponsavel()) getCliente().getResponsavel().setMatricula("0");
 	}
-	
+
+	private String validarNumeroNIS(String nis) {
+
+	}
+
 	public void populateProprietario() {
 
 		// Nome do Usuario
@@ -767,6 +773,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 		} else {
 			((RadioButton) (view.findViewById(R.id.radioComercialProprietario))).setChecked(true);
 		}
+
+		//Nmero NIS do PROPRIETARIO
+		if (getCliente().getProprietario().getNumeroNIS() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.nisProprietario))).setText(String.valueOf(getCliente().getProprietario().getNumeroNIS()));
+		}
 	}
 	
 	public void populateUsuario() {
@@ -824,6 +835,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 		} else if (getCliente().getTipoEnderecoProprietario() == Constantes.IMOVEL_PROPRIETARIO_COMERCIAL) {
 			((RadioButton) (view.findViewById(R.id.radioComercial))).setChecked(true);
+		}
+
+		//Nmero NIS do USUARIO
+		if (getCliente().getUsuario().getNumeroNIS() != Constantes.NULO_STRING) {
+			((EditText) (view.findViewById(R.id.nisUsuario))).setText(String.valueOf(getCliente().getUsuario().getNumeroNIS()));
 		}
 	}
 		
@@ -914,6 +930,11 @@ public class ClienteTab extends Fragment implements LocationListener {
 
 			} else {
 				((RadioButton) (view.findViewById(R.id.radioComercialResponsavel))).setChecked(true);
+			}
+
+			//Nmero NIS do RESPONSAVEL
+			if (getCliente().getResponsavel().getNumeroNIS() != Constantes.NULO_STRING) {
+				((EditText) (view.findViewById(R.id.nisUsuario))).setText(String.valueOf(getCliente().getResponsavel().getNumeroNIS()));
 			}
 		}
 	}

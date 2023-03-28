@@ -33,11 +33,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_CLIENTE_QUERY =
     	"CREATE TABLE cliente (id INTEGER PRIMARY KEY autoincrement, matricula_usuario INTEGER, matricula_responsavel INTEGER, matricula_proprietario INTEGER, matricula TEXT not null, gerencia TEXT, tipo_endereco_proprietario TEXT, tipo_endereco_responsavel TEXT, usuario_proprietario TEXT, tipo_responsavel TEXT, " +
-    	"nome_usuario TEXT, tipo_pessoa_usuario TEXT, cpf_cnpj_usuario TEXT, rg_usuario TEXT, uf_usuario TEXT, tipo_sexo_usuario TEXT, telefone_usuario TEXT, celular_usuario TEXT, email_usuario TEXT, " +
+    	"nome_usuario TEXT, tipo_pessoa_usuario TEXT, cpf_cnpj_usuario TEXT, rg_usuario TEXT, uf_usuario TEXT, tipo_sexo_usuario TEXT, telefone_usuario TEXT, celular_usuario TEXT, email_usuario TEXT, numero_nis_usuario TEXT, " +
     	"nome_proprietario TEXT, tipo_pessoa_proprietario TEXT, cpf_cnpj_proprietario TEXT, rg_proprietario TEXT, uf_proprietario TEXT, tipo_sexo_proprietario TEXT, telefone_proprietario TEXT, celular_proprietario TEXT, email_proprietario TEXT, " +
-     	"tipo_logradouro_proprietario INTEGER, logradouro_proprietario TEXT, numero_proprietario TEXT, complemento_proprietario TEXT, bairro_proprietario TEXT, cep_proprietario TEXT, municipio_proprietario TEXT, " +
+     	"tipo_logradouro_proprietario INTEGER, logradouro_proprietario TEXT, numero_proprietario TEXT, complemento_proprietario TEXT, bairro_proprietario TEXT, cep_proprietario TEXT, municipio_proprietario TEXT, numero_nis_proprietario TEXT," +
     	"nome_responsavel TEXT, tipo_pessoa_responsavel TEXT, cpf_cnpj_responsavel TEXT, rg_responsavel TEXT, uf_responsavel TEXT, tipo_sexo_responsavel TEXT, telefone_responsavel TEXT, celular_responsavel TEXT, email_responsavel TEXT, " +
- 		"tipo_logradouro_responsavel INTEGER, logradouro_responsavel TEXT, numero_responsavel TEXT, complemento_responsavel TEXT, bairro_responsavel TEXT, cep_responsavel TEXT, municipio_responsavel TEXT, latitude TEXT, longitude TEXT, data TEXT )";
+ 		"tipo_logradouro_responsavel INTEGER, logradouro_responsavel TEXT, numero_responsavel TEXT, complemento_responsavel TEXT, bairro_responsavel TEXT, cep_responsavel TEXT, municipio_responsavel TEXT, numero_nis_responsavel TEXT,latitude TEXT, longitude TEXT, data TEXT )";
 
     private static final String DATABASE_IMOVEL_QUERY =
     	"CREATE TABLE imovel (id INTEGER PRIMARY KEY autoincrement, matricula TEXT not null, codigo_cliente TEXT, inscricao TEXT, rota TEXT, face TEXT, codigo_municipio TEXT, numero_iptu TEXT, numero_celpa TEXT, numero_pontos_uteis TEXT, " +

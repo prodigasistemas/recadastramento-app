@@ -1,0 +1,215 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:1-71:12
+	package
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:3:7-36
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:5:7-47
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:4:7-30
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+uses-sdk
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:5-72
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:5-72
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:5-72
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:5-72
+INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:5-72
+	android:targetSdkVersion
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:41-70
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:6:15-40
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+		INJECTED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml
+uses-permission#android.permission.ACCESS_GPS
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:7:2-66
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:7:19-63
+uses-permission#android.permission.ACCESS_LOCATION
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:8:2-71
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:8:19-68
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:9:2-78
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:9:19-75
+uses-permission#android.permission.ACCESS_FINE_LOCATION
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:10:2-76
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:10:19-73
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:11:5-80
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:11:22-78
+uses-permission#android.permission.INTERNET
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:12:2-63
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:12:19-61
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:13:2-71
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:13:19-69
+uses-permission#android.permission.CAMERA
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:15:2-61
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:15:19-59
+uses-feature#android.hardware.camera
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:16:3-58
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:16:17-55
+uses-feature#android.hardware.camera.autofocus
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:17:3-68
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:17:17-65
+application
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:19:5-70:17
+	android:label
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:19:48-72
+	android:allowTaskReparenting
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:19:73-108
+	android:icon
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:19:18-47
+activity#com.AndroidExplorer.TelaInicial
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:20:9-25:20
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:20:47-94
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:20:19-46
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:21:13-24:29
+action#android.intent.action.MAIN
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:22:17-69
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:22:25-66
+category#android.intent.category.LAUNCHER
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:23:17-77
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:23:27-74
+activity#com.AndroidExplorer.MainTab
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:27:9-28:20
+	android:screenOrientation
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:27:74-110
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:27:42-73
+	android:configChanges
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:27:111-161
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:27:162-209
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:27:19-41
+activity#com.AndroidExplorer.ListaRotas
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:30:9-31:20
+	android:screenOrientation
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:30:46-82
+	android:configChanges
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:30:83-133
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:30:134-181
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:30:19-45
+activity#com.AndroidExplorer.MenuListaImoveis
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:34:9-35:20
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:34:52-83
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:34:84-131
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:34:19-51
+activity#com.AndroidExplorer.ListaAddImovel
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:37:9-38:20
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:37:50-81
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:37:82-129
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:37:19-49
+activity#com.AndroidExplorer.MenuPrincipal
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:40:6-41:20
+	android:screenOrientation
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:40:78-114
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:40:46-77
+	android:configChanges
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:40:115-165
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:40:166-213
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:40:16-45
+activity#com.AndroidExplorer.ClienteTab
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:43:9-44:20
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:43:46-93
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:43:19-45
+activity#com.AndroidExplorer.ImovelTab
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:46:9-47:20
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:46:45-92
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:46:19-44
+activity#com.AndroidExplorer.ServicosTab
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:49:9-50:20
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:49:47-94
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:49:19-46
+activity#com.AndroidExplorer.MedidorTab
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:52:9-53:20
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:52:46-93
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:52:19-45
+activity#com.AndroidExplorer.AnormalidadeTab
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:55:9-56:20
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:55:51-98
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:55:19-50
+activity#com.AndroidExplorer.TelaInformacoes
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:58:3-59:20
+	android:screenOrientation
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:58:45-81
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:58:82-113
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:58:114-161
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:58:13-44
+activity#com.AndroidExplorer.TelaRelatorio
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:61:3-62:20
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:61:42-73
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:61:74-121
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:61:13-41
+activity#com.AndroidExplorer.Consulta
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:64:3-65:20
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:64:37-68
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:64:69-116
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:64:13-36
+activity#com.AndroidExplorer.ListaImoveis
+ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:67:3-68:20
+	android:launchMode
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:67:42-73
+	android:theme
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:67:74-121
+	android:name
+		ADDED from /home/kurt/StudioProjects/recadastramento-android/AndroidManifest.xml:67:13-41

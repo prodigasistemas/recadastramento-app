@@ -438,6 +438,7 @@ public class DataManipulator
 		        "telefone_usuario",
 		        "celular_usuario",
 		        "email_usuario",
+				"numero_nis_usuario",
 		        "matricula_proprietario",
 		        "nome_proprietario",
 		        "tipo_pessoa_proprietario",
@@ -455,6 +456,7 @@ public class DataManipulator
 		        "bairro_proprietario",
 		        "cep_proprietario",
 		        "municipio_proprietario",
+				"numero_nis_proprietario",
 		        "matricula_responsavel",
 		        "nome_responsavel",
 		        "tipo_pessoa_responsavel",
@@ -472,6 +474,7 @@ public class DataManipulator
 		        "bairro_responsavel",
 		        "cep_responsavel",
 		        "municipio_responsavel",
+				"numero_nis_responsavel",
 		        "latitude",
 		        "longitude",
 		        "data",
@@ -504,47 +507,50 @@ public class DataManipulator
 		cliente.getUsuario().setTelefone(cursor.getString(13));
 		cliente.getUsuario().setCelular(cursor.getString(14));
 		cliente.getUsuario().setEmail(cursor.getString(15));
+		cliente.getUsuario().setNumeroNIS(cursor.getString(16));
 
-		cliente.getProprietario().setMatricula(cursor.getString(16));
-		cliente.getProprietario().setNome(cursor.getString(17));
-		cliente.getProprietario().setTipoPessoa(cursor.getString(18));
-		cliente.getProprietario().setCpfCnpj(cursor.getString(19));
-		cliente.getProprietario().setRg(cursor.getString(20));
-		cliente.getProprietario().setUf(cursor.getString(21));
-		cliente.getProprietario().setTipoSexo(cursor.getString(22));
-		cliente.getProprietario().setTelefone(cursor.getString(23));
-		cliente.getProprietario().setCelular(cursor.getString(24));
-		cliente.getProprietario().setEmail(cursor.getString(25));
-		cliente.getEnderecoProprietario().setTipoLogradouro(cursor.getString(26));
-		cliente.getEnderecoProprietario().setLogradouro(cursor.getString(27));
-		cliente.getEnderecoProprietario().setNumero(cursor.getString(28));
-		cliente.getEnderecoProprietario().setComplemento(cursor.getString(29));
-		cliente.getEnderecoProprietario().setBairro(cursor.getString(30));
-		cliente.getEnderecoProprietario().setCep(cursor.getString(31));
-		cliente.getEnderecoProprietario().setMunicipio(cursor.getString(32));
+		cliente.getProprietario().setMatricula(cursor.getString(17));
+		cliente.getProprietario().setNome(cursor.getString(18));
+		cliente.getProprietario().setTipoPessoa(cursor.getString(19));
+		cliente.getProprietario().setCpfCnpj(cursor.getString(20));
+		cliente.getProprietario().setRg(cursor.getString(21));
+		cliente.getProprietario().setUf(cursor.getString(22));
+		cliente.getProprietario().setTipoSexo(cursor.getString(23));
+		cliente.getProprietario().setTelefone(cursor.getString(24));
+		cliente.getProprietario().setCelular(cursor.getString(25));
+		cliente.getProprietario().setEmail(cursor.getString(26));
+		cliente.getEnderecoProprietario().setTipoLogradouro(cursor.getString(27));
+		cliente.getEnderecoProprietario().setLogradouro(cursor.getString(28));
+		cliente.getEnderecoProprietario().setNumero(cursor.getString(29));
+		cliente.getEnderecoProprietario().setComplemento(cursor.getString(30));
+		cliente.getEnderecoProprietario().setBairro(cursor.getString(31));
+		cliente.getEnderecoProprietario().setCep(cursor.getString(32));
+		cliente.getEnderecoProprietario().setMunicipio(cursor.getString(33));
+		cliente.getProprietario().setNumeroNIS(cursor.getString(34));
 
-		cliente.getResponsavel().setMatricula(cursor.getString(33));
-		cliente.getResponsavel().setNome(cursor.getString(34));
-		cliente.getResponsavel().setTipoPessoa(cursor.getString(35));
-		cliente.getResponsavel().setCpfCnpj(cursor.getString(36));
-		cliente.getResponsavel().setRg(cursor.getString(37));
-		cliente.getResponsavel().setUf(cursor.getString(38));
-		cliente.getResponsavel().setTipoSexo(cursor.getString(39));
-		cliente.getResponsavel().setTelefone(cursor.getString(40));
-		cliente.getResponsavel().setCelular(cursor.getString(41));
-		cliente.getResponsavel().setEmail(cursor.getString(42));
+		cliente.getResponsavel().setMatricula(cursor.getString(35));
+		cliente.getResponsavel().setNome(cursor.getString(36));
+		cliente.getResponsavel().setTipoPessoa(cursor.getString(37));
+		cliente.getResponsavel().setCpfCnpj(cursor.getString(38));
+		cliente.getResponsavel().setRg(cursor.getString(39));
+		cliente.getResponsavel().setUf(cursor.getString(40));
+		cliente.getResponsavel().setTipoSexo(cursor.getString(41));
+		cliente.getResponsavel().setTelefone(cursor.getString(42));
+		cliente.getResponsavel().setCelular(cursor.getString(43));
+		cliente.getResponsavel().setEmail(cursor.getString(44));
 
-		cliente.getEnderecoResponsavel().setTipoLogradouro(cursor.getString(43));
-		cliente.getEnderecoResponsavel().setLogradouro(cursor.getString(44));
-		cliente.getEnderecoResponsavel().setNumero(cursor.getString(45));
-		cliente.getEnderecoResponsavel().setComplemento(cursor.getString(46));
-		cliente.getEnderecoResponsavel().setBairro(cursor.getString(47));
-		cliente.getEnderecoResponsavel().setCep(cursor.getString(48));
-		cliente.getEnderecoResponsavel().setMunicipio(cursor.getString(49));
+		cliente.getEnderecoResponsavel().setTipoLogradouro(cursor.getString(45));
+		cliente.getEnderecoResponsavel().setLogradouro(cursor.getString(46));
+		cliente.getEnderecoResponsavel().setNumero(cursor.getString(47));
+		cliente.getEnderecoResponsavel().setComplemento(cursor.getString(48));
+		cliente.getEnderecoResponsavel().setBairro(cursor.getString(49));
+		cliente.getEnderecoResponsavel().setCep(cursor.getString(50));
+		cliente.getEnderecoResponsavel().setMunicipio(cursor.getString(51));
+		cliente.getProprietario().setNumeroNIS(cursor.getString(52));
 
-		cliente.setLatitude(cursor.getString(50));
-		cliente.setLongitude(cursor.getString(51));
-		cliente.setData(cursor.getString(52));
+		cliente.setLatitude(cursor.getString(53));
+		cliente.setLongitude(cursor.getString(54));
+		cliente.setData(cursor.getString(55));
 	}
 	
 	public void selectImovel(long id) {
@@ -996,6 +1002,7 @@ public class DataManipulator
 		values.put("telefone_usuario", parser.obterDadoParser(tamanhoTelefoneUsuario));
 		values.put("celular_usuario", parser.obterDadoParser(tamanhoCelularUsuario));
 		values.put("email_usuario", Util.removerCaractereEspecial(parser.obterDadoParser(30)));
+		values.put("numero_nis_usuario", parser.obterDadoParser(14).trim());
 
 		String matriculaProprietario = parser.obterDadoParser(9);
 
@@ -1019,6 +1026,7 @@ public class DataManipulator
 		values.put("bairro_proprietario", Util.removerCaractereEspecial(parser.obterDadoParser(20)));
 		values.put("cep_proprietario", parser.obterDadoParser(8));
 		values.put("municipio_proprietario", Util.removerCaractereEspecial(parser.obterDadoParser(15)));
+		values.put("numero_nis_proprietario", parser.obterDadoParser(14).trim());
 
 		String matriculaResponsavel = parser.obterDadoParser(9);
 
@@ -1042,6 +1050,7 @@ public class DataManipulator
 		values.put("bairro_responsavel", Util.removerCaractereEspecial(parser.obterDadoParser(20)));
 		values.put("cep_responsavel", parser.obterDadoParser(8));
 		values.put("municipio_responsavel", Util.removerCaractereEspecial(parser.obterDadoParser(15)));
+		values.put("numero_nis_responsavel", parser.obterDadoParser(14).trim());
 		values.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
 		values.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
 		values.put("data", "");
@@ -1451,6 +1460,7 @@ public class DataManipulator
 		values.put("telefone_usuario", getClienteSelecionado().getUsuario().getTelefone());
 		values.put("celular_usuario", getClienteSelecionado().getUsuario().getCelular());
 		values.put("email_usuario", getClienteSelecionado().getUsuario().getEmail());
+		values.put("numero_nis_usuario", getClienteSelecionado().getUsuario().getNumeroNIS());
 
 		if (getClienteSelecionado().isNovoProprietario())
 			values.put("matricula_proprietario", "0");
@@ -1471,6 +1481,7 @@ public class DataManipulator
 		values.put("bairro_proprietario", getClienteSelecionado().getEnderecoProprietario().getBairro());
 		values.put("cep_proprietario", getClienteSelecionado().getEnderecoProprietario().getCep());
 		values.put("municipio_proprietario", getClienteSelecionado().getEnderecoProprietario().getMunicipio());
+		values.put("numero_nis_proprietario", getClienteSelecionado().getProprietario().getNumeroNIS());
 
 		if (getClienteSelecionado().isNovoResponsavel())
 			values.put("matricula_responsavel", "0");
@@ -1491,6 +1502,7 @@ public class DataManipulator
 		values.put("bairro_responsavel", getClienteSelecionado().getEnderecoResponsavel().getBairro());
 		values.put("cep_responsavel", getClienteSelecionado().getEnderecoResponsavel().getCep());
 		values.put("municipio_responsavel", getClienteSelecionado().getEnderecoResponsavel().getMunicipio());
+		values.put("numero_nis_responsavel", getClienteSelecionado().getResponsavel().getNumeroNIS());
 
 		values.put("latitude", getClienteSelecionado().getLatitude());
 		values.put("longitude", getClienteSelecionado().getLongitude());

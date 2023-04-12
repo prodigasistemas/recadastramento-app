@@ -122,6 +122,7 @@ public class ArquivoRetorno {
 			linha.append(Util.adicionarCharDireita(11, cliente.getUsuario().getTelefone().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
 			linha.append(Util.adicionarCharDireita(11, cliente.getUsuario().getCelular().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""), ' '));
 			linha.append(Util.adicionarCharDireita(30, cliente.getUsuario().getEmail(), ' '));
+			linha.append(Util.adicionarCharDireita(11, cliente.getUsuario().getNumeroNIS(), ' '));
 			
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(cliente.getProprietario().getMatricula())));
 			linha.append(Util.adicionarCharDireita(50, Util.substringNome(cliente.getProprietario().getNome()), ' '));
@@ -149,6 +150,7 @@ public class ArquivoRetorno {
 			linha.append(Util.adicionarCharDireita(20, cliente.getEnderecoProprietario().getBairro(), ' '));
 			linha.append(Util.adicionarCharDireita(8, cliente.getEnderecoProprietario().getCep().replaceAll("[-]", ""), ' '));
 			linha.append(Util.adicionarCharDireita(15, cliente.getEnderecoProprietario().getMunicipio(), ' '));
+			linha.append(Util.adicionarCharDireita(11, cliente.getProprietario().getNumeroNIS(), ' '));
 			
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(cliente.getResponsavel().getMatricula())));
 			linha.append(Util.adicionarCharDireita(50, Util.substringNome(cliente.getResponsavel().getNome()), ' '));
@@ -167,6 +169,7 @@ public class ArquivoRetorno {
 			linha.append(Util.adicionarCharDireita(20, cliente.getEnderecoResponsavel().getBairro(), ' '));
 			linha.append(Util.adicionarCharDireita(8, cliente.getEnderecoResponsavel().getCep().replaceAll("[-]", ""), ' '));
 			linha.append(Util.adicionarCharDireita(15, cliente.getEnderecoResponsavel().getMunicipio(), ' '));
+			linha.append(Util.adicionarCharDireita(11, cliente.getResponsavel().getNumeroNIS(), ' '));
 			
 			linha.append(Util.adicionarCharDireita(20, String.valueOf(cliente.getLatitude() != Constantes.NULO_DOUBLE ? cliente.getLatitude() : " "), ' '));
 			linha.append(Util.adicionarCharDireita(20, String.valueOf(cliente.getLongitude() != Constantes.NULO_DOUBLE ? cliente.getLongitude() : " "), ' '));
@@ -183,7 +186,7 @@ public class ArquivoRetorno {
 	@SuppressLint("DefaultLocale")
 	public String gerarLinhaImovel(Imovel imovel) {
 		linha = new StringBuffer("02");
-		
+
 		try {
 			linha.append(Util.adicionarZerosEsquerdaNumero(9, String.valueOf(imovel.getMatricula())));
 			linha.append(String.valueOf(imovel.getTipoOperacao()));

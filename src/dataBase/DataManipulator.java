@@ -1002,7 +1002,7 @@ public class DataManipulator
 		values.put("telefone_usuario", parser.obterDadoParser(tamanhoTelefoneUsuario));
 		values.put("celular_usuario", parser.obterDadoParser(tamanhoCelularUsuario));
 		values.put("email_usuario", Util.removerCaractereEspecial(parser.obterDadoParser(30)));
-		values.put("numero_nis_usuario", parser.obterDadoParser(14).trim());
+		values.put("numero_nis_usuario", parser.obterDadoParser(12));
 
 		String matriculaProprietario = parser.obterDadoParser(9);
 
@@ -1026,7 +1026,7 @@ public class DataManipulator
 		values.put("bairro_proprietario", Util.removerCaractereEspecial(parser.obterDadoParser(20)));
 		values.put("cep_proprietario", parser.obterDadoParser(8));
 		values.put("municipio_proprietario", Util.removerCaractereEspecial(parser.obterDadoParser(15)));
-		values.put("numero_nis_proprietario", parser.obterDadoParser(14).trim());
+		values.put("numero_nis_proprietario", parser.obterDadoParser(12));
 
 		String matriculaResponsavel = parser.obterDadoParser(9);
 
@@ -1050,7 +1050,7 @@ public class DataManipulator
 		values.put("bairro_responsavel", Util.removerCaractereEspecial(parser.obterDadoParser(20)));
 		values.put("cep_responsavel", parser.obterDadoParser(8));
 		values.put("municipio_responsavel", Util.removerCaractereEspecial(parser.obterDadoParser(15)));
-		values.put("numero_nis_responsavel", parser.obterDadoParser(14).trim());
+		values.put("numero_nis_responsavel", parser.obterDadoParser(12));
 		values.put("latitude", String.valueOf(Constantes.NULO_DOUBLE));
 		values.put("longitude", String.valueOf(Constantes.NULO_DOUBLE));
 		values.put("data", "");

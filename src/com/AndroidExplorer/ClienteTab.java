@@ -445,6 +445,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 			
 				}
 			}
+
+		if(!((EditText) view.findViewById(R.id.nisUsuario)).getText().toString().isEmpty()) {
+			result = validarNumeroNIS(((EditText) view.findViewById(R.id.nisUsuario)).getText().toString());
+		}
 		
 		// Dados do Responsavel, se existir.
 		if ( ((Spinner)view.findViewById(R.id.spinnerDefineResponsavel)).getSelectedItemPosition() > 1){
@@ -501,6 +505,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 				
 					}
 					
+			}
+
+			if(!((EditText) view.findViewById(R.id.nisResponsavel)).getText().toString().isEmpty()) {
+				return validarNumeroNIS(((EditText) view.findViewById(R.id.nisResponsavel)).getText().toString());
 			}
 		}
 		// Dados do Proprietario, se existir.
@@ -576,6 +584,10 @@ public class ClienteTab extends Fragment implements LocationListener {
 					showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
 					return false;
 				}
+
+			if(!((EditText) view.findViewById(R.id.nisProprietario)).getText().toString().isEmpty()) {
+				return validarNumeroNIS(((EditText) view.findViewById(R.id.nisProprietario)).getText().toString());
+			}
 			
 			
 		} else {
@@ -629,7 +641,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			getCliente().getEnderecoProprietario().setBairro(((EditText)view.findViewById(R.id.bairroProprietario)).getText().toString());
 			getCliente().getEnderecoProprietario().setCep(((EditText)view.findViewById(R.id.cepProprietario)).getText().toString().replaceAll("[-]", ""));
 			getCliente().getEnderecoProprietario().setMunicipio(((EditText)view.findViewById(R.id.municipioProprietario)).getText().toString());
-			getCliente().getProprietario().setNumeroNIS(validarNumeroNIS(((EditText)view.findViewById(R.id.municipioProprietario)).getText().toString()));
+			getCliente().getProprietario().setNumeroNIS(((EditText)view.findViewById(R.id.nisProprietario)).getText().toString());
 		}
 
 		getCliente().setTipoResponsavel(String.valueOf(((Spinner)view.findViewById(R.id.spinnerDefineResponsavel)).getSelectedItemPosition()));
@@ -659,6 +671,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 			getCliente().getEnderecoResponsavel().setBairro(((EditText)view.findViewById(R.id.bairroResponsavel)).getText().toString());
 			getCliente().getEnderecoResponsavel().setCep(((EditText)view.findViewById(R.id.cepResponsavel)).getText().toString().replaceAll("[-]", ""));
 			getCliente().getEnderecoResponsavel().setMunicipio(((EditText)view.findViewById(R.id.municipioResponsavel)).getText().toString());
+            getCliente().getResponsavel().setNumeroNIS(((EditText)view.findViewById(R.id.nisResponsavel)).getText().toString());
 		}
 		
 		getCliente().getUsuario().setNome(((EditText)view.findViewById(R.id.nomeUsuario)).getText().toString());
@@ -670,6 +683,7 @@ public class ClienteTab extends Fragment implements LocationListener {
 		getCliente().getUsuario().setTelefone(((EditText)view.findViewById(R.id.foneUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 		getCliente().getUsuario().setCelular(((EditText)view.findViewById(R.id.celularUsuario)).getText().toString().replaceAll("[-]", "").replaceAll("[(]", "").replaceAll("[)]", ""));
 		getCliente().getUsuario().setEmail(((EditText)view.findViewById(R.id.emailUsuario)).getText().toString());
+        getCliente().getUsuario().setNumeroNIS(((EditText)view.findViewById(R.id.nisUsuario)).getText().toString());
 
 				   
         if (lastKnownLocation != null){
@@ -683,8 +697,37 @@ public class ClienteTab extends Fragment implements LocationListener {
 		if(getCliente().isNovoResponsavel()) getCliente().getResponsavel().setMatricula("0");
 	}
 
-	private String validarNumeroNIS(String nis) {
+	private Boolean validarNumeroNIS(String nis) {
+		String numeroNis = nis;
 
+		String[] arrayNis = numeroNis.split("");
+		int peso1 = 3;
+		int peso2 = 9;
+		int soma = 0;
+
+		for(int i = 1; i < 3; i++){
+			soma += peso1 * Integer.parseInt(arrayNis[i]);
+			peso1--;
+		}
+
+		for(int i = 3; i < 11; i++){
+			soma += peso2 * Integer.parseInt(arrayNis[i]);
+			peso2--;
+		}
+
+		int resultado = 11 - (soma % 11);
+
+		if(resultado == 10 || resultado == 11) {
+			resultado = 0;
+		}
+
+		if(!(resultado == Integer.parseInt(arrayNis[11])) || numeroNis.equals("00000000000")) {
+            dialogMessage = "Número NIS Inválido.";
+            showNotifyDialog(R.drawable.aviso, "Erro:", dialogMessage, Constantes.DIALOG_ID_ERRO);
+			return false;
+		} else  {
+            return true;
+        }
 	}
 
 	public void populateProprietario() {

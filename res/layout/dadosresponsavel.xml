@@ -138,7 +138,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/NisResponsavel"
+            android:id="@+id/nisResponsavel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
